@@ -33,8 +33,14 @@ public class PycReader {
       bitFiled = BinaryUtil.nextInt(stream);
       timestamp = BinaryUtil.nextInt(stream);
       mappingPyFileSize = BinaryUtil.nextInt(stream);
+      Marshal marshal = new Marshal();
+      marshal.loadPyObject(stream);
       // release resources
       stream.close();
+   }
+
+   public CodeObject getCodeObject() {
+      return codeObject;
    }
 
    public int getMappingPyFileSize() {
