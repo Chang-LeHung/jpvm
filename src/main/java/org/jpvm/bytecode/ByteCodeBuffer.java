@@ -3,7 +3,6 @@ package org.jpvm.bytecode;
 import org.jpvm.objects.PyBytesObject;
 import org.jpvm.pycParser.CodeObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ByteCodeBuffer {
@@ -42,6 +41,8 @@ public class ByteCodeBuffer {
 
       @Override
       public Instruction next() {
+         if (!hasNext())
+            throw new UnsupportedOperationException("No more elements");
          Instruction instruction = new Instruction();
          int opcode;
          int oparg;
