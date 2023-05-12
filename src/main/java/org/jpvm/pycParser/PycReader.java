@@ -1,5 +1,7 @@
 package org.jpvm.pycParser;
 
+import org.jpvm.module.Marshal;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 

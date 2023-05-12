@@ -1,11 +1,21 @@
 package org.jpvm.bytecode;
 
 public class Instruction {
+
+   private int pos;
    private OpMap.OpName opname;
    private int opcode;
    private int oparg;
 
    public Instruction() {
+   }
+
+   public int getPos() {
+      return pos;
+   }
+
+   public void setPos(int pos) {
+      this.pos = pos;
    }
 
    public Instruction(OpMap.OpName opname, int opcode, int oparg) {

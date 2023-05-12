@@ -1,7 +1,7 @@
 package org.jpvm;
 
 import org.jpvm.pycParser.CodeObject;
-import org.jpvm.pycParser.Marshal;
+import org.jpvm.module.Marshal;
 import org.jpvm.pycParser.PycReader;
 import org.junit.Test;
 import static org.junit.Assert.*;

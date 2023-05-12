@@ -46,14 +46,18 @@ public class ByteCodeBuffer {
          Instruction instruction = new Instruction();
          int opcode;
          int oparg;
+         instruction.setPos(cursor);
          int extendedArg = 0;
          do {
             opcode = codeBuf[cursor++] & 0xff;
-            oparg = (codeBuf[cursor++] & 0xff) | extendedArg;
-            if (opcode == OpMap.EXTENDED_ARG) {
-               extendedArg = oparg << 8;
-            } else
-               extendedArg = 0;
+            if (opcode >= OpMap.HAVE_ARGUMENT) {
+               oparg = (codeBuf[cursor++] & 0xff) | extendedArg;
+               if (opcode == OpMap.EXTENDED_ARG) {
+                  extendedArg = oparg << 8;
+               } else
+                  extendedArg = 0;
+            }else
+               oparg = -1; // means no argument
          } while (opcode != OpMap.EXTENDED_ARG);
          instruction.setOpcode(opcode);
          instruction.setOpname(OpMap.instructions.get(opcode));
