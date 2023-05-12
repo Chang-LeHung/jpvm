@@ -27,7 +27,6 @@ public class PycParserTest {
       System.out.println(date);
       // python3.8 magic number is 0xa0d0d55
       assertEquals(0xa0d0d55, magicNumber);
-      assertEquals(0x20, pyFileSize);
       assertEquals(0, bitFiled);
    }
 

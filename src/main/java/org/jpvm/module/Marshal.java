@@ -9,6 +9,15 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * Before implementing this class, you should read cpython:marshal.c) carefully
+ * pay much attention on {@link Marshal#RREF(PyObject)} {@link Marshal#RREFInsert(int, PyObject)}
+ * and {@link Marshal#RREFReserve()}, all above function are used to deal with reference relationship
+ * between PyObjects.
+ *
+ * Your code must follow thr order of calling above function, cause there is recursive call in
+ * {@link Marshal#loadPyObject(ByteBuffer)}. If you do not follow the order, will cause some unexpected errors.
+ */
 public class Marshal {
 
    /**
@@ -72,15 +81,24 @@ public class Marshal {
       if (flag != 0) {
          assert (flag & TYPE.FLAG_REF) != 0;
          if (o == null)
-            return null;
+            return BuiltIn.NULL;
          refs.app1(o);
       }
       return o;
    }
 
-   public void RREFReserve() {
+   public int RREFReserve() {
       if (flag != 0) {
+         int size = refs.size();
          refs.app1(BuiltIn.None);
+         return size;
+      }
+      return 0;
+   }
+
+   public void RREFInsert(int idx, PyObject o) {
+      if (flag != 0) {
+         refs.set(idx, o);
       }
    }
 
@@ -92,8 +110,7 @@ public class Marshal {
    }
 
    public PyObject loadPyObject(ByteBuffer buffer) {
-      byte b = buffer.get();
-      int code = b & 0xff;
+      int code = (buffer.get() & 0xff);
       int type = code & (~TYPE.FLAG_REF);
       flag = code & TYPE.FLAG_REF;
       return switch (type) {
@@ -105,23 +122,23 @@ public class Marshal {
          case TYPE.TYPE_TRUE -> BuiltIn.True;
          case TYPE.TYPE_INT -> loadInt(buffer);
          case TYPE.TYPE_INT64 -> loadInt64(buffer);
-         case TYPE.TYPE_SMALL_TUPLE -> loadSmallTuple(buffer);
-         case TYPE.TYPE_TUPLE -> loadTuple(buffer);
-         case TYPE.TYPE_CODE -> loadCodeObject(buffer);
-         case TYPE.TYPE_LIST -> loadList(buffer);
          case TYPE.TYPE_LONG -> loadLong(buffer);
          case TYPE.TYPE_FLOAT -> loadFloat(buffer);
          case TYPE.TYPE_BINARY_FLOAT -> loadBinaryFloat(buffer);
          case TYPE.TYPE_COMPLEX -> throw new RuntimeException("Unsupported TYPE_COMPLEX");
          case TYPE.TYPE_BINARY_COMPLEX -> loadComplex(buffer);
+         case TYPE.TYPE_SMALL_TUPLE -> loadSmallTuple(buffer);
+         case TYPE.TYPE_TUPLE -> loadTuple(buffer);
+         case TYPE.TYPE_CODE -> loadCodeObject(buffer);
+         case TYPE.TYPE_LIST -> loadList(buffer);
          case TYPE.TYPE_STRING -> loadPyStringObject(buffer); // load bytes
          case TYPE.TYPE_ASCII_INTERNED, TYPE.TYPE_INTERNED -> loadACSII(buffer, true, false);
          case TYPE.TYPE_ASCII, TYPE.TYPE_UNICODE -> loadACSII(buffer, false, false);
          case TYPE.TYPE_SHORT_ASCII -> loadACSII(buffer, false, true);
          case TYPE.TYPE_SHORT_ASCII_INTERNED -> loadACSII(buffer, true, true);
          case TYPE.TYPE_DICT -> loadDictionary(buffer);
-         case TYPE.TYPE_SET -> loadSet(buffer, true);
-         case TYPE.TYPE_FROZENSET -> loadSet(buffer, false);
+         case TYPE.TYPE_SET -> loadSet(buffer, false);
+         case TYPE.TYPE_FROZENSET -> loadSet(buffer, true);
          case TYPE.TYPE_REF -> loadReference(buffer);
          default -> throw new IllegalStateException("Unexpected value: " + type);
       };
@@ -130,13 +147,13 @@ public class Marshal {
    public PyUnicodeObject loadACSII(ByteBuffer buffer, boolean interned, boolean isShort) {
       int size;
       if (isShort)
-         size = buffer.get();
+         size = (buffer.get() & 0xff);
       else
          size = buffer.getInt();
       byte[] bytes = new byte[size];
       buffer.get(bytes);
       PyUnicodeObject o = new PyUnicodeObject(bytes);
-      o = (PyUnicodeObject) RREF(o);
+      RREF(o);
       return o;
    }
 
@@ -161,6 +178,7 @@ public class Marshal {
 
    public CodeObject loadCodeObject(ByteBuffer buffer) {
       CodeObject codeObject = new CodeObject();
+      int idx = RREFReserve();
       codeObject.setCoArgument(buffer.getInt());
       codeObject.setCoPosOnlyArCnt(buffer.getInt());
       codeObject.setCoKwOnlyArCnt(buffer.getInt());
@@ -178,6 +196,7 @@ public class Marshal {
       codeObject.setCoName(loadPyObject(buffer));
       codeObject.setCoFirstLineNo(buffer.getInt());
       codeObject.setColnotab(loadPyObject(buffer));
+      RREFInsert(idx, codeObject);
       return codeObject;
    }
 
@@ -190,7 +209,10 @@ public class Marshal {
 
    private PyObject loadReference(ByteBuffer buffer) {
       int i = buffer.getInt();
-      return refs.get(i - 1);
+//      System.out.print(refs);
+//      System.out.print("\t" + i + " ");
+//      System.out.println(refs.get(i));
+      return refs.get(i);
    }
 
    private PySetObject loadSet(ByteBuffer buffer, boolean isFrozen) {
@@ -199,17 +221,25 @@ public class Marshal {
          RREF(BuiltIn.FROZENSET);
          return BuiltIn.FROZENSET;
       } else {
+         int idx = 0;
          PySetObject setObject = new PySetObject(isFrozen);
-         RREF(setObject);
+         if (!isFrozen) {
+            RREF(setObject);
+         }else {
+            idx = RREFReserve();
+         }
          for (int i = 0; i < size; i++) {
             setObject.put(loadPyObject(buffer));
          }
+         if (isFrozen)
+            RREFInsert(idx, setObject);
          return setObject;
       }
    }
 
    private PyObject loadDictionary(ByteBuffer buffer) {
       PyDictObject dictObject = new PyDictObject();
+      RREF(dictObject);
       for (; ; ) {
          PyObject key = loadPyObject(buffer);
          if (key == BuiltIn.NULL) break;
@@ -217,17 +247,16 @@ public class Marshal {
          if (val == BuiltIn.NULL) break;
          dictObject.put(key, val);
       }
-      RREF(dictObject);
       return dictObject;
    }
 
    private PyListObject loadList(ByteBuffer buffer) {
       int size = buffer.getInt();
       PyListObject listObject = new PyListObject(size);
+      RREF(listObject);
       for (int i = 0; i < size; i++) {
          listObject.app1(loadPyObject(buffer));
       }
-      RREF(listObject);
       return listObject;
    }
 
@@ -238,7 +267,7 @@ public class Marshal {
    }
 
    private PyFloatObject loadFloat(ByteBuffer buffer) {
-      int size = buffer.get();
+      int size = (buffer.get() & 0xff);
       if (size == 4) {
          PyFloatObject floatObject = new PyFloatObject(buffer.getFloat());
          RREF(floatObject);
@@ -270,20 +299,20 @@ public class Marshal {
    private PyTupleObject loadTuple(ByteBuffer buffer) {
       int s = buffer.getInt();
       PyTupleObject tupleObject = new PyTupleObject(s);
+      RREF(tupleObject);
       for (int i = 0; i < s; ++i) {
          tupleObject.set(i, loadPyObject(buffer));
       }
-      RREF(tupleObject);
       return tupleObject;
    }
 
    private PyTupleObject loadSmallTuple(ByteBuffer buffer) {
-      int s = buffer.get();
+      int s = (buffer.get() & 0xff);
       PyTupleObject tupleObject = new PyTupleObject(s);
+      RREF(tupleObject);
       for (int i = 0; i < s; ++i) {
          tupleObject.set(i, loadPyObject(buffer));
       }
-      RREF(tupleObject);
       return tupleObject;
    }
 

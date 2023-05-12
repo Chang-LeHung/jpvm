@@ -36,7 +36,7 @@ public class ByteCodeBuffer {
 
       @Override
       public boolean hasNext() {
-         return cursor != codeBuf.length;
+         return cursor < codeBuf.length - 2;
       }
 
       @Override
@@ -58,7 +58,7 @@ public class ByteCodeBuffer {
                   extendedArg = 0;
             }else
                oparg = -1; // means no argument
-         } while (opcode != OpMap.EXTENDED_ARG);
+         } while (opcode == OpMap.EXTENDED_ARG);
          instruction.setOpcode(opcode);
          instruction.setOpname(OpMap.instructions.get(opcode));
          instruction.setOparg(oparg);

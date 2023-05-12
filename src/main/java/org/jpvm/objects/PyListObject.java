@@ -45,6 +45,10 @@ public class PyListObject extends PyObject {
       return obItem.get(idx);
    }
 
+   public void set(int idx, PyObject o) {
+      obItem.set(idx, o);
+   }
+
    public int size(){
       return obItem.size();
    }
