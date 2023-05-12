@@ -22,20 +22,34 @@ public class Disassembler {
       Iterator<Instruction> iterator = buf.iterator();
       StringBuilder builder = new StringBuilder();
       while (iterator.hasNext()) {
-         builder.delete(0, builder.length());
          Instruction ins = iterator.next();
-         builder.append(ins.getPos());
+         if (ins.getOpcode() == 0)
+            break;
+         builder.delete(0, builder.length());
+         builder.append(String.format("%4d", ins.getPos()));
          builder.append(" ");
-         builder.append(ins.getOpname());
+         builder.append(String.format("%-15s", ins.getOpname()));
          builder.append("\t");
          builder.append(ins.getOparg());
          switch (ins.getOpname()) {
-            case LOAD_CONST:
+            case LOAD_CONST -> {
                var coConsts = (PyTupleObject) codeObject.getCoConsts();
-               builder.append(" (").append(coConsts.get(ins.getOparg()).toString()).append(")");
-            case STORE_NAME:
-               var coNames = (PyTupleObject)codeObject.getCoVarNames();
-//               builder.append(" (" + coNames.get(ins.getOparg()) + ")");
+               if (coConsts.get(ins.getOparg()) instanceof CodeObject) {
+                  var cb = (CodeObject)coConsts.get(ins.getOparg());
+                  builder.append(" <CodeObject ").append(cb.getCoName())
+                      .append(" @0x")
+                      .append(Integer.toHexString(System.identityHashCode(cb)))
+                      .append(" ")
+                      .append(cb.getCoFileName()).append(", line ")
+                      .append(cb.getCoFirstLineNo()).append(" >");
+               }else {
+                  builder.append(" (").append(coConsts.get(ins.getOparg())).append(")");
+               }
+            }
+            case STORE_NAME, LOAD_NAME -> {
+               var coNames = (PyTupleObject) codeObject.getCoNames();
+               builder.append(" (").append(coNames.get(ins.getOparg())).append(")");
+            }
          }
          System.out.println(builder);
       }
