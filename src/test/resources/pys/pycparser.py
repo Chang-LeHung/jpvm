@@ -53,7 +53,7 @@ def show_hex(label, h, indent):
 
 
 if __name__ == '__main__':
-    filename = "./__pycache__/add.cpython-38.pyc"
+    filename = "./__pycache__/loop.cpython-38.pyc"
     with open(filename, "rb") as fp:
         print_metadata(fp)
         code_object = marshal.load(fp)
