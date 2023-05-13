@@ -44,7 +44,7 @@ public class Disassembler {
              .append(" ")
              .append(String.format("%-15s", ins.getOpname()))
              .append("\t")
-             .append(ins.getOparg());
+             .append(String.format("%3d", ins.getOparg()));
          switch (ins.getOpname()) {
             case LOAD_CONST -> {
                var coConsts = (PyTupleObject) codeObject.getCoConsts();
