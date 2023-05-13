@@ -32,7 +32,7 @@ public class Disassembler {
       StringBuilder builder = new StringBuilder();
       while (iterator.hasNext()) {
          Instruction ins = iterator.next();
-         if (ins.getOpcode() == 0) // for bug fix
+         if (!OpMap.instructions.containsKey(ins.getOpcode())) // for bug fix
             continue;
          builder.delete(0, builder.length());
 
