@@ -12,8 +12,8 @@ import java.util.Iterator;
 
 public class Disassembler {
 
-   private CodeObject codeObject;
-   private ByteCodeBuffer buf;
+   private final CodeObject codeObject;
+   private final ByteCodeBuffer buf;
 
    public Disassembler(CodeObject codeObject) {
       this.codeObject = codeObject;
@@ -48,8 +48,7 @@ public class Disassembler {
          switch (ins.getOpname()) {
             case LOAD_CONST -> {
                var coConsts = (PyTupleObject) codeObject.getCoConsts();
-               if (coConsts.get(ins.getOparg()) instanceof CodeObject) {
-                  var cb = (CodeObject)coConsts.get(ins.getOparg());
+               if (coConsts.get(ins.getOparg()) instanceof CodeObject cb) {
                   builder.append(" <CodeObject ").append(cb.getCoName())
                       .append(" @0x")
                       .append(Integer.toHexString(System.identityHashCode(cb)))
