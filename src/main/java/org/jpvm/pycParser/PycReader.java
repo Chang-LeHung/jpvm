@@ -36,7 +36,7 @@ public class PycReader {
       timestamp = BinaryUtil.nextInt(stream);
       mappingPyFileSize = BinaryUtil.nextInt(stream);
       Marshal marshal = new Marshal();
-      marshal.loadPyObject(stream);
+      codeObject = (CodeObject) marshal.loadPyObject(stream);
       // release resources
       stream.close();
    }
