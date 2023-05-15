@@ -3,7 +3,6 @@ package org.jpvm.module;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.pycParser.CodeObject;
 
