@@ -21,12 +21,9 @@ public class PyDictObject extends PyObject{
       builder.append("{");
 
       map.forEach((x, y) -> {
-         builder.append("[");
-         builder.append("key=");
          builder.append(x.toString());
-         builder.append(", val=");
+         builder.append(": ");
          builder.append(y.toString());
-         builder.append("]");
          builder.append(", ");
       });
       if (builder.length() > 2)

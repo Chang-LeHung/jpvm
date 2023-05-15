@@ -14,6 +14,7 @@ public class PySetObject extends PyObject{
    }
 
    public PySetObject(boolean isFrozen) {
+      this();
       this.isFrozen = isFrozen;
    }
 
