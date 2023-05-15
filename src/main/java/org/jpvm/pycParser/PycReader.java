@@ -13,7 +13,7 @@ import java.io.IOException;
  *     |   Bite Field   | 4 bytes
  *     |  Modified Date | 4 bytes
  *     |   File Size    | 4 bytes
- *     |  Coed Object   |
+ *     |  Code Object   |
  *     +----------------+
  */
 public class PycReader {
