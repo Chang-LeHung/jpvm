@@ -208,9 +208,6 @@ public class Marshal {
 
   private PyObject loadReference(ByteBuffer buffer) {
     int i = buffer.getInt();
-//      System.out.print(refs);
-//      System.out.print("\t" + i + " ");
-//      System.out.println(refs.get(i));
     return refs.get(i);
   }
 
