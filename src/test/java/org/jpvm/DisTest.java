@@ -25,6 +25,7 @@ public class DisTest {
     CodeObject codeObject = marshal.loadCodeObject(bytes);
     Disassembler disassembler = new Disassembler(codeObject);
     disassembler.dis();
+    stream.close();
   }
 
   @Test
@@ -39,6 +40,7 @@ public class DisTest {
     CodeObject codeObject = marshal.loadCodeObject(bytes);
     Disassembler disassembler = new Disassembler(codeObject);
     disassembler.dis();
+    stream.close();
   }
 
   @Test
@@ -53,6 +55,7 @@ public class DisTest {
     CodeObject codeObject = marshal.loadCodeObject(bytes);
     Disassembler disassembler = new Disassembler(codeObject);
     disassembler.dis();
+    stream.close();
   }
 
   @Test
@@ -67,6 +70,7 @@ public class DisTest {
     System.out.println(codeObject);
     Disassembler disassembler = new Disassembler(codeObject);
     disassembler.dis();
+    stream.close();
   }
 
   @Test
@@ -94,5 +98,6 @@ public class DisTest {
     System.out.println(o);
     o = marshal.loadPyObject(buffer);
     System.out.println(o);
+    stream.close();
   }
 }
