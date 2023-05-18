@@ -3,7 +3,7 @@ package org.jpvm.objects;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PySetObject extends PyObject{
+public class PySetObject extends PyObject {
 
    private Set<PyObject> set;
 
