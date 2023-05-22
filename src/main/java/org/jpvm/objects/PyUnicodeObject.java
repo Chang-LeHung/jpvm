@@ -3,7 +3,7 @@ package org.jpvm.objects;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Use {@linkplain StandardCharsets.UTF_8} as default charset
+ * Use {@linkplain StandardCharsets#UTF_8} as default charset
  */
 public class PyUnicodeObject extends PyObject{
 

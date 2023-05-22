@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class PyDictObject extends PyObject{
 
-   private Map<PyObject, PyObject> map;
+   private final Map<PyObject, PyObject> map;
 
    public PyDictObject() {
       this.map = new HashMap<>();
