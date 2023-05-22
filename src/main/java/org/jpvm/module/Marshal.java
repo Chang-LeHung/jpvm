@@ -14,7 +14,7 @@ import java.nio.ByteOrder;
  * pay much attention on {@link Marshal#RREF(PyObject)} {@link Marshal#RREFInsert(int, PyObject)}
  * and {@link Marshal#RREFReserve()}, all above function are used to deal with reference relationship
  * between PyObjects.
- * Your code must follow thr order of calling above function, cause there is recursive call in
+ * Your code must follow the order of calling above function, cause there is recursive call in
  * {@link Marshal#loadPyObject(ByteBuffer)}. If you do not follow the order, will cause some unexpected errors.
  */
 public class Marshal {
