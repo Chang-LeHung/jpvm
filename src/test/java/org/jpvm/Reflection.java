@@ -18,5 +18,6 @@ public class Reflection {
     System.out.println(getData);
     Object o = getData.invoke(unicodeObject);
     System.out.println(o);
+    assert o.equals("hello");
   }
 }

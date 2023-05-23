@@ -4,6 +4,7 @@ import struct
 import time
 import types
 import binascii
+import sys
 
 
 def print_metadata(fp):
@@ -53,7 +54,7 @@ def show_hex(label, h, indent):
 
 
 if __name__ == '__main__':
-    filename = "./__pycache__/loop.cpython-38.pyc"
+    filename = sys.argv[1]
     with open(filename, "rb") as fp:
         print_metadata(fp)
         code_object = marshal.load(fp)

@@ -2,5 +2,5 @@
 def add(a, b):
     return a + b
 
-data = add()
+data = add(1, 2)
 print(data)
