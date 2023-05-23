@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
-public class PyFloatObject extends PyObject{
+import org.jpvm.objects.pyinterface.PyArgs;
+
+public class PyFloatObject extends PyObject implements PyArgs {
 
    private double data;
    public PyFloatObject(float data) {
@@ -27,5 +29,10 @@ public class PyFloatObject extends PyObject{
    @Override
    public String toString() {
       return String.valueOf(data);
+   }
+
+   @Override
+   public Object toJavaType() {
+      return data;
    }
 }

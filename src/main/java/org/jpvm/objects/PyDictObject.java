@@ -1,9 +1,11 @@
 package org.jpvm.objects;
 
+import org.jpvm.objects.pyinterface.PyArgs;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class PyDictObject extends PyObject{
+public class PyDictObject extends PyObject implements PyArgs {
 
    private final Map<PyObject, PyObject> map;
 
@@ -35,5 +37,10 @@ public class PyDictObject extends PyObject{
    public boolean containKey(PyObject key) {
 
       return map.containsKey(key);
+   }
+
+   @Override
+   public Object toJavaType() {
+      return map;
    }
 }

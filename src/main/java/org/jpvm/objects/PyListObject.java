@@ -1,10 +1,12 @@
 package org.jpvm.objects;
 
+import org.jpvm.objects.pyinterface.PyArgs;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PyListObject extends PyObject {
+public class PyListObject extends PyObject implements PyArgs {
 
    private final List<PyObject> obItem;
 
@@ -65,5 +67,10 @@ public class PyListObject extends PyObject {
          builder.delete(builder.length() - 2, builder.length());
       builder.append("]");
       return builder.toString();
+   }
+
+   @Override
+   public Object toJavaType() {
+      return obItem;
    }
 }

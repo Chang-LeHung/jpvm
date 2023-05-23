@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
-public class PyBoolObject extends PyObject{
+import org.jpvm.objects.pyinterface.PyArgs;
+
+public class PyBoolObject extends PyObject implements PyArgs {
 
    private boolean bool;
 
@@ -21,5 +23,10 @@ public class PyBoolObject extends PyObject{
       return "PyBoolObject{" +
           "bool=" + bool +
           '}';
+   }
+
+   @Override
+   public Object toJavaType() {
+      return bool;
    }
 }

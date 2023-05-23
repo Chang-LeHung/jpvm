@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
-public class PyBytesObject extends PyObject{
+import org.jpvm.objects.pyinterface.PyArgs;
+
+public class PyBytesObject extends PyObject implements PyArgs {
 
    private byte[] data;
 
@@ -26,5 +28,10 @@ public class PyBytesObject extends PyObject{
       }
       builder.append("'");
       return builder.toString();
+   }
+
+   @Override
+   public Object toJavaType() {
+      return data;
    }
 }

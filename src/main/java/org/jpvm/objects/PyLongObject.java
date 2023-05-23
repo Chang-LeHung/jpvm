@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
-public class PyLongObject extends PyObject {
+import org.jpvm.objects.pyinterface.PyArgs;
+
+public class PyLongObject extends PyObject implements PyArgs {
    private long data;
 
    public PyLongObject(long data) {
@@ -26,5 +28,10 @@ public class PyLongObject extends PyObject {
 
    public void fromString(String s) {
       data = Integer.parseInt(s);
+   }
+
+   @Override
+   public Object toJavaType() {
+      return data;
    }
 }

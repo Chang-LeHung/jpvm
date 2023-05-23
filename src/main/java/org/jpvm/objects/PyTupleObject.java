@@ -1,11 +1,13 @@
 package org.jpvm.objects;
 
+import org.jpvm.objects.pyinterface.PyArgs;
+
 import java.util.Arrays;
 
 /**
  * python 当中的元祖对象都是具有固定大小的数组
  */
-public class PyTupleObject extends PyObject {
+public class PyTupleObject extends PyObject implements PyArgs {
 
    private final PyObject[] obItem;
 
@@ -36,5 +38,10 @@ public class PyTupleObject extends PyObject {
          builder.delete(builder.length() - 2, builder.length());
       builder.append(")");
       return builder.toString();
+   }
+
+   @Override
+   public Object toJavaType() {
+      return obItem;
    }
 }

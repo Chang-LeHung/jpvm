@@ -1,9 +1,11 @@
 package org.jpvm.objects;
 
+import org.jpvm.objects.pyinterface.PyArgs;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class PySetObject extends PyObject {
+public class PySetObject extends PyObject implements PyArgs {
 
    private Set<PyObject> set;
 
@@ -46,5 +48,10 @@ public class PySetObject extends PyObject {
 
    public boolean contains(PyObject key) {
       return set.contains(key);
+   }
+
+   @Override
+   public Object toJavaType() {
+      return set;
    }
 }
