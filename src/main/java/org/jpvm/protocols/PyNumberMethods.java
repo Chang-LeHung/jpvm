@@ -50,35 +50,35 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_negative
    */
-  default PyObject neg(PyObject l) {
+  default PyObject neg() {
     return Global.notImplemented;
   }
 
   /**
    * implementation of corresponding cpython tp_positive
    */
-  default PyObject pos(PyObject l) {
+  default PyObject pos() {
     return Global.notImplemented;
   }
 
   /**
    * implementation of corresponding cpython tp_absolute
    */
-  default PyObject abs(PyObject l) {
+  default PyObject abs() {
     return Global.notImplemented;
   }
 
   /**
    * implementation of corresponding cpython tp_bool
    */
-  default PyObject bool(PyObject l) {
+  default PyObject bool() {
     return Global.notImplemented;
   }
 
   /**
    * implementation of corresponding cpython nb_invert
    */
-  default PyObject invert(PyObject o) {
+  default PyObject invert() {
     return Global.notImplemented;
   }
 
@@ -133,7 +133,7 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_float
    */
-  default PyObject nbFloat(PyObject l) {
+  default PyObject nbFloat() {
     return Global.notImplemented;
   }
 
