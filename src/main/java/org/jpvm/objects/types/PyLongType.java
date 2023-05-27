@@ -2,7 +2,6 @@ package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
-import org.jpvm.objects.pyinterface.TypeName;
 
 public class PyLongType extends PyObject {
 
@@ -22,5 +21,12 @@ public class PyLongType extends PyObject {
   @Override
   public Object getType() {
     return parentType;
+  }
+
+  @Override
+  public String toString() {
+    return "PyLongType{" +
+        "name=" + name.getData() +
+        '}';
   }
 }

@@ -1,14 +1,7 @@
 package org.jpvm.errors;
 
-import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.PyObject;
 
-public class PyExcStopIteration extends PyException{
-   public PyExcStopIteration(String message) {
-      super(message);
-   }
+public class PyExcStopIteration extends PyObject {
 
-   @Override
-   public PyUnicodeObject log() {
-      return new PyUnicodeObject("PyExcStopIteration:" + getMessage());
-   }
 }

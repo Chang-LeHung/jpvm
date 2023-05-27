@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyNoSuchMethod;
+import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.types.PyMethodType;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,13 +25,13 @@ public class PyMethodObject extends PyObject{
     return type;
   }
 
-  public PyObject execute(Object... args) {
+  public PyObject execute(Object... args) throws PyNotImplemented {
     Class<? extends PyObject> clazz = self.getClass();
     try {
       Method method = clazz.getMethod((String) methodName.toJavaType());
       return (PyObject) method.invoke(self, args);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      return new PyNoSuchMethod(self.getTypeName() + " have no method " + (String)methodName.toJavaType());
+      throw new PyNotImplemented("");
     }
   }
 }

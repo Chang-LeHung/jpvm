@@ -3,22 +3,21 @@ package org.jpvm.objects.types;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyListType extends PyObject {
+public class PySliceType extends PyObject {
   private final PyUnicodeObject name;
-
   public Object parentType = PyTypeType.parentType;
 
-  public PyListType() {
-    name = new PyUnicodeObject("list");
-  }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
+  public PySliceType() {
+    name = new PyUnicodeObject("slice");
   }
 
   @Override
   public Object getType() {
     return parentType;
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return name;
   }
 }

@@ -1,9 +1,9 @@
 package org.jpvm.objects;
 
-import org.jpvm.objects.pyinterface.PyArgs;
 import org.jpvm.objects.types.PyComplexType;
+import org.jpvm.protocols.PyNumberMethods;
 
-public class PyComplexObject extends PyObject implements PyArgs {
+public class PyComplexObject extends PyObject implements PyNumberMethods {
 
    public static PyObject type = new PyComplexType();
    private PyFloatObject real;
@@ -38,7 +38,6 @@ public class PyComplexObject extends PyObject implements PyArgs {
    }
 
    /**
-    *
     * @return double[] [0] for image [1] for real
     */
    @Override

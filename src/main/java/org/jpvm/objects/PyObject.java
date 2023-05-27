@@ -8,7 +8,8 @@ import org.jpvm.objects.types.PyBaseObjectType;
  * base class of all classes in python
  */
 public class PyObject implements PyArgs, TypeCheck,
-    TypeName, TypeStr, TypeRepr, TypeHash,TypeRichCompare {
+      TypeName, TypeStr, TypeRepr, TypeHash,TypeRichCompare,
+      TypeNew, TypeInit, TypeCall, PyHashable {
 
    public static Object type = new PyBaseObjectType();
 
@@ -64,10 +65,7 @@ public class PyObject implements PyArgs, TypeCheck,
 
    @Override
    public PyLongObject hash() {
-      if (hashcode == null) {
-         hashcode = new PyLongObject(hashCode());
-      }
-      return hashcode;
+      return new PyLongObject(0);
    }
 
    @Override
@@ -97,5 +95,10 @@ public class PyObject implements PyArgs, TypeCheck,
 
    public void setMro(PyListObject mro) {
       this.mro = mro;
+   }
+
+   @Override
+   public int hashCode() {
+      return (int) hash().getData();
    }
 }

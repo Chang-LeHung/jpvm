@@ -1,5 +1,6 @@
 package org.jpvm.python;
 
+import org.jpvm.errors.PyExcStopIteration;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNoSuchMethod;
 import org.jpvm.objects.PyBoolObject;
@@ -22,7 +23,7 @@ public class BuiltIn {
    /**
     * define jpython internal exceptions
     */
-   public static PyObject PyExcStopIteration = new PyException("PyExcStopIteration");
+   public static PyObject PyExcStopIteration = new PyExcStopIteration();
 
 
    public PyObject print(PyObject... objs) {
