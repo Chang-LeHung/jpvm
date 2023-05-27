@@ -1,18 +1,19 @@
 package org.jpvm.errors;
 
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyUnicodeObject;
 
 public class PyException extends PyObject implements PyExcLogging {
 
-   private String message;
+   private final String message;
 
    public PyException(String message) {
       this.message = message;
    }
 
    @Override
-   public void log() {
-      System.err.println(message);
+   public PyUnicodeObject log() {
+      return new PyUnicodeObject(message);
    }
 
    public String getMessage() {

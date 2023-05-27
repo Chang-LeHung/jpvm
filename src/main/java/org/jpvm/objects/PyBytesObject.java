@@ -1,9 +1,11 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.pyinterface.PyArgs;
+import org.jpvm.objects.types.PyBytesType;
 
 public class PyBytesObject extends PyObject implements PyArgs {
 
+   public static PyObject type = new PyBytesType();
    private byte[] data;
 
    public byte[] getData() {
@@ -22,9 +24,9 @@ public class PyBytesObject extends PyObject implements PyArgs {
    public String toString() {
       StringBuilder builder = new StringBuilder();
       builder.append("b'");
-      for (int i = 0; i < data.length; ++i) {
-         builder.append(Integer.toHexString((data[i] & 0xf0) >> 4));
-         builder.append(Integer.toHexString(data[i] & 0xf));
+      for (byte datum : data) {
+         builder.append(Integer.toHexString((datum & 0xf0) >> 4));
+         builder.append(Integer.toHexString(datum & 0xf));
       }
       builder.append("'");
       return builder.toString();
@@ -33,5 +35,14 @@ public class PyBytesObject extends PyObject implements PyArgs {
    @Override
    public Object toJavaType() {
       return data;
+   }
+
+   @Override
+   public Object getType() {
+      return type;
+   }
+
+   public static PyBoolObject check(PyObject o) {
+      return new PyBoolObject(o == type);
    }
 }

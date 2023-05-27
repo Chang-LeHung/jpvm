@@ -3,7 +3,7 @@ package org.jpvm;
 import org.jpvm.module.Disassembler;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
-import org.jpvm.pycParser.CodeObject;
+import org.jpvm.pycParser.PyCodeObject;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -22,8 +22,9 @@ public class DisTest {
       byte[] bytes = new byte[available];
       int s = stream.read(bytes);
       Marshal marshal = new Marshal();
-      CodeObject codeObject = marshal.loadCodeObject(bytes);
-      Disassembler disassembler = new Disassembler(codeObject);
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      System.out.println(pyCodeObject);
+      Disassembler disassembler = new Disassembler(pyCodeObject);
       disassembler.dis();
       stream.close();
    }
@@ -37,8 +38,9 @@ public class DisTest {
       byte[] bytes = new byte[available];
       int s = stream.read(bytes);
       Marshal marshal = new Marshal();
-      CodeObject codeObject = marshal.loadCodeObject(bytes);
-      Disassembler disassembler = new Disassembler(codeObject);
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      System.out.println(pyCodeObject);
+      Disassembler disassembler = new Disassembler(pyCodeObject);
       disassembler.dis();
       stream.close();
    }
@@ -52,8 +54,8 @@ public class DisTest {
       byte[] bytes = new byte[available];
       int s = stream.read(bytes);
       Marshal marshal = new Marshal();
-      CodeObject codeObject = marshal.loadCodeObject(bytes);
-      Disassembler disassembler = new Disassembler(codeObject);
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      Disassembler disassembler = new Disassembler(pyCodeObject);
       disassembler.dis();
       stream.close();
    }
@@ -66,9 +68,9 @@ public class DisTest {
       byte[] bytes = new byte[available];
       int s = stream.read(bytes);
       Marshal marshal = new Marshal();
-      CodeObject codeObject = marshal.loadCodeObject(bytes);
-      System.out.println(codeObject);
-      Disassembler disassembler = new Disassembler(codeObject);
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      System.out.println(pyCodeObject);
+      Disassembler disassembler = new Disassembler(pyCodeObject);
       disassembler.dis();
       stream.close();
    }

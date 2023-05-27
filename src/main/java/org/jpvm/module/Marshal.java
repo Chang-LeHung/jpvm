@@ -1,7 +1,8 @@
 package org.jpvm.module;
 
 import org.jpvm.objects.*;
-import org.jpvm.pycParser.CodeObject;
+import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.python.BuiltIn;
 
 
 import java.io.FileInputStream;
@@ -160,43 +161,43 @@ public class Marshal {
    * see cpython(3.8.16)/Python/marshal.c:953 r_object(RFILE *p)
    *
    * @param stream byte[]
-   * @return {@link CodeObject}
+   * @return {@link PyCodeObject}
    */
-  public CodeObject loadCodeObject(byte[] stream) {
+  public PyCodeObject loadCodeObject(byte[] stream) {
     ByteBuffer buffer = ByteBuffer.wrap(stream).order(ByteOrder.LITTLE_ENDIAN);
-    return (CodeObject) loadPyObject(buffer);
+    return (PyCodeObject) loadPyObject(buffer);
   }
 
-  public CodeObject loadCodeObject(FileInputStream stream) throws IOException {
+  public PyCodeObject loadCodeObject(FileInputStream stream) throws IOException {
     var size = stream.available();
     byte[] bytes = new byte[size];
     var s = stream.read(bytes);
     ByteBuffer buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
-    return (CodeObject) loadPyObject(buffer);
+    return (PyCodeObject) loadPyObject(buffer);
   }
 
-  public CodeObject loadCodeObject(ByteBuffer buffer) {
-    CodeObject codeObject = new CodeObject();
+  public PyCodeObject loadCodeObject(ByteBuffer buffer) {
+    PyCodeObject pyCodeObject = new PyCodeObject();
     int idx = RREFReserve();
-    codeObject.setCoArgument(buffer.getInt());
-    codeObject.setCoPosOnlyArCnt(buffer.getInt());
-    codeObject.setCoKwOnlyArCnt(buffer.getInt());
-    codeObject.setCoNLocals(buffer.getInt());
-    codeObject.setCoStackSize(buffer.getInt());
-    codeObject.setCoFlags(buffer.getInt());
+    pyCodeObject.setCoArgument(buffer.getInt());
+    pyCodeObject.setCoPosOnlyArCnt(buffer.getInt());
+    pyCodeObject.setCoKwOnlyArCnt(buffer.getInt());
+    pyCodeObject.setCoNLocals(buffer.getInt());
+    pyCodeObject.setCoStackSize(buffer.getInt());
+    pyCodeObject.setCoFlags(buffer.getInt());
 
-    codeObject.setCoCode(loadPyObject(buffer));
-    codeObject.setCoConsts(loadPyObject(buffer));
-    codeObject.setCoNames(loadPyObject(buffer));
-    codeObject.setCoVarNames(loadPyObject(buffer));
-    codeObject.setCoFreeVars(loadPyObject(buffer));
-    codeObject.setCoCellVars(loadPyObject(buffer));
-    codeObject.setCoFileName(loadPyObject(buffer));
-    codeObject.setCoName(loadPyObject(buffer));
-    codeObject.setCoFirstLineNo(buffer.getInt());
-    codeObject.setColnotab(loadPyObject(buffer));
-    RREFInsert(idx, codeObject);
-    return codeObject;
+    pyCodeObject.setCoCode(loadPyObject(buffer));
+    pyCodeObject.setCoConsts(loadPyObject(buffer));
+    pyCodeObject.setCoNames(loadPyObject(buffer));
+    pyCodeObject.setCoVarNames(loadPyObject(buffer));
+    pyCodeObject.setCoFreeVars(loadPyObject(buffer));
+    pyCodeObject.setCoCellVars(loadPyObject(buffer));
+    pyCodeObject.setCoFileName(loadPyObject(buffer));
+    pyCodeObject.setCoName(loadPyObject(buffer));
+    pyCodeObject.setCoFirstLineNo(buffer.getInt());
+    pyCodeObject.setColnotab(loadPyObject(buffer));
+    RREFInsert(idx, pyCodeObject);
+    return pyCodeObject;
   }
 
   public PyFloatObject loadBinaryFloat(ByteBuffer buffer) {

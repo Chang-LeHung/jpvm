@@ -1,6 +1,13 @@
-package org.jpvm.objects;
+package org.jpvm.python;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNoSuchMethod;
+import org.jpvm.objects.PyBoolObject;
+import org.jpvm.objects.PyNoneObject;
+import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PySetObject;
+
+import java.io.PrintWriter;
 
 public class BuiltIn {
 
@@ -16,4 +23,13 @@ public class BuiltIn {
     * define jpython internal exceptions
     */
    public static PyObject PyExcStopIteration = new PyException("PyExcStopIteration");
+
+
+   public PyObject print(PyObject... objs) {
+      PrintWriter writer = new PrintWriter(System.out);
+      for (PyObject obj : objs) {
+
+      }
+      return BuiltIn.None;
+   }
 }

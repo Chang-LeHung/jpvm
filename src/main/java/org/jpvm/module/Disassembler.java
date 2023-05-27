@@ -4,19 +4,19 @@ import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
 import org.jpvm.objects.PyTupleObject;
-import org.jpvm.pycParser.CodeObject;
+import org.jpvm.pycParser.PyCodeObject;
 
 import java.util.HashSet;
 import java.util.Iterator;
 
 public class Disassembler {
 
-  private final CodeObject codeObject;
+  private final PyCodeObject pyCodeObject;
   private final ByteCodeBuffer buf;
 
-  public Disassembler(CodeObject codeObject) {
-    this.codeObject = codeObject;
-    buf = new ByteCodeBuffer(codeObject);
+  public Disassembler(PyCodeObject pyCodeObject) {
+    this.pyCodeObject = pyCodeObject;
+    buf = new ByteCodeBuffer(pyCodeObject);
   }
 
   public void dis() {
@@ -46,8 +46,8 @@ public class Disassembler {
           .append(String.format("%3d", ins.getOparg()));
       switch (ins.getOpname()) {
         case LOAD_CONST -> {
-          var coConsts = (PyTupleObject) codeObject.getCoConsts();
-          if (coConsts.get(ins.getOparg()) instanceof CodeObject cb) {
+          var coConsts = (PyTupleObject) pyCodeObject.getCoConsts();
+          if (coConsts.get(ins.getOparg()) instanceof PyCodeObject cb) {
             builder.append(" <CodeObject ").append(cb.getCoName())
                 .append(" @0x")
                 .append(Integer.toHexString(System.identityHashCode(cb)))
@@ -59,7 +59,7 @@ public class Disassembler {
           }
         }
         case STORE_NAME, LOAD_NAME, IMPORT_NAME -> {
-          var coNames = (PyTupleObject) codeObject.getCoNames();
+          var coNames = (PyTupleObject) pyCodeObject.getCoNames();
           builder.append(" (").append(coNames.get(ins.getOparg())).append(")");
         }
       }

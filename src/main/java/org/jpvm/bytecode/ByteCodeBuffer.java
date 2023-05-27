@@ -1,19 +1,16 @@
 package org.jpvm.bytecode;
 
 import org.jpvm.objects.PyBytesObject;
-import org.jpvm.pycParser.CodeObject;
+import org.jpvm.pycParser.PyCodeObject;
 
 import java.util.Iterator;
 
 public class ByteCodeBuffer implements Iterable<Instruction> {
 
-   private final CodeObject codeObject;
-   private final PyBytesObject code;
    private final byte[] codeBuf;
 
-   public ByteCodeBuffer(CodeObject codeObject) {
-      this.codeObject = codeObject;
-      code = (PyBytesObject) codeObject.getCoCode();
+   public ByteCodeBuffer(PyCodeObject pyCodeObject) {
+      PyBytesObject code = (PyBytesObject) pyCodeObject.getCoCode();
       codeBuf = code.getData();
    }
 

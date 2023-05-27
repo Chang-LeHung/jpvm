@@ -1,12 +1,20 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.pyinterface.PyArgs;
+import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.pyinterface.TypeName;
+import org.jpvm.objects.types.PyListType;
+import org.jpvm.python.BuiltIn;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PyListObject extends PyObject implements PyArgs {
+public class PyListObject extends PyObject
+                     implements PyArgs, TypeIterable {
+
+   public static PyObject type = new PyListType();
 
    private final List<PyObject> obItem;
 
@@ -19,6 +27,10 @@ public class PyListObject extends PyObject implements PyArgs {
    }
 
    public void app1(PyObject obj) {
+      obItem.add(obj);
+   }
+
+   public void append(PyObject obj) {
       obItem.add(obj);
    }
 
@@ -72,5 +84,49 @@ public class PyListObject extends PyObject implements PyArgs {
    @Override
    public Object toJavaType() {
       return obItem;
+   }
+
+   @Override
+   public Object getType() {
+      return type;
+   }
+
+   public static PyBoolObject check(PyObject o) {
+      return new PyBoolObject(o == type);
+   }
+
+   @Override
+   public PyObject getIterator() {
+      return new PyListItrObject();
+   }
+
+   public static class PyListItrType extends PyObject implements TypeName {
+      private final PyUnicodeObject name;
+
+      public PyListItrType(){
+         name = new PyUnicodeObject("list_iterator");
+      }
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+   public class PyListItrObject extends PyObject implements TypeDoIterate {
+
+      public static PyObject type = new PyListItrType();
+      private int idx;
+
+      public PyListItrObject() {
+         idx = 0;
+      }
+
+      @Override
+      public PyObject next() {
+         if (idx < obItem.size()){
+            return obItem.get(idx++);
+         }
+         return BuiltIn.PyExcStopIteration;
+      }
    }
 }

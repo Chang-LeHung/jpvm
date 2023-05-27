@@ -23,7 +23,7 @@ public class PycReader {
    private int magicNumber;
    private int bitFiled;
    private int mappingPyFileSize;
-   private CodeObject codeObject;
+   private PyCodeObject pyCodeObject;
 
    public PycReader(String filename) {
       pyc = filename;
@@ -36,13 +36,13 @@ public class PycReader {
       timestamp = BinaryUtil.nextInt(stream);
       mappingPyFileSize = BinaryUtil.nextInt(stream);
       Marshal marshal = new Marshal();
-      codeObject = (CodeObject) marshal.loadPyObject(stream);
+      pyCodeObject = (PyCodeObject) marshal.loadPyObject(stream);
       // release resources
       stream.close();
    }
 
-   public CodeObject getCodeObject() {
-      return codeObject;
+   public PyCodeObject getCodeObject() {
+      return pyCodeObject;
    }
 
    public int getMappingPyFileSize() {

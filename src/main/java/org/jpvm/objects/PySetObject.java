@@ -1,11 +1,19 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.pyinterface.PyArgs;
+import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.pyinterface.TypeName;
+import org.jpvm.objects.types.PySetType;
+import org.jpvm.python.BuiltIn;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class PySetObject extends PyObject implements PyArgs {
+public class PySetObject extends PyObject implements PyArgs, TypeIterable {
+
+   public static PyObject type = new PySetType();
 
    private Set<PyObject> set;
 
@@ -53,5 +61,48 @@ public class PySetObject extends PyObject implements PyArgs {
    @Override
    public Object toJavaType() {
       return set;
+   }
+
+   @Override
+   public Object getType() {
+      return type;
+   }
+
+   @Override
+   public PyObject getIterator() {
+      return new PySetItrObject();
+   }
+
+   public static class PySetItrType extends PyObject implements TypeName {
+
+      private PyUnicodeObject name;
+
+      public PySetItrType() {
+         name = new PyUnicodeObject("set_iterator");
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+   public class PySetItrObject extends PyObject implements TypeDoIterate {
+      Iterator<PyObject> iterator;
+
+      public PySetItrObject() {
+         iterator = set.iterator();
+      }
+
+      @Override
+      public PyObject next() {
+         if (iterator.hasNext())
+            return iterator.next();
+         return BuiltIn.PyExcStopIteration;
+      }
+   }
+
+   public static PyBoolObject check(PyObject o) {
+      return new PyBoolObject(o == type);
    }
 }

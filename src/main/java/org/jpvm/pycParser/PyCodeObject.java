@@ -3,25 +3,61 @@ package org.jpvm.pycParser;
 import org.jpvm.objects.PyObject;
 
 
-public class CodeObject extends PyObject {
+public class PyCodeObject extends PyObject {
 
+   /**
+    * non-KwOnly argument count
+    */
    private int coArgument;
+   /**
+    * KwOnly argument count
+    */
    private int coKwOnlyArCnt;
+   /**
+    * Positional only argument count
+    */
    private int coPosOnlyArCnt;
    private int coNLocals;
    private int coStackSize;
    private int coFlags;
    private int coFirstLineNo;
-   // PyStringObject
+   /**
+    * type of {@link org.jpvm.objects.PyBytesObject}
+    */
    private PyObject coCode;
+   /**
+    * type of {@link org.jpvm.objects.PyTupleObject}
+    */
    private PyObject coConsts;
+   /**
+    * type of {@link org.jpvm.objects.PyTupleObject}
+    */
    private PyObject coNames;
+   /**
+    * type of {@link org.jpvm.objects.PyTupleObject}
+    */
    private PyObject coVarNames;
+   /**
+    * type of {@link org.jpvm.objects.PyTupleObject}
+    */
    private PyObject coFreeVars;
+   /**
+    * type of {@link org.jpvm.objects.PyTupleObject}
+    */
    private PyObject coCellVars;
+   /**
+    * type of {@link org.jpvm.objects.PyUnicodeObject}
+    */
    private PyObject coFileName;
+   /**
+    * type of {@link org.jpvm.objects.PyUnicodeObject}
+    */
    private PyObject coName;
+   /**
+    * type of {@link org.jpvm.objects.PyBytesObject}
+    */
    private PyObject colnotab;
+
    private PyObject coZombieFrame;
    private PyObject coWeakRefList;
    private PyObject coExtra;

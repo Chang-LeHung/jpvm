@@ -1,6 +1,6 @@
 package org.jpvm;
 
-import org.jpvm.pycParser.CodeObject;
+import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.module.Marshal;
 import org.jpvm.pycParser.PycReader;
 import org.junit.Test;
@@ -39,13 +39,13 @@ public class PycParserTest {
       byte[] bytes = new byte[available];
       int s = stream.read(bytes);
       Marshal marshal = new Marshal();
-      CodeObject codeObject = marshal.loadCodeObject(bytes);
-      System.out.println(codeObject);
-      assertEquals(0, codeObject.getCoArgument());
-      assertEquals(0, codeObject.getCoKwOnlyArCnt());
-      assertEquals(0, codeObject.getCoPosOnlyArCnt());
-      assertEquals(0, codeObject.getCoNLocals());
-      assertEquals(3, codeObject.getCoStackSize());
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      System.out.println(pyCodeObject);
+      assertEquals(0, pyCodeObject.getCoArgument());
+      assertEquals(0, pyCodeObject.getCoKwOnlyArCnt());
+      assertEquals(0, pyCodeObject.getCoPosOnlyArCnt());
+      assertEquals(0, pyCodeObject.getCoNLocals());
+      assertEquals(3, pyCodeObject.getCoStackSize());
    }
 
    @Test

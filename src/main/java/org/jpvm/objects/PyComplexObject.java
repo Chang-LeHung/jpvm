@@ -1,7 +1,11 @@
 package org.jpvm.objects;
 
-public class PyComplexObject extends PyObject{
+import org.jpvm.objects.pyinterface.PyArgs;
+import org.jpvm.objects.types.PyComplexType;
 
+public class PyComplexObject extends PyObject implements PyArgs {
+
+   public static PyObject type = new PyComplexType();
    private PyFloatObject real;
    private PyFloatObject image;
 
@@ -31,5 +35,24 @@ public class PyComplexObject extends PyObject{
 
    public void setImage(PyFloatObject image) {
       this.image = image;
+   }
+
+   /**
+    *
+    * @return double[] [0] for image [1] for real
+    */
+   @Override
+   public Object toJavaType() {
+      return new double[] {(double)getImage().toJavaType(),
+          (double)getReal().toJavaType()};
+   }
+
+   @Override
+   public Object getType() {
+      return type;
+   }
+
+   public static PyBoolObject check(PyObject o) {
+      return new PyBoolObject(o == type);
    }
 }
