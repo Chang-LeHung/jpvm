@@ -213,4 +213,13 @@ public class PyLongObject extends PyObject
    public PyObject index() {
       return new PyLongObject(data);
    }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) return false;
+      if (obj == this) return true;
+      if (obj instanceof Integer o) return data == o;
+      if (obj instanceof Long o) return data == o;
+      return false;
+   }
 }

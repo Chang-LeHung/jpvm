@@ -1,6 +1,5 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyNoSuchMethod;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.types.PyMethodType;
 

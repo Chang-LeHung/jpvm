@@ -67,7 +67,7 @@ public class GILRuntimeState {
           long start = System.currentTimeMillis();
           try {
             condition.wait(interval);
-          } catch (InterruptedException e) {
+          } catch (InterruptedException ignored) {
             // do nothing
           }
           long end = System.currentTimeMillis();

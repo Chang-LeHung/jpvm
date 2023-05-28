@@ -1,8 +1,6 @@
 package org.jpvm.python;
 
 import org.jpvm.errors.PyExcStopIteration;
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNoSuchMethod;
 import org.jpvm.objects.PyBoolObject;
 import org.jpvm.objects.PyNoneObject;
 import org.jpvm.objects.PyObject;

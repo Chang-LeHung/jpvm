@@ -208,4 +208,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
       }
       return new PyFloatObject(data / ((PyFloatObject)object).getData());
    }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) return false;
+      if (obj == this) return true;
+      if (obj instanceof Integer o) return data == o;
+      if (obj instanceof Long o) return data == o;
+      if (obj instanceof Double o) return data == o;
+      if (obj instanceof Float o) return data == o;
+      return false;
+   }
 }

@@ -70,4 +70,13 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
          return new PyBoolObject(false);
       return new PyBoolObject(bool || ((PyBoolObject) o).bool);
    }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (obj instanceof PyBoolObject)
+         return bool == ((PyBoolObject) obj).bool;
+      return false;
+   }
 }

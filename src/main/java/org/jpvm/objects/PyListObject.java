@@ -222,8 +222,7 @@ public class PyListObject extends PyObject
             if (idx >= size())
                throw  new PyIndexOutOfBound("index " + idx + " out of bound");
             return get(idx);
-         } catch (PyNotImplemented ignored) {
-         }
+         } catch (PyNotImplemented ignored) {}
 
          try {
             PyObject index = num.index();

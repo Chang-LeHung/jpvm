@@ -1,13 +1,19 @@
 package org.jpvm.objects;
 
-import org.jpvm.objects.pyinterface.PyArgs;
-import org.jpvm.objects.types.PyBytesType;
+import org.jpvm.errors.*;
+import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyDictType;
+import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyMappingMethods;
+import org.jpvm.protocols.PyNumberMethods;
+import org.jpvm.protocols.PySequenceMethods;
+import org.jpvm.python.BuiltIn;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class PyDictObject extends PyObject implements PyArgs {
+public class PyDictObject extends PyObject implements PyMappingMethods,
+    PySequenceMethods, TypeIterable {
 
    public static PyObject type = new PyDictType();
 
@@ -55,7 +61,6 @@ public class PyDictObject extends PyObject implements PyArgs {
    }
 
    public boolean containKey(PyObject key) {
-
       return map.containsKey(key);
    }
 
@@ -69,7 +74,583 @@ public class PyDictObject extends PyObject implements PyArgs {
       return type;
    }
 
-   public static PyBoolObject check(PyObject o) {
-      return new PyBoolObject(o == type);
+   @Override
+   public PyUnicodeObject getTypeName() {
+      return type.getTypeName();
+   }
+
+   @Override
+   public PyUnicodeObject str() {
+      return new PyUnicodeObject(toString());
+   }
+
+   @Override
+   public PyUnicodeObject repr() {
+      return new PyUnicodeObject(toString());
+   }
+
+   @Override
+   public PyBoolObject richCompare(PyObject o) {
+      if (o instanceof PyDictObject dict) {
+         if (map.equals(dict.toJavaType()))
+            return BuiltIn.True;
+         return BuiltIn.False;
+      }
+      return BuiltIn.False;
+   }
+
+
+
+   @Override
+   public PyObject mpLength(PyObject o) throws PyNotImplemented {
+      return new PyLongObject(map.size());
+   }
+
+   @Override
+   public PyObject mpSubscript(PyObject o) throws PyIndexOutOfBound, PyKeyError, PyTypeNotMatch, PyNotImplemented {
+      return map.getOrDefault(o, BuiltIn.None);
+   }
+
+   @Override
+   public PyObject mpAssSubscript(PyObject key, PyObject val) throws PyKeyError, PyNotImplemented {
+      if (null == val)
+         map.remove(key);
+      else
+         map.put(key, val);
+      return BuiltIn.None;
+   }
+
+   @Override
+   public PyObject sqLength(PyObject o) throws PyNotImplemented {
+      return new PyLongObject(map.size());
+   }
+
+   @Override
+   public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqConcat(o);
+   }
+
+   @Override
+   public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqRepeat(o);
+   }
+
+   @Override
+   public PyObject sqItem(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqItem(o);
+   }
+
+   @Override
+   public PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqAssItem(key, val);
+   }
+
+   @Override
+   public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+      if (map.containsKey(o))
+         return BuiltIn.True;
+      return BuiltIn.False;
+   }
+
+   @Override
+   public PyObject sqInplaceConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqInplaceConcat(o);
+   }
+
+   @Override
+   public PyObject sqInplaceRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+      return PySequenceMethods.super.sqInplaceRepeat(o);
+   }
+
+   @Override
+   public PyObject getIterator() throws PyNotImplemented {
+      return new PyDictItrObject();
+   }
+
+   public static class PyDictItrType extends PyObject {
+      private final PyUnicodeObject name;
+
+      private final Object type = PyTypeType.parentType;
+
+      public PyDictItrType() {
+         this.name = new PyUnicodeObject("dict_key_iterator");
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+   public class PyDictItrObject extends PyObject implements TypeDoIterate {
+      Iterator<PyObject> iterator;
+
+      public static PyObject type = new PyDictItrType();
+
+      public PyDictItrObject() {
+         iterator = map.keySet().iterator();
+      }
+
+      @Override
+      public PyObject next() {
+         if (iterator.hasNext())
+            return iterator.next();
+         return BuiltIn.PyExcStopIteration;
+      }
+   }
+
+   public static class PyDictValuesType extends PyObject {
+      private final PyUnicodeObject name;
+
+      private final Object type = PyTypeType.parentType;
+
+      public PyDictValuesType() {
+         this.name = new PyUnicodeObject("dict_values");
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+
+   public static class PyDictValuesObject extends PyObject
+       implements TypeIterable, PySequenceMethods {
+
+      private final Collection<PyObject> values;
+
+      public static PyObject type = new PyDictValuesType();
+
+      public PyDictValuesObject(Map<PyObject, PyObject> map) {
+         values = map.values();
+      }
+
+      @Override
+      public String toString() {
+         StringBuilder builder = new StringBuilder();
+         builder.append("dict_values[");
+         for (PyObject value : values) {
+            builder.append(value.toString())
+                .append(", ");
+         }
+         if (builder.length() >= 14)
+            builder.delete(builder.length() - 2, builder.length());
+         builder.append("]");
+         return builder.toString();
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return type.getTypeName();
+      }
+
+      @Override
+      public PyUnicodeObject str() {
+         return new PyUnicodeObject(toString());
+      }
+
+      @Override
+      public PyUnicodeObject repr() {
+         return new PyUnicodeObject(toString());
+      }
+
+      @Override
+      public PyObject sqLength(PyObject o) throws PyNotImplemented {
+         return new PyLongObject(values.size());
+      }
+
+      @Override
+      public PyObject getIterator() throws PyNotImplemented {
+         return new PyDictValuesItrObject();
+      }
+
+      public static class PyDictValuesItrType extends PyObject {
+         private final PyUnicodeObject name;
+
+         public PyDictValuesItrType(){
+            name = new PyUnicodeObject("dict_value_iterator");
+         }
+         @Override
+         public PyUnicodeObject getTypeName() {
+            return name;
+         }
+      }
+
+      public class PyDictValuesItrObject extends PyObject
+               implements TypeDoIterate{
+
+         public static PyObject type = new PyDictValuesItrType();
+         Iterator<PyObject> iterator;
+
+         public PyDictValuesItrObject() {
+            iterator = values.iterator();
+         }
+
+         @Override
+         public PyObject next() throws PyException {
+            if (iterator.hasNext())
+               return iterator.next();
+            return BuiltIn.PyExcStopIteration;
+         }
+      }
+   }
+
+   public static class PyDictKeysType extends PyObject {
+      private final PyUnicodeObject name;
+
+      private final Object type = PyTypeType.parentType;
+
+      public PyDictKeysType() {
+         this.name = new PyUnicodeObject("dict_keys");
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+   public static class PyDictKeysObject extends PyObject
+         implements PyNumberMethods, PySequenceMethods, TypeIterable {
+
+      public static PyObject type = new PyDictKeysType();
+      private final Set<PyObject> set;
+      public PyDictKeysObject(Map<PyObject, PyObject> map) {
+         set = map.keySet();
+      }
+
+      @Override
+      public String toString() {
+         StringBuilder builder = new StringBuilder();
+         builder.append("dict_keys{");
+         for (PyObject value : set) {
+            builder.append(value.toString())
+                .append(", ");
+         }
+         if (builder.length() > 10)
+            builder.delete(builder.length() - 2, builder.length());
+         builder.append("}");
+         return builder.toString();
+      }
+
+      @Override
+      public Object getType() {
+         return super.getType();
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return super.getTypeName();
+      }
+
+      @Override
+      public PyUnicodeObject str() {
+         return new PyUnicodeObject(toString());
+      }
+
+      @Override
+      public PyUnicodeObject repr() {
+         return new PyUnicodeObject(toString());
+      }
+
+      /**
+       * not implemented in the current version
+       */
+      @Override
+      public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         return PyNumberMethods.super.sub(o);
+      }
+
+      /**
+       * not implemented in the current version
+       */
+      @Override
+      public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         return PyNumberMethods.super.and(o);
+      }
+
+      /**
+       * not implemented in the current version
+       */
+      @Override
+      public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         return PyNumberMethods.super.xor(o);
+      }
+
+      /**
+       * not implemented in the current version
+       */
+      @Override
+      public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         return PyNumberMethods.super.or(o);
+      }
+
+      @Override
+      public PyObject sqLength(PyObject o) throws PyNotImplemented {
+         return new PyLongObject(set.size());
+      }
+
+      @Override
+      public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (set.contains(o))
+            return BuiltIn.True;
+         return BuiltIn.False;
+      }
+
+      @Override
+      public PyObject getIterator() throws PyNotImplemented {
+         return new PyDictKeysItrObject();
+      }
+
+      public static class PyDictKeysItrType extends PyObject {
+         private final PyUnicodeObject name;
+
+         public PyDictKeysItrType(){
+            name = new PyUnicodeObject("dict_value_iterator");
+         }
+         @Override
+         public PyUnicodeObject getTypeName() {
+            return name;
+         }
+      }
+
+      private class PyDictKeysItrObject extends PyObject
+          implements TypeDoIterate{
+         Iterator<PyObject> iterator;
+
+         public static PyObject type = new PyDictKeysItrType();
+
+         public PyDictKeysItrObject() {
+            iterator = set.iterator();
+         }
+
+         @Override
+         public PyObject next() throws PyException {
+            if (iterator.hasNext())
+               return iterator.next();
+            return BuiltIn.PyExcStopIteration;
+         }
+      }
+   }
+
+   public static class PyDictItemsType extends PyObject {
+      private final PyUnicodeObject name;
+
+      private final Object type = PyTypeType.parentType;
+
+      public PyDictItemsType() {
+         this.name = new PyUnicodeObject("dict_items");
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+
+
+   }
+
+   public static class PyDictItemsObject extends PyObject
+            implements TypeIterable, PyNumberMethods, PySequenceMethods{
+      public static PyObject type = new PyDictItemsType();
+
+      private final Map<PyObject, PyObject> map;
+
+      public PyDictItemsObject(Map<PyObject, PyObject> map) {
+         this.map = map;
+      }
+
+      @Override
+      public String toString() {
+         StringBuilder builder = new StringBuilder();
+         builder.append("dict_items[");
+         map.forEach((key, val)->{
+            builder.append("(")
+                .append(key).append(", ")
+                .append(val).append("), ");
+         });
+         if (builder.length() > 11)
+            builder.delete(builder.length() - 2, builder.length());
+         builder.append("]");
+         return builder.toString();
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return type.getTypeName();
+      }
+
+      @Override
+      public PyUnicodeObject str() {
+         return new PyUnicodeObject(toString());
+      }
+
+      @Override
+      public PyUnicodeObject repr() {
+         return new PyUnicodeObject(toString());
+      }
+
+      public static class PyDictItemsItrType extends PyObject {
+         private final PyUnicodeObject name;
+
+         private final Object type = PyTypeType.parentType;
+
+         public PyDictItemsItrType() {
+            this.name = new PyUnicodeObject("dict_items");
+         }
+
+         @Override
+         public Object getType() {
+            return type;
+         }
+
+         @Override
+         public PyUnicodeObject getTypeName() {
+            return name;
+         }
+      }
+
+
+      @Override
+      public PyObject getIterator() throws PyNotImplemented {
+         return new PyDictItemsItrObject();
+      }
+
+      public class PyDictItemsItrObject extends PyObject
+            implements TypeDoIterate{
+         private final PyObject type = new PyDictItemsItrType();
+         private final Iterator<Map.Entry<PyObject, PyObject>> iterator;
+         public PyDictItemsItrObject() {
+            iterator = map.entrySet().iterator();
+         }
+
+         @Override
+         public Object getType() {
+            return type;
+         }
+
+         @Override
+         public PyUnicodeObject getTypeName() {
+            return type.getTypeName();
+         }
+
+         @Override
+         public PyObject next() throws PyException {
+            if (iterator.hasNext()) {
+               Map.Entry<PyObject, PyObject> n = iterator.next();
+               PyTupleObject object = new PyTupleObject(2);
+               object.set(0, n.getKey());
+               object.set(1, n.getValue());
+               return object;
+            }
+            return BuiltIn.PyExcStopIteration;
+         }
+      }
+
+      @Override
+      public Object toJavaType() {
+         return map;
+      }
+
+      @Override
+      public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (o instanceof PyDictItemsObject item) {
+            PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
+            map.forEach((x, y)->{
+               if (item.map.containsKey(x))
+                  ret.map.remove(x);
+            });
+            return ret;
+         }
+         throw new PyTypeNotMatch("require type PyDictItemsObject");
+      }
+
+      @Override
+      public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (o instanceof PyDictItemsObject item) {
+            PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
+            map.forEach((x, y)->{
+               if (item.map.containsKey(x))
+                  ret.map.put(x, y);
+            });
+            item.map.forEach((x, y) -> {
+               if (map.containsKey(x))
+                  ret.map.put(x, y);
+            });
+            return ret;
+         }
+         throw new PyTypeNotMatch("require type PyDictItemsObject");
+      }
+
+      @Override
+      public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (o instanceof PyDictItemsObject item) {
+            PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
+            map.forEach((x, y)->{
+               if (!item.map.containsKey(x))
+                  ret.map.put(x, y);
+            });
+            item.map.forEach((x, y) -> {
+               if (!map.containsKey(x))
+                  ret.map.put(x, y);
+            });
+            return ret;
+         }
+         throw new PyTypeNotMatch("require type PyDictItemsObject");
+      }
+
+      @Override
+      public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (o instanceof PyDictItemsObject item) {
+            PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
+            ret.map.putAll(map);
+            ret.map.putAll(item.map);
+            return ret;
+         }
+         throw new PyTypeNotMatch("require type PyDictItemsObject");
+      }
+
+      @Override
+      public PyObject sqLength(PyObject o) throws PyNotImplemented {
+         return new PyLongObject(map.size());
+      }
+
+      @Override
+      public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+         if (map.containsKey(o))
+            return BuiltIn.True;
+         return BuiltIn.False;
+      }
    }
 }

@@ -190,21 +190,21 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_inplace_and
    */
-  default PyObject inplaceAnd(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("v is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_xor
    */
-  default PyObject inplaceXor(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceXor is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_or
    */
-  default PyObject inplaceOr(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceOr is not implemented");
   }
 
@@ -241,5 +241,19 @@ public interface PyNumberMethods {
    */
   default PyObject index() throws PyNotImplemented {
     throw new PyNotImplemented("index is not implemented");
+  }
+
+  /**
+   * implementation of corresponding cpython nb_matrix_multiply
+   */
+  default PyObject matrixMul() throws PyNotImplemented {
+    throw new PyNotImplemented("matrixMul is not implemented");
+  }
+
+  /**
+   * implementation of corresponding cpython nb_inplace_matrix_multiply
+   */
+  default PyObject inplaceMatrixMul() throws PyNotImplemented {
+    throw new PyNotImplemented("inplaceMatrixMul is not implemented");
   }
 }

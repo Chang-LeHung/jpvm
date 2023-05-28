@@ -1,8 +1,13 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyIndexOutOfBound;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.internal.NumberHelper;
+import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.objects.types.PyUnicodeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -16,7 +21,8 @@ import java.util.Arrays;
  * Use {@linkplain StandardCharsets#UTF_8} as default charset
  */
 public class PyUnicodeObject extends PyObject
-    implements PyNumberMethods, PySequenceMethods, PyMappingMethods {
+    implements PyNumberMethods, PySequenceMethods, PyMappingMethods,
+    TypeIterable {
 
    public static PyObject type = new PyUnicodeType();
 
@@ -155,9 +161,63 @@ public class PyUnicodeObject extends PyObject
    @Override
    public PyObject sqContain(PyObject o) throws PyTypeNotMatch {
       if (o instanceof PyUnicodeObject u) {
-         return new PyUnicodeObject(s + u.getData());
+         return new PyBoolObject(s.contains(u.getData()));
       }
       throw new PyTypeNotMatch("sqContain: parameter o require type str");
+   }
+
+   public static class PyUnicodeItrType extends PyObject {
+      private final PyUnicodeObject name;
+
+      private final Object type = PyTypeType.parentType;
+
+      public PyUnicodeItrType() {
+         this.name = new PyUnicodeObject("str_iterator");
+      }
+
+      @Override
+      public Object getType() {
+         return type;
+      }
+
+      @Override
+      public PyUnicodeObject getTypeName() {
+         return name;
+      }
+   }
+
+   public class PyUnicodeItrObject extends PyObject implements TypeDoIterate {
+
+      private int idx;
+      public static PyObject type = new PyUnicodeItrType();
+
+      public PyUnicodeItrObject() {
+         idx = 0;
+      }
+
+      @Override
+      public PyObject next() throws PyException {
+         if (idx < size())
+            return new PyUnicodeObject(s.substring(idx, ++idx));
+         return BuiltIn.PyExcStopIteration;
+      }
+
+      @Override
+      public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
+         if (idx >= size())
+            throw new PyIndexOutOfBound(idx + " is out of bound for str " + s);
+         return new PyUnicodeObject(s.substring(idx, idx+1));
+      }
+
+      @Override
+      public int size() {
+         return s.length();
+      }
+   }
+
+   @Override
+   public PyObject getIterator() throws PyNotImplemented {
+      return new PyUnicodeItrObject();
    }
 
 }
