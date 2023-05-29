@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyBoolType extends PyObject {
+public class PyBoolType extends PyTypeType {
 
   private final PyUnicodeObject name;
   public Object parentType = PyTypeType.parentType;

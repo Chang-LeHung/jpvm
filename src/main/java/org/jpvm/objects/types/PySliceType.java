@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PySliceType extends PyObject {
+public class PySliceType extends PyTypeType {
   private final PyUnicodeObject name;
   public Object parentType = PyTypeType.parentType;
 

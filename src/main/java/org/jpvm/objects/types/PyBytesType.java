@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyBytesType extends PyObject {
+public class PyBytesType extends PyTypeType {
 
   private final PyUnicodeObject name;
 

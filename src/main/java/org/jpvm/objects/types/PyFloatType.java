@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyFloatType extends PyObject {
+public class PyFloatType extends PyTypeType {
 
   private final PyUnicodeObject name;
 

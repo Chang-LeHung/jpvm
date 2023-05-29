@@ -1,10 +1,8 @@
 package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyUnicodeObject;
-import org.jpvm.objects.pyinterface.TypeCheck;
-import org.jpvm.objects.pyinterface.TypeName;
 
-public class PyBaseObjectType implements TypeName, TypeCheck {
+public class PyBaseObjectType extends PyTypeType {
 
   private final PyUnicodeObject name;
 

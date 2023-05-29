@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyComplexType extends PyObject {
+public class PyComplexType extends PyTypeType {
 
   private final PyUnicodeObject name;
 

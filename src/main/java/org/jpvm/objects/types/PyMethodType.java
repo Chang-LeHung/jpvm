@@ -1,9 +1,8 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyMethodType extends PyObject {
+public class PyMethodType extends PyTypeType {
 
   public static Object parentType = PyTypeType.parentType;
   private final PyUnicodeObject name;
