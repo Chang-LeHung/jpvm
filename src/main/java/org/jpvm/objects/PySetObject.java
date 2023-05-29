@@ -20,7 +20,7 @@ public class PySetObject extends PyObject implements TypeIterable,
 
    public static PyObject type = new PySetType();
 
-   private Set<PyObject> set;
+   private final Set<PyObject> set;
 
    private boolean isFrozen;
 

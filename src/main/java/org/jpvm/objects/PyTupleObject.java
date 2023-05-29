@@ -19,7 +19,7 @@ public class PyTupleObject extends PyObject implements TypeIterable {
 
    private final PyObject[] obItem;
 
-   private int hashCode;
+   private PyLongObject hashCode;
 
    private boolean hashDone;
 
@@ -131,10 +131,13 @@ public class PyTupleObject extends PyObject implements TypeIterable {
    @Override
    public PyLongObject hash() {
       if (hashDone)
-         return new PyLongObject(hashCode);
+         return hashCode;
+      int h = 0;
       for (PyObject e : obItem) {
-         hashCode = 31 * hashCode + (e == null ? 0 : (int) e.hash().getData());
+         h = 31 * h + (e == null ? 0 : (int) e.hash().getData());
       }
-      return new PyLongObject(hashCode);
+      hashDone = true;
+      hashCode = new PyLongObject(h);
+      return hashCode;
    }
 }

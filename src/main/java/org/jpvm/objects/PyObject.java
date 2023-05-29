@@ -9,7 +9,7 @@ import org.jpvm.python.BuiltIn;
 /**
  * base class of all classes in python
  */
-public class PyObject extends Exception implements PyArgs, TypeCheck,
+public class PyObject implements PyArgs, TypeCheck,
       TypeName, TypeStr, TypeRepr, TypeHash,TypeRichCompare,
       TypeNew, TypeInit, TypeCall, PyHashable {
 

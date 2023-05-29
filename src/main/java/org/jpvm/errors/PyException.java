@@ -1,9 +1,8 @@
 package org.jpvm.errors;
 
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyException extends PyObject implements PyExcLogging {
+public class PyException extends Exception implements PyExcLogging {
 
    private final String message;
 
