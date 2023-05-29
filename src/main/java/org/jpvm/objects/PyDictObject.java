@@ -90,13 +90,16 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      if (o instanceof PyDictObject dict) {
-         if (map.equals(dict.toJavaType()))
-            return BuiltIn.True;
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (o instanceof PyDictObject dict) {
+            if (map.equals(dict.toJavaType()))
+               return BuiltIn.True;
+            return BuiltIn.False;
+         }
          return BuiltIn.False;
       }
-      return BuiltIn.False;
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
 

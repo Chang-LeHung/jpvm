@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.types.PyFloatType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.python.BuiltIn;
@@ -72,12 +73,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      if (!(o instanceof PyFloatObject))
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (!(o instanceof PyFloatObject))
+            return BuiltIn.False;
+         if (((PyFloatObject) o).getData() == data)
+            return BuiltIn.True;
          return BuiltIn.False;
-      if (((PyFloatObject) o).getData() == data)
-         return BuiltIn.True;
-      return BuiltIn.False;
+      }
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
    @Override

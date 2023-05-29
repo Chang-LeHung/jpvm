@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeName;
@@ -126,13 +127,16 @@ public class PySetObject extends PyObject implements TypeIterable,
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      if (o instanceof PySetObject obj) {
-         if (set.equals(obj.toJavaType()))
-            return BuiltIn.True;
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (o instanceof PySetObject obj) {
+            if (set.equals(obj.toJavaType()))
+               return BuiltIn.True;
+            return BuiltIn.False;
+         }
          return BuiltIn.False;
       }
-      return BuiltIn.False;
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
    @Override

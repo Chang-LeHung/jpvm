@@ -1,5 +1,6 @@
 package org.jpvm.pvm;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -66,7 +67,7 @@ public class GILRuntimeState {
           long saveSwitchNumber = switchNumber;
           long start = System.currentTimeMillis();
           try {
-            condition.wait(interval);
+            condition.await(interval, TimeUnit.MILLISECONDS);
           } catch (InterruptedException ignored) {
             // do nothing
           }

@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -42,13 +43,16 @@ public class PySliceObject extends PyObject{
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o) {
-    if (!(o instanceof PySliceObject slice)) {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+    if (op == Operator.PY_EQ) {
+      if (!(o instanceof PySliceObject slice)) {
+        return BuiltIn.False;
+      }
+      if (start == slice.start && end == slice.end && step == slice.step)
+        return BuiltIn.True;
       return BuiltIn.False;
     }
-    if (start == slice.start && end == slice.end && step == slice.step)
-      return BuiltIn.True;
-    return BuiltIn.False;
+    throw new PyUnsupportedOperator("not support operator " + op);
   }
 
   @Override

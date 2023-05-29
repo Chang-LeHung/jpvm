@@ -4,6 +4,8 @@ import org.jpvm.objects.PyLongObject;
 import org.jpvm.objects.PyObject;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class TypeTest {
 
   @Test
@@ -18,5 +20,11 @@ public class TypeTest {
     System.out.println(obj.getTypeName());
     assert obj.getTypeName().getData().equals("int");
     System.out.println(2.5%2);
+  }
+
+  @Test
+  public void testBytes() {
+    byte[] bytes = {1, 2, 3};
+    System.out.println(Arrays.toString(bytes));
   }
 }

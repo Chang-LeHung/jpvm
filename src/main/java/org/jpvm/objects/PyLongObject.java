@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.types.PyLongType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.python.BuiltIn;
@@ -72,12 +73,15 @@ public class PyLongObject extends PyObject
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      if (!(o instanceof PyLongObject))
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (!(o instanceof PyLongObject))
+            return BuiltIn.False;
+         if (((PyLongObject) o).getData() == data)
+            return BuiltIn.True;
          return BuiltIn.False;
-      if (((PyLongObject) o).getData() == data)
-         return BuiltIn.True;
-      return BuiltIn.False;
+      }
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
    @Override

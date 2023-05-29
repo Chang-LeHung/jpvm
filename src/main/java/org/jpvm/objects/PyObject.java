@@ -1,8 +1,10 @@
 package org.jpvm.objects;
 
 
+import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
+import org.jpvm.python.BuiltIn;
 
 /**
  * base class of all classes in python
@@ -69,8 +71,13 @@ public class PyObject extends Exception implements PyArgs, TypeCheck,
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      return new PyBoolObject(o == this);
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (o == this)
+            return BuiltIn.True;
+         return BuiltIn.False;
+      }
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
    public PyDictObject getDict() {

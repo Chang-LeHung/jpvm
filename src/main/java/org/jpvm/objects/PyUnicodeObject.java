@@ -1,9 +1,6 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyIndexOutOfBound;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -98,12 +95,15 @@ public class PyUnicodeObject extends PyObject
    }
 
    @Override
-   public PyBoolObject richCompare(PyObject o) {
-      if (!(o instanceof PyUnicodeObject d))
+   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+      if (op == Operator.PY_EQ) {
+         if (!(o instanceof PyUnicodeObject d))
+            return BuiltIn.False;
+         if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
+            return BuiltIn.True;
          return BuiltIn.False;
-      if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
-         return BuiltIn.True;
-      return BuiltIn.False;
+      }
+      throw new PyUnsupportedOperator("not support operator " + op);
    }
 
    @Override
