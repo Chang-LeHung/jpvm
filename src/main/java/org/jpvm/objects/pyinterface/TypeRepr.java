@@ -6,6 +6,7 @@ public interface TypeRepr {
 
   /**
    * implementation of corresponding cpython tp_repr
+   *
    * @return {@link PyUnicodeObject}
    */
   PyUnicodeObject repr();

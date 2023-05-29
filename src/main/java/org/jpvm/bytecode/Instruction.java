@@ -2,49 +2,49 @@ package org.jpvm.bytecode;
 
 public class Instruction {
 
-   private int pos;
-   private OpMap.OpName opname;
-   private int opcode;
-   private int oparg;
+  private int pos;
+  private OpMap.OpName opname;
+  private int opcode;
+  private int oparg;
 
-   public Instruction() {
-   }
+  public Instruction() {
+  }
 
-   public int getPos() {
-      return pos;
-   }
+  public Instruction(OpMap.OpName opname, int opcode, int oparg) {
+    this.opname = opname;
+    this.opcode = opcode;
+    this.oparg = oparg;
+  }
 
-   public void setPos(int pos) {
-      this.pos = pos;
-   }
+  public int getPos() {
+    return pos;
+  }
 
-   public Instruction(OpMap.OpName opname, int opcode, int oparg) {
-      this.opname = opname;
-      this.opcode = opcode;
-      this.oparg = oparg;
-   }
+  public void setPos(int pos) {
+    this.pos = pos;
+  }
 
-   public void setOpname(OpMap.OpName opname) {
-      this.opname = opname;
-   }
+  public OpMap.OpName getOpname() {
+    return opname;
+  }
 
-   public void setOpcode(int opcode) {
-      this.opcode = opcode;
-   }
+  public void setOpname(OpMap.OpName opname) {
+    this.opname = opname;
+  }
 
-   public void setOparg(int oparg) {
-      this.oparg = oparg;
-   }
+  public int getOpcode() {
+    return opcode;
+  }
 
-   public OpMap.OpName getOpname() {
-      return opname;
-   }
+  public void setOpcode(int opcode) {
+    this.opcode = opcode;
+  }
 
-   public int getOpcode() {
-      return opcode;
-   }
+  public int getOparg() {
+    return oparg;
+  }
 
-   public int getOparg() {
-      return oparg;
-   }
+  public void setOparg(int oparg) {
+    this.oparg = oparg;
+  }
 }

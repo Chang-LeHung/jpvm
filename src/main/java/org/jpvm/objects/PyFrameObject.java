@@ -8,13 +8,13 @@ public class PyFrameObject extends PyObject {
   public static PyObject type = new PyFrameType();
   private final PyFrameObject back;
   private final PyCodeObject code;
-  private PyObject builtins;
-  private PyObject globals;
-  private PyObject locals;
   /**
    * value stack
    */
   private final PyObject[] stack;
+  private PyObject builtins;
+  private PyObject globals;
+  private PyObject locals;
   /**
    * shows how many slots of stack have been used
    */
@@ -37,6 +37,9 @@ public class PyFrameObject extends PyObject {
     this.stack = new PyObject[code.getCoStackSize()];
   }
 
+  public static PyBoolObject check(PyObject o) {
+    return new PyBoolObject(o == type);
+  }
 
   public PyFrameObject getBack() {
     return back;
@@ -50,12 +53,24 @@ public class PyFrameObject extends PyObject {
     return builtins;
   }
 
+  public void setBuiltins(PyObject builtins) {
+    this.builtins = builtins;
+  }
+
   public PyObject getGlobals() {
     return globals;
   }
 
+  public void setGlobals(PyObject globals) {
+    this.globals = globals;
+  }
+
   public PyObject getLocals() {
     return locals;
+  }
+
+  public void setLocals(PyObject locals) {
+    this.locals = locals;
   }
 
   public int getUsed() {
@@ -66,24 +81,8 @@ public class PyFrameObject extends PyObject {
     return isExecuting;
   }
 
-  public void setBuiltins(PyObject builtins) {
-    this.builtins = builtins;
-  }
-
-  public void setGlobals(PyObject globals) {
-    this.globals = globals;
-  }
-
-  public void setLocals(PyObject locals) {
-    this.locals = locals;
-  }
-
   @Override
   public Object getType() {
     return type;
-  }
-
-  public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
   }
 }

@@ -124,6 +124,7 @@ public interface PyNumberMethods {
   default PyObject nbInt() throws PyNotImplemented {
     throw new PyNotImplemented("nbInt is not implemented");
   }
+
   /**
    * implementation of corresponding cpython nb_reserved
    */

@@ -5,9 +5,8 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PySetType extends PyObject {
 
-  private final PyUnicodeObject name;
-
   public static Object parentType = PyTypeType.parentType;
+  private final PyUnicodeObject name;
 
   public PySetType() {
     name = new PyUnicodeObject("set");

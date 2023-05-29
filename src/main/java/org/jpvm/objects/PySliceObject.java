@@ -8,7 +8,7 @@ import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PySliceType;
 import org.jpvm.python.BuiltIn;
 
-public class PySliceObject extends PyObject{
+public class PySliceObject extends PyObject {
 
   public static PyObject type = new PySliceType();
 
@@ -108,12 +108,12 @@ public class PySliceObject extends PyObject{
       }
       PyListObject list = new PyListObject();
       if (s < 0) {
-        for(int i=(e-1+it.size())%it.size(); i>=((b+it.size())%it.size()); i+=s){
+        for (int i = (e - 1 + it.size()) % it.size(); i >= ((b + it.size()) % it.size()); i += s) {
           assert i >= 0;
           list.append(new PyLongObject(i));
         }
-      }else {
-        for(int i=((b+it.size())%it.size()); i<(e+it.size())%it.size(); i+=s){
+      } else {
+        for (int i = ((b + it.size()) % it.size()); i < (e + it.size()) % it.size(); i += s) {
           assert i >= 0;
           list.append(new PyLongObject(i));
         }

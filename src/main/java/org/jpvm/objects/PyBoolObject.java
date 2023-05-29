@@ -5,78 +5,78 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolObject extends PyObject implements PyNumberMethods {
 
-   public static PyObject type = new PyBoolType();
+  public static PyObject type = new PyBoolType();
 
-   private boolean bool;
+  private boolean bool;
 
-   public PyBoolObject(boolean bool) {
-      this.bool = bool;
-   }
+  public PyBoolObject(boolean bool) {
+    this.bool = bool;
+  }
 
-   public boolean isBool() {
-      return bool;
-   }
+  public static PyBoolObject check(PyObject o) {
+    return new PyBoolObject(o == type);
+  }
 
-   public void setBool(boolean bool) {
-      this.bool = bool;
-   }
+  public boolean isBool() {
+    return bool;
+  }
 
-   @Override
-   public String toString() {
-      return "PyBoolObject{" +
-          "bool=" + bool +
-          '}';
-   }
+  public void setBool(boolean bool) {
+    this.bool = bool;
+  }
 
-   @Override
-   public Object toJavaType() {
-      return bool;
-   }
+  @Override
+  public String toString() {
+    return "PyBoolObject{" +
+        "bool=" + bool +
+        '}';
+  }
 
-   public boolean isTrue() {
-      return bool;
-   }
+  @Override
+  public Object toJavaType() {
+    return bool;
+  }
 
-   public boolean isFalse() {
-      return !bool;
-   }
+  public boolean isTrue() {
+    return bool;
+  }
 
-   @Override
-   public Object getType() {
-      return type;
-   }
+  public boolean isFalse() {
+    return !bool;
+  }
 
-   public static PyBoolObject check(PyObject o) {
-      return new PyBoolObject(o == type);
-   }
+  @Override
+  public Object getType() {
+    return type;
+  }
 
-   @Override
-   public PyObject and(PyObject o) {
-      if (!(o instanceof PyBoolObject))
-         return new PyBoolObject(false);
-      return new PyBoolObject(bool && ((PyBoolObject) o).bool);
-   }
+  @Override
+  public PyObject and(PyObject o) {
+    if (!(o instanceof PyBoolObject))
+      return new PyBoolObject(false);
+    return new PyBoolObject(bool && ((PyBoolObject) o).bool);
+  }
 
-   @Override
-   public PyObject xor(PyObject o) {
-      if (!(o instanceof PyBoolObject))
-         return new PyBoolObject(false);
-      return new PyBoolObject(bool != ((PyBoolObject) o).bool);
-   }
+  @Override
+  public PyObject xor(PyObject o) {
+    if (!(o instanceof PyBoolObject))
+      return new PyBoolObject(false);
+    return new PyBoolObject(bool != ((PyBoolObject) o).bool);
+  }
 
-   @Override
-   public PyObject or(PyObject o) {
-      if (!(o instanceof PyBoolObject))
-         return new PyBoolObject(false);
-      return new PyBoolObject(bool || ((PyBoolObject) o).bool);
-   }
+  @Override
+  public PyObject or(PyObject o) {
+    if (!(o instanceof PyBoolObject))
+      return new PyBoolObject(false);
+    return new PyBoolObject(bool || ((PyBoolObject) o).bool);
+  }
 
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj) return true;
-      if (obj == null) return false;
-      if (obj instanceof PyBoolObject)
-         return bool == ((PyBoolObject) obj).bool;
-      return false;
-   }
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (obj instanceof PyBoolObject)
+      return bool == ((PyBoolObject) obj).bool;
+    return false;
+  }
 }

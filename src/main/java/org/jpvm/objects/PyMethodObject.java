@@ -6,7 +6,7 @@ import org.jpvm.objects.types.PyMethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class PyMethodObject extends PyObject{
+public class PyMethodObject extends PyObject {
 
   public static PyObject type = new PyMethodType();
 

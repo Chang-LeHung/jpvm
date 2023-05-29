@@ -4,18 +4,18 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PyException extends Exception implements PyExcLogging {
 
-   private final String message;
+  private final String message;
 
-   public PyException(String message) {
-      this.message = message;
-   }
+  public PyException(String message) {
+    this.message = message;
+  }
 
-   @Override
-   public PyUnicodeObject log() {
-      return new PyUnicodeObject(message);
-   }
+  @Override
+  public PyUnicodeObject log() {
+    return new PyUnicodeObject(message);
+  }
 
-   public String getMessage() {
-      return message;
-   }
+  public String getMessage() {
+    return message;
+  }
 }

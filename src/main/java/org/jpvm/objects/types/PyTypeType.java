@@ -5,9 +5,8 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PyTypeType extends PyObject {
 
-  private final PyUnicodeObject name;
-
   public static Object parentType = new PyTypeType();
+  private final PyUnicodeObject name;
 
   public PyTypeType() {
     name = new PyUnicodeObject("type");

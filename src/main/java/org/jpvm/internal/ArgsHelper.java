@@ -1,6 +1,9 @@
 package org.jpvm.internal;
 
-import org.jpvm.objects.*;
+import org.jpvm.objects.PyDictObject;
+import org.jpvm.objects.PyFunctionObject;
+import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
 import org.jpvm.pycParser.PyCodeObject;
 
 
@@ -47,12 +50,12 @@ public class ArgsHelper {
     if (isKw) {
       PyTupleObject arg = (PyTupleObject) args[0];
       for (int i = 0; i < arg.size(); ++i) {
-        ans.put(arg.get(i), args[i+1]);
+        ans.put(arg.get(i), args[i + 1]);
       }
-      for (int i = arg.size()+1; i < args.length; ++i) {
-        ans.put(varNames.get(i-arg.size()-1), args[i]);
+      for (int i = arg.size() + 1; i < args.length; ++i) {
+        ans.put(varNames.get(i - arg.size() - 1), args[i]);
       }
-    }else {
+    } else {
       for (int i = 0; i < args.length; ++i) {
         ans.put(varNames.get(i), args[i]);
       }

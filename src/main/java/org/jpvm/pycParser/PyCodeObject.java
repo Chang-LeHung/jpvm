@@ -5,236 +5,237 @@ import org.jpvm.objects.PyObject;
 
 public class PyCodeObject extends PyObject {
 
-   /**
-    * non-KwOnly argument count
-    */
-   private int coArgument;
-   /**
-    * KwOnly argument count
-    */
-   private int coKwOnlyArCnt;
-   /**
-    * Positional only argument count
-    */
-   private int coPosOnlyArCnt;
-   private int coNLocals;
-   private int coStackSize;
-   private int coFlags;
-   private int coFirstLineNo;
-   /**
-    * type of {@link org.jpvm.objects.PyBytesObject}
-    */
-   private PyObject coCode;
-   /**
-    * type of {@link org.jpvm.objects.PyTupleObject}
-    */
-   private PyObject coConsts;
-   /**
-    * type of {@link org.jpvm.objects.PyTupleObject}
-    */
-   private PyObject coNames;
-   /**
-    * type of {@link org.jpvm.objects.PyTupleObject}
-    */
-   private PyObject coVarNames;
-   /**
-    * type of {@link org.jpvm.objects.PyTupleObject}
-    */
-   private PyObject coFreeVars;
-   /**
-    * type of {@link org.jpvm.objects.PyTupleObject}
-    */
-   private PyObject coCellVars;
-   /**
-    * type of {@link org.jpvm.objects.PyUnicodeObject}
-    */
-   private PyObject coFileName;
-   /**
-    * type of {@link org.jpvm.objects.PyUnicodeObject}
-    */
-   private PyObject coName;
-   /**
-    * type of {@link org.jpvm.objects.PyBytesObject}
-    */
-   private PyObject colnotab;
+  /**
+   * non-KwOnly argument count
+   */
+  private int coArgument;
+  /**
+   * KwOnly argument count
+   */
+  private int coKwOnlyArCnt;
+  /**
+   * Positional only argument count
+   */
+  private int coPosOnlyArCnt;
+  private int coNLocals;
+  private int coStackSize;
+  private int coFlags;
+  private int coFirstLineNo;
+  /**
+   * type of {@link org.jpvm.objects.PyBytesObject}
+   */
+  private PyObject coCode;
+  /**
+   * type of {@link org.jpvm.objects.PyTupleObject}
+   */
+  private PyObject coConsts;
+  /**
+   * type of {@link org.jpvm.objects.PyTupleObject}
+   */
+  private PyObject coNames;
+  /**
+   * type of {@link org.jpvm.objects.PyTupleObject}
+   */
+  private PyObject coVarNames;
+  /**
+   * type of {@link org.jpvm.objects.PyTupleObject}
+   */
+  private PyObject coFreeVars;
+  /**
+   * type of {@link org.jpvm.objects.PyTupleObject}
+   */
+  private PyObject coCellVars;
+  /**
+   * type of {@link org.jpvm.objects.PyUnicodeObject}
+   */
+  private PyObject coFileName;
+  /**
+   * type of {@link org.jpvm.objects.PyUnicodeObject}
+   */
+  private PyObject coName;
+  /**
+   * type of {@link org.jpvm.objects.PyBytesObject}
+   */
+  private PyObject colnotab;
 
-   private PyObject coZombieFrame;
-   private PyObject coWeakRefList;
-   private PyObject coExtra;
+  private PyObject coZombieFrame;
+  private PyObject coWeakRefList;
+  private PyObject coExtra;
 
-   public int getCoArgument() {
-      return coArgument;
-   }
+  public int getCoArgument() {
+    return coArgument;
+  }
 
-   public void setCoArgument(int coArgument) {
-      this.coArgument = coArgument;
-   }
+  public void setCoArgument(int coArgument) {
+    this.coArgument = coArgument;
+  }
 
-   public int getCoKwOnlyArCnt() {
-      return coKwOnlyArCnt;
-   }
+  public int getCoKwOnlyArCnt() {
+    return coKwOnlyArCnt;
+  }
 
-   public void setCoKwOnlyArCnt(int coKwOnlyArCnt) {
-      this.coKwOnlyArCnt = coKwOnlyArCnt;
-   }
+  public void setCoKwOnlyArCnt(int coKwOnlyArCnt) {
+    this.coKwOnlyArCnt = coKwOnlyArCnt;
+  }
 
-   public PyObject getCoVarNames() {
-      return coVarNames;
-   }
+  public PyObject getCoVarNames() {
+    return coVarNames;
+  }
 
-   public void setCoVarNames(PyObject coVarNames) {
-      this.coVarNames = coVarNames;
-   }
+  public void setCoVarNames(PyObject coVarNames) {
+    this.coVarNames = coVarNames;
+  }
 
-   public PyObject getCoConsts() {
-      return coConsts;
-   }
+  public PyObject getCoConsts() {
+    return coConsts;
+  }
 
-   public void setCoConsts(PyObject coConsts) {
-      this.coConsts = coConsts;
-   }
-   public int getCoNLocals() {
-      return coNLocals;
-   }
+  public void setCoConsts(PyObject coConsts) {
+    this.coConsts = coConsts;
+  }
 
-   public void setCoNLocals(int coNLocals) {
-      this.coNLocals = coNLocals;
-   }
+  public int getCoNLocals() {
+    return coNLocals;
+  }
 
-   public int getCoPosOnlyArCnt() {
-      return coPosOnlyArCnt;
-   }
+  public void setCoNLocals(int coNLocals) {
+    this.coNLocals = coNLocals;
+  }
 
-   public void setCoPosOnlyArCnt(int coPosOnlyArCnt) {
-      this.coPosOnlyArCnt = coPosOnlyArCnt;
-   }
+  public int getCoPosOnlyArCnt() {
+    return coPosOnlyArCnt;
+  }
 
-   public int getCoStackSize() {
-      return coStackSize;
-   }
+  public void setCoPosOnlyArCnt(int coPosOnlyArCnt) {
+    this.coPosOnlyArCnt = coPosOnlyArCnt;
+  }
 
-   public void setCoStackSize(int coStackSize) {
-      this.coStackSize = coStackSize;
-   }
+  public int getCoStackSize() {
+    return coStackSize;
+  }
 
-   public int getCoFlags() {
-      return coFlags;
-   }
+  public void setCoStackSize(int coStackSize) {
+    this.coStackSize = coStackSize;
+  }
 
-   public void setCoFlags(int coFlags) {
-      this.coFlags = coFlags;
-   }
+  public int getCoFlags() {
+    return coFlags;
+  }
 
-   public int getCoFirstLineNo() {
-      return coFirstLineNo;
-   }
+  public void setCoFlags(int coFlags) {
+    this.coFlags = coFlags;
+  }
 
-   public void setCoFirstLineNo(int coFirstLineNo) {
-      this.coFirstLineNo = coFirstLineNo;
-   }
+  public int getCoFirstLineNo() {
+    return coFirstLineNo;
+  }
 
-   public PyObject getCoCode() {
-      return coCode;
-   }
+  public void setCoFirstLineNo(int coFirstLineNo) {
+    this.coFirstLineNo = coFirstLineNo;
+  }
 
-   public void setCoCode(PyObject coCode) {
-      this.coCode = coCode;
-   }
+  public PyObject getCoCode() {
+    return coCode;
+  }
 
-   public PyObject getCoNames() {
-      return coNames;
-   }
+  public void setCoCode(PyObject coCode) {
+    this.coCode = coCode;
+  }
 
-   public void setCoNames(PyObject coNames) {
-      this.coNames = coNames;
-   }
+  public PyObject getCoNames() {
+    return coNames;
+  }
 
-   public PyObject getCoFreeVars() {
-      return coFreeVars;
-   }
+  public void setCoNames(PyObject coNames) {
+    this.coNames = coNames;
+  }
 
-   public void setCoFreeVars(PyObject coFreeVars) {
-      this.coFreeVars = coFreeVars;
-   }
+  public PyObject getCoFreeVars() {
+    return coFreeVars;
+  }
 
-   public PyObject getCoCellVars() {
-      return coCellVars;
-   }
+  public void setCoFreeVars(PyObject coFreeVars) {
+    this.coFreeVars = coFreeVars;
+  }
 
-   public void setCoCellVars(PyObject coCellVars) {
-      this.coCellVars = coCellVars;
-   }
+  public PyObject getCoCellVars() {
+    return coCellVars;
+  }
 
-   public PyObject getCoFileName() {
-      return coFileName;
-   }
+  public void setCoCellVars(PyObject coCellVars) {
+    this.coCellVars = coCellVars;
+  }
 
-   public void setCoFileName(PyObject coFileName) {
-      this.coFileName = coFileName;
-   }
+  public PyObject getCoFileName() {
+    return coFileName;
+  }
 
-   public PyObject getCoName() {
-      return coName;
-   }
+  public void setCoFileName(PyObject coFileName) {
+    this.coFileName = coFileName;
+  }
 
-   public void setCoName(PyObject coName) {
-      this.coName = coName;
-   }
+  public PyObject getCoName() {
+    return coName;
+  }
 
-   public PyObject getColnotab() {
-      return colnotab;
-   }
+  public void setCoName(PyObject coName) {
+    this.coName = coName;
+  }
 
-   public void setColnotab(PyObject colnotab) {
-      this.colnotab = colnotab;
-   }
+  public PyObject getColnotab() {
+    return colnotab;
+  }
 
-   public PyObject getCoZombieFrame() {
-      return coZombieFrame;
-   }
+  public void setColnotab(PyObject colnotab) {
+    this.colnotab = colnotab;
+  }
 
-   public void setCoZombieFrame(PyObject coZombieFrame) {
-      this.coZombieFrame = coZombieFrame;
-   }
+  public PyObject getCoZombieFrame() {
+    return coZombieFrame;
+  }
 
-   public PyObject getCoWeakRefList() {
-      return coWeakRefList;
-   }
+  public void setCoZombieFrame(PyObject coZombieFrame) {
+    this.coZombieFrame = coZombieFrame;
+  }
 
-   public void setCoWeakRefList(PyObject coWeakRefList) {
-      this.coWeakRefList = coWeakRefList;
-   }
+  public PyObject getCoWeakRefList() {
+    return coWeakRefList;
+  }
 
-   public PyObject getCoExtra() {
-      return coExtra;
-   }
+  public void setCoWeakRefList(PyObject coWeakRefList) {
+    this.coWeakRefList = coWeakRefList;
+  }
 
-   public void setCoExtra(PyObject coExtra) {
-      this.coExtra = coExtra;
-   }
+  public PyObject getCoExtra() {
+    return coExtra;
+  }
 
-   @Override
-   public String toString() {
-      return "CodeObject{" +
-          "coArgument=" + coArgument +
-          ", coKwOnlyArCnt=" + coKwOnlyArCnt +
-          ", coPosOnlyArCnt=" + coPosOnlyArCnt +
-          ", coNLocals=" + coNLocals +
-          ", coStackSize=" + coStackSize +
-          ", coFlags=" + coFlags +
-          ", coFirstLineNo=" + coFirstLineNo +
-          ", coCode=" + coCode +
-          ", coConsts=" + coConsts +
-          ", coNames=" + coNames +
-          ", coVarNames=" + coVarNames +
-          ", coFreeVars=" + coFreeVars +
-          ", coCellVars=" + coCellVars +
-          ", coFileName=" + coFileName +
-          ", coName=" + coName +
-          ", colnotab=" + colnotab +
-          ", coZombieFrame=" + coZombieFrame +
-          ", coWeakRefList=" + coWeakRefList +
-          ", coExtra=" + coExtra +
-          '}';
-   }
+  public void setCoExtra(PyObject coExtra) {
+    this.coExtra = coExtra;
+  }
+
+  @Override
+  public String toString() {
+    return "CodeObject{" +
+        "coArgument=" + coArgument +
+        ", coKwOnlyArCnt=" + coKwOnlyArCnt +
+        ", coPosOnlyArCnt=" + coPosOnlyArCnt +
+        ", coNLocals=" + coNLocals +
+        ", coStackSize=" + coStackSize +
+        ", coFlags=" + coFlags +
+        ", coFirstLineNo=" + coFirstLineNo +
+        ", coCode=" + coCode +
+        ", coConsts=" + coConsts +
+        ", coNames=" + coNames +
+        ", coVarNames=" + coVarNames +
+        ", coFreeVars=" + coFreeVars +
+        ", coCellVars=" + coCellVars +
+        ", coFileName=" + coFileName +
+        ", coName=" + coName +
+        ", colnotab=" + colnotab +
+        ", coZombieFrame=" + coZombieFrame +
+        ", coWeakRefList=" + coWeakRefList +
+        ", coExtra=" + coExtra +
+        '}';
+  }
 }

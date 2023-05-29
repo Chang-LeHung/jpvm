@@ -5,53 +5,54 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyComplexObject extends PyObject implements PyNumberMethods {
 
-   public static PyObject type = new PyComplexType();
-   private PyFloatObject real;
-   private PyFloatObject image;
+  public static PyObject type = new PyComplexType();
+  private PyFloatObject real;
+  private PyFloatObject image;
 
-   public PyComplexObject() {}
+  public PyComplexObject() {
+  }
 
-   public PyComplexObject(PyFloatObject real, PyFloatObject image) {
-      this.real = real;
-      this.image = image;
-   }
+  public PyComplexObject(PyFloatObject real, PyFloatObject image) {
+    this.real = real;
+    this.image = image;
+  }
 
-   public PyFloatObject getReal() {
-      return real;
-   }
+  public static PyBoolObject check(PyObject o) {
+    return new PyBoolObject(o == type);
+  }
 
-   public void setReal(PyFloatObject real) {
-      this.real = real;
-   }
+  public PyFloatObject getReal() {
+    return real;
+  }
 
-   public PyFloatObject getImage() {
-      return image;
-   }
+  public void setReal(PyFloatObject real) {
+    this.real = real;
+  }
 
-   @Override
-   public String toString() {
-      return real + "+" + image + "i";
-   }
+  public PyFloatObject getImage() {
+    return image;
+  }
 
-   public void setImage(PyFloatObject image) {
-      this.image = image;
-   }
+  public void setImage(PyFloatObject image) {
+    this.image = image;
+  }
 
-   /**
-    * @return double[] [0] for image [1] for real
-    */
-   @Override
-   public Object toJavaType() {
-      return new double[] {(double)getImage().toJavaType(),
-          (double)getReal().toJavaType()};
-   }
+  @Override
+  public String toString() {
+    return real + "+" + image + "i";
+  }
 
-   @Override
-   public Object getType() {
-      return type;
-   }
+  /**
+   * @return double[] [0] for image [1] for real
+   */
+  @Override
+  public Object toJavaType() {
+    return new double[]{(double) getImage().toJavaType(),
+        (double) getReal().toJavaType()};
+  }
 
-   public static PyBoolObject check(PyObject o) {
-      return new PyBoolObject(o == type);
-   }
+  @Override
+  public Object getType() {
+    return type;
+  }
 }

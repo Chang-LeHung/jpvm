@@ -2,7 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.pycParser.PyCodeObject;
 
-public class PyFunctionObject extends PyObject{
+public class PyFunctionObject extends PyObject {
 
   /**
    * type of {@link PyBytesObject}
@@ -38,6 +38,10 @@ public class PyFunctionObject extends PyObject{
     this.funcName = funcName;
     this.funcDict = funcDict;
     this.funcQualName = funcQualName;
+  }
+
+  public static PyBoolObject check(PyObject o) {
+    return new PyBoolObject(o == type);
   }
 
   public PyObject getFuncCode() {
@@ -115,9 +119,5 @@ public class PyFunctionObject extends PyObject{
   @Override
   public Object getType() {
     return type;
-  }
-
-  public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
   }
 }

@@ -6,6 +6,8 @@ import org.jpvm.objects.PyObject;
 
 public interface TypeRichCompare {
 
+  PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator;
+
   public static enum Operator {
     PY_EQ,
     PY_NE,
@@ -14,6 +16,4 @@ public interface TypeRichCompare {
     PY_LE,
     PY_LT,
   }
-
-  PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator;
 }

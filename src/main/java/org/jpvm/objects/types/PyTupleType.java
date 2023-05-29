@@ -2,7 +2,6 @@ package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
-import org.jpvm.objects.pyinterface.TypeName;
 
 public class PyTupleType extends PyObject {
   private final PyUnicodeObject name;

@@ -16,223 +16,223 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class PySetObject extends PyObject implements TypeIterable,
-            PyNumberMethods, PySequenceMethods {
+    PyNumberMethods, PySequenceMethods {
 
-   public static PyObject type = new PySetType();
+  public static PyObject type = new PySetType();
 
-   private final Set<PyObject> set;
+  private final Set<PyObject> set;
 
-   private boolean isFrozen;
+  private boolean isFrozen;
 
-   public PySetObject() {
-      this.set = new HashSet<>();
-   }
+  public PySetObject() {
+    this.set = new HashSet<>();
+  }
 
-   public PySetObject(boolean isFrozen) {
-      this();
-      this.isFrozen = isFrozen;
-   }
+  public PySetObject(boolean isFrozen) {
+    this();
+    this.isFrozen = isFrozen;
+  }
 
-   @Override
-   public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("{");
-      for (PyObject object : set) {
-         builder.append(object.toString());
-         builder.append(", ");
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("{");
+    for (PyObject object : set) {
+      builder.append(object.toString());
+      builder.append(", ");
+    }
+    if (builder.length() > 2)
+      builder.delete(builder.length() - 2, builder.length());
+    builder.append("}");
+    return builder.toString();
+  }
+
+  public boolean isFrozen() {
+    return isFrozen;
+  }
+
+  public void setFrozen(boolean frozen) {
+    isFrozen = frozen;
+  }
+
+  public void put(PyObject key) {
+    set.add(key);
+  }
+
+  public void putAll(PySetObject key) {
+    set.addAll(key.set);
+  }
+
+  public boolean contains(PyObject key) {
+    return set.contains(key);
+  }
+
+  @Override
+  public Object toJavaType() {
+    return set;
+  }
+
+  @Override
+  public Object getType() {
+    return type;
+  }
+
+  @Override
+  public PyObject getIterator() {
+    return new PySetItrObject();
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return str();
+  }
+
+  @Override
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+    if (op == Operator.PY_EQ) {
+      if (o instanceof PySetObject obj) {
+        if (set.equals(obj.toJavaType()))
+          return BuiltIn.True;
+        return BuiltIn.False;
       }
-      if (builder.length() > 2)
-         builder.delete(builder.length() - 2, builder.length());
-      builder.append("}");
-      return builder.toString();
-   }
+      return BuiltIn.False;
+    }
+    throw new PyUnsupportedOperator("not support operator " + op);
+  }
 
-   public boolean isFrozen() {
-      return isFrozen;
-   }
+  @Override
+  public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      PySetObject ret = new PySetObject();
+      ret.putAll(this);
+      ret.set.removeAll((Set) s.toJavaType());
+      return ret;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-   public void setFrozen(boolean frozen) {
-      isFrozen = frozen;
-   }
+  @Override
+  public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      PySetObject ret = new PySetObject();
+      ret.putAll(this);
+      ret.set.retainAll((Set) s.toJavaType());
+      return ret;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-   public void put(PyObject key) {
-      set.add(key);
-   }
-
-   public void putAll(PySetObject key) {
-      set.addAll(key.set);
-   }
-
-   public boolean contains(PyObject key) {
-      return set.contains(key);
-   }
-
-   @Override
-   public Object toJavaType() {
-      return set;
-   }
-
-   @Override
-   public Object getType() {
-      return type;
-   }
-
-   @Override
-   public PyObject getIterator() {
-      return new PySetItrObject();
-   }
-
-   public static class PySetItrType extends PyObject implements TypeName {
-
-      private PyUnicodeObject name;
-
-      public PySetItrType() {
-         name = new PyUnicodeObject("set_iterator");
+  @Override
+  public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      PySetObject ret = new PySetObject();
+      for (PyObject pyObject : set) {
+        if (!s.contains(pyObject))
+          ret.put(pyObject);
       }
-
-      @Override
-      public PyUnicodeObject getTypeName() {
-         return name;
+      for (PyObject pyObject : s.set) {
+        if (!set.contains(pyObject))
+          ret.put(pyObject);
       }
-   }
+      return ret;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-   public class PySetItrObject extends PyObject implements TypeDoIterate {
-      Iterator<PyObject> iterator;
+  @Override
+  public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      PySetObject ret = new PySetObject();
+      ret.putAll(this);
+      ret.set.addAll((Set) s.toJavaType());
+      return ret;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-      public PySetItrObject() {
-         iterator = set.iterator();
+  @Override
+  public PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      set.retainAll(s.set);
+      return this;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
+
+  @Override
+  public PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      HashSet<PyObject> set = new HashSet<>();
+      for (PyObject pyObject : this.set) {
+        if (!s.contains(pyObject))
+          set.add(pyObject);
       }
-
-      @Override
-      public PyObject next() {
-         if (iterator.hasNext())
-            return iterator.next();
-         return BuiltIn.PyExcStopIteration;
+      for (PyObject pyObject : s.set) {
+        if (!this.set.contains(pyObject))
+          set.add(pyObject);
       }
-   }
+      this.set.clear();
+      this.set.addAll(set);
+      return this;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-   @Override
-   public PyUnicodeObject getTypeName() {
-      return type.getTypeName();
-   }
+  @Override
+  public PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if (o instanceof PySetObject s) {
+      set.addAll((Set) s.toJavaType());
+      return this;
+    }
+    throw new PyTypeNotMatch("set sub function require type set");
+  }
 
-   @Override
-   public PyUnicodeObject str() {
-      return  new PyUnicodeObject(toString());
-   }
+  @Override
+  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+    return new PyLongObject(set.size());
+  }
 
-   @Override
-   public PyUnicodeObject repr() {
-      return str();
-   }
+  @Override
+  public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return new PyBoolObject(set.contains(o));
+  }
 
-   @Override
-   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-      if (op == Operator.PY_EQ) {
-         if (o instanceof PySetObject obj) {
-            if (set.equals(obj.toJavaType()))
-               return BuiltIn.True;
-            return BuiltIn.False;
-         }
-         return BuiltIn.False;
-      }
-      throw new PyUnsupportedOperator("not support operator " + op);
-   }
+  public static class PySetItrType extends PyObject implements TypeName {
 
-   @Override
-   public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         PySetObject ret = new PySetObject();
-         ret.putAll(this);
-         ret.set.removeAll((Set)s.toJavaType());
-         return ret;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
+    private PyUnicodeObject name;
 
-   @Override
-   public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         PySetObject ret = new PySetObject();
-         ret.putAll(this);
-         ret.set.retainAll((Set)s.toJavaType());
-         return ret;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
+    public PySetItrType() {
+      name = new PyUnicodeObject("set_iterator");
+    }
 
-   @Override
-   public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         PySetObject ret = new PySetObject();
-         for (PyObject pyObject : set) {
-            if (!s.contains(pyObject))
-               ret.put(pyObject);
-         }
-         for (PyObject pyObject : s.set) {
-            if (!set.contains(pyObject))
-               ret.put(pyObject);
-         }
-         return ret;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
+    @Override
+    public PyUnicodeObject getTypeName() {
+      return name;
+    }
+  }
 
-   @Override
-   public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         PySetObject ret = new PySetObject();
-         ret.putAll(this);
-         ret.set.addAll((Set)s.toJavaType());
-         return ret;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
+  public class PySetItrObject extends PyObject implements TypeDoIterate {
+    Iterator<PyObject> iterator;
 
-   @Override
-   public PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         set.retainAll(s.set);
-         return this;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
+    public PySetItrObject() {
+      iterator = set.iterator();
+    }
 
-   @Override
-   public PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         HashSet<PyObject> set = new HashSet<>();
-         for (PyObject pyObject : this.set) {
-            if (!s.contains(pyObject))
-               set.add(pyObject);
-         }
-         for (PyObject pyObject : s.set) {
-            if (!this.set.contains(pyObject))
-               set.add(pyObject);
-         }
-         this.set.clear();
-         this.set.addAll(set);
-         return this;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
-
-   @Override
-   public PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (o instanceof PySetObject s) {
-         set.addAll((Set)s.toJavaType());
-         return this;
-      }
-      throw new PyTypeNotMatch("set sub function require type set");
-   }
-
-   @Override
-   public PyObject sqLength(PyObject o) throws PyNotImplemented {
-      return new PyLongObject(set.size());
-   }
-
-   @Override
-   public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      return new PyBoolObject(set.contains(o));
-   }
+    @Override
+    public PyObject next() {
+      if (iterator.hasNext())
+        return iterator.next();
+      return BuiltIn.PyExcStopIteration;
+    }
+  }
 }

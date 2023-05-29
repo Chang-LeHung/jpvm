@@ -4,7 +4,6 @@ import org.jpvm.objects.*;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -29,44 +28,7 @@ public class Marshal {
   public static int CO_VARKEYWORDS = 0x0008;
   public static int CO_NESTED = 0x0010;
   public static int CO_GENERATOR = 0x0020;
-
-  public static class TYPE {
-    public static final byte FLAG_REF = (byte) 0x80;
-    public static final byte TYPE_NULL = '0';
-    public static final byte TYPE_NONE = 'N';
-    public static final byte TYPE_FALSE = 'F';
-    public static final byte TYPE_TRUE = 'T';
-    public static final byte TYPE_STOPITER = 'S';
-    public static final byte TYPE_ELLIPSIS = '.';
-    public static final byte TYPE_INT = 'i';
-    /* TYPE_INT64 is not generated anymore.
-    Supported for backward compatibility only. */
-    public static final byte TYPE_INT64 = 'I';
-    public static final byte TYPE_FLOAT = 'f';
-    public static final byte TYPE_BINARY_FLOAT = 'g';
-    public static final byte TYPE_COMPLEX = 'x';
-    public static final byte TYPE_BINARY_COMPLEX = 'y';
-    public static final byte TYPE_LONG = 'l';
-    public static final byte TYPE_STRING = 's';
-    public static final byte TYPE_INTERNED = 't';
-    public static final byte TYPE_REF = 'r';
-    public static final byte TYPE_TUPLE = '(';
-    public static final byte TYPE_LIST = '[';
-    public static final byte TYPE_DICT = '{';
-    public static final byte TYPE_CODE = 'c';
-    public static final byte TYPE_UNICODE = 'u';
-    public static final byte TYPE_UNKNOWN = '?';
-    public static final byte TYPE_SET = '<';
-    public static final byte TYPE_FROZENSET = '>';
-    public static final byte TYPE_ASCII = 'a';
-    public static final byte TYPE_ASCII_INTERNED = 'A';
-    public static final byte TYPE_SMALL_TUPLE = ')';
-    public static final byte TYPE_SHORT_ASCII = 'z';
-    public static final byte TYPE_SHORT_ASCII_INTERNED = 'Z';
-  }
-
   private PyListObject refs;
-
   /**
    * flag of being parsed {@link PyObject}
    */
@@ -75,7 +37,6 @@ public class Marshal {
   public Marshal() {
     refs = new PyListObject();
   }
-
 
   public PyObject RREF(PyObject o) {
     if (flag != 0) {
@@ -206,7 +167,6 @@ public class Marshal {
     return floatObject;
   }
 
-
   private PyObject loadReference(ByteBuffer buffer) {
     int i = buffer.getInt();
     return refs.get(i);
@@ -320,5 +280,40 @@ public class Marshal {
     PyBytesObject o = new PyBytesObject(bytes);
     RREF(o);
     return o;
+  }
+
+  public static class TYPE {
+    public static final byte FLAG_REF = (byte) 0x80;
+    public static final byte TYPE_NULL = '0';
+    public static final byte TYPE_NONE = 'N';
+    public static final byte TYPE_FALSE = 'F';
+    public static final byte TYPE_TRUE = 'T';
+    public static final byte TYPE_STOPITER = 'S';
+    public static final byte TYPE_ELLIPSIS = '.';
+    public static final byte TYPE_INT = 'i';
+    /* TYPE_INT64 is not generated anymore.
+    Supported for backward compatibility only. */
+    public static final byte TYPE_INT64 = 'I';
+    public static final byte TYPE_FLOAT = 'f';
+    public static final byte TYPE_BINARY_FLOAT = 'g';
+    public static final byte TYPE_COMPLEX = 'x';
+    public static final byte TYPE_BINARY_COMPLEX = 'y';
+    public static final byte TYPE_LONG = 'l';
+    public static final byte TYPE_STRING = 's';
+    public static final byte TYPE_INTERNED = 't';
+    public static final byte TYPE_REF = 'r';
+    public static final byte TYPE_TUPLE = '(';
+    public static final byte TYPE_LIST = '[';
+    public static final byte TYPE_DICT = '{';
+    public static final byte TYPE_CODE = 'c';
+    public static final byte TYPE_UNICODE = 'u';
+    public static final byte TYPE_UNKNOWN = '?';
+    public static final byte TYPE_SET = '<';
+    public static final byte TYPE_FROZENSET = '>';
+    public static final byte TYPE_ASCII = 'a';
+    public static final byte TYPE_ASCII_INTERNED = 'A';
+    public static final byte TYPE_SMALL_TUPLE = ')';
+    public static final byte TYPE_SHORT_ASCII = 'z';
+    public static final byte TYPE_SHORT_ASCII_INTERNED = 'Z';
   }
 }

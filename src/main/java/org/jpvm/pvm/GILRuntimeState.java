@@ -7,23 +7,18 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GILRuntimeState {
   private final long interval;
-
+  private final AtomicBoolean locked;
+  private final ReentrantLock lock;
+  private final Condition condition;
   private volatile boolean dropGILRequest;
-
   /**
    * purpose of use a1-a8/b1-b8/c1-c8 is to avoid false sharing
    */
   private volatile long a1, a2, a3, a4, a5, a6, a7, a8;
-  private final AtomicBoolean locked;
-
   private volatile long b1, b2, b3, b4, b5, b6, b7, b8;
   private volatile long switchNumber;
-
   private volatile long c1, c2, c3, c4, c5, c6, c7, c8;
   private volatile Thread lastHolder;
-
-  private final ReentrantLock lock;
-  private final Condition condition;
 
   public GILRuntimeState(long interval) {
     this.interval = interval;
@@ -46,13 +41,12 @@ public class GILRuntimeState {
     return switchNumber;
   }
 
-  public Thread getLastHolder() {
-    return lastHolder;
-  }
-
-
   public void setSwitchNumber(long switchNumber) {
     this.switchNumber = switchNumber;
+  }
+
+  public Thread getLastHolder() {
+    return lastHolder;
   }
 
   public boolean isDropGILRequest() {
@@ -62,7 +56,7 @@ public class GILRuntimeState {
   public void takeGIL() {
     try {
       lock.lock();
-      for (;;) {
+      for (; ; ) {
         while (locked.get()) {
           long saveSwitchNumber = switchNumber;
           long start = System.currentTimeMillis();
@@ -97,7 +91,7 @@ public class GILRuntimeState {
       locked.set(false);
       lastHolder = Thread.currentThread();
       condition.signal();
-    }finally {
+    } finally {
       lock.unlock();
     }
   }

@@ -7,6 +7,7 @@ public interface TypeName {
 
   /**
    * implementation of corresponding cpython tp_name
+   *
    * @return {@link PyObject}
    */
   PyUnicodeObject getTypeName();

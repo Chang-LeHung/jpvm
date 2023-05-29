@@ -15,129 +15,128 @@ import org.jpvm.python.BuiltIn;
  */
 public class PyTupleObject extends PyObject implements TypeIterable {
 
-   public static PyObject type = new PySetType();
+  public static PyObject type = new PySetType();
 
-   private final PyObject[] obItem;
+  private final PyObject[] obItem;
 
-   private PyLongObject hashCode;
+  private PyLongObject hashCode;
 
-   private boolean hashDone;
+  private boolean hashDone;
 
 
-   public PyTupleObject(int size) {
-      obItem = new PyObject[size];
-   }
+  public PyTupleObject(int size) {
+    obItem = new PyObject[size];
+  }
 
-   public void set(int idx, PyObject obj) {
-      obItem[idx] = obj;
-   }
+  public static PyBoolObject check(PyObject o) {
+    return new PyBoolObject(o == type);
+  }
 
-   public PyObject get(int idx) {
-      if (idx >= obItem.length)
-         throw new IndexOutOfBoundsException("idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
-      return obItem[idx];
-   }
+  public void set(int idx, PyObject obj) {
+    obItem[idx] = obj;
+  }
 
-   @Override
-   public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("(");
-      for (PyObject object : obItem) {
-         builder.append(object.toString());
-         builder.append(", ");
-      }
-      if (builder.length() > 2)
-         builder.delete(builder.length() - 2, builder.length());
-      builder.append(")");
-      return builder.toString();
-   }
+  public PyObject get(int idx) {
+    if (idx >= obItem.length)
+      throw new IndexOutOfBoundsException("idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
+    return obItem[idx];
+  }
 
-   @Override
-   public Object toJavaType() {
-      return obItem;
-   }
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("(");
+    for (PyObject object : obItem) {
+      builder.append(object.toString());
+      builder.append(", ");
+    }
+    if (builder.length() > 2)
+      builder.delete(builder.length() - 2, builder.length());
+    builder.append(")");
+    return builder.toString();
+  }
 
-   public int size() {
-      return obItem.length;
-   }
+  @Override
+  public Object toJavaType() {
+    return obItem;
+  }
 
-   @Override
-   public Object getType() {
-      return type;
-   }
+  public int size() {
+    return obItem.length;
+  }
 
-   public static PyBoolObject check(PyObject o) {
-      return new PyBoolObject(o == type);
-   }
+  @Override
+  public Object getType() {
+    return type;
+  }
 
-   public static class PyTupleItrType extends PyObject{
-      private final Object type = PyTypeType.parentType;
-      private final PyUnicodeObject name;
+  @Override
+  public PyBoolObject isHashable() {
+    return BuiltIn.True;
+  }
 
-      public PyTupleItrType() {
-         name = new PyUnicodeObject("tuple_iterator");
-      }
+  @Override
+  public PyObject getIterator() {
+    return new PyTupleItrObject();
+  }
 
-      @Override
-      public Object getType() {
-         return type;
-      }
-
-      @Override
-      public PyUnicodeObject getTypeName() {
-         return name;
-      }
-   }
-
-   public class PyTupleItrObject extends PyObject implements TypeDoIterate {
-      private int idx;
-
-      public static PyObject type = new PyTupleItrType();
-
-      public PyTupleItrObject() {
-         idx = 0;
-      }
-
-      @Override
-      public PyObject next() throws PyException {
-         if (idx < obItem.length)
-            return obItem[idx++];
-         return BuiltIn.PyExcStopIteration;
-      }
-
-      @Override
-      public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
-         if (idx < obItem.length)
-            return obItem[idx];
-         throw new PyIndexOutOfBound("tuple is out of bound for index " + idx);
-      }
-
-      @Override
-      public int size() {
-         return obItem.length;
-      }
-   }
-
-   @Override
-   public PyBoolObject isHashable() {
-      return BuiltIn.True;
-   }
-
-   @Override
-   public PyObject getIterator() {
-      return new PyTupleItrObject();
-   }
-
-   @Override
-   public PyLongObject hash() {
-      if (hashDone)
-         return hashCode;
-      int h = 0;
-      for (PyObject e : obItem) {
-         h = 31 * h + (e == null ? 0 : (int) e.hash().getData());
-      }
-      hashDone = true;
-      hashCode = new PyLongObject(h);
+  @Override
+  public PyLongObject hash() {
+    if (hashDone)
       return hashCode;
-   }
+    int h = 0;
+    for (PyObject e : obItem) {
+      h = 31 * h + (e == null ? 0 : (int) e.hash().getData());
+    }
+    hashDone = true;
+    hashCode = new PyLongObject(h);
+    return hashCode;
+  }
+
+  public static class PyTupleItrType extends PyObject {
+    private final Object type = PyTypeType.parentType;
+    private final PyUnicodeObject name;
+
+    public PyTupleItrType() {
+      name = new PyUnicodeObject("tuple_iterator");
+    }
+
+    @Override
+    public Object getType() {
+      return type;
+    }
+
+    @Override
+    public PyUnicodeObject getTypeName() {
+      return name;
+    }
+  }
+
+  public class PyTupleItrObject extends PyObject implements TypeDoIterate {
+    public static PyObject type = new PyTupleItrType();
+    private int idx;
+
+    public PyTupleItrObject() {
+      idx = 0;
+    }
+
+    @Override
+    public PyObject next() throws PyException {
+      if (idx < obItem.length)
+        return obItem[idx++];
+      return BuiltIn.PyExcStopIteration;
+    }
+
+    @Override
+    public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
+      if (idx < obItem.length)
+        return obItem[idx];
+      throw new PyIndexOutOfBound("tuple is out of bound for index " + idx);
+    }
+
+    @Override
+    public int size() {
+      return obItem.length;
+    }
+  }
 }

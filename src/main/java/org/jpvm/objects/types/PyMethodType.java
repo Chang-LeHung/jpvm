@@ -2,13 +2,11 @@ package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
-import org.jpvm.objects.pyinterface.TypeName;
 
 public class PyMethodType extends PyObject {
 
-  private final PyUnicodeObject name;
-
   public static Object parentType = PyTypeType.parentType;
+  private final PyUnicodeObject name;
 
   public PyMethodType() {
     this.name = new PyUnicodeObject("method");

@@ -16,7 +16,7 @@ public class PyMain {
     int timestamp = reader.getTimestamp();
     System.out.println("magic number = 0x" + Integer.toHexString(magicNumber));
     System.out.println("bit filed = " + bitFiled);
-    System.out.println("date = " + new Date((long) timestamp*1000));
+    System.out.println("date = " + new Date((long) timestamp * 1000));
     System.out.println("CodeObject = " + reader.getCodeObject());
   }
 

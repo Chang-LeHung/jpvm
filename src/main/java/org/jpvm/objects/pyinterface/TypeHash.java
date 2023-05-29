@@ -6,6 +6,7 @@ public interface TypeHash {
 
   /**
    * implementation of corresponding cpython tp_hash
+   *
    * @return {@link PyLongObject}
    */
   PyLongObject hash();
