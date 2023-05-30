@@ -28,7 +28,7 @@ public class Marshal {
   public static int CO_VARKEYWORDS = 0x0008;
   public static int CO_NESTED = 0x0010;
   public static int CO_GENERATOR = 0x0020;
-  private PyListObject refs;
+  private final PyListObject refs;
   /**
    * flag of being parsed {@link PyObject}
    */

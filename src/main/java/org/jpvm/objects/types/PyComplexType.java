@@ -6,8 +6,6 @@ public class PyComplexType extends PyTypeType {
 
   private final PyUnicodeObject name;
 
-  public Object parentType = PyTypeType.parentType;
-
   public PyComplexType() {
     name = new PyUnicodeObject("complex");
   }
@@ -17,8 +15,4 @@ public class PyComplexType extends PyTypeType {
     return name;
   }
 
-  @Override
-  public Object getType() {
-    return parentType;
-  }
 }

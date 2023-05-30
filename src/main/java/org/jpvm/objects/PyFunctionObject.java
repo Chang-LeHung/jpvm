@@ -116,8 +116,4 @@ public class PyFunctionObject extends PyObject {
     this.funcQualName = funcQualName;
   }
 
-  @Override
-  public Object getType() {
-    return type;
-  }
 }

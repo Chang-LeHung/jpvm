@@ -82,7 +82,7 @@ public class PyFrameObject extends PyObject {
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 }

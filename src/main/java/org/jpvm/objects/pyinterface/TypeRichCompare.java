@@ -8,7 +8,7 @@ public interface TypeRichCompare {
 
   PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator;
 
-  public static enum Operator {
+  enum Operator {
     PY_EQ,
     PY_NE,
     PY_GT,

@@ -2,10 +2,11 @@ package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.pyinterface.TypeNew;
 
-public class PyTypeType extends PyObject {
+public class PyTypeType extends PyObject implements TypeNew {
 
-  public static Object parentType = new PyTypeType();
+  public static PyObject type = new PyTypeType();
   private final PyUnicodeObject name;
 
   public PyTypeType() {
@@ -18,7 +19,7 @@ public class PyTypeType extends PyObject {
   }
 
   @Override
-  public Object getType() {
-    return parentType;
+  public PyObject getType() {
+    return type;
   }
 }

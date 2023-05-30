@@ -95,7 +95,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 

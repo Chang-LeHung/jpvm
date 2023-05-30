@@ -46,7 +46,7 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 

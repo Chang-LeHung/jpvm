@@ -6,8 +6,6 @@ public class PyByteArrayType extends PyTypeType {
 
   private final PyUnicodeObject name;
 
-  public Object parentType = PyTypeType.parentType;
-
   public PyByteArrayType() {
     name = new PyUnicodeObject("bytearray");
   }
@@ -17,8 +15,4 @@ public class PyByteArrayType extends PyTypeType {
     return name;
   }
 
-  @Override
-  public Object getType() {
-    return parentType;
-  }
 }

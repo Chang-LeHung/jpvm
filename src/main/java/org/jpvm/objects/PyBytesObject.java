@@ -47,7 +47,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 

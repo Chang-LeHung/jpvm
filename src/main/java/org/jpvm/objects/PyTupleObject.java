@@ -6,7 +6,6 @@ import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PySetType;
-import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
 
 
@@ -66,7 +65,7 @@ public class PyTupleObject extends PyObject implements TypeIterable {
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 
@@ -94,16 +93,10 @@ public class PyTupleObject extends PyObject implements TypeIterable {
   }
 
   public static class PyTupleItrType extends PyObject {
-    private final Object type = PyTypeType.parentType;
     private final PyUnicodeObject name;
 
     public PyTupleItrType() {
       name = new PyUnicodeObject("tuple_iterator");
-    }
-
-    @Override
-    public Object getType() {
-      return type;
     }
 
     @Override

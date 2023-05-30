@@ -20,7 +20,7 @@ public class PyMethodObject extends PyObject {
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 

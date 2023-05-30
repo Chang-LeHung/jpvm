@@ -45,6 +45,7 @@ public class PycParserTest {
       assertEquals(0, pyCodeObject.getCoKwOnlyArCnt());
       assertEquals(0, pyCodeObject.getCoPosOnlyArCnt());
       assertEquals(0, pyCodeObject.getCoNLocals());
+      stream.close();
    }
 
    @Test

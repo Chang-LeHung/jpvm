@@ -70,7 +70,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 
@@ -169,18 +169,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     return new PyDictItrObject();
   }
 
-  public static class PyDictItrType extends PyObject {
+  public static class PyDictItrType extends PyTypeType {
     private final PyUnicodeObject name;
-
-    private final Object type = PyTypeType.parentType;
 
     public PyDictItrType() {
       this.name = new PyUnicodeObject("dict_key_iterator");
-    }
-
-    @Override
-    public Object getType() {
-      return type;
     }
 
     @Override
@@ -189,18 +182,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
   }
 
-  public static class PyDictValuesType extends PyObject {
+  public static class PyDictValuesType extends PyTypeType {
     private final PyUnicodeObject name;
-
-    private final Object type = PyTypeType.parentType;
 
     public PyDictValuesType() {
       this.name = new PyUnicodeObject("dict_values");
-    }
-
-    @Override
-    public Object getType() {
-      return type;
     }
 
     @Override
@@ -234,7 +220,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public Object getType() {
+    public PyObject getType() {
       return type;
     }
 
@@ -295,18 +281,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
   }
 
-  public static class PyDictKeysType extends PyObject {
+  public static class PyDictKeysType extends PyTypeType {
     private final PyUnicodeObject name;
-
-    private final Object type = PyTypeType.parentType;
 
     public PyDictKeysType() {
       this.name = new PyUnicodeObject("dict_keys");
-    }
-
-    @Override
-    public Object getType() {
-      return type;
     }
 
     @Override
@@ -340,7 +319,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public Object getType() {
+    public PyObject getType() {
       return super.getType();
     }
 
@@ -439,18 +418,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
   }
 
-  public static class PyDictItemsType extends PyObject {
+  public static class PyDictItemsType extends PyTypeType {
     private final PyUnicodeObject name;
-
-    private final Object type = PyTypeType.parentType;
 
     public PyDictItemsType() {
       this.name = new PyUnicodeObject("dict_items");
-    }
-
-    @Override
-    public Object getType() {
-      return type;
     }
 
     @Override
@@ -487,7 +459,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public Object getType() {
+    public PyObject getType() {
       return type;
     }
 
@@ -586,18 +558,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       return BuiltIn.False;
     }
 
-    public static class PyDictItemsItrType extends PyObject {
+    public static class PyDictItemsItrType extends PyTypeType {
       private final PyUnicodeObject name;
-
-      private final Object type = PyTypeType.parentType;
 
       public PyDictItemsItrType() {
         this.name = new PyUnicodeObject("dict_items");
-      }
-
-      @Override
-      public Object getType() {
-        return type;
       }
 
       @Override
@@ -616,7 +581,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       }
 
       @Override
-      public Object getType() {
+      public PyObject getType() {
         return type;
       }
 

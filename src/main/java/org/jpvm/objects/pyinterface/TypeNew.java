@@ -10,7 +10,7 @@ public interface TypeNew {
    *
    * @return {@link PyObject}
    */
-  default PyObject allocate() throws PyNotImplemented {
+  default PyObject allocate(PyObject args, PyObject kwArgs) throws PyNotImplemented {
     throw new PyNotImplemented("TypeNew allocate not implemented");
   }
 }

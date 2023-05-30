@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 
+import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
@@ -11,9 +12,9 @@ import org.jpvm.python.BuiltIn;
  */
 public class PyObject implements PyArgs, TypeCheck,
     TypeName, TypeStr, TypeRepr, TypeHash, TypeRichCompare,
-    TypeNew, TypeInit, TypeCall, PyHashable {
+    TypeInit, TypeCall, PyHashable {
 
-  public static Object type = new PyBaseObjectType();
+  public static PyObject type = new PyBaseObjectType();
 
   /**
    * base class name of all classes in python
@@ -43,7 +44,7 @@ public class PyObject implements PyArgs, TypeCheck,
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 
@@ -107,5 +108,10 @@ public class PyObject implements PyArgs, TypeCheck,
   @Override
   public int hashCode() {
     return (int) hash().getData();
+  }
+
+  @Override
+  public PyObject init() throws PyNotImplemented {
+    return this;
   }
 }

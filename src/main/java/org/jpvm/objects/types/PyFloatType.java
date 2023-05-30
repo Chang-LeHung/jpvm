@@ -6,8 +6,6 @@ public class PyFloatType extends PyTypeType {
 
   private final PyUnicodeObject name;
 
-  public Object parentType = PyTypeType.parentType;
-
   public PyFloatType() {
     name = new PyUnicodeObject("float");
   }
@@ -17,8 +15,4 @@ public class PyFloatType extends PyTypeType {
     return name;
   }
 
-  @Override
-  public Object getType() {
-    return parentType;
-  }
 }

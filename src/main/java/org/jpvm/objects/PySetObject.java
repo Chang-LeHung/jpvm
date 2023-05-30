@@ -73,7 +73,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 
@@ -209,7 +209,7 @@ public class PySetObject extends PyObject implements TypeIterable,
 
   public static class PySetItrType extends PyObject implements TypeName {
 
-    private PyUnicodeObject name;
+    private final PyUnicodeObject name;
 
     public PySetItrType() {
       name = new PyUnicodeObject("set_iterator");

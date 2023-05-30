@@ -48,7 +48,7 @@ public class PyLongObject extends PyObject
   }
 
   @Override
-  public Object getType() {
+  public PyObject getType() {
     return type;
   }
 
