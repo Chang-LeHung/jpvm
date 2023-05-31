@@ -115,46 +115,109 @@ public class PyLongObjectTest {
     }
 
     @Test
-    public void lshift() {
+    public void lshift() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(1);
+        PyLongObject o2 = new PyLongObject(2);
+        var res = (PyLongObject)o1.lshift(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 4;
+        System.out.println("\u001B[32m method lshift of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void rshift() {
+    public void rshift() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(4);
+        PyLongObject o2 = new PyLongObject(1);
+        var res = (PyLongObject)o1.rshift(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 2;
+        System.out.println("\u001B[32m method rshift of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void and() {
+    public void and() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(1);
+        PyLongObject o2 = new PyLongObject(2);
+        var res = (PyLongObject)o1.and(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 0;
+        System.out.println("\u001B[32m method and of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void xor() {
+    public void xor() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(5);
+        PyLongObject o2 = new PyLongObject(3);
+        var res = (PyLongObject)o1.xor(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 6;
+        System.out.println("\u001B[32m method xor of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void or() {
+    public void or() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(4);
+        PyLongObject o2 = new PyLongObject(3);
+        var res = (PyLongObject)o1.or(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 7;
+        System.out.println("\u001B[32m method or of PyLongObject pass\u001B[32m");
     }
 
     @Test
     public void nbInt() {
+        PyLongObject o1 = new PyLongObject(4);
+        var res = (PyLongObject)o1.nbInt();
+        System.out.println(res.repr());
+        assert res.getData() == 4;
+        System.out.println("\u001B[32m method nbInt of PyLongObject pass\u001B[32m");
     }
 
     @Test
     public void nbFloat() {
+        PyLongObject o1 = new PyLongObject(4);
+        var res = (PyFloatObject)o1.nbFloat();
+        System.out.println(res.repr());
+        assert res.getData() == 4.0;
+        System.out.println("\u001B[32m method nbFloat of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void floorDiv() {
+    public void floorDiv() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(4);
+        PyLongObject o2 = new PyLongObject(3);
+        var res = (PyLongObject)o1.floorDiv(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 1;
+        System.out.println("\u001B[32m method floorDiv of PyLongObject pass\u001B[32m");
     }
 
     @Test
-    public void trueDiv() {
+    public void trueDiv() throws PyTypeNotMatch {
+        PyLongObject o1 = new PyLongObject(10);
+        PyLongObject o2 = new PyLongObject(4);
+        var res = (PyFloatObject)o1.trueDiv(o2);
+        System.out.println(res.repr());
+        assert res.getData() == 2.5;
+        System.out.println("\u001B[32m method trueDiv of PyLongObject pass\u001B[32m");
     }
 
     @Test
     public void index() {
+        PyLongObject o1 = new PyLongObject(4);
+        var res = (PyLongObject)o1.index();
+        System.out.println(res.repr());
+        assert res.getData() == 4;
+        System.out.println("\u001B[32m method index of PyLongObject pass\u001B[32m");
     }
 
     @Test
     public void testEquals() {
+        PyLongObject o1 = new PyLongObject(10);
+        PyLongObject o2 = new PyLongObject(4);
+        var res = o1.equals(o2);
+        System.out.println(res);
+        assert res == false;
+        System.out.println("\u001B[32m method equals of PyLongObject pass\u001B[32m");
     }
 }
