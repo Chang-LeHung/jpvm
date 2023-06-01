@@ -15,7 +15,7 @@ public class PyComplexObjectTest {
         var res = (PyComplexObject)o1.add(o2);
         System.out.println(res.repr());
         assert res.getReal().getData() == 4 && res.getImage().getData() == 6;
-        System.out.println("\u001B[32m method add of PyComplexObject pass\u001B[32m");
+        System.out.println("\u001B[32m method add of PyComplexObject pass\u001B[0m");
     }
 
     @Test
@@ -25,7 +25,7 @@ public class PyComplexObjectTest {
         var res = (PyComplexObject)o1.sub(o2);
         System.out.println(res.repr());
         assert res.getReal().getData() == 2 && res.getImage().getData() == -2;
-        System.out.println("\u001B[32m method sub of PyComplexObject pass\u001B[32m");
+        System.out.println("\u001B[32m method sub of PyComplexObject pass\u001B[0m");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class PyComplexObjectTest {
         var res = (PyComplexObject)o1.mul(o2);
         System.out.println(res.repr());
         assert res.getReal().getData() == -7 && res.getImage().getData() == 26;
-        System.out.println("\u001B[32m method mul of PyComplexObject pass\u001B[32m");
+        System.out.println("\u001B[32m method mul of PyComplexObject pass\u001B[0m");
     }
 
     @Test
@@ -49,6 +49,6 @@ public class PyComplexObjectTest {
         var res = (PyComplexObject)o1.trueDiv(o2);
         System.out.println(res.repr());
         assert res.getReal().getData() == 0 && res.getImage().getData() == 1;
-        System.out.println("\u001B[32m method div of PyComplexObject pass\u001B[32m");
+        System.out.println("\u001B[32m method div of PyComplexObject pass\u001B[0m");
     }
 }
