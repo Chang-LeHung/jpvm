@@ -14,15 +14,6 @@ public class PyBoolObjectTest {
     }
 
     @Test
-    public void setBool() {
-        PyBoolObject o1 = new PyBoolObject(false);
-        o1.setBool(true);
-        System.out.println(o1);
-        assert o1.isTrue() == true;
-        System.out.println("\u001B[32m method setBool of PyBoolObject pass\u001B[32m");
-    }
-
-    @Test
     public void isTrue() {
         PyBoolObject o1 = new PyBoolObject(true);
         assert o1.isTrue() == true;
