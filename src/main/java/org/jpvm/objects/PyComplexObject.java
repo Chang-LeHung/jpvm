@@ -98,18 +98,31 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject add(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    return PyNumberMethods.super.add(o);
+  public PyObject add(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+    if(!(o instanceof PyComplexObject)){
+      throw new PyTypeNotMatch("can not apply function add on complex and " + o.getTypeName());
+    }
+    return new PyComplexObject((PyFloatObject) (real.add(((PyComplexObject)o).getReal())), (PyFloatObject) (image.add(((PyComplexObject)o).getImage())));
   }
 
   @Override
   public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    return PyNumberMethods.super.sub(o);
+    if(!(o instanceof PyComplexObject)){
+      throw new PyTypeNotMatch("cannot  apply function add on complex and " + o.getTypeName());
+    }
+    return new PyComplexObject((PyFloatObject) (real.sub(((PyComplexObject)o).getReal())), (PyFloatObject) (image.sub(((PyComplexObject)o).getImage())));
   }
 
   @Override
   public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    return PyNumberMethods.super.mul(o);
+    if(!(o instanceof PyComplexObject)){
+      throw new PyTypeNotMatch("can not apply function mul on complex and " + o.getTypeName());
+    }
+    PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
+    PyFloatObject bd = (PyFloatObject) image.mul(((PyComplexObject) o).getImage());
+    PyFloatObject bc = (PyFloatObject) image.mul(((PyComplexObject) o).getReal());
+    PyFloatObject ad = (PyFloatObject) real.mul(((PyComplexObject) o).getImage());
+    return new PyComplexObject((PyFloatObject) ac.sub(bd), (PyFloatObject) bc.add(ad));
   }
 
   @Override
@@ -139,6 +152,18 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject trueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    return PyNumberMethods.super.trueDiv(o);
+    if(!(o instanceof PyComplexObject)){
+      throw new PyTypeNotMatch("cannot apply function div on complex and " + o.getTypeName());
+    }
+    PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
+    PyFloatObject bd = (PyFloatObject) image.mul(((PyComplexObject) o).getImage());
+    PyFloatObject bc = (PyFloatObject) image.mul(((PyComplexObject) o).getReal());
+    PyFloatObject ad = (PyFloatObject) real.mul(((PyComplexObject) o).getImage());
+    PyFloatObject c2 = (PyFloatObject) image.pow(new PyLongObject(2));
+    PyFloatObject d2 = (PyFloatObject) ((PyComplexObject) o).getImage().pow(new PyLongObject(2));
+    PyFloatObject ac_add_bd = (PyFloatObject) ac.add(bd);
+    PyFloatObject c2_add_d2 = (PyFloatObject) c2.add(d2);
+    PyFloatObject bc_sub_ad = (PyFloatObject) bc.sub(ad);
+    return new PyComplexObject((PyFloatObject) ac_add_bd.trueDiv(c2_add_d2), (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
   }
 }
