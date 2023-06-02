@@ -24,6 +24,26 @@ public class PyMethodObject extends PyObject {
     return type;
   }
 
+  @Override
+  public String toString() {
+    return methodName.toString();
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return str();
+  }
+
   public PyObject execute(Object... args) throws PyNotImplemented {
     Class<? extends PyObject> clazz = self.getClass();
     try {

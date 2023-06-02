@@ -14,7 +14,7 @@ public class PyObject implements PyArgs, TypeCheck,
     TypeName, TypeStr, TypeRepr, TypeHash, TypeRichCompare,
     TypeInit, TypeCall, PyHashable {
 
-  public static PyObject type = new PyBaseObjectType();
+  public static PyObject type;
 
   /**
    * base class name of all classes in python
@@ -113,5 +113,9 @@ public class PyObject implements PyArgs, TypeCheck,
   @Override
   public PyObject init() throws PyNotImplemented {
     return this;
+  }
+
+  public static void doInit() {
+    type = new PyBaseObjectType();
   }
 }

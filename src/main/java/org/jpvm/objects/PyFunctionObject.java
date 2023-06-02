@@ -1,14 +1,18 @@
 package org.jpvm.objects;
 
+import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 
 public class PyFunctionObject extends PyObject {
+
+  public static PyObject type = new PyFunctionType();
 
   /**
    * type of {@link PyBytesObject}
    */
   private PyObject funcCode;
   private PyObject funcGlobals;
+  private PyObject funcClosure;
   private PyObject funcLocals;
   /**
    * NULL or type of {@link PyTupleObject}
@@ -116,4 +120,39 @@ public class PyFunctionObject extends PyObject {
     this.funcQualName = funcQualName;
   }
 
+  @Override
+  public PyObject getType() {
+    return type;
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public String toString() {
+    return "PyFunctionObject{" +
+        "funcCode=" + funcCode +
+        ", funcGlobals=" + funcGlobals +
+        ", funcClosure=" + funcClosure +
+        ", funcLocals=" + funcLocals +
+        ", funcDefaults=" + funcDefaults +
+        ", funcKwDefaults=" + funcKwDefaults +
+        ", funcDoc=" + funcDoc +
+        ", funcName=" + funcName +
+        ", funcDict=" + funcDict +
+        ", funcQualName=" + funcQualName +
+        '}';
+  }
 }
