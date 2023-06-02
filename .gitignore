@@ -36,3 +36,4 @@ build/
 .idea
 ### Mac OS ###
 .DS_Store
+*test_example*
