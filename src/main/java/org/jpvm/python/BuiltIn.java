@@ -1,8 +1,8 @@
 package org.jpvm.python;
 
 import org.jpvm.objects.*;
+import org.jpvm.objects.types.PyTypeType;
 
-import java.io.PrintWriter;
 
 public class BuiltIn {
 
@@ -19,12 +19,16 @@ public class BuiltIn {
    */
   public static PyObject PyExcStopIteration = new PyExcStopIteration();
 
+  public static PyDictObject dict;
 
-  public PyObject print(PyObject... objs) {
-    PrintWriter writer = new PrintWriter(System.out);
-    for (PyObject obj : objs) {
-
-    }
-    return BuiltIn.None;
+  static {
+    dict = new PyDictObject();
+    dict.put(new PyUnicodeObject("int"), PyLongObject.type);
+    dict.put(new PyUnicodeObject("list"), PyListObject.type);
+    dict.put(new PyUnicodeObject("tuple"), PyTupleObject.type);
+    dict.put(new PyUnicodeObject("dict"), PyDictObject.type);
+    dict.put(new PyUnicodeObject("complex"), PyComplexObject.type);
+    dict.put(new PyUnicodeObject("str"), PyUnicodeObject.type);
+    dict.put(new PyUnicodeObject("type"), PyTypeType.type);
   }
 }

@@ -1,9 +1,7 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.types.PyMethodType;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class PyMethodObject extends PyObject {
@@ -12,10 +10,13 @@ public class PyMethodObject extends PyObject {
 
   private final PyObject self;
 
-  private final PyUnicodeObject methodName;
+  private final Method method;
 
-  public PyMethodObject(PyObject self, PyUnicodeObject methodName) {
+  private final String methodName;
+
+  public PyMethodObject(PyObject self, Method method, String methodName) {
     this.self = self;
+    this.method = method;
     this.methodName = methodName;
   }
 
@@ -26,7 +27,7 @@ public class PyMethodObject extends PyObject {
 
   @Override
   public String toString() {
-    return methodName.toString();
+    return methodName;
   }
 
   @Override
@@ -44,13 +45,4 @@ public class PyMethodObject extends PyObject {
     return str();
   }
 
-  public PyObject execute(Object... args) throws PyNotImplemented {
-    Class<? extends PyObject> clazz = self.getClass();
-    try {
-      Method method = clazz.getMethod((String) methodName.toJavaType());
-      return (PyObject) method.invoke(self, args);
-    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new PyNotImplemented("");
-    }
-  }
 }

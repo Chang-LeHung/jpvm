@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.python.BuiltIn;
 
 public class PyFunctionObject extends PyObject {
 
@@ -45,7 +46,9 @@ public class PyFunctionObject extends PyObject {
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    if (type == o)
+      return BuiltIn.True;
+    return BuiltIn.False;
   }
 
   public PyObject getFuncCode() {

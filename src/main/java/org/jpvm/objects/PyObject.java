@@ -1,18 +1,21 @@
 package org.jpvm.objects;
 
 
+import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.python.BuiltIn;
 
+import java.lang.reflect.Method;
+
 /**
  * base class of all classes in python
  */
 public class PyObject implements PyArgs, TypeCheck,
     TypeName, TypeStr, TypeRepr, TypeHash, TypeRichCompare,
-    TypeInit, TypeCall, PyHashable {
+    TypeInit, TypeCall, PyHashable, TypeGetMethod {
 
   public static PyObject type;
 
@@ -112,10 +115,39 @@ public class PyObject implements PyArgs, TypeCheck,
 
   @Override
   public PyObject init() throws PyNotImplemented {
+    type = new PyBaseObjectType();
     return this;
   }
 
-  public static void doInit() {
-    type = new PyBaseObjectType();
+  @Override
+  public PyObject getMethod(String name) throws PyMissMethod {
+    PyUnicodeObject object = new PyUnicodeObject(name);
+    if (dict == null) {
+      dict = new PyDictObject();
+      return getMethodByName(name, object);
+    }else {
+      if (dict.get(object) != null) {
+        return dict.get(object);
+      }else {
+        return getMethodByName(name, object);
+      }
+    }
+  }
+
+  @Override
+  public PyObject getMethod(PyUnicodeObject name) throws PyMissMethod {
+    return getMethod(name.getData());
+  }
+
+  private PyObject getMethodByName(String name, PyUnicodeObject object) throws PyMissMethod {
+    Class<? extends PyObject> clazz = this.getClass();
+    try {
+      Method method = clazz.getMethod(name);
+      PyMethodObject m = new PyMethodObject(this, method, name);
+      dict.put(object, m);
+      return m;
+    } catch (NoSuchMethodException e) {
+      throw new PyMissMethod(this.repr().getData() + " has not method " + name);
+    }
   }
 }
