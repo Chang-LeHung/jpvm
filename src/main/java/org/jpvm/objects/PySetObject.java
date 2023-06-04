@@ -78,7 +78,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject getIterator() {
+  public TypeDoIterate getIterator() {
     return new PySetItrObject();
   }
 
@@ -233,6 +233,11 @@ public class PySetObject extends PyObject implements TypeIterable,
       if (iterator.hasNext())
         return iterator.next();
       return BuiltIn.PyExcStopIteration;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return iterator.hasNext();
     }
   }
 }

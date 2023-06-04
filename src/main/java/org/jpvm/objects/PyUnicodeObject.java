@@ -11,7 +11,7 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Use {@linkplain StandardCharsets#UTF_8} as default charset
@@ -21,6 +21,8 @@ public class PyUnicodeObject extends PyObject
     TypeIterable {
 
   public static PyObject type = new PyUnicodeType();
+
+  public static Map<String, PyUnicodeObject> internStr = new HashMap<>();
   private final String s;
   private byte[] data;
 
@@ -48,7 +50,7 @@ public class PyUnicodeObject extends PyObject
 
   @Override
   public String toString() {
-    return "'" + s + "'";
+    return s;
   }
 
   @Override
@@ -165,7 +167,7 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyObject getIterator() throws PyNotImplemented {
+  public TypeDoIterate getIterator() throws PyNotImplemented {
     return new PyUnicodeItrObject();
   }
 
@@ -209,6 +211,24 @@ public class PyUnicodeObject extends PyObject
     public int size() {
       return s.length();
     }
+
+    @Override
+    public boolean hasNext() {
+      return idx < size();
+    }
   }
 
+  public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
+    if (intern) {
+      if (internStr.containsKey(s))
+        return internStr.get(s);
+      else {
+        PyUnicodeObject object = new PyUnicodeObject(s);
+        internStr.put(s, object);
+        return object;
+      }
+    }else {
+      return internStr.getOrDefault(s, new PyUnicodeObject(s));
+    }
+  }
 }

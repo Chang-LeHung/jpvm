@@ -47,4 +47,13 @@ public class Instruction {
   public void setOparg(int oparg) {
     this.oparg = oparg;
   }
+
+  @Override
+  public String toString() {
+    return "Instruction{" +
+        "opname=" + opname +
+        ", opcode=" + opcode +
+        ", oparg=" + oparg +
+        '}';
+  }
 }

@@ -33,7 +33,9 @@ public class PyObject implements PyArgs, TypeCheck,
   private PyLongObject hashcode;
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    if (o == type)
+      return BuiltIn.True;
+    return BuiltIn.False;
   }
 
   @Override
@@ -119,6 +121,12 @@ public class PyObject implements PyArgs, TypeCheck,
     return this;
   }
 
+  public static void registerBaseObjectType() {
+    if (type == null) {
+      type = new PyBaseObjectType();
+    }
+  }
+
   @Override
   public PyObject getMethod(String name) throws PyMissMethod {
     PyUnicodeObject object = new PyUnicodeObject(name);
@@ -150,4 +158,5 @@ public class PyObject implements PyArgs, TypeCheck,
       throw new PyMissMethod(this.repr().getData() + " has not method " + name);
     }
   }
+
 }

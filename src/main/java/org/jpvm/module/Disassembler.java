@@ -28,6 +28,7 @@ public class Disassembler {
           enterPoint.add(ins.getOparg());
       }
     }
+    buf.reset(0);
     StringBuilder builder = new StringBuilder();
     while (iterator.hasNext()) {
       Instruction ins = iterator.next();

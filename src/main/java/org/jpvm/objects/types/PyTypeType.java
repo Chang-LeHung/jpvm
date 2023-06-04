@@ -22,4 +22,8 @@ public class PyTypeType extends PyObject implements TypeNew {
   public PyObject getType() {
     return type;
   }
+
+  public static boolean isSubType(PyTypeType l, PyTypeType r) {
+      return true;
+  }
 }

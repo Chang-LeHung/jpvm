@@ -7,6 +7,7 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.junit.Test;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -100,6 +101,21 @@ public class DisTest {
       System.out.println(o);
       o = marshal.loadPyObject(buffer);
       System.out.println(o);
+      stream.close();
+   }
+
+   @Test
+   public void testString() throws IOException {
+      String filename = "src/test/resources/syntax/__pycache__/test05.cpython-38.pyc";
+      FileInputStream stream = new FileInputStream(filename);
+      stream.skipNBytes(16);
+      int available = stream.available();
+      byte[] bytes = new byte[available];
+      int s = stream.read(bytes);
+      Marshal marshal = new Marshal();
+      PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
+      Disassembler disassembler = new Disassembler(pyCodeObject);
+      disassembler.dis();
       stream.close();
    }
 }

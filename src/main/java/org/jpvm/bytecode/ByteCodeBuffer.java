@@ -9,6 +9,8 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
 
   private final byte[] codeBuf;
 
+  private Itr itr;
+
   public ByteCodeBuffer(PyCodeObject pyCodeObject) {
     PyBytesObject code = (PyBytesObject) pyCodeObject.getCoCode();
     codeBuf = code.getData();
@@ -16,7 +18,17 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
 
 
   public Iterator<Instruction> iterator() {
-    return new Itr();
+    if (itr == null)
+      itr = new Itr();
+    return itr;
+  }
+
+  public void reset(int pos) {
+    itr.resetCursor(pos);
+  }
+
+  public void increase(int delta) {
+    itr.increase(delta);
   }
 
   private class Itr implements Iterator<Instruction> {
@@ -55,7 +67,7 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
             extendedArg = oparg << 8;
           } else
             extendedArg = 0;
-        }
+        }else cursor++;
       } while (opcode == OpMap.EXTENDED_ARG);
       instruction.setOpcode(opcode);
       instruction.setOpname(OpMap.instructions.get(opcode));
@@ -63,9 +75,12 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
       return instruction;
     }
 
-    public boolean resetCursor(int pos) {
+    public void resetCursor(int pos) {
       cursor = pos;
-      return true;
+    }
+
+    public void increase(int delta) {
+      cursor += delta;
     }
   }
 

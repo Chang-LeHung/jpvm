@@ -35,6 +35,10 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     return map.get(key);
   }
 
+  public PyObject getOrDefault(PyObject key, PyObject val) {
+    return map.getOrDefault(key, val);
+  }
+
   public void addAll(PyDictObject dict) {
     map.putAll(dict.getMap());
   }
@@ -165,7 +169,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   @Override
-  public PyObject getIterator() throws PyNotImplemented {
+  public TypeDoIterate getIterator() throws PyNotImplemented {
     return new PyDictItrObject();
   }
 
@@ -245,7 +249,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public PyObject getIterator() throws PyNotImplemented {
+    public TypeDoIterate getIterator() throws PyNotImplemented {
       return new PyDictValuesItrObject();
     }
 
@@ -277,6 +281,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
         if (iterator.hasNext())
           return iterator.next();
         return BuiltIn.PyExcStopIteration;
+      }
+
+      @Override
+      public boolean hasNext() {
+        return iterator.hasNext();
       }
     }
   }
@@ -383,7 +392,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public PyObject getIterator() throws PyNotImplemented {
+    public TypeDoIterate getIterator() throws PyNotImplemented {
       return new PyDictKeysItrObject();
     }
 
@@ -414,6 +423,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
         if (iterator.hasNext())
           return iterator.next();
         return BuiltIn.PyExcStopIteration;
+      }
+
+      @Override
+      public boolean hasNext() {
+        return iterator.hasNext();
       }
     }
   }
@@ -479,7 +493,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     @Override
-    public PyObject getIterator() throws PyNotImplemented {
+    public TypeDoIterate getIterator() throws PyNotImplemented {
       return new PyDictItemsItrObject();
     }
 
@@ -601,6 +615,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
         }
         return BuiltIn.PyExcStopIteration;
       }
+
+      @Override
+      public boolean hasNext() {
+        return iterator.hasNext();
+      }
     }
   }
 
@@ -617,6 +636,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       if (iterator.hasNext())
         return iterator.next();
       return BuiltIn.PyExcStopIteration;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return iterator.hasNext();
     }
   }
 }

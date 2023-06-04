@@ -4,11 +4,12 @@ import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyIndexOutOfBound;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.PyObject;
+import org.jpvm.python.BuiltIn;
 
 public interface TypeDoIterate {
 
   default PyObject next() throws PyException {
-    throw new PyNotImplemented("TypeDoIterate next not implemented");
+    return BuiltIn.PyExcStopIteration;
   }
 
   default PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
@@ -17,5 +18,9 @@ public interface TypeDoIterate {
 
   default int size() {
     return -1;
+  }
+
+  default boolean hasNext() {
+    return false;
   }
 }

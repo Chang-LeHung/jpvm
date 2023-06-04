@@ -100,7 +100,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject getIterator() {
+  public TypeDoIterate getIterator() {
     return new PyListItrObject();
   }
 
@@ -354,6 +354,11 @@ public class PyListObject extends PyObject
     @Override
     public int size() {
       return PyListObject.this.size();
+    }
+
+    @Override
+    public boolean hasNext() {
+      return idx < size();
     }
   }
 }

@@ -10,55 +10,83 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.python.BuiltIn;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class PyFileStreamObject extends PyObject {
 
   public static PyObject type = new PyFileStreamType();
 
-  private final RandomAccessFile file;
+  private RandomAccessFile file;
+  private String encoding = "utf-8";
+  private String filename;
 
-  private final String encoding;
-  private final String filename;
+  private boolean stdout;
+  private boolean stdin;
+  private boolean stderr;
 
   public PyFileStreamObject(String filename, String args, String encoding) throws FileNotFoundException {
-    this.filename = filename;
-    this.file = new RandomAccessFile(filename, args);
-    this.encoding = encoding;
+    if (filename != null) {
+      this.filename = filename;
+      this.file = new RandomAccessFile(filename, args);
+      this.encoding = encoding;
+    }
+  }
+
+  public PyFileStreamObject() {
+  }
+
+  public PyFileStreamObject(boolean stdout, boolean stdin, boolean stderr) {
+    this.stdout = stdout;
+    this.stdin = stdin;
+    this.stderr = stderr;
+  }
+
+  public void setStdout(boolean stdout) {
+    this.stdout = stdout;
+  }
+
+  public void setStdin(boolean stdin) {
+    this.stdin = stdin;
+  }
+
+  public void setStderr(boolean stderr) {
+    this.stderr = stderr;
   }
 
   public void writeBytes(byte[] bytes) throws IOException {
-    file.write(bytes);
+    if (file != null) {
+      file.write(bytes);
+    }else if (stdout) {
+      System.out.write(bytes);
+    }else {
+      System.err.write(bytes);
+    }
   }
 
   public void writeString(String s) throws IOException {
-    file.write(s.getBytes(encoding));
+    writeBytes(s.getBytes(encoding));
   }
 
   public void writeLines(TypeIterable o) throws PyNotImplemented {
-    PyObject iterator = o.getIterator();
-    if (iterator instanceof TypeDoIterate itr) {
-      try {
-        for (; ; ) {
-          PyObject next = itr.next();
-          if (next == BuiltIn.PyExcStopIteration) {
-            break;
-          }
-          if (next instanceof PyUnicodeObject uni) {
-            String data = uni.getData();
-            writeString(data);
-          } else if (next instanceof PyBytesObject bytes) {
-            byte[] data = bytes.getData();
-            writeBytes(data);
-          } else {
-            throw new PyTypeNotMatch("require type bytes or str");
-          }
+    TypeDoIterate itr = o.getIterator();
+    try {
+      for (;;) {
+        PyObject next = itr.next();
+        if (next == BuiltIn.PyExcStopIteration) {
+          break;
         }
-      } catch (PyException | IOException ignored) {
-
+        if (next instanceof PyUnicodeObject uni) {
+          String data = uni.getData();
+          writeString(data);
+        } else if (next instanceof PyBytesObject bytes) {
+          byte[] data = bytes.getData();
+          writeBytes(data);
+        } else {
+          throw new PyTypeNotMatch("require type bytes or str");
+        }
       }
+    } catch (PyException | IOException ignored) {
+
     }
   }
 

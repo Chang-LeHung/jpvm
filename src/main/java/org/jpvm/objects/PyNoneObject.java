@@ -1,6 +1,9 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.types.PyNoneType;
+import org.jpvm.python.BuiltIn;
+
+import javax.swing.plaf.ButtonUI;
 
 public class PyNoneObject extends PyObject {
 
@@ -18,5 +21,20 @@ public class PyNoneObject extends PyObject {
   @Override
   public PyObject getType() {
     return type;
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return PyUnicodeObject.getOrCreateFromInternStringPool("None", true);
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return str();
   }
 }

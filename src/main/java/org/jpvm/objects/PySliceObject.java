@@ -75,51 +75,48 @@ public class PySliceObject extends PyObject {
   public PyListObject unpacked(PyObject o) {
     if (!(o instanceof TypeIterable iter))
       return null;
-    PyObject iterator;
+    TypeDoIterate it;
     try {
-      iterator = iter.getIterator();
+      it = iter.getIterator();
     } catch (PyNotImplemented e) {
       throw new RuntimeException(e);
     }
-    if (iterator instanceof TypeDoIterate it) {
-      int b, e, s;
-      Long l;
-      if (start == BuiltIn.None)
-        b = 0;
-      else {
-        l = NumberHelper.transformPyObject2Long(start);
-        assert l != null;
-        b = l.intValue();
-      }
-      if (end == BuiltIn.None)
-        e = it.size();
-      else {
-        l = NumberHelper.transformPyObject2Long(end);
-        assert l != null;
-        e = l.intValue();
-      }
-
-      if (step == BuiltIn.None)
-        s = 1;
-      else {
-        l = NumberHelper.transformPyObject2Long(step);
-        assert l != null;
-        s = l.intValue();
-      }
-      PyListObject list = new PyListObject();
-      if (s < 0) {
-        for (int i = (e - 1 + it.size()) % it.size(); i >= ((b + it.size()) % it.size()); i += s) {
-          assert i >= 0;
-          list.append(new PyLongObject(i));
-        }
-      } else {
-        for (int i = ((b + it.size()) % it.size()); i < (e + it.size()) % it.size(); i += s) {
-          assert i >= 0;
-          list.append(new PyLongObject(i));
-        }
-      }
-      return list;
+    int b, e, s;
+    Long l;
+    if (start == BuiltIn.None)
+      b = 0;
+    else {
+      l = NumberHelper.transformPyObject2Long(start);
+      assert l != null;
+      b = l.intValue();
     }
-    return null;
+    if (end == BuiltIn.None)
+      e = it.size();
+    else {
+      l = NumberHelper.transformPyObject2Long(end);
+      assert l != null;
+      e = l.intValue();
+    }
+
+    if (step == BuiltIn.None)
+      s = 1;
+    else {
+      l = NumberHelper.transformPyObject2Long(step);
+      assert l != null;
+      s = l.intValue();
+    }
+    PyListObject list = new PyListObject();
+    if (s < 0) {
+      for (int i = (e - 1 + it.size()) % it.size(); i >= ((b + it.size()) % it.size()); i += s) {
+        assert i >= 0;
+        list.append(new PyLongObject(i));
+      }
+    } else {
+      for (int i = ((b + it.size()) % it.size()); i < (e + it.size()) % it.size(); i += s) {
+        assert i >= 0;
+        list.append(new PyLongObject(i));
+      }
+    }
+    return list;
   }
 }
