@@ -40,43 +40,6 @@ public class PyRangeObject extends PyObject implements TypeIterable {
     return cur;
   }
 
-  public static class PyRangeItrType extends PyTypeType {
-    private final PyUnicodeObject name;
-
-    public PyRangeItrType() {
-      name = new PyUnicodeObject("range_iterator");
-    }
-
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
-
-  }
-
-  private class PyRangeItrObject extends PyObject implements TypeDoIterate {
-
-    public static PyObject type = new PyRangeItrType();
-
-    @Override
-    public PyObject next() throws PyException {
-      if (hasNext()) {
-        PyLongObject ret = new PyLongObject(cur);
-        cur += step;
-        return ret;
-      }
-      return BuiltIn.PyExcStopIteration;
-    }
-
-    @Override
-    public boolean hasNext() {
-      if (step < 0)
-        return (step+cur) >= end;
-      else
-        return (step+cur) <= end;
-    }
-  }
-
   @Override
   public TypeDoIterate getIterator() throws PyNotImplemented {
     return new PyRangeItrObject();
@@ -110,5 +73,42 @@ public class PyRangeObject extends PyObject implements TypeIterable {
   @Override
   public PyUnicodeObject repr() {
     return new PyUnicodeObject(toString());
+  }
+
+  public static class PyRangeItrType extends PyTypeType {
+    private final PyUnicodeObject name;
+
+    public PyRangeItrType() {
+      name = new PyUnicodeObject("range_iterator");
+    }
+
+    @Override
+    public PyUnicodeObject getTypeName() {
+      return name;
+    }
+
+  }
+
+  private class PyRangeItrObject extends PyObject implements TypeDoIterate {
+
+    public static PyObject type = new PyRangeItrType();
+
+    @Override
+    public PyObject next() throws PyException {
+      if (hasNext()) {
+        PyLongObject ret = new PyLongObject(cur);
+        cur += step;
+        return ret;
+      }
+      return BuiltIn.PyExcStopIteration;
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (step < 0)
+        return (step + cur) >= end;
+      else
+        return (step + cur) <= end;
+    }
   }
 }

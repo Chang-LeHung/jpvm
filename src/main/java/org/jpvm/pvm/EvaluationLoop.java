@@ -2,7 +2,9 @@ package org.jpvm.pvm;
 
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
+import org.jpvm.bytecode.OpMap;
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNameError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -52,21 +54,17 @@ public class EvaluationLoop {
           PyObject name = coNames.get(ins.getOparg());
           PyObject v = locals.get(name);
           if (null == v) {
-            v = globals.get(name);
-            if (null == v) {
-              v = builtins.get(name);
-              if (v == null) {
-                error = new PyException("not find variable " + name.toString());
-              } else {
-                frame.push(v);
-              }
-            } else {
-              frame.push(v);
-            }
+            loadFromGlobal(frame, globals, builtins, name);
           } else {
             frame.push(v);
           }
         }
+        case LOAD_GLOBAL -> {
+          PyObject name = coNames.get(ins.getOparg());
+          loadFromGlobal(frame, globals, builtins, name);
+        }
+        case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
+        case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
         case CALL_FUNCTION -> {
           int size = ins.getOparg();
           PyTupleObject args = new PyTupleObject(size);
@@ -75,12 +73,21 @@ public class EvaluationLoop {
           }
           PyObject pop = frame.pop();
           try {
-            PyObject object = Abstract.abstractCall(pop, null, args, null);
+            PyObject object = Abstract.abstractCall(pop, null, args, null, frame);
             frame.push(object);
           } catch (PyException e) {
             error = e;
           }
           // other callable object to be implemented
+        }
+        case BUILD_CONST_KEY_MAP -> {
+          var keys = (PyTupleObject) frame.pop();
+          PyDictObject dict = new PyDictObject();
+          int size = keys.size();
+          for (int i = 0; i < size; i++) {
+            dict.put(keys.get(size - 1 - i), frame.pop());
+          }
+          frame.push(dict);
         }
         case CALL_FUNCTION_KW -> {
           PyObject pop = frame.pop();
@@ -97,7 +104,7 @@ public class EvaluationLoop {
             args.set(i, frame.pop());
           PyObject callable = frame.pop();
           try {
-            PyObject object = Abstract.abstractCall(callable, null, args, kwArgs);
+            PyObject object = Abstract.abstractCall(callable, null, args, kwArgs, frame);
             frame.push(object);
           } catch (PyException e) {
             error = e;
@@ -172,6 +179,15 @@ public class EvaluationLoop {
           }
           frame.push(res);
         }
+        case BINARY_SUBTRACT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.sub(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
         case BUILD_LIST -> {
           int size = ins.getOparg();
           PyListObject listObject = new PyListObject();
@@ -191,8 +207,7 @@ public class EvaluationLoop {
           if (pop instanceof PyBoolObject b) {
             if (b.isFalse())
               byteCodeBuffer.reset(ins.getOparg());
-          }
-          else
+          } else
             error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
         }
         case COMPARE_OP -> {
@@ -207,35 +222,69 @@ public class EvaluationLoop {
               case TypeRichCompare.Py_NE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_NE);
               case TypeRichCompare.Py_GT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GT);
               case TypeRichCompare.Py_GE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GE);
-              case TypeRichCompare.PyCmp_IN -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
-              case TypeRichCompare.PyCmp_NOT_IN -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
-              case TypeRichCompare.PyCmp_IS -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
-              case TypeRichCompare.PyCmp_IS_NOT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
-              case TypeRichCompare.PyCmp_EXC_MATCH -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
-              case TypeRichCompare.PyCmp_BAD -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
+              case TypeRichCompare.PyCmp_IN ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
+              case TypeRichCompare.PyCmp_NOT_IN ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
+              case TypeRichCompare.PyCmp_IS ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
+              case TypeRichCompare.PyCmp_IS_NOT ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
+              case TypeRichCompare.PyCmp_EXC_MATCH ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
+              case TypeRichCompare.PyCmp_BAD ->
+                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
               default -> throw new PyException("Unknow COMPARE_OP operator" + ins.getOparg());
             }
             frame.push(result);
-          }catch (PyException e) {
+          } catch (PyException e) {
             error = e;
           }
         }
         case MAKE_FUNCTION -> {
           PyObject qualname = frame.pop();
-          if (! (qualname instanceof PyUnicodeObject)) {
+          if (!(qualname instanceof PyUnicodeObject)) {
             error = new PyException("qualname require PyUnicodeObject", true);
             break;
           }
-          PyCodeObject codeObject = (PyCodeObject)frame.pop();
-          var type = (PyFunctionType)PyFunctionObject.type;
+          PyCodeObject codeObject = (PyCodeObject) frame.pop();
+          var type = (PyFunctionType) PyFunctionObject.type;
           PyFunctionObject function = type.createFunction(codeObject, frame.getGlobals(), (PyUnicodeObject) qualname);
+          int oparg = ins.getOparg();
+          if ((oparg & 0x08) != 0) {
+            function.setFuncClosure(frame.pop());
+          }
+          if ((oparg & 0x04) != 0) {
+            function.setAnnotation(frame.pop());
+          }
+          if ((oparg & 0x02) != 0) {
+            function.setFuncKwDefaults(frame.pop());
+          }
+          if ((oparg & 0x01) != 0) {
+            function.setFuncDefaults(frame.pop());
+          }
           frame.push(function);
         }
-        default -> throw new PyException("not support opcode " + ins.getOpcode(), true);
+        default -> throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()), true);
       }
       if (error != null) throw new PyException(error.getMessage(), error.isInternalError());
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;
+  }
+
+  private void loadFromGlobal(PyFrameObject frame, PyDictObject globals, PyDictObject builtins, PyObject name) {
+    PyObject v;
+    v = globals.get(name);
+    if (null == v) {
+      v = builtins.get(name);
+      if (v == null) {
+        error = new PyNameError("can not find variable " + name.repr());
+      } else {
+        frame.push(v);
+      }
+    } else {
+      frame.push(v);
+    }
   }
 }

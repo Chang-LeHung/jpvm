@@ -1,4 +1,4 @@
-package org.jpvm.module.filesteam;
+package org.jpvm.module.filestream;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
@@ -10,7 +10,9 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.python.BuiltIn;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class PyFileStreamObject extends PyObject {
 
@@ -56,9 +58,9 @@ public class PyFileStreamObject extends PyObject {
   public void writeBytes(byte[] bytes) throws IOException {
     if (file != null) {
       file.write(bytes);
-    }else if (stdout) {
+    } else if (stdout) {
       System.out.write(bytes);
-    }else {
+    } else {
       System.err.write(bytes);
     }
   }
@@ -70,7 +72,7 @@ public class PyFileStreamObject extends PyObject {
   public void writeLines(TypeIterable o) throws PyNotImplemented {
     TypeDoIterate itr = o.getIterator();
     try {
-      for (;;) {
+      for (; ; ) {
         PyObject next = itr.next();
         if (next == BuiltIn.PyExcStopIteration) {
           break;

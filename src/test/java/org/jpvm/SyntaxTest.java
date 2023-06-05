@@ -8,13 +8,13 @@ public class SyntaxTest {
   public void testLoop() {
     CONTINUELIABLE:
     for (int i = 0; i < 3; i++) {
-      System.out.println(String.format("start outer for loop index %d", i));
+      System.out.printf("start outer for loop index %d%n", i);
       for (int k = 0; k < 3; k++) {
         if (k == 1)
           break CONTINUELIABLE;
-        System.out.println(String.format("inner loop index %d", k));
+        System.out.printf("inner loop index %d%n", k);
       }
-      System.out.println(String.format("end outer for loop index %d", i));
+      System.out.printf("end outer for loop index %d%n", i);
     }
   }
 

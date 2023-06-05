@@ -2,7 +2,7 @@ package org.jpvm.objects.types;
 
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyNativeMethodType extends PyTypeType{
+public class PyNativeMethodType extends PyTypeType {
 
   private final PyUnicodeObject name;
 

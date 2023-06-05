@@ -13,6 +13,10 @@ public class PyTypeType extends PyObject implements TypeNew {
     name = new PyUnicodeObject("type");
   }
 
+  public static boolean isSubType(PyTypeType l, PyTypeType r) {
+    return true;
+  }
+
   @Override
   public PyUnicodeObject getTypeName() {
     return name;
@@ -21,9 +25,5 @@ public class PyTypeType extends PyObject implements TypeNew {
   @Override
   public PyObject getType() {
     return type;
-  }
-
-  public static boolean isSubType(PyTypeType l, PyTypeType r) {
-      return true;
   }
 }

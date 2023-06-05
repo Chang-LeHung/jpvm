@@ -1,9 +1,6 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.types.PyNoneType;
-import org.jpvm.python.BuiltIn;
-
-import javax.swing.plaf.ButtonUI;
 
 public class PyNoneObject extends PyObject {
 

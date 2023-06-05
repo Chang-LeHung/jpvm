@@ -5,7 +5,7 @@ import org.jpvm.objects.PyFunctionObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.pycParser.PyCodeObject;
 
-public class PyFunctionType extends PyTypeType{
+public class PyFunctionType extends PyTypeType {
   private final PyUnicodeObject name;
 
   public PyFunctionType() {
@@ -23,7 +23,7 @@ public class PyFunctionType extends PyTypeType{
     if (PyFunctionObject.__name__ == null) {
       PyFunctionObject.__name__ = new PyUnicodeObject("__main__");
       func.setFuncName(PyFunctionObject.__name__);
-    }else {
+    } else {
       func.setFuncModule(globals.get(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)));
     }
     return func;

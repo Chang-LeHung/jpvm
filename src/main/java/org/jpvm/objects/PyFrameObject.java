@@ -11,6 +11,7 @@ public class PyFrameObject extends PyObject {
    * value stack
    */
   private final PyObject[] stack;
+  private final PyObject[] localPlus;
   private PyDictObject builtins;
   private PyDictObject globals;
   private PyDictObject locals;
@@ -18,10 +19,8 @@ public class PyFrameObject extends PyObject {
    * shows how many slots of stack have been used
    */
   private int used;
-
   private boolean isExecuting;
-
-  private final PyFrameObject back;
+  private PyFrameObject back;
 
   public PyFrameObject(PyCodeObject code,
                        PyDictObject builtins,
@@ -33,6 +32,21 @@ public class PyFrameObject extends PyObject {
     this.locals = new PyDictObject();
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
+  }
+
+  public PyFrameObject(PyCodeObject code,
+                       PyDictObject builtins,
+                       PyDictObject globals, PyDictObject locals,
+                       PyFrameObject back) {
+    assert code != null;
+    this.code = code;
+    this.builtins = builtins;
+    this.globals = globals;
+    this.locals = locals;
+    stack = new PyObject[code.getCoStackSize()];
+    this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
   }
 
   public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyFrameObject back) {
@@ -42,6 +56,7 @@ public class PyFrameObject extends PyObject {
     this.globals = new PyDictObject();
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
   }
 
   public PyCodeObject getCode() {
@@ -80,8 +95,16 @@ public class PyFrameObject extends PyObject {
     return back;
   }
 
+  public void setBack(PyFrameObject back) {
+    this.back = back;
+  }
+
   public boolean isExecuting() {
     return isExecuting;
+  }
+
+  public void setExecuting(boolean executing) {
+    isExecuting = executing;
   }
 
   @Override
@@ -111,5 +134,13 @@ public class PyFrameObject extends PyObject {
 
   public void decreaseStackPointer(int delta) {
     used -= delta;
+  }
+
+  public PyObject getLocal(int idx) {
+    return localPlus[idx];
+  }
+
+  public void setLocal(int idx, PyObject o) {
+    localPlus[idx] = o;
   }
 }

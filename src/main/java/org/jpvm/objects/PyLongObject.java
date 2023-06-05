@@ -11,7 +11,7 @@ public class PyLongObject extends PyObject
 
   public static PyObject type = new PyLongType();
 
-  public static PyLongObject[] miniPool = new PyLongObject[256+5];
+  public static PyLongObject[] miniPool = new PyLongObject[256 + 5];
 
   private long data;
 
@@ -25,6 +25,22 @@ public class PyLongObject extends PyObject
 
   public static PyBoolObject check(PyObject o) {
     return new PyBoolObject(o == type);
+  }
+
+  public static PyLongObject getLongObject(long num) {
+    int idx = (int) num + 5;
+    if (num <= 255 && num >= -5) {
+      if (miniPool[idx] == null) {
+        miniPool[idx] = new PyLongObject(num);
+      }
+      return miniPool[idx];
+    } else {
+      return new PyLongObject(num);
+    }
+  }
+
+  public static PyLongObject getLongObject(int num) {
+    return getLongObject((long) num);
   }
 
   @Override
@@ -254,21 +270,5 @@ public class PyLongObject extends PyObject
     if (obj instanceof Integer o) return data == o;
     if (obj instanceof Long o) return data == o;
     return false;
-  }
-
-  public static PyLongObject getLongObject(long num) {
-    int idx = (int)num+5;
-    if (num <= 255 && num >=-5) {
-      if (miniPool[idx] == null) {
-        miniPool[idx] = new PyLongObject(num);
-      }
-      return miniPool[idx];
-    }else {
-      return new PyLongObject(num);
-    }
-  }
-
-  public static PyLongObject getLongObject(int num) {
-    return getLongObject((long)num);
   }
 }

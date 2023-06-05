@@ -1,7 +1,6 @@
 package org.jpvm.objects.pyinterface;
 
 import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.objects.PyObject;
 
 public interface TypeIterable {
 

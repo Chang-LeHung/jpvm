@@ -1,4 +1,4 @@
-package org.jpvm.module.filesteam;
+package org.jpvm.module.filestream;
 
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.types.PyTypeType;

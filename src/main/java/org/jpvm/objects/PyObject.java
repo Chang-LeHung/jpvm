@@ -38,6 +38,12 @@ public class PyObject implements PyArgs, TypeCheck,
     return BuiltIn.False;
   }
 
+  public static void registerBaseObjectType() {
+    if (type == null) {
+      type = new PyBaseObjectType();
+    }
+  }
+
   @Override
   public String toString() {
     return "<PyObject>";
@@ -121,22 +127,16 @@ public class PyObject implements PyArgs, TypeCheck,
     return this;
   }
 
-  public static void registerBaseObjectType() {
-    if (type == null) {
-      type = new PyBaseObjectType();
-    }
-  }
-
   @Override
   public PyObject getMethod(String name) throws PyMissMethod {
     PyUnicodeObject object = new PyUnicodeObject(name);
     if (dict == null) {
       dict = new PyDictObject();
       return getMethodByName(name, object);
-    }else {
+    } else {
       if (dict.get(object) != null) {
         return dict.get(object);
-      }else {
+      } else {
         return getMethodByName(name, object);
       }
     }

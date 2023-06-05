@@ -11,7 +11,9 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Use {@linkplain StandardCharsets#UTF_8} as default charset
@@ -38,6 +40,20 @@ public class PyUnicodeObject extends PyObject
 
   public static PyBoolObject check(PyObject o) {
     return new PyBoolObject(o == type);
+  }
+
+  public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
+    if (intern) {
+      if (internStr.containsKey(s))
+        return internStr.get(s);
+      else {
+        PyUnicodeObject object = new PyUnicodeObject(s);
+        internStr.put(s, object);
+        return object;
+      }
+    } else {
+      return internStr.getOrDefault(s, new PyUnicodeObject(s));
+    }
   }
 
   public String getData() {
@@ -215,20 +231,6 @@ public class PyUnicodeObject extends PyObject
     @Override
     public boolean hasNext() {
       return idx < size();
-    }
-  }
-
-  public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
-    if (intern) {
-      if (internStr.containsKey(s))
-        return internStr.get(s);
-      else {
-        PyUnicodeObject object = new PyUnicodeObject(s);
-        internStr.put(s, object);
-        return object;
-      }
-    }else {
-      return internStr.getOrDefault(s, new PyUnicodeObject(s));
     }
   }
 }

@@ -4,9 +4,8 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PyException extends Exception implements PyExcLogging {
 
-  private boolean isInternalError;
-
   private final String message;
+  private boolean isInternalError;
 
   public PyException(String message) {
     this.message = message;

@@ -2,7 +2,7 @@ package org.jpvm.python;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.module.filesteam.PyFileStreamObject;
+import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -26,6 +26,7 @@ public class BuiltIn {
   public static PyObject PyExcStopIteration = new PyExcStopIteration();
   public static PyObject notImplemented = new PyObject();
   public static PyDictObject dict;
+  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
 
   static {
     PyObject.registerBaseObjectType();
@@ -58,8 +59,6 @@ public class BuiltIn {
         PyRangeObject.type);
   }
 
-  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
-
   public static void doInit() {
     Class<BuiltIn> clazz = BuiltIn.class;
     try {
@@ -76,7 +75,7 @@ public class BuiltIn {
     if (kwArgs == null) {
       std = Sys.stdout;
       end = PyUnicodeObject.getOrCreateFromInternStringPool("\n", true);
-    }else {
+    } else {
       std = kwArgs.getOrDefault(PyUnicodeObject.getOrCreateFromInternStringPool("std", true),
           Sys.stdout);
       end = kwArgs.getOrDefault(PyUnicodeObject.getOrCreateFromInternStringPool("end", true),
@@ -93,6 +92,8 @@ public class BuiltIn {
     o = iterator.next();
     while (o != BuiltIn.PyExcStopIteration) {
       stream.writeString(o.str().getData());
+      if (iterator.hasNext())
+        stream.writeString(" ");
       o = iterator.next();
     }
     stream.writeString(uni.getData());

@@ -67,7 +67,7 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
             extendedArg = oparg << 8;
           } else
             extendedArg = 0;
-        }else cursor++;
+        } else cursor++;
       } while (opcode == OpMap.EXTENDED_ARG);
       instruction.setOpcode(opcode);
       instruction.setOpname(OpMap.instructions.get(opcode));

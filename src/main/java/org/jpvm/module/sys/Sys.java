@@ -1,6 +1,6 @@
 package org.jpvm.module.sys;
 
-import org.jpvm.module.filesteam.PyFileStreamObject;
+import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.objects.PyObject;
 
 public class Sys extends PyObject {

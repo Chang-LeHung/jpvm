@@ -93,6 +93,10 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     return new PyUnicodeObject(toString());
   }
 
+  public int size() {
+    return map.size();
+  }
+
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
     if (op == Operator.Py_EQ) {
@@ -173,6 +177,18 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     return new PyDictItrObject();
   }
 
+  public PyObject items() {
+    return new PyDictItemsObject(map);
+  }
+
+  public PyObject keys() {
+    return new PyDictKeysObject(map);
+  }
+
+  public PyObject values() {
+    return new PyDictValuesObject(map);
+  }
+
   public static class PyDictItrType extends PyTypeType {
     private final PyUnicodeObject name;
 
@@ -242,6 +258,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     public PyUnicodeObject repr() {
       return new PyUnicodeObject(toString());
     }
+
 
     @Override
     public PyObject sqLength(PyObject o) throws PyNotImplemented {

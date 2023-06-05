@@ -77,7 +77,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyLongObject hash() {
-    return new PyLongObject((int)(real.getData()*image.getData()));
+    return new PyLongObject((int) (real.getData() * image.getData()));
   }
 
   @Override
@@ -99,23 +99,23 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject add(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
-    if(!(o instanceof PyComplexObject)){
+    if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("can not apply function add on complex and " + o.getTypeName());
     }
-    return new PyComplexObject((PyFloatObject) (real.add(((PyComplexObject)o).getReal())), (PyFloatObject) (image.add(((PyComplexObject)o).getImage())));
+    return new PyComplexObject((PyFloatObject) (real.add(((PyComplexObject) o).getReal())), (PyFloatObject) (image.add(((PyComplexObject) o).getImage())));
   }
 
   @Override
   public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    if(!(o instanceof PyComplexObject)){
+    if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("cannot  apply function add on complex and " + o.getTypeName());
     }
-    return new PyComplexObject((PyFloatObject) (real.sub(((PyComplexObject)o).getReal())), (PyFloatObject) (image.sub(((PyComplexObject)o).getImage())));
+    return new PyComplexObject((PyFloatObject) (real.sub(((PyComplexObject) o).getReal())), (PyFloatObject) (image.sub(((PyComplexObject) o).getImage())));
   }
 
   @Override
   public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    if(!(o instanceof PyComplexObject)){
+    if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("can not apply function mul on complex and " + o.getTypeName());
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
@@ -152,7 +152,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject trueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    if(!(o instanceof PyComplexObject)){
+    if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("cannot apply function div on complex and " + o.getTypeName());
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());

@@ -1,8 +1,7 @@
-
 def add(a, b=1, c=2):
     """hello add"""
     d = 2
-    g = a*d
+    g = a * d
     return g + b
 
 

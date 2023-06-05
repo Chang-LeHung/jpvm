@@ -7,9 +7,10 @@ import org.jpvm.python.BuiltIn;
 public class PyFunctionObject extends PyObject {
 
   public static PyObject type = new PyFunctionType();
-
+  public static PyUnicodeObject __name__;
+  public static PyDictObject zero = new PyDictObject();
   /**
-   * type of {@link PyBytesObject}
+   * type of {@link PyCodeObject}
    */
   private PyObject funcCode;
   private PyObject funcGlobals;
@@ -32,10 +33,8 @@ public class PyFunctionObject extends PyObject {
   private PyObject funcName;
   private PyObject funcDict;
   private PyObject funcQualName;
-
   private PyObject funcModule;
-
-  public static PyUnicodeObject __name__;
+  private PyObject annotation;
 
   public PyFunctionObject(PyObject funcCode, PyObject funcGlobals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
     this.funcCode = funcCode;
@@ -71,6 +70,14 @@ public class PyFunctionObject extends PyObject {
     this.funcCode = funcCode;
   }
 
+  public PyObject getAnnotation() {
+    return annotation;
+  }
+
+  public void setAnnotation(PyObject annotation) {
+    this.annotation = annotation;
+  }
+
   public PyObject getFuncGlobals() {
     return funcGlobals;
   }
@@ -88,6 +95,8 @@ public class PyFunctionObject extends PyObject {
   }
 
   public PyObject getFuncDefaults() {
+    if (funcDefaults == null)
+      funcDefaults = PyTupleObject.getTupleBySize(0);
     return funcDefaults;
   }
 
@@ -96,6 +105,8 @@ public class PyFunctionObject extends PyObject {
   }
 
   public PyObject getFuncKwDefaults() {
+    if (funcKwDefaults == null)
+      return zero;
     return funcKwDefaults;
   }
 
@@ -140,6 +151,10 @@ public class PyFunctionObject extends PyObject {
     return type;
   }
 
+  public static void setType(PyObject type) {
+    PyFunctionObject.type = type;
+  }
+
   @Override
   public PyUnicodeObject getTypeName() {
     return type.getTypeName();
@@ -171,10 +186,6 @@ public class PyFunctionObject extends PyObject {
         '}';
   }
 
-  public static void setType(PyObject type) {
-    PyFunctionObject.type = type;
-  }
-
   public PyObject getFuncClosure() {
     return funcClosure;
   }
@@ -190,4 +201,5 @@ public class PyFunctionObject extends PyObject {
   public void setFuncModule(PyObject funcModule) {
     this.funcModule = funcModule;
   }
+
 }

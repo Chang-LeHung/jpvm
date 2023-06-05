@@ -19,7 +19,7 @@ public class TypeTest {
     System.out.println(obj.getType());
     System.out.println(obj.getTypeName());
     assert obj.getTypeName().getData().equals("int");
-    System.out.println(2.5%2);
+    System.out.println(2.5 % 2);
   }
 
   @Test

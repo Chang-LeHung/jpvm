@@ -5,7 +5,6 @@ import org.jpvm.errors.PyIndexOutOfBound;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.objects.types.PySetType;
 import org.jpvm.objects.types.PyTupleType;
 import org.jpvm.python.BuiltIn;
 
@@ -16,6 +15,8 @@ import org.jpvm.python.BuiltIn;
 public class PyTupleObject extends PyObject implements TypeIterable {
 
   public static PyObject type = new PyTupleType();
+
+  public static PyTupleObject zero = new PyTupleObject(0);
 
   private final PyObject[] obItem;
 
@@ -32,6 +33,12 @@ public class PyTupleObject extends PyObject implements TypeIterable {
     if (type == o)
       return BuiltIn.True;
     return BuiltIn.False;
+  }
+
+  public static PyObject getTupleBySize(int size) {
+    if (size == 0)
+      return zero;
+    return new PyTupleObject(size);
   }
 
   public void set(int idx, PyObject obj) {
@@ -95,6 +102,21 @@ public class PyTupleObject extends PyObject implements TypeIterable {
     return hashCode;
   }
 
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return str();
+  }
+
   public static class PyTupleItrType extends PyObject {
     private final PyUnicodeObject name;
 
@@ -139,20 +161,5 @@ public class PyTupleObject extends PyObject implements TypeIterable {
     public boolean hasNext() {
       return idx < size();
     }
-  }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return type.getTypeName();
-  }
-
-  @Override
-  public PyUnicodeObject str() {
-    return new PyUnicodeObject(toString());
-  }
-
-  @Override
-  public PyUnicodeObject repr() {
-    return str();
   }
 }
