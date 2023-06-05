@@ -190,29 +190,17 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   public static class PyDictItrType extends PyTypeType {
-    private final PyUnicodeObject name;
-
     public PyDictItrType() {
-      this.name = new PyUnicodeObject("dict_key_iterator");
-    }
-
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
+      name = "dict_key_iterator";
     }
   }
 
   public static class PyDictValuesType extends PyTypeType {
-    private final PyUnicodeObject name;
 
     public PyDictValuesType() {
-      this.name = new PyUnicodeObject("dict_values");
+      name = "dict_values";
     }
 
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
   }
 
   public static class PyDictValuesObject extends PyObject
@@ -270,17 +258,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       return new PyDictValuesItrObject();
     }
 
-    public static class PyDictValuesItrType extends PyObject {
-      private final PyUnicodeObject name;
-
+    public static class PyDictValuesItrType extends PyTypeType {
       public PyDictValuesItrType() {
-        name = new PyUnicodeObject("dict_value_iterator");
+        name = "dict_value_iterator";
       }
 
-      @Override
-      public PyUnicodeObject getTypeName() {
-        return name;
-      }
     }
 
     public class PyDictValuesItrObject extends PyObject
@@ -308,15 +290,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   public static class PyDictKeysType extends PyTypeType {
-    private final PyUnicodeObject name;
 
     public PyDictKeysType() {
-      this.name = new PyUnicodeObject("dict_keys");
-    }
-
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
+      this.name = "dict_keys";
     }
   }
 
@@ -413,16 +389,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       return new PyDictKeysItrObject();
     }
 
-    public static class PyDictKeysItrType extends PyObject {
-      private final PyUnicodeObject name;
-
+    public static class PyDictKeysItrType extends PyTypeType {
       public PyDictKeysItrType() {
-        name = new PyUnicodeObject("dict_value_iterator");
-      }
-
-      @Override
-      public PyUnicodeObject getTypeName() {
-        return name;
+        name = "dict_value_iterator";
       }
     }
 
@@ -450,17 +419,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   public static class PyDictItemsType extends PyTypeType {
-    private final PyUnicodeObject name;
-
     public PyDictItemsType() {
-      this.name = new PyUnicodeObject("dict_items");
+      name = "dict_items";
     }
-
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
-
 
   }
 
@@ -590,15 +551,8 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
 
     public static class PyDictItemsItrType extends PyTypeType {
-      private final PyUnicodeObject name;
-
       public PyDictItemsItrType() {
-        this.name = new PyUnicodeObject("dict_items");
-      }
-
-      @Override
-      public PyUnicodeObject getTypeName() {
-        return name;
+        name = "dict_items";
       }
     }
 

@@ -63,4 +63,69 @@ public class TestFunction {
     assert ret != null;
     System.out.println("ret = " + ret.str().getData());
   }
+
+  @Test
+  public void testStrIterator() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test09.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
+
+  @Test
+  public void testMathOperator() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test10.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
+
+  @Test
+  public void testBitOperator() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test11.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
+
+  @Test
+  public void testSlice() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test_slice.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
+
+  @Test
+  public void testTupleSlice() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test_tuple_slice.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
 }

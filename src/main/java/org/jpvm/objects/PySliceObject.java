@@ -34,7 +34,7 @@ public class PySliceObject extends PyObject {
 
   @Override
   public PyUnicodeObject str() {
-    return new PyUnicodeObject(String.format("slice(%d, %d, %d,)", start, end, step));
+    return new PyUnicodeObject(String.format("slice(%s, %s, %s,)", start.repr(), end.repr(), step.repr()));
   }
 
   @Override

@@ -1,12 +1,16 @@
 package org.jpvm.python;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.pvm.Abstract;
 
 import java.io.IOException;
 
@@ -37,6 +41,8 @@ public class BuiltIn {
         PyListObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true),
         PyDictObject.type);
+    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("bool", true),
+        PyBoolObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("complex", true),
         PyComplexObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("str", true),
@@ -64,6 +70,8 @@ public class BuiltIn {
     try {
       PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod("print", parameterTypes), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("print", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("sum", parameterTypes), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("sum", true), mp);
     } catch (NoSuchMethodException ignore) {
     }
   }
@@ -98,5 +106,22 @@ public class BuiltIn {
     }
     stream.writeString(uni.getData());
     return BuiltIn.None;
+  }
+
+  public static PyObject sum(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      if (o instanceof TypeIterable itr) {
+        TypeDoIterate iterator = itr.getIterator();
+        PyObject result = new PyLongObject(0);
+        while (iterator.hasNext()) {
+          result = Abstract.add(result, iterator.next());
+          if (result == BuiltIn.notImplemented)
+            throw new PyTypeError("can apply sum on " + o.repr());
+        }
+        return result;
+      }
+    }
+    throw new PyTypeError("sum only require one iterable argument");
   }
 }

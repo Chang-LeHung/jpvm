@@ -5,15 +5,9 @@ import org.jpvm.objects.*;
 
 public class PyRangeType extends PyTypeType {
 
-  private final PyUnicodeObject name;
-
   public PyRangeType() {
-    name = new PyUnicodeObject("range");
-  }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
+    super();
+    name = "range";
   }
 
   @Override

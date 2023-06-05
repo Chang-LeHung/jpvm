@@ -4,6 +4,7 @@ import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.objects.types.PyUnicodeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -187,17 +188,11 @@ public class PyUnicodeObject extends PyObject
     return new PyUnicodeItrObject();
   }
 
-  public static class PyUnicodeItrType extends PyObject {
-    private final PyUnicodeObject name;
-
+  public static class PyUnicodeItrType extends PyTypeType {
     public PyUnicodeItrType() {
-      this.name = new PyUnicodeObject("str_iterator");
+      this.name = "str_iterator";
     }
 
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
   }
 
   public class PyUnicodeItrObject extends PyObject implements TypeDoIterate {

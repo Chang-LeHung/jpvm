@@ -7,6 +7,7 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeName;
 import org.jpvm.objects.types.PySetType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
@@ -207,18 +208,12 @@ public class PySetObject extends PyObject implements TypeIterable,
     return new PyBoolObject(set.contains(o));
   }
 
-  public static class PySetItrType extends PyObject implements TypeName {
-
-    private final PyUnicodeObject name;
+  public static class PySetItrType extends PyTypeType implements TypeName {
 
     public PySetItrType() {
-      name = new PyUnicodeObject("set_iterator");
+      name = "set_iterator";
     }
 
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
   }
 
   public class PySetItrObject extends PyObject implements TypeDoIterate {

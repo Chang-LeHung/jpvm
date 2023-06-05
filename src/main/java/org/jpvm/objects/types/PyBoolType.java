@@ -1,18 +1,27 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.errors.PyException;
+import org.jpvm.objects.PyDictObject;
+import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolType extends PyTypeType {
 
-  private final PyUnicodeObject name;
-
   public PyBoolType() {
-    name = new PyUnicodeObject("bool");
+    super();
+    name = "bool";
   }
 
   @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
+  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args != null && args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PyNumberMethods num) {
+        return num.bool();
+      }
+    }
+    throw new PyException("bool require only 1 argument");
   }
-
 }

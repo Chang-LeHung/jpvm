@@ -1,18 +1,20 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyIndexOutOfBound;
-import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.*;
+import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyTupleType;
+import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
 
 /**
  * tuple is a size-fixed array
  */
-public class PyTupleObject extends PyObject implements TypeIterable {
+public class PyTupleObject extends PyObject implements TypeIterable,
+    PySequenceMethods {
 
   public static PyObject type = new PyTupleType();
 
@@ -103,6 +105,64 @@ public class PyTupleObject extends PyObject implements TypeIterable {
   }
 
   @Override
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+    if (o instanceof PyTupleObject tuple) {
+      if (tuple.size() != size())
+        return BuiltIn.False;
+      for (int i = 0; i < size(); i++) {
+        if (obItem[i] != tuple.obItem[i])
+          return BuiltIn.False;
+      }
+      return BuiltIn.True;
+    }
+    return BuiltIn.False;
+  }
+
+  @Override
+  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+    return new PyLongObject(obItem.length);
+  }
+
+  @Override
+  public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+    return PySequenceMethods.super.sqConcat(o);
+  }
+
+  @Override
+  public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+    return PySequenceMethods.super.sqRepeat(o);
+  }
+
+  @Override
+  public PyObject sqItem(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+    if (o instanceof PyLongObject) {
+      Long n = NumberHelper.transformPyObject2Long(o);
+      if (n == null)
+        throw new PyTypeNotMatch("require PyNumberMethods type");
+      return get(n.intValue());
+    }else if (o instanceof PySliceObject slice) {
+      PyListObject idx = slice.unpacked(this);
+      PyTupleObject result = new PyTupleObject(idx.size());
+      for (int i = 0; i < idx.size(); i++) {
+        int index = (int)((PyLongObject)idx.get(i)).getData();
+        result.set(i, get(index));
+      }
+      return result;
+    }
+    throw new PyTypeNotMatch("require PyNumberMethods type");
+  }
+
+  @Override
+  public PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch, PyNotImplemented {
+    return PySequenceMethods.super.sqAssItem(key, val);
+  }
+
+  @Override
+  public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch, PyUnsupportedOperator {
+    return PySequenceMethods.super.sqContain(o);
+  }
+
+  @Override
   public PyUnicodeObject getTypeName() {
     return type.getTypeName();
   }
@@ -117,16 +177,9 @@ public class PyTupleObject extends PyObject implements TypeIterable {
     return str();
   }
 
-  public static class PyTupleItrType extends PyObject {
-    private final PyUnicodeObject name;
-
+  public static class PyTupleItrType extends PyTypeType {
     public PyTupleItrType() {
-      name = new PyUnicodeObject("tuple_iterator");
-    }
-
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
+      name = "tuple_iterator";
     }
   }
 

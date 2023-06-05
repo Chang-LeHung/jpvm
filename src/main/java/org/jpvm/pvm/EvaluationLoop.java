@@ -5,12 +5,14 @@ import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNameError;
+import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyFunctionType;
+import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
@@ -32,7 +34,6 @@ public class EvaluationLoop {
   public PyObject pyEvalFrame(PyFrameObject frame) throws PyException {
     PyCodeObject code = frame.getCode();
     PyTupleObject coNames = (PyTupleObject) code.getCoNames();
-    PyTupleObject coVarNames = (PyTupleObject) code.getCoVarNames();
     ByteCodeBuffer byteCodeBuffer = new ByteCodeBuffer(code);
     PyDictObject globals = frame.getGlobals();
     PyDictObject locals = frame.getLocals();
@@ -188,6 +189,203 @@ public class EvaluationLoop {
           }
           frame.push(res);
         }
+        case ROT_TWO -> {
+          PyObject o1 = frame.pop();
+          PyObject o2 = frame.pop();
+          frame.push(o1);
+          frame.push(o2);
+        }
+        case ROT_THREE -> {
+          PyObject o1 = frame.pop();
+          PyObject o2 = frame.pop();
+          PyObject o3 = frame.pop();
+          frame.push(o1);
+          frame.push(o2);
+          frame.push(o3);
+        }
+        case ROT_FOUR -> {
+          PyObject o1 = frame.pop();
+          PyObject o2 = frame.pop();
+          PyObject o3 = frame.pop();
+          PyObject o4 = frame.pop();
+          frame.push(o1);
+          frame.push(o2);
+          frame.push(o3);
+          frame.push(o4);
+        }
+        case DUP_TOP -> {
+          PyObject top = frame.top();
+          frame.push(top);
+        }
+        case DUP_TOP_TWO -> {
+          PyObject o1 = frame.top(1);
+          PyObject o2 = frame.top(2);
+          frame.push(o2);
+          frame.push(o1);
+        }
+        case UNARY_POSITIVE -> {
+          PyObject top = frame.pop();
+          if (top instanceof PyNumberMethods num) {
+            try {
+              frame.push(num.pos());
+            }catch (PyException e) {
+              error = e;
+            }
+          }else
+            error = new PyTypeError(top.repr() + " not support operator +");
+        }
+        case UNARY_NEGATIVE -> {
+          PyObject top = frame.pop();
+          if (top instanceof PyNumberMethods num) {
+            try {
+              frame.push(num.neg());
+            }catch (PyException e) {
+              error = e;
+            }
+          }else
+            error = new PyTypeError(top.repr() + " not support operator -");
+        }
+        case UNARY_INVERT -> {
+          PyObject top = frame.pop();
+          if (top instanceof PyNumberMethods num) {
+            try {
+              frame.push(num.invert());
+            }catch (PyException e) {
+              error = e;
+            }
+          }else
+            error = new PyTypeError(top.repr() + " not support operator ~");
+        }
+        case UNARY_NOT -> {
+          PyObject top = frame.pop();
+          if ( Abstract.isTrue(top).isTrue())
+            frame.push(BuiltIn.False);
+          else
+            frame.push(BuiltIn.True);
+        }
+        case BINARY_POWER -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.pow(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_MATRIX_MULTIPLY -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.matrixMul(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_TRUE_DIVIDE -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.trueDiv(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_FLOOR_DIVIDE -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.floorDiv(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_MODULO -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.mod(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BUILD_SLICE -> {
+          PyObject t1 = frame.pop();
+          PyObject t2 = frame.pop();
+          if (ins.getOparg() == 2) {
+            PySliceObject sliceObject = new PySliceObject(t2, t1, PyLongObject.getLongObject(1));
+            frame.push(sliceObject);
+          }else if (ins.getOparg() == 3) {
+            PySliceObject sliceObject = new PySliceObject(frame.pop(), t2, t1);
+            frame.push(sliceObject);
+          }
+        }
+        case BINARY_SUBSCR -> {
+          PyObject sub = frame.pop();
+          PyObject container = frame.pop();
+          try {
+            PyObject item = Abstract.getItem(container, sub);
+            if (item == BuiltIn.notImplemented)
+              error = new PyException("can not apply BINARY_SUBSCR on " + container + " and " + sub.repr());
+            else
+              frame.push(item);
+          }catch (PyException e) {
+            error = e;
+          }
+        }
+        case BINARY_LSHIFT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.lshift(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_RSHIFT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.rshift(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_AND -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.and(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_XOR -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.xor(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_XOR -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceXor(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case BINARY_OR -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.or(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
         case BUILD_LIST -> {
           int size = ins.getOparg();
           PyListObject listObject = new PyListObject();
@@ -249,7 +447,10 @@ public class EvaluationLoop {
           }
           PyCodeObject codeObject = (PyCodeObject) frame.pop();
           var type = (PyFunctionType) PyFunctionObject.type;
-          PyFunctionObject function = type.createFunction(codeObject, frame.getGlobals(), (PyUnicodeObject) qualname);
+          // just for debugging to avoid cycle reference, idea will get stuck for toString method
+          PyDictObject dict = new PyDictObject();
+          dict.addAll(globals);
+          PyFunctionObject function = type.createFunction(codeObject, dict, (PyUnicodeObject) qualname);
           int oparg = ins.getOparg();
           if ((oparg & 0x08) != 0) {
             function.setFuncClosure(frame.pop());
@@ -265,9 +466,33 @@ public class EvaluationLoop {
           }
           frame.push(function);
         }
-        default -> throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()), true);
+        case JUMP_IF_FALSE_OR_POP -> {
+          PyObject top = frame.top();
+          if (top == BuiltIn.False)
+            byteCodeBuffer.reset(ins.getOparg());
+          else
+            frame.pop();
+        }
+        case JUMP_IF_TRUE_OR_POP -> {
+          PyObject top = frame.top();
+          if (top == BuiltIn.True)
+            byteCodeBuffer.reset(ins.getOparg());
+          else
+            frame.pop();
+        }
+        case BUILD_TUPLE -> {
+          int size = ins.getOparg();
+          PyTupleObject tuple = new PyTupleObject(size);
+          int used = frame.getUsed();
+          for (int i = 0; i < size; ++i) {
+            tuple.set(i, frame.get(used - size + i));
+          }
+          frame.decreaseStackPointer(size);
+          frame.push(tuple);
+        }
+        default -> throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }
-      if (error != null) throw new PyException(error.getMessage(), error.isInternalError());
+      if (error != null) throw new PyException("Execution error with op " + ins.getOpname() + " " + error.getMessage(), error.isInternalError());
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;

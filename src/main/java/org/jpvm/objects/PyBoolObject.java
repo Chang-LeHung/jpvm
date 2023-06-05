@@ -27,9 +27,9 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public String toString() {
-    return "PyBoolObject{" +
-        "bool=" + bool +
-        '}';
+    if (bool)
+      return "True";
+    return "False";
   }
 
   @Override

@@ -4,15 +4,8 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PyBytesType extends PyTypeType {
 
-  private final PyUnicodeObject name;
-
   public PyBytesType() {
-    name = new PyUnicodeObject("bytes");
+    super();
+    name = "bytes";
   }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
-  }
-
 }

@@ -1,18 +1,13 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.PyListObject;
+
+import java.util.ArrayList;
 
 public class PyBaseObjectType extends PyTypeType {
 
-  private final PyUnicodeObject name;
-
   public PyBaseObjectType() {
-    name = new PyUnicodeObject("object");
+    mro = new ArrayList<>();
+    name = "object";
   }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
-  }
-
 }

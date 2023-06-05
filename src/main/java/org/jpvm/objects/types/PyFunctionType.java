@@ -6,15 +6,9 @@ import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.pycParser.PyCodeObject;
 
 public class PyFunctionType extends PyTypeType {
-  private final PyUnicodeObject name;
-
   public PyFunctionType() {
-    name = new PyUnicodeObject("frame");
-  }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
+    super();
+    name = "function";
   }
 
   public PyFunctionObject createFunction(PyCodeObject codeObject, PyDictObject globals,

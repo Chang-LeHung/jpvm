@@ -6,6 +6,7 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeName;
 import org.jpvm.objects.types.PyListType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
@@ -277,10 +278,21 @@ public class PyListObject extends PyObject
 
   @Override
   public PyObject sqItem(PyObject o) throws PyTypeNotMatch {
-    Long n = NumberHelper.transformPyObject2Long(o);
-    if (n == null)
-      throw new PyTypeNotMatch("require PyNumberMethods type");
-    return get(n.intValue());
+    if (o instanceof PyLongObject) {
+      Long n = NumberHelper.transformPyObject2Long(o);
+      if (n == null)
+        throw new PyTypeNotMatch("require PyNumberMethods type");
+      return get(n.intValue());
+    }else if (o instanceof PySliceObject slice) {
+      PyListObject idx = slice.unpacked(this);
+      PyListObject result = new PyListObject();
+      for (int i = 0; i < idx.size(); i++) {
+        int index = (int)((PyLongObject)idx.get(i)).getData();
+        result.append(get(index));
+      }
+      return result;
+    }
+    throw new PyTypeNotMatch("require PyNumberMethods type");
   }
 
   @Override
@@ -314,17 +326,11 @@ public class PyListObject extends PyObject
     return this;
   }
 
-  public static class PyListItrType extends PyObject implements TypeName {
-    private final PyUnicodeObject name;
-
+  public static class PyListItrType extends PyTypeType implements TypeName {
     public PyListItrType() {
-      name = new PyUnicodeObject("list_iterator");
+      name = "list_iterator";
     }
 
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
   }
 
   public class PyListItrObject extends PyObject implements TypeDoIterate {

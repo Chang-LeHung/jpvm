@@ -3,6 +3,8 @@ package org.jpvm.objects;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
 
+import java.util.Arrays;
+
 public class PyFrameObject extends PyObject {
 
   public static PyObject type = new PyFrameType();
@@ -124,6 +126,11 @@ public class PyFrameObject extends PyObject {
     return stack[used - 1];
   }
 
+  public PyObject top(int delta) {
+    assert used >= delta && delta >= 1;
+    return stack[used - delta];
+  }
+
   public boolean hasArgs() {
     return used > 0;
   }
@@ -142,5 +149,16 @@ public class PyFrameObject extends PyObject {
 
   public void setLocal(int idx, PyObject o) {
     localPlus[idx] = o;
+  }
+
+  @Override
+  public String toString() {
+    return "PyFrameObject{" +
+        "stack=" + Arrays.toString(stack) +
+        ", localPlus=" + Arrays.toString(localPlus) +
+        ", builtins=" + builtins +
+        ", globals=" + globals +
+        ", locals=" + locals +
+        '}';
   }
 }

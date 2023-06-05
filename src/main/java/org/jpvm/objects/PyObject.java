@@ -26,10 +26,6 @@ public class PyObject implements PyArgs, TypeCheck,
 
   private PyDictObject dict;
 
-  private PyTupleObject bases;
-
-  private PyListObject mro;
-
   private PyLongObject hashcode;
 
   public static PyBoolObject check(PyObject o) {
@@ -99,23 +95,6 @@ public class PyObject implements PyArgs, TypeCheck,
   public void setDict(PyDictObject dict) {
     this.dict = dict;
   }
-
-  public PyTupleObject getBases() {
-    return bases;
-  }
-
-  public void setBases(PyTupleObject bases) {
-    this.bases = bases;
-  }
-
-  public PyListObject getMro() {
-    return mro;
-  }
-
-  public void setMro(PyListObject mro) {
-    this.mro = mro;
-  }
-
   @Override
   public int hashCode() {
     return (int) hash().getData();

@@ -1,18 +1,12 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 
 public class PyDictType extends PyTypeType {
 
-  private final PyUnicodeObject name;
-
   public PyDictType() {
-    this.name = new PyUnicodeObject("dict");
+    super();
+    name = "dict";
   }
-
-  @Override
-  public PyUnicodeObject getTypeName() {
-    return name;
-  }
-
 }

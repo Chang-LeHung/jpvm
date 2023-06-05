@@ -12,4 +12,4 @@ def fibonacci(n):
 # 示例：计算斐波那契数列中的第10个数
 n = 10
 fib_number = fibonacci(n)
-print(fib_number)
+print(f"{fib_number = }")

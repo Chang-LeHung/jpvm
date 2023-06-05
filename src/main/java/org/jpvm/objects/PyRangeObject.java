@@ -76,16 +76,10 @@ public class PyRangeObject extends PyObject implements TypeIterable {
   }
 
   public static class PyRangeItrType extends PyTypeType {
-    private final PyUnicodeObject name;
-
     public PyRangeItrType() {
-      name = new PyUnicodeObject("range_iterator");
+      name = "range_iterator";
     }
 
-    @Override
-    public PyUnicodeObject getTypeName() {
-      return name;
-    }
 
   }
 

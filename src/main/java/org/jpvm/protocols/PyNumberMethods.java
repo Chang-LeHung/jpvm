@@ -247,14 +247,14 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_matrix_multiply
    */
-  default PyObject matrixMul() throws PyNotImplemented {
+  default PyObject matrixMul(PyObject o) throws PyNotImplemented {
     throw new PyNotImplemented("matrixMul is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_matrix_multiply
    */
-  default PyObject inplaceMatrixMul() throws PyNotImplemented {
+  default PyObject inplaceMatrixMul(PyObject o) throws PyNotImplemented {
     throw new PyNotImplemented("inplaceMatrixMul is not implemented");
   }
 }
