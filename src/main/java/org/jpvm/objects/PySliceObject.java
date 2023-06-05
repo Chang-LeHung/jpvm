@@ -44,7 +44,7 @@ public class PySliceObject extends PyObject {
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (!(o instanceof PySliceObject slice)) {
         return BuiltIn.False;
       }

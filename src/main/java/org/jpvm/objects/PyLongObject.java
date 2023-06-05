@@ -76,12 +76,39 @@ public class PyLongObject extends PyObject
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
-      if (!(o instanceof PyLongObject))
-        return BuiltIn.False;
-      if (((PyLongObject) o).getData() == data)
-        return BuiltIn.True;
+    if (!(o instanceof PyLongObject n))
       return BuiltIn.False;
+    switch (op) {
+      case Py_GT -> {
+        if (data > n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case Py_EQ -> {
+        if (data == n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case Py_NE -> {
+        if (data != n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case Py_GE -> {
+        if (data >= n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case Py_LT -> {
+        if (data < n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case Py_LE -> {
+        if (data <= n.getData())
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
     }
     throw new PyUnsupportedOperator("not support operator " + op);
   }

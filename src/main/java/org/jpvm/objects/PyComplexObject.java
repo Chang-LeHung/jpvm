@@ -82,7 +82,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (Operator.PY_EQ == op) {
+    if (Operator.Py_EQ == op) {
       if (o instanceof PyComplexObject complex) {
         if (complex.real == real && complex.image == image)
           return BuiltIn.True;

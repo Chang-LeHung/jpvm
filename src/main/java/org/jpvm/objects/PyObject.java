@@ -78,7 +78,7 @@ public class PyObject implements PyArgs, TypeCheck,
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (o == this)
         return BuiltIn.True;
       return BuiltIn.False;

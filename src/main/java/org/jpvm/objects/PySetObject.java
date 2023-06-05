@@ -99,7 +99,7 @@ public class PySetObject extends PyObject implements TypeIterable,
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (o instanceof PySetObject obj) {
         if (set.equals(obj.toJavaType()))
           return BuiltIn.True;

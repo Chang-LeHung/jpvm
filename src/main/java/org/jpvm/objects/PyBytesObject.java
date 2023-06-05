@@ -82,7 +82,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (null == o)
         return BuiltIn.False;
       if (o instanceof PyBytesObject bytes) {

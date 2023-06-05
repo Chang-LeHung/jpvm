@@ -139,13 +139,13 @@ public class PyListObject extends PyObject
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (!(o instanceof PyListObject list))
         return BuiltIn.False;
       int s = size();
       if (s != list.size()) return BuiltIn.False;
       for (int i = 0; i < s; i++) {
-        if (richCompare(list.get(i), Operator.PY_EQ).isFalse())
+        if (richCompare(list.get(i), Operator.Py_EQ).isFalse())
           return BuiltIn.False;
       }
       return BuiltIn.True;
@@ -295,7 +295,7 @@ public class PyListObject extends PyObject
   @Override
   public PyObject sqContain(PyObject o) throws PyUnsupportedOperator {
     for (PyObject object : obItem) {
-      if (object.richCompare(o, Operator.PY_EQ).isTrue())
+      if (object.richCompare(o, Operator.Py_EQ).isTrue())
         return BuiltIn.True;
     }
     return BuiltIn.False;

@@ -74,7 +74,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.PY_EQ) {
+    if (op == Operator.Py_EQ) {
       if (!(o instanceof PyFloatObject))
         return BuiltIn.False;
       if (((PyFloatObject) o).getData() == data)

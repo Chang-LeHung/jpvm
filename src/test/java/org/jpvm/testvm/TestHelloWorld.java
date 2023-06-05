@@ -55,4 +55,31 @@ public class TestHelloWorld {
     PyLongObject object = new PyLongObject(1);
     System.out.println(object.str().getData());
   }
+
+  @Test
+  public void test03() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test03.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("return val = " + ret.str().getData());
+  }
+
+  @Test
+  public void test02() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test02.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("return val = " + ret.str().getData());
+  }
+
 }

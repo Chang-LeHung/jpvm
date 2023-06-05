@@ -33,16 +33,28 @@ public class PyFunctionObject extends PyObject {
   private PyObject funcDict;
   private PyObject funcQualName;
 
-  public PyFunctionObject(PyObject funcCode, PyObject funcGlobals, PyObject funcLocals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
+  private PyObject funcModule;
+
+  public static PyUnicodeObject __name__;
+
+  public PyFunctionObject(PyObject funcCode, PyObject funcGlobals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
     this.funcCode = funcCode;
     this.funcGlobals = funcGlobals;
-    this.funcLocals = funcLocals;
+    this.funcLocals = new PyDictObject();
     this.funcDefaults = funcDefaults;
     this.funcKwDefaults = funcKwDefaults;
     this.funcDoc = funcDoc;
     this.funcName = funcName;
     this.funcDict = funcDict;
     this.funcQualName = funcQualName;
+  }
+
+  public PyFunctionObject(PyCodeObject code, PyDictObject globals,
+                          PyUnicodeObject funcQualName) {
+    funcCode = code;
+    funcGlobals = globals;
+    this.funcQualName = funcQualName;
+    funcDict = new PyDictObject();
   }
 
   public static PyBoolObject check(PyObject o) {
@@ -157,5 +169,25 @@ public class PyFunctionObject extends PyObject {
         ", funcDict=" + funcDict +
         ", funcQualName=" + funcQualName +
         '}';
+  }
+
+  public static void setType(PyObject type) {
+    PyFunctionObject.type = type;
+  }
+
+  public PyObject getFuncClosure() {
+    return funcClosure;
+  }
+
+  public void setFuncClosure(PyObject funcClosure) {
+    this.funcClosure = funcClosure;
+  }
+
+  public PyObject getFuncModule() {
+    return funcModule;
+  }
+
+  public void setFuncModule(PyObject funcModule) {
+    this.funcModule = funcModule;
   }
 }

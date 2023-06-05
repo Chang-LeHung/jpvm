@@ -3,12 +3,12 @@ package org.jpvm.pvm;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.objects.pyinterface.TypeRichCompare;
+import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
@@ -74,16 +74,11 @@ public class EvaluationLoop {
             args.set(size - i - 1, frame.pop());
           }
           PyObject pop = frame.pop();
-          if (pop instanceof PyNativeMethodObject nativeMethodObject) {
-            try {
-              frame.push(nativeMethodObject.call(null, args, null));
-            } catch (PyNotImplemented e) {
-              error = e;
-              break;
-            }
-          }else if (pop instanceof PyTypeType t) {
-            PyObject result = t.call(null, args, null);
-            frame.push(result);
+          try {
+            PyObject object = Abstract.abstractCall(pop, null, args, null);
+            frame.push(object);
+          } catch (PyException e) {
+            error = e;
           }
           // other callable object to be implemented
         }
@@ -101,13 +96,11 @@ public class EvaluationLoop {
           for (int i = args.size() - 1; i >= 0; i--)
             args.set(i, frame.pop());
           PyObject callable = frame.pop();
-          if (callable instanceof PyNativeMethodObject nativeMethodObject) {
-            try {
-              frame.push(nativeMethodObject.call(null, args, kwArgs));
-            } catch (PyNotImplemented e) {
-              error = e;
-              break;
-            }
+          try {
+            PyObject object = Abstract.abstractCall(callable, null, args, kwArgs);
+            frame.push(object);
+          } catch (PyException e) {
+            error = e;
           }
           // other callable object to be implemented
         }
@@ -118,7 +111,7 @@ public class EvaluationLoop {
         case FORMAT_VALUE -> {
           int oparg = ins.getOparg();
           boolean have_fmt_spec = (oparg & FVS_MASK) == FVS_HAVE_SPEC;
-          PyObject sepc = have_fmt_spec ? frame.pop() : null;
+          PyObject spec = have_fmt_spec ? frame.pop() : null;
           PyObject val = frame.pop();
           switch (oparg & FVC_MASK) {
             case FVC_NONE -> frame.push(val);
@@ -146,11 +139,11 @@ public class EvaluationLoop {
             PyObject next = itr.next();
             if (next != BuiltIn.PyExcStopIteration) {
               frame.push(next);
-            }else {
+            } else {
               frame.pop();
               byteCodeBuffer.increase(ins.getOparg());
             }
-          }else {
+          } else {
             error = new PyTypeNotMatch("require an iterator on stack top");
             error.setInternalError(true);
           }
@@ -159,8 +152,7 @@ public class EvaluationLoop {
           PyObject pop = frame.pop();
           if (pop instanceof TypeIterable itr) {
             frame.push((PyObject) itr.getIterator());
-          } else
-            error = new PyException(pop.repr() + " is not a iterable object");
+          } else error = new PyException(pop.repr() + " is not a iterable object");
         }
         case BINARY_MULTIPLY -> {
           PyObject right = frame.pop();
@@ -180,10 +172,68 @@ public class EvaluationLoop {
           }
           frame.push(res);
         }
+        case BUILD_LIST -> {
+          int size = ins.getOparg();
+          PyListObject listObject = new PyListObject();
+          int used = frame.getUsed();
+          for (int i = 0; i < size; ++i) {
+            listObject.append(frame.get(used - size + i));
+          }
+          frame.decreaseStackPointer(size);
+          frame.push(listObject);
+        }
+        case JUMP_FORWARD -> {
+          int oparg = ins.getOparg();
+          byteCodeBuffer.increase(oparg);
+        }
+        case POP_JUMP_IF_FALSE -> {
+          PyObject pop = frame.pop();
+          if (pop instanceof PyBoolObject b) {
+            if (b.isFalse())
+              byteCodeBuffer.reset(ins.getOparg());
+          }
+          else
+            error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
+        }
+        case COMPARE_OP -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject result;
+          try {
+            switch (ins.getOparg()) {
+              case TypeRichCompare.Py_LT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_LT);
+              case TypeRichCompare.Py_LE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_LE);
+              case TypeRichCompare.Py_EQ -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_EQ);
+              case TypeRichCompare.Py_NE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_NE);
+              case TypeRichCompare.Py_GT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GT);
+              case TypeRichCompare.Py_GE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GE);
+              case TypeRichCompare.PyCmp_IN -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
+              case TypeRichCompare.PyCmp_NOT_IN -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
+              case TypeRichCompare.PyCmp_IS -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
+              case TypeRichCompare.PyCmp_IS_NOT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
+              case TypeRichCompare.PyCmp_EXC_MATCH -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
+              case TypeRichCompare.PyCmp_BAD -> result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
+              default -> throw new PyException("Unknow COMPARE_OP operator" + ins.getOparg());
+            }
+            frame.push(result);
+          }catch (PyException e) {
+            error = e;
+          }
+        }
+        case MAKE_FUNCTION -> {
+          PyObject qualname = frame.pop();
+          if (! (qualname instanceof PyUnicodeObject)) {
+            error = new PyException("qualname require PyUnicodeObject", true);
+            break;
+          }
+          PyCodeObject codeObject = (PyCodeObject)frame.pop();
+          var type = (PyFunctionType)PyFunctionObject.type;
+          PyFunctionObject function = type.createFunction(codeObject, frame.getGlobals(), (PyUnicodeObject) qualname);
+          frame.push(function);
+        }
         default -> throw new PyException("not support opcode " + ins.getOpcode(), true);
       }
-      if (error != null)
-        throw new PyException(error.getMessage(), error.isInternalError());
+      if (error != null) throw new PyException(error.getMessage(), error.isInternalError());
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;

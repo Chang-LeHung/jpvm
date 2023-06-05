@@ -13,5 +13,4 @@ public class PyFrameType extends PyTypeType {
   public PyUnicodeObject getTypeName() {
     return name;
   }
-
 }
