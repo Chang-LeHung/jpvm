@@ -283,11 +283,11 @@ public class PyListObject extends PyObject
       if (n == null)
         throw new PyTypeNotMatch("require PyNumberMethods type");
       return get(n.intValue());
-    }else if (o instanceof PySliceObject slice) {
+    } else if (o instanceof PySliceObject slice) {
       PyListObject idx = slice.unpacked(this);
       PyListObject result = new PyListObject();
       for (int i = 0; i < idx.size(); i++) {
-        int index = (int)((PyLongObject)idx.get(i)).getData();
+        int index = (int) ((PyLongObject) idx.get(i)).getData();
         result.append(get(index));
       }
       return result;

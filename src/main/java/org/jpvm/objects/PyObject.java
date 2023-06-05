@@ -23,9 +23,9 @@ public class PyObject implements PyArgs, TypeCheck,
    * base class name of all classes in python
    */
   public static PyUnicodeObject name;
-
+  protected PyListObject mro;
+  protected PyListObject bases;
   private PyDictObject dict;
-
   private PyLongObject hashcode;
 
   public static PyBoolObject check(PyObject o) {
@@ -95,6 +95,7 @@ public class PyObject implements PyArgs, TypeCheck,
   public void setDict(PyDictObject dict) {
     this.dict = dict;
   }
+
   @Override
   public int hashCode() {
     return (int) hash().getData();

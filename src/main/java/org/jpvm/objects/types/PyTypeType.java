@@ -5,19 +5,16 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeNew;
 import org.jpvm.python.BuiltIn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PyTypeType extends PyObject implements TypeNew {
 
   /* Objects behave like an unbound method */
-  public static int  Py_TPFLAGS_METHOD_DESCRIPTOR = (1<<17);
+  public static int Py_TPFLAGS_METHOD_DESCRIPTOR = (1 << 17);
 
   /* Objects support type attribute cache */
 
-  public static int  Py_TPFLAGS_HAVE_VERSION_TAG = (1<<18);
+  public static int Py_TPFLAGS_HAVE_VERSION_TAG = (1 << 18);
 
-  public static int Py_TPFLAGS_VALID_VERSION_TAG = (1<<19);
+  public static int Py_TPFLAGS_VALID_VERSION_TAG = (1 << 19);
 
   /* Type is abstract and cannot be instantiated */
   public static int Py_TPFLAGS_IS_ABSTRACT = (1 << 20);
@@ -34,23 +31,20 @@ public class PyTypeType extends PyObject implements TypeNew {
 
   public static PyObject type = new PyTypeType();
 
-  protected List<PyObject> mro;
-
   protected String name;
-
-  protected int flag;
 
   public PyTypeType() {
     name = "type";
-    mro = new ArrayList<>();
-    mro.add(PyObject.type);
+    mro = new PyListObject();
+    mro.append(PyObject.type);
   }
 
   /**
    * this object is subtype of r or not
    */
   public PyBoolObject isSubType(PyTypeType r) {
-    for (PyObject pyObject : mro) {
+    for (int i = 0; i < mro.size(); i++) {
+      PyObject pyObject = mro.get(i);
       if (pyObject == r)
         return BuiltIn.True;
     }
@@ -60,12 +54,12 @@ public class PyTypeType extends PyObject implements TypeNew {
   public PyTupleObject getMro() {
     PyTupleObject object = new PyTupleObject(mro.size());
     for (int i = 0; i < mro.size(); i++) {
-        object.set(i, mro.get(i));
+      object.set(i, mro.get(i));
     }
     return object;
   }
 
-  public void setMro(List<PyObject> mro) {
+  public void setMro(PyListObject mro) {
     this.mro = mro;
   }
 

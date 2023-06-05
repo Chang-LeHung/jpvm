@@ -140,11 +140,11 @@ public class PyTupleObject extends PyObject implements TypeIterable,
       if (n == null)
         throw new PyTypeNotMatch("require PyNumberMethods type");
       return get(n.intValue());
-    }else if (o instanceof PySliceObject slice) {
+    } else if (o instanceof PySliceObject slice) {
       PyListObject idx = slice.unpacked(this);
       PyTupleObject result = new PyTupleObject(idx.size());
       for (int i = 0; i < idx.size(); i++) {
-        int index = (int)((PyLongObject)idx.get(i)).getData();
+        int index = (int) ((PyLongObject) idx.get(i)).getData();
         result.set(i, get(index));
       }
       return result;

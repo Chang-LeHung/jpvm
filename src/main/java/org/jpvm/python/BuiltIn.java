@@ -1,7 +1,6 @@
 package org.jpvm.python;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.module.filestream.PyFileStreamObject;

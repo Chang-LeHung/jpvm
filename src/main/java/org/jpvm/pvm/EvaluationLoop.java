@@ -228,10 +228,10 @@ public class EvaluationLoop {
           if (top instanceof PyNumberMethods num) {
             try {
               frame.push(num.pos());
-            }catch (PyException e) {
+            } catch (PyException e) {
               error = e;
             }
-          }else
+          } else
             error = new PyTypeError(top.repr() + " not support operator +");
         }
         case UNARY_NEGATIVE -> {
@@ -239,10 +239,10 @@ public class EvaluationLoop {
           if (top instanceof PyNumberMethods num) {
             try {
               frame.push(num.neg());
-            }catch (PyException e) {
+            } catch (PyException e) {
               error = e;
             }
-          }else
+          } else
             error = new PyTypeError(top.repr() + " not support operator -");
         }
         case UNARY_INVERT -> {
@@ -250,15 +250,15 @@ public class EvaluationLoop {
           if (top instanceof PyNumberMethods num) {
             try {
               frame.push(num.invert());
-            }catch (PyException e) {
+            } catch (PyException e) {
               error = e;
             }
-          }else
+          } else
             error = new PyTypeError(top.repr() + " not support operator ~");
         }
         case UNARY_NOT -> {
           PyObject top = frame.pop();
-          if ( Abstract.isTrue(top).isTrue())
+          if (Abstract.isTrue(top).isTrue())
             frame.push(BuiltIn.False);
           else
             frame.push(BuiltIn.True);
@@ -314,7 +314,7 @@ public class EvaluationLoop {
           if (ins.getOparg() == 2) {
             PySliceObject sliceObject = new PySliceObject(t2, t1, PyLongObject.getLongObject(1));
             frame.push(sliceObject);
-          }else if (ins.getOparg() == 3) {
+          } else if (ins.getOparg() == 3) {
             PySliceObject sliceObject = new PySliceObject(frame.pop(), t2, t1);
             frame.push(sliceObject);
           }
@@ -328,7 +328,7 @@ public class EvaluationLoop {
               error = new PyException("can not apply BINARY_SUBSCR on " + container + " and " + sub.repr());
             else
               frame.push(item);
-          }catch (PyException e) {
+          } catch (PyException e) {
             error = e;
           }
         }
@@ -490,9 +490,11 @@ public class EvaluationLoop {
           frame.decreaseStackPointer(size);
           frame.push(tuple);
         }
-        default -> throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
+        default ->
+            throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }
-      if (error != null) throw new PyException("Execution error with op " + ins.getOpname() + " " + error.getMessage(), error.isInternalError());
+      if (error != null)
+        throw new PyException("Execution error with op " + ins.getOpname() + " " + error.getMessage(), error.isInternalError());
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;

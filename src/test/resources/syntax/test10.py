@@ -10,6 +10,7 @@ def calculate_operations(a, b):
 
     return addition, subtraction, multiplication, division, modulus, logical_and, logical_or, xor
 
+
 # 示例：对给定数据执行操作
 a = 10
 b = 4
