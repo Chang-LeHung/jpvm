@@ -32,20 +32,38 @@ public class EvaluationLoop {
 
   private PyException error;
 
-  private PyFrameObject f;
+  private final PyFrameObject frame;
 
+  public EvaluationLoop(PyFrameObject frame) {
+    this.frame = frame;
+  }
 
   public PyTupleObject getArgs(Instruction ins) {
     int size = ins.getOparg();
     PyTupleObject args = new PyTupleObject(size);
     for (int i = 0; i < size; i++) {
-      args.set(size - i - 1, f.pop());
+      args.set(size - i - 1, frame.pop());
     }
     return args;
   }
 
-  public PyObject pyEvalFrame(PyFrameObject frame) throws PyException {
-    f = frame;
+  public PyObject getClassMethod(PyUnicodeObject name) {
+    PyObject obj = frame.pop();
+    Class<? extends PyObject> clazz = obj.getClass();
+    try {
+      Method meth = clazz.getMethod(name.getData(), PyObject.parameterTypes);
+      PyClassMethod annotation = meth.getAnnotation(PyClassMethod.class);
+      if (annotation != null) {
+        return new PyMethodObject(obj, meth, name.getData());
+      }
+    } catch (NoSuchMethodException e) {
+      error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+    }
+    error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+    return null;
+  }
+
+  public PyObject pyEvalFrame() throws PyException {
     PyCodeObject code = frame.getCode();
     PyTupleObject coNames = (PyTupleObject) code.getCoNames();
     ByteCodeBuffer byteCodeBuffer = new ByteCodeBuffer(code);
@@ -78,6 +96,11 @@ public class EvaluationLoop {
           PyObject name = coNames.get(ins.getOparg());
           loadFromGlobal(frame, globals, builtins, name);
         }
+        case LOAD_ATTR -> {
+          var name = (PyUnicodeObject)coNames.get(ins.getOparg());
+          frame.push(getClassMethod(name));
+          // other features to be implemented
+        }
         case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
         case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
         case LOAD_METHOD -> {
@@ -100,8 +123,12 @@ public class EvaluationLoop {
         case CALL_METHOD -> {
           PyTupleObject args = getArgs(ins);
           PyObject method = frame.pop();
-          if (method instanceof PyMethodObject meth) {
-            frame.push(method.call(null, args, null));
+          if (method instanceof PyMethodObject) {
+            try {
+              frame.push(Abstract.abstractCall(method, null, args, null, frame));
+            }catch (PyException e) {
+              error = e;
+            }
           }else
             error = new PyException("object " + method.repr() + " can not be called");
         }
@@ -115,15 +142,6 @@ public class EvaluationLoop {
             error = e;
           }
           // other callable object to be implemented
-        }
-        case BUILD_CONST_KEY_MAP -> {
-          var keys = (PyTupleObject) frame.pop();
-          PyDictObject dict = new PyDictObject();
-          int size = keys.size();
-          for (int i = 0; i < size; i++) {
-            dict.put(keys.get(size - 1 - i), frame.pop());
-          }
-          frame.push(dict);
         }
         case CALL_FUNCTION_KW -> {
           PyObject pop = frame.pop();
@@ -144,8 +162,52 @@ public class EvaluationLoop {
             frame.push(object);
           } catch (PyException e) {
             error = e;
+          }catch (Exception e) {
+            error = new PyException("Java native exception occurred : " + e.getMessage(), false);
           }
           // other callable object to be implemented
+        }
+        case BUILD_CONST_KEY_MAP -> {
+          var keys = (PyTupleObject) frame.pop();
+          PyDictObject dict = new PyDictObject();
+          int size = keys.size();
+          for (int i = 0; i < size; i++) {
+            dict.put(keys.get(size - 1 - i), frame.pop());
+          }
+          frame.push(dict);
+        }
+        case UNPACK_SEQUENCE -> {
+          int size = ins.getOparg();
+          PyObject top = frame.pop();
+          if (top instanceof PyTupleObject tuple) {
+            if (tuple.size() == size) {
+              for (int i = 0; i < tuple.size(); i++)
+                // push argument from right to left
+                frame.push(tuple.get(size - 1 - i));
+              continue;
+            }
+          }else if (top instanceof PyListObject list) {
+            if (list.size() == size) {
+              for (int i = 0; i < list.size(); i++)
+                // push argument from right to left
+                frame.push(list.get(size - 1 - i));
+              continue;
+            }
+          }else if (top instanceof TypeDoIterate itr) {
+            if (itr.size() == size) {
+              frame.increaseStackPointer(size);
+              for (int i = 0; i < size; i++) {
+                frame.setTop(i+1, itr.next());
+              }
+              continue;
+            }
+          }
+          throw new PyException(top.repr() + " can not be unpacked into " + size + " objects");
+        }
+        case LIST_APPEND -> {
+          PyObject top = frame.pop();
+          PyListObject list = (PyListObject) frame.top(ins.getOparg());
+          list.append(top);
         }
         case POP_TOP -> frame.pop();
         case RETURN_VALUE -> {
@@ -163,9 +225,7 @@ public class EvaluationLoop {
             case FVC_ASCII -> frame.push(new PyUnicodeObject(val.toString()));
           }
         }
-        case JUMP_ABSOLUTE -> {
-          byteCodeBuffer.reset(ins.getOparg());
-        }
+        case JUMP_ABSOLUTE -> byteCodeBuffer.reset(ins.getOparg());
         case BUILD_STRING -> {
           int size = ins.getOparg();
           StringBuilder builder = new StringBuilder();
@@ -303,7 +363,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.pow(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply pow on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -312,7 +372,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.matrixMul(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply matrixMul on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -321,7 +381,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.trueDiv(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply trueDiv on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -330,7 +390,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.floorDiv(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply floorDiv on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -339,7 +399,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.mod(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply mod on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -372,7 +432,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.lshift(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply lshift on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -381,7 +441,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.rshift(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply rshift on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -390,7 +450,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.and(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply and on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -399,7 +459,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.xor(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply xor on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -408,7 +468,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.inplaceXor(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply inplaceXor on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -417,7 +477,7 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.or(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+            error = new PyException("can not apply or on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -525,6 +585,7 @@ public class EvaluationLoop {
           frame.decreaseStackPointer(size);
           frame.push(tuple);
         }
+        case NOP -> {}
         default ->
             throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }

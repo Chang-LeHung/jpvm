@@ -1,8 +1,10 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeName;
@@ -67,6 +69,148 @@ public class PySetObject extends PyObject implements TypeIterable,
   public boolean contains(PyObject key) {
     return set.contains(key);
   }
+
+  @PyClassMethod
+  public PyObject add(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      set.add(args.get(0));
+      return BuiltIn.None;
+    }
+    throw new PyException("set method add only require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (set.size() == 0)
+      return BuiltIn.None;
+    Iterator<PyObject> iterator = set.iterator();
+    PyObject next = iterator.next();
+    iterator.remove();
+    return next;
+  }
+  @PyClassMethod
+  public PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      set.remove(args.get(0));
+      return BuiltIn.None;
+    }
+    throw new PyException("set method remove only require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PySetObject result = new PySetObject();
+    result.set.addAll(set);
+    return result;
+  }
+
+  @PyClassMethod
+  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    set.clear();
+    return BuiltIn.None;
+  }
+
+  @PyClassMethod
+  public PyObject issubset(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        if (o.set.containsAll(set))
+          return BuiltIn.True;
+        else
+          return BuiltIn.False;
+      }
+    }
+    throw new PyException("set method issubset only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject issuperset(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        if (set.containsAll(o.set))
+          return BuiltIn.True;
+        else
+          return BuiltIn.False;
+      }
+    }
+    throw new PyException("set method issubset only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject intersection(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        PySetObject result = new PySetObject();
+        result.set.addAll(set);
+        result.set.retainAll(o.set);
+        return result;
+      }
+    }
+    throw new PyException("set method intersection only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject intersection_update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        set.retainAll(o.set);
+        return BuiltIn.None;
+      }
+    }
+    throw new PyException("set method intersection_update only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject difference(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        PySetObject result = new PySetObject();
+        result.set.addAll(set);
+        result.set.removeAll(o.set);
+        return result;
+      }
+    }
+    throw new PyException("set method difference only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject difference_update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        PySetObject result = new PySetObject();
+        set.removeAll(o.set);
+        return BuiltIn.None;
+      }
+    }
+    throw new PyException("set method difference_update only require one PySetObject argument");
+  }
+
+  @PyClassMethod
+  public PyObject isdisjoint(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PySetObject o) {
+        PySetObject result = new PySetObject();
+        result.set.addAll(o.set);
+        result.set.retainAll(set);
+        if (result.size() == 0)
+          return BuiltIn.True;
+        return BuiltIn.False;
+      }
+    }
+    throw new PyException("set method isdisjoint only require one PySetObject argument");
+  }
+  
+  public int size() {
+    return set.size();
+  }
+
 
   @Override
   public Object toJavaType() {

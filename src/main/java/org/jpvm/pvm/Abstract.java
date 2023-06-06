@@ -225,7 +225,7 @@ public class Abstract {
   }
 
   public static PyObject mod(PyObject v, PyObject w) throws PyTypeNotMatch {
-    if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
+    if (v instanceof PyNumberMethods nv) {
       try {
         return nv.mod(w);
       } catch (PyException ignore) {
@@ -353,7 +353,10 @@ public class Abstract {
       return (nativeMethodObject.call(self, args, kwArgs));
     } else if (callable instanceof PyTypeType t) {
       return t.call(self, args, kwArgs);
-    } else if (callable instanceof PyFunctionObject func) {
+    } else if (callable instanceof PyMethodObject) {
+      return callable.call(self, args, kwArgs);
+    }
+    else if (callable instanceof PyFunctionObject func) {
       if (kwArgs == null)
         kwArgs = new PyDictObject();
       PyCodeObject code = (PyCodeObject) func.getFuncCode();
@@ -362,11 +365,12 @@ public class Abstract {
       var coVarNames = (PyTupleObject) code.getCoVarNames();
       // just for debugging to avoid cycle reference, idea will get stuck for toString method
       PyDictObject globals = new PyDictObject();
-      globals.addAll(frameObject.getGlobals());
+      if (frameObject != null)
+        globals.addAll(frameObject.getGlobals());
       int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
       // use below in release version
 //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), frameObject.getGlobals(), frameObject);
-      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), globals, frameObject);
+      PyFrameObject f = new PyFrameObject(code, BuiltIn.dict, globals, frameObject);
       // start initialize parameters
       for (int i = 0; i < args.size(); i++) {
         f.setLocal(i, args.get(i));
@@ -385,9 +389,8 @@ public class Abstract {
         if (f.getLocal(i) == null)
           throw new PyParametersError("please pass argument " + coVarNames.get(i).repr(), false);
       }
-      f.setBack(frameObject);
-      EvaluationLoop eval = new EvaluationLoop();
-      return eval.pyEvalFrame(f);
+      EvaluationLoop eval = new EvaluationLoop(f);
+      return eval.pyEvalFrame();
     }
     throw new PyException("abstract call error occurred");
   }
@@ -427,7 +430,8 @@ public class Abstract {
         return seq.sqItem(w);
       } catch (PyTypeNotMatch | PyNotImplemented ignore) {
       }
-    } else if (v instanceof PyMappingMethods map) {
+    }
+    if (v instanceof PyMappingMethods map) {
       try {
         return map.mpSubscript(w);
       } catch (PyException ignore) {

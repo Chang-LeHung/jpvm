@@ -131,6 +131,11 @@ public class PyFrameObject extends PyObject {
     return stack[used - delta];
   }
 
+  public void setTop(int delta, PyObject o) {
+    assert used >= delta && delta >= 1;
+    stack[used - delta] = o;
+  }
+
   public boolean hasArgs() {
     return used > 0;
   }
@@ -141,6 +146,9 @@ public class PyFrameObject extends PyObject {
 
   public void decreaseStackPointer(int delta) {
     used -= delta;
+  }
+  public void increaseStackPointer(int delta) {
+    used += delta;
   }
 
   public PyObject getLocal(int idx) {

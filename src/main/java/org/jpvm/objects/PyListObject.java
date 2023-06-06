@@ -11,6 +11,7 @@ import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
+import org.jpvm.pvm.Abstract;
 import org.jpvm.python.BuiltIn;
 
 import java.util.ArrayList;
@@ -44,14 +45,18 @@ public class PyListObject extends PyObject
     obItem.add(obj);
   }
 
+  public void add(PyObject obj) {
+    app1(obj);
+  }
+
   public void insert(int idx, PyObject obj) {
     obItem.add(idx, obj);
   }
 
-  public boolean pop() {
+  public PyObject pop() {
     if (obItem.size() == 0)
       throw new IndexOutOfBoundsException("pop() PyListObject has no elements");
-    return obItem.remove(obItem.size() - 1) != null;
+    return obItem.remove(obItem.size() - 1);
   }
 
   public boolean remove(PyObject obj) {
@@ -339,6 +344,142 @@ public class PyListObject extends PyObject
     throw new PyTypeNotMatch("PyListObject extend require one PyListObject argument");
   }
 
+  @PyClassMethod
+  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 0)
+      return pop();
+    else {
+      PyObject object = args.get(0);
+      if (object instanceof PyLongObject o) {
+        return obItem.remove((int) o.getData());
+      }
+    }
+    throw new PyException("pop require one or zero argument");
+  }
+
+  @PyClassMethod
+  public PyObject append(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      append(args.get(0));
+      return BuiltIn.True;
+    }
+    throw new PyException("list append method require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      if (remove(args.get(0))) return BuiltIn.True;
+      return BuiltIn.False;
+    }
+    throw new PyException("list append method require one argument");
+  }
+
+
+  @PyClassMethod
+  public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyListObject result = new PyListObject();
+    result.addAll(this);
+    return result;
+  }
+
+
+  @PyClassMethod
+  public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      for (int i = 0; i < obItem.size(); i++) {
+        if (o.richCompare(obItem.get(i), Operator.Py_EQ).isTrue())
+          return PyLongObject.getLongObject(i);
+      }
+      return PyLongObject.getLongObject(-1);
+    }
+    throw new PyException("list index method require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject reverse(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    Collections.reverse(obItem);
+    return this;
+  }
+
+  @PyClassMethod
+  public PyObject insert(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 2) {
+      PyObject idx = args.get(0);
+      if (idx instanceof PyLongObject l) {
+        PyObject val = args.get(1);
+        insert((int)l.getData(), val);
+        return BuiltIn.None;
+      }
+    }
+    throw new PyException("list insert method require 2 method");
+  }
+
+  @PyClassMethod
+  public PyObject count(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    int cnt = 0;
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      for (PyObject object : obItem) {
+        if (object.richCompare(o, Operator.Py_EQ).isTrue()) {
+          cnt++;
+        }
+      }
+      return new PyLongObject(cnt);
+    }
+    throw new PyException("list count method require 1 method");
+  }
+
+
+  @PyClassMethod
+  public PyObject sort(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    var ref = new Object() {
+      PyException error;
+    };
+    if (kwArgs == null) {
+      obItem.sort((x, y) -> {
+        try {
+          if (x.richCompare(y, Operator.Py_LT).isFalse()) {
+            return 1;
+          } else
+            return -1;
+        } catch (PyUnsupportedOperator e) {
+          ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+        }
+        return 0;
+      });
+    }else {
+      PyObject func = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("key", true));
+      PyTupleObject tuple = new PyTupleObject(1);
+      if (func != null) {
+        obItem.sort((x, y) -> {
+          try {
+            tuple.set(0, x);
+            x = Abstract.abstractCall(func, null, tuple, null);
+            tuple.set(0, y);
+            y = Abstract.abstractCall(func, null, tuple, null);
+          } catch (PyException e) {
+            ref.error = new PyTypeError(e.getMessage());
+          }
+          try {
+            if (x.richCompare(y, Operator.Py_LT).isFalse()) {
+              return 1;
+            } else
+              return -1;
+          } catch (PyUnsupportedOperator e) {
+            ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+          }
+          return 0;
+        });
+      }
+    }
+    if (ref.error == null) return BuiltIn.None;
+    throw ref.error;
+  }
+
+
+
   public void addAll(PyListObject o) {
     for (int i = 0; i < o.size(); i++)
       append(o.get(i));
@@ -348,7 +489,6 @@ public class PyListObject extends PyObject
     public PyListItrType() {
       name = "list_iterator";
     }
-
   }
 
   public class PyListItrObject extends PyObject implements TypeDoIterate {

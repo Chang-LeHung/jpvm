@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.*;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyDictType;
@@ -40,7 +41,8 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   public void addAll(PyDictObject dict) {
-    map.putAll(dict.getMap());
+    if (dict != null)
+      map.putAll(dict.getMap());
   }
 
   public Map<PyObject, PyObject> getMap() {
@@ -96,6 +98,66 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   public int size() {
     return map.size();
   }
+
+  @PyClassMethod
+  public PyObject items(PyTupleObject args, PyDictObject kwArgs) {
+    return new PyDictItemsObject(map);
+  }
+
+  @PyClassMethod
+  public PyObject keys(PyTupleObject args, PyDictObject kwArgs) {
+    return new PyDictKeysObject(map);
+  }
+
+  @PyClassMethod
+  public PyObject values(PyTupleObject args, PyDictObject kwArgs) {
+    return new PyDictValuesObject(map);
+  }
+
+  @PyClassMethod
+  public PyObject get(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+        return map.getOrDefault(args.get(0), BuiltIn.None);
+    }
+    throw new PyException("dict get method only require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyDictObject result = new PyDictObject();
+    result.addAll(this);
+    return result;
+  }
+
+  @PyClassMethod
+  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject remove = map.remove(args.get(0));
+      if (remove == null)
+        return BuiltIn.None;
+      return remove;
+    }
+    throw new PyException("dict pop method only require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    map.clear();
+    return BuiltIn.None;
+  }
+
+  @PyClassMethod
+  public PyObject update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof PyDictObject o) {
+        addAll(o);
+        return BuiltIn.None;
+      }
+    }
+    throw new PyException("dict update method only require one PyDictObject object");
+  }
+
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {

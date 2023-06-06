@@ -120,7 +120,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyObject mod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject mod(PyObject o) throws PyException {
     return PyNumberMethods.super.mod(o);
   }
 

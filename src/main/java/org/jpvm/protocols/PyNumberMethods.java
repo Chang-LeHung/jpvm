@@ -1,5 +1,6 @@
 package org.jpvm.protocols;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.PyObject;
@@ -30,7 +31,7 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_remainder
    */
-  default PyObject mod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject mod(PyObject o) throws PyException {
     throw new PyNotImplemented("mod is not implemented");
   }
 

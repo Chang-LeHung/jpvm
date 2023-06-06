@@ -9,6 +9,9 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyMappingMethods;
+import org.jpvm.protocols.PyNumberMethods;
+import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 
 import java.io.IOException;
@@ -67,10 +70,15 @@ public class BuiltIn {
   public static void doInit() {
     Class<BuiltIn> clazz = BuiltIn.class;
     try {
+      // load builtin function & object into builtin dict
       PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod("print", parameterTypes), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("print", true), mp);
       mp = new PyNativeMethodObject(clazz.getMethod("sum", parameterTypes), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("sum", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("iter", parameterTypes), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("iter", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("len", parameterTypes), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("len", true), mp);
     } catch (NoSuchMethodException ignore) {
     }
   }
@@ -107,6 +115,17 @@ public class BuiltIn {
     return BuiltIn.None;
   }
 
+  public static PyObject iter(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject object = args.get(0);
+      if (object instanceof TypeIterable itr) {
+        return (PyObject) itr.getIterator();
+      }
+      throw new PyException("object " + object.repr() + " can not be an iterator");
+    }
+    throw new PyException("iter function require only 1 argument");
+  }
+
   public static PyObject sum(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject o = args.get(0);
@@ -119,6 +138,21 @@ public class BuiltIn {
             throw new PyTypeError("can apply sum on " + o.repr());
         }
         return result;
+      }
+    }
+    throw new PyTypeError("sum only require one iterable argument");
+  }
+
+  public static PyObject len(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      if (o instanceof TypeIterable itr) {
+        TypeDoIterate iterator = itr.getIterator();
+        return new PyLongObject(iterator.size());
+      }else if (o instanceof PySequenceMethods seq) {
+        return seq.sqLength(null);
+      }else if (o instanceof PyMappingMethods map) {
+        return map.mpLength(null);
       }
     }
     throw new PyTypeError("sum only require one iterable argument");

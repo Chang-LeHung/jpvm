@@ -21,8 +21,8 @@ public class TestFunction {
     BuiltIn.doInit();
     PyDictObject globals = new PyDictObject();
     PyFrameObject object = new PyFrameObject(codeObject, BuiltIn.dict, globals, globals, null);
-    EvaluationLoop evaluationLoop = new EvaluationLoop();
-    return evaluationLoop.pyEvalFrame(object);
+    EvaluationLoop evaluationLoop = new EvaluationLoop(object);
+    return evaluationLoop.pyEvalFrame();
   }
 
   @Test

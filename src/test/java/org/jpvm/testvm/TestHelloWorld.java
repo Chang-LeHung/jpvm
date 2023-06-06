@@ -20,8 +20,8 @@ public class TestHelloWorld {
     PyCodeObject codeObject = reader.getCodeObject();
     BuiltIn.doInit();
     PyFrameObject object = new PyFrameObject(codeObject, BuiltIn.dict, null);
-    EvaluationLoop evaluationLoop = new EvaluationLoop();
-    return evaluationLoop.pyEvalFrame(object);
+    EvaluationLoop evaluationLoop = new EvaluationLoop(object);
+    return evaluationLoop.pyEvalFrame();
   }
 
   @Test
