@@ -74,10 +74,6 @@ public class Abstract {
         return nv.sub(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.sub(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply sub on " + v.repr() + " and " + w.repr());
   }
@@ -86,10 +82,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.pow(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.pow(v);
       } catch (PyException ignore) {
       }
     }
@@ -102,10 +94,6 @@ public class Abstract {
         return nv.lshift(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.lshift(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply lshift on " + v.repr() + " and " + w.repr());
   }
@@ -114,10 +102,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.rshift(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.rshift(v);
       } catch (PyException ignore) {
       }
     }
@@ -166,10 +150,6 @@ public class Abstract {
         return nv.divmod(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.divmod(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply divmod on " + v.repr() + " and " + w.repr());
   }
@@ -178,10 +158,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.floorDiv(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.floorDiv(v);
       } catch (PyException ignore) {
       }
     }
@@ -194,10 +170,6 @@ public class Abstract {
         return nv.inplaceAdd(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.inplaceAdd(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
   }
@@ -206,10 +178,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceAnd(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceAnd(v);
       } catch (PyException ignore) {
       }
     }
@@ -222,10 +190,6 @@ public class Abstract {
         return nv.inplaceFloorDiv(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.inplaceFloorDiv(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply inplaceFloorDiv on " + v.repr() + " and " + w.repr());
   }
@@ -234,10 +198,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceMatrixMul(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceMatrixMul(v);
       } catch (PyException ignore) {
       }
     }
@@ -250,10 +210,6 @@ public class Abstract {
         return nv.trueDiv(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.trueDiv(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply trueDiv on " + v.repr() + " and " + w.repr());
   }
@@ -262,10 +218,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.matrixMul(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.matrixMul(v);
       } catch (PyException ignore) {
       }
     }
@@ -278,10 +230,6 @@ public class Abstract {
         return nv.mod(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.mod(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply mod on " + v.repr() + " and " + w.repr());
   }
@@ -290,10 +238,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceMul(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceMul(v);
       } catch (PyException ignore) {
       }
     }
@@ -306,10 +250,6 @@ public class Abstract {
         return nv.inplaceOr(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.inplaceOr(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply inplaceOr on " + v.repr() + " and " + w.repr());
   }
@@ -318,10 +258,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplacePow(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplacePow(v);
       } catch (PyException ignore) {
       }
     }
@@ -334,10 +270,6 @@ public class Abstract {
         return nv.inplaceRshift(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.inplaceRshift(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply inplaceRshift on " + v.repr() + " and " + w.repr());
   }
@@ -346,10 +278,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceLshift(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceLshift(v);
       } catch (PyException ignore) {
       }
     }
@@ -362,10 +290,6 @@ public class Abstract {
         return nv.inplaceSub(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.inplaceSub(v);
-      } catch (PyException ignore) {
-      }
     }
     throw new PyTypeNotMatch("can not apply inplaceSub on " + v.repr() + " and " + w.repr());
   }
@@ -374,10 +298,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceTrueDiv(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceTrueDiv(v);
       } catch (PyException ignore) {
       }
     }
@@ -416,10 +336,6 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {
         return nv.inplaceXor(w);
-      } catch (PyException ignore) {
-      }
-      try {
-        return nw.inplaceXor(v);
       } catch (PyException ignore) {
       }
     }
