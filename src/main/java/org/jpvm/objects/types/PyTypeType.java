@@ -5,6 +5,9 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeNew;
 import org.jpvm.python.BuiltIn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PyTypeType extends PyObject implements TypeNew {
 
   /* Objects behave like an unbound method */
@@ -35,8 +38,9 @@ public class PyTypeType extends PyObject implements TypeNew {
 
   public PyTypeType() {
     name = "type";
-    mro = new PyListObject();
-    mro.append(PyObject.type);
+    // use List just to avoid ExceptionInInitializerError
+    mro = new ArrayList<>();
+    mro.add(PyObject.type);
   }
 
   /**
@@ -59,7 +63,7 @@ public class PyTypeType extends PyObject implements TypeNew {
     return object;
   }
 
-  public void setMro(PyListObject mro) {
+  public void setMro(List<PyObject> mro) {
     this.mro = mro;
   }
 

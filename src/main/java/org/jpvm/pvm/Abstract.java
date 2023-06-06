@@ -61,7 +61,7 @@ public class Abstract {
     } else if (v instanceof PySequenceMethods nv && w instanceof PySequenceMethods) {
       // like "hello" + "world"
       try {
-        ((PySequenceMethods) v).sqConcat(w);
+        return ((PySequenceMethods) v).sqConcat(w);
       } catch (PyException ignore) {
       }
     }

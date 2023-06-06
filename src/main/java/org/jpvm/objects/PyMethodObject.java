@@ -45,4 +45,7 @@ public class PyMethodObject extends PyObject {
     return str();
   }
 
+  public PyObject getSelf() {
+    return self;
+  }
 }

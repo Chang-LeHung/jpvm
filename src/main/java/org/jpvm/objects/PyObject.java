@@ -8,7 +8,7 @@ import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.python.BuiltIn;
 
-import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * base class of all classes in python
@@ -23,8 +23,9 @@ public class PyObject implements PyArgs, TypeCheck,
    * base class name of all classes in python
    */
   public static PyUnicodeObject name;
-  protected PyListObject mro;
+  protected List<PyObject> mro;
   protected PyListObject bases;
+  protected volatile static PyDictObject methods;
   private PyDictObject dict;
   private PyLongObject hashcode;
 
@@ -109,34 +110,15 @@ public class PyObject implements PyArgs, TypeCheck,
 
   @Override
   public PyObject getMethod(String name) throws PyMissMethod {
-    PyUnicodeObject object = new PyUnicodeObject(name);
-    if (dict == null) {
-      dict = new PyDictObject();
-      return getMethodByName(name, object);
-    } else {
-      if (dict.get(object) != null) {
-        return dict.get(object);
-      } else {
-        return getMethodByName(name, object);
-      }
-    }
+    return getMethod(new PyUnicodeObject(name));
   }
 
   @Override
   public PyObject getMethod(PyUnicodeObject name) throws PyMissMethod {
-    return getMethod(name.getData());
-  }
-
-  private PyObject getMethodByName(String name, PyUnicodeObject object) throws PyMissMethod {
-    Class<? extends PyObject> clazz = this.getClass();
-    try {
-      Method method = clazz.getMethod(name);
-      PyMethodObject m = new PyMethodObject(this, method, name);
-      dict.put(object, m);
-      return m;
-    } catch (NoSuchMethodException e) {
-      throw new PyMissMethod(this.repr().getData() + " has not method " + name);
-    }
+    PyObject method = methods.get(name);
+    if (method == null)
+      throw new PyMissMethod("not have method" + name);
+    return method;
   }
 
 }

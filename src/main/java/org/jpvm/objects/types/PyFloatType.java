@@ -7,7 +7,7 @@ public class PyFloatType extends PyTypeType {
   public PyFloatType() {
     super();
     name = "float";
-    mro.append(PyLongObject.type);
+    mro.add(PyLongObject.type);
   }
 
 }

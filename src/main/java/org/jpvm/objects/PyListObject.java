@@ -12,6 +12,7 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,17 @@ public class PyListObject extends PyObject
 
   public PyListObject() {
     this(1);
+    Class<? extends PyListObject> clazz = this.getClass();
+    if (methods == null) {
+      methods = new PyDictObject();
+      try {
+        PyUnicodeObject name = PyUnicodeObject.getOrCreateFromInternStringPool("extend", true);
+        Method method = clazz.getMethod("extend", PyObject.class);
+        PyMethodObject extend = new PyMethodObject(this, method, "extend");
+        methods.put(name, extend);
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
   }
 
   public PyListObject(int size) {
@@ -324,6 +336,18 @@ public class PyListObject extends PyObject
         obItem.add(obItem.get(j));
     }
     return this;
+  }
+
+  public PyListObject extend(PyObject o) throws PyTypeNotMatch {
+    if (o instanceof PyListObject list) {
+      this.addAll(list);
+    }
+    throw new PyTypeNotMatch("PyListObject extend require one PyListObject argument");
+  }
+
+  public void addAll(PyListObject o) {
+    for (int i = 0; i < o.size(); i++)
+      append(o.get(i));
   }
 
   public static class PyListItrType extends PyTypeType implements TypeName {

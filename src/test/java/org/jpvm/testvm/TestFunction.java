@@ -128,4 +128,17 @@ public class TestFunction {
     assert ret != null;
     System.out.println("ret = " + ret.str().getData());
   }
+
+  @Test
+  public void testConcat() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test12.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
 }

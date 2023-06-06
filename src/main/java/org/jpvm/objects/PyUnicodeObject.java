@@ -44,6 +44,8 @@ public class PyUnicodeObject extends PyObject
   }
 
   public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
+    if (internStr == null)
+      return new PyUnicodeObject(s);
     if (intern) {
       if (internStr.containsKey(s))
         return internStr.get(s);
