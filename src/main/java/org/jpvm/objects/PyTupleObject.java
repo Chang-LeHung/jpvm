@@ -22,11 +22,6 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   private final PyObject[] obItem;
 
-  private PyLongObject hashCode;
-
-  private boolean hashDone;
-
-
   public PyTupleObject(int size) {
     obItem = new PyObject[size];
   }

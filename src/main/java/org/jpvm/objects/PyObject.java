@@ -23,11 +23,17 @@ public class PyObject implements PyArgs, TypeCheck,
    * base class name of all classes in python
    */
   public static PyUnicodeObject name;
+
   protected List<PyObject> mro;
   protected PyListObject bases;
-  protected volatile static PyDictObject methods;
-  private PyDictObject dict;
-  private PyLongObject hashcode;
+  protected PyDictObject dict;
+  protected PyLongObject hashCode;
+  protected boolean hashDone;
+
+  /**
+   * parameterTypes of callable methods
+   */
+  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
 
   public static PyBoolObject check(PyObject o) {
     if (o == type)
@@ -102,6 +108,9 @@ public class PyObject implements PyArgs, TypeCheck,
     return (int) hash().getData();
   }
 
+  /**
+   * initialize methods object
+   */
   @Override
   public PyObject init() throws PyNotImplemented {
     type = new PyBaseObjectType();
@@ -115,10 +124,11 @@ public class PyObject implements PyArgs, TypeCheck,
 
   @Override
   public PyObject getMethod(PyUnicodeObject name) throws PyMissMethod {
-    PyObject method = methods.get(name);
-    if (method == null)
-      throw new PyMissMethod("not have method" + name);
-    return method;
+    return null;
+//    PyObject method = methods.get(name);
+//    if (method == null)
+//      throw new PyMissMethod("not have method" + name);
+//    return method;
   }
 
 }

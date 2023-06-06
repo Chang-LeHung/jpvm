@@ -8,6 +8,7 @@ import org.jpvm.errors.PyNameError;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.*;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
@@ -16,6 +17,7 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 public class EvaluationLoop {
@@ -30,8 +32,20 @@ public class EvaluationLoop {
 
   private PyException error;
 
+  private PyFrameObject f;
+
+
+  public PyTupleObject getArgs(Instruction ins) {
+    int size = ins.getOparg();
+    PyTupleObject args = new PyTupleObject(size);
+    for (int i = 0; i < size; i++) {
+      args.set(size - i - 1, f.pop());
+    }
+    return args;
+  }
 
   public PyObject pyEvalFrame(PyFrameObject frame) throws PyException {
+    f = frame;
     PyCodeObject code = frame.getCode();
     PyTupleObject coNames = (PyTupleObject) code.getCoNames();
     ByteCodeBuffer byteCodeBuffer = new ByteCodeBuffer(code);
@@ -66,12 +80,33 @@ public class EvaluationLoop {
         }
         case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
         case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
-        case CALL_FUNCTION -> {
-          int size = ins.getOparg();
-          PyTupleObject args = new PyTupleObject(size);
-          for (int i = 0; i < size; i++) {
-            args.set(size - i - 1, frame.pop());
+        case LOAD_METHOD -> {
+          var name = (PyUnicodeObject)coNames.get(ins.getOparg());
+          PyObject obj = frame.pop();
+          Class<? extends PyObject> clazz = obj.getClass();
+          try {
+            Method meth = clazz.getMethod(name.getData(), PyObject.parameterTypes);
+            PyClassMethod annotation = meth.getAnnotation(PyClassMethod.class);
+            if (annotation != null) {
+              PyMethodObject methodObject = new PyMethodObject(obj, meth, name.getData());
+              frame.push(methodObject);
+              continue;
+            }
+          } catch (NoSuchMethodException e) {
+            error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
           }
+          error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+        }
+        case CALL_METHOD -> {
+          PyTupleObject args = getArgs(ins);
+          PyObject method = frame.pop();
+          if (method instanceof PyMethodObject meth) {
+            frame.push(method.call(null, args, null));
+          }else
+            error = new PyException("object " + method.repr() + " can not be called");
+        }
+        case CALL_FUNCTION -> {
+          PyTupleObject args = getArgs(ins);
           PyObject pop = frame.pop();
           try {
             PyObject object = Abstract.abstractCall(pop, null, args, null, frame);

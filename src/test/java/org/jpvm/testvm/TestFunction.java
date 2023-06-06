@@ -141,4 +141,17 @@ public class TestFunction {
     assert ret != null;
     System.out.println("ret = " + ret.str().getData());
   }
+
+  @Test
+  public void testMethod() throws IOException {
+    String filename = "src/test/resources/syntax/__pycache__/test13.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
 }

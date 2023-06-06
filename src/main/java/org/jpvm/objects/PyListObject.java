@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeName;
@@ -12,7 +13,6 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,17 +26,6 @@ public class PyListObject extends PyObject
 
   public PyListObject() {
     this(1);
-    Class<? extends PyListObject> clazz = this.getClass();
-    if (methods == null) {
-      methods = new PyDictObject();
-      try {
-        PyUnicodeObject name = PyUnicodeObject.getOrCreateFromInternStringPool("extend", true);
-        Method method = clazz.getMethod("extend", PyObject.class);
-        PyMethodObject extend = new PyMethodObject(this, method, "extend");
-        methods.put(name, extend);
-      } catch (NoSuchMethodException ignore) {
-      }
-    }
   }
 
   public PyListObject(int size) {
@@ -338,9 +327,14 @@ public class PyListObject extends PyObject
     return this;
   }
 
-  public PyListObject extend(PyObject o) throws PyTypeNotMatch {
-    if (o instanceof PyListObject list) {
-      this.addAll(list);
+  @PyClassMethod
+  public PyListObject extend(PyTupleObject args, PyDictObject kwArgs) throws PyTypeNotMatch {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      if (o instanceof PyListObject list) {
+        this.addAll(list);
+        return this;
+      }
     }
     throw new PyTypeNotMatch("PyListObject extend require one PyListObject argument");
   }
