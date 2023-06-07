@@ -427,6 +427,12 @@ public class EvaluationLoop {
             error = e;
           }
         }
+        case STORE_SUBSCR -> {
+          PyObject key = frame.pop();
+          PyObject obj = frame.pop();
+          PyObject val = frame.pop();
+          Abstract.assignItem(obj, key, val);
+        }
         case BINARY_LSHIFT -> {
           PyObject right = frame.pop();
           PyObject left = frame.pop();

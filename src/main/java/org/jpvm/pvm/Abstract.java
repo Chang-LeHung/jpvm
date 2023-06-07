@@ -441,4 +441,25 @@ public class Abstract {
     throw new PyTypeError("can not get " + w.repr() + " from " + v.repr());
   }
 
+  public static void assignItem(PyObject obj, PyObject key, PyObject val) throws PyException {
+    PyException error = null;
+    if (obj instanceof PySequenceMethods seq) {
+      try {
+        seq.sqAssItem(key, val);
+      }catch (PyException e) {
+        error = e;
+      }
+    }
+    if (obj instanceof PyMappingMethods map) {
+      try {
+        map.mpAssSubscript(key, val);
+        error = null;
+      }catch (PyException e) {
+        error = e;
+      }
+    }
+    if (null != error)
+      throw error;
+  }
+
 }

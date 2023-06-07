@@ -113,14 +113,14 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyUnicodeObject o) {
-        int i = countSubstringOccurrences(s, o, s);
+        int i = countSubstringOccurrences(s, o.getData());
         return PyLongObject.getLongObject(i);
       }
     }
     throw new PyException("str method startswith require one str argument");
   }
 
-  public int countSubstringOccurrences(String str, PyUnicodeObject o, String substring) {
+  public int countSubstringOccurrences(String str, String substring) {
     int count = 0;
     int index = str.indexOf(substring);
     while (index != -1) {

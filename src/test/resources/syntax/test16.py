@@ -11,3 +11,6 @@ for key in person.keys():
     print(f"{key = }")
 
 print(f"{person['name'] = }")
+
+person['hello'] = "world"
+print(person)
