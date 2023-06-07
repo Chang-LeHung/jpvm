@@ -6,7 +6,6 @@ for (kev, val) in person.items():
 for val in person.values():
     print(f"{val = }")
 
-
 for key in person.keys():
     print(f"{key = }")
 

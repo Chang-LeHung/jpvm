@@ -1,7 +1,10 @@
 package org.jpvm.objects.types;
 
 import org.jpvm.errors.PyUnsupportedOperator;
-import org.jpvm.objects.*;
+import org.jpvm.objects.PyBoolObject;
+import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeNew;
 import org.jpvm.python.BuiltIn;
 

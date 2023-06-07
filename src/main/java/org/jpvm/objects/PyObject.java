@@ -23,17 +23,15 @@ public class PyObject implements PyArgs, TypeCheck,
    * base class name of all classes in python
    */
   public static PyUnicodeObject name;
-
+  /**
+   * parameterTypes of callable methods
+   */
+  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
   protected List<PyObject> mro;
   protected PyListObject bases;
   protected PyDictObject dict;
   protected PyLongObject hashCode;
   protected boolean hashDone;
-
-  /**
-   * parameterTypes of callable methods
-   */
-  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
 
   public static PyBoolObject check(PyObject o) {
     if (o == type)

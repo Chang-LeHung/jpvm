@@ -1,6 +1,5 @@
 package org.jpvm.objects;
 
-import com.sun.source.tree.ReturnTree;
 import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -17,7 +16,7 @@ import org.jpvm.python.BuiltIn;
  * tuple is a size-fixed array
  */
 public class PyTupleObject extends PyObject implements TypeIterable,
-    PySequenceMethods , PyNumberMethods {
+    PySequenceMethods, PyNumberMethods {
 
   public static PyObject type = new PyTupleType();
 
@@ -67,11 +66,11 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   @Override
   public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    if(o instanceof PyLongObject pyLongObject){
+    if (o instanceof PyLongObject pyLongObject) {
       PyTupleObject o1 = new PyTupleObject((int) (size() * pyLongObject.getData()));
-      for(int i = 0; i < pyLongObject.getData(); i++){
-        for(int j = 0; j < size(); j++){
-          o1.obItem[i*size()+j] = obItem[j];
+      for (int i = 0; i < pyLongObject.getData(); i++) {
+        for (int j = 0; j < size(); j++) {
+          o1.obItem[i * size() + j] = obItem[j];
         }
       }
       return o1;
@@ -139,7 +138,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
           return BuiltIn.True;
       }
       return BuiltIn.False;
-    }else if (op == Operator.PyCmp_NOT_IN) {
+    } else if (op == Operator.PyCmp_NOT_IN) {
       for (PyObject pyObject : obItem) {
         if (pyObject.richCompare(o, Operator.Py_NE).isTrue())
           return BuiltIn.True;
@@ -156,12 +155,12 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   @Override
   public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
-    if(o instanceof PyTupleObject tupleObject){
+    if (o instanceof PyTupleObject tupleObject) {
       PyTupleObject o1 = new PyTupleObject(size() + tupleObject.size());
-      for (int i = 0; i < o1.size(); i++){
-        if(i < obItem.length){
+      for (int i = 0; i < o1.size(); i++) {
+        if (i < obItem.length) {
           o1.obItem[i] = obItem[i];
-        }else {
+        } else {
           o1.obItem[i] = tupleObject.obItem[i - size()];
         }
       }
@@ -201,7 +200,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
   public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
     if (args.size() == 1) {
       PyObject o = args.get(0);
-      for (int i = 0 ; i < size(); i++) {
+      for (int i = 0; i < size(); i++) {
         if (get(i).richCompare(o, Operator.Py_EQ).isTrue()) {
           return PyLongObject.getLongObject(i);
         }
@@ -213,11 +212,11 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   @PyClassMethod
   public PyObject count(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
-    if(args.size() == 1){
+    if (args.size() == 1) {
       int count = 0;
-      for(int i = 0; i < size(); i++){
-        if(obItem[i].richCompare(args.get(0), Operator.Py_EQ).isTrue()){
-          count ++;
+      for (int i = 0; i < size(); i++) {
+        if (obItem[i].richCompare(args.get(0), Operator.Py_EQ).isTrue()) {
+          count++;
         }
       }
       return PyLongObject.getLongObject(count);

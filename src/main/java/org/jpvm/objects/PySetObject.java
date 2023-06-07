@@ -88,6 +88,7 @@ public class PySetObject extends PyObject implements TypeIterable,
     iterator.remove();
     return next;
   }
+
   @PyClassMethod
   public PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
@@ -206,7 +207,7 @@ public class PySetObject extends PyObject implements TypeIterable,
     }
     throw new PyException("set method isdisjoint only require one PySetObject argument");
   }
-  
+
   public int size() {
     return set.size();
   }

@@ -409,7 +409,7 @@ public class PyListObject extends PyObject
       PyObject idx = args.get(0);
       if (idx instanceof PyLongObject l) {
         PyObject val = args.get(1);
-        insert((int)l.getData(), val);
+        insert((int) l.getData(), val);
         return BuiltIn.None;
       }
     }
@@ -449,7 +449,7 @@ public class PyListObject extends PyObject
         }
         return 0;
       });
-    }else {
+    } else {
       PyObject func = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("key", true));
       PyTupleObject tuple = new PyTupleObject(1);
       if (func != null) {
@@ -477,7 +477,6 @@ public class PyListObject extends PyObject
     if (ref.error == null) return BuiltIn.None;
     throw ref.error;
   }
-
 
 
   public void addAll(PyListObject o) {

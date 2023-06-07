@@ -355,8 +355,7 @@ public class Abstract {
       return t.call(self, args, kwArgs);
     } else if (callable instanceof PyMethodObject) {
       return callable.call(self, args, kwArgs);
-    }
-    else if (callable instanceof PyFunctionObject func) {
+    } else if (callable instanceof PyFunctionObject func) {
       if (kwArgs == null)
         kwArgs = new PyDictObject();
       PyCodeObject code = (PyCodeObject) func.getFuncCode();
@@ -444,7 +443,7 @@ public class Abstract {
     if (obj instanceof PySequenceMethods seq) {
       try {
         seq.sqAssItem(key, val);
-      }catch (PyException e) {
+      } catch (PyException e) {
         error = e;
       }
     }
@@ -452,7 +451,7 @@ public class Abstract {
       try {
         map.mpAssSubscript(key, val);
         error = null;
-      }catch (PyException e) {
+      } catch (PyException e) {
         error = e;
       }
     }

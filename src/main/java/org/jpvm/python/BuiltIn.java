@@ -12,12 +12,10 @@ import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyListType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
-import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 
 import java.io.IOException;
-import java.util.Collections;
 
 
 public class BuiltIn {
@@ -45,7 +43,7 @@ public class BuiltIn {
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("list", true),
         PyListObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("tuple", true),
-            PyTupleObject.type);
+        PyTupleObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true),
         PyDictObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("bool", true),
@@ -160,9 +158,9 @@ public class BuiltIn {
       if (o instanceof TypeIterable itr) {
         TypeDoIterate iterator = itr.getIterator();
         return new PyLongObject(iterator.size());
-      }else if (o instanceof PySequenceMethods seq) {
+      } else if (o instanceof PySequenceMethods seq) {
         return seq.sqLength(null);
-      }else if (o instanceof PyMappingMethods map) {
+      } else if (o instanceof PyMappingMethods map) {
         return map.mpLength(null);
       }
     }

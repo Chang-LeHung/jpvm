@@ -117,7 +117,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   @PyClassMethod
   public PyObject get(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
-        return map.getOrDefault(args.get(0), BuiltIn.None);
+      return map.getOrDefault(args.get(0), BuiltIn.None);
     }
     throw new PyException("dict get method only require one argument");
   }

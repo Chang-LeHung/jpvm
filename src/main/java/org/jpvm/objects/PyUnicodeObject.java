@@ -141,7 +141,7 @@ public class PyUnicodeObject extends PyObject
         }
         return list;
       }
-    }else {
+    } else {
       PyListObject list = new PyListObject();
       for (String str : s.split("[, ]")) {
         list.add(new PyUnicodeObject(str));
@@ -180,12 +180,12 @@ public class PyUnicodeObject extends PyObject
           if (o.get(i) instanceof PyUnicodeObject str) {
             builder.append(str.getData());
             builder.append(s);
-          }else
+          } else
             throw new PyException(o.repr() + " is not a str object");
         }
         if (o.get(o.size() - 1) instanceof PyUnicodeObject str) {
           builder.append(str.getData());
-        }else
+        } else
           throw new PyException(o.repr() + " is not a str object");
         return new PyUnicodeObject(builder.toString());
       }
@@ -320,11 +320,11 @@ public class PyUnicodeObject extends PyObject
         PyObject arg = tuple.get(i);
         if (arg instanceof PyLongObject l) {
           objects[i] = l.getData();
-        }else if (arg instanceof PyUnicodeObject s) {
+        } else if (arg instanceof PyUnicodeObject s) {
           objects[i] = s.getData();
-        }else if (arg instanceof PyFloatObject f) {
+        } else if (arg instanceof PyFloatObject f) {
           objects[i] = f.getData();
-        }else {
+        } else {
           objects[i] = arg.repr().getData();
         }
       }

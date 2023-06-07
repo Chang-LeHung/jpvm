@@ -9,18 +9,10 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 
-import javax.swing.plaf.SeparatorUI;
-
 public class PyListType extends PyTypeType {
   public PyListType() {
     super();
     name = "list";
-  }
-
-
-  @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    return getListFromIterable(args, kwArgs);
   }
 
   public static PyListObject getListFromIterable(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -32,15 +24,20 @@ public class PyListType extends PyTypeType {
         while (itr.hasNext()) {
           result.append(itr.next());
         }
-      }else if (args.get(0) instanceof TypeIterable itr) {
+      } else if (args.get(0) instanceof TypeIterable itr) {
         TypeDoIterate iterator = itr.getIterator();
         while (iterator.hasNext()) {
           result.append(iterator.next());
         }
-      }else
+      } else
         throw new PyTypeNotMatch("list() require an Iterable object");
       return result;
     }
     throw new PyException("list() only require one argument");
+  }
+
+  @Override
+  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return getListFromIterable(args, kwArgs);
   }
 }

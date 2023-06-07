@@ -147,6 +147,7 @@ public class PyFrameObject extends PyObject {
   public void decreaseStackPointer(int delta) {
     used -= delta;
   }
+
   public void increaseStackPointer(int delta) {
     used += delta;
   }

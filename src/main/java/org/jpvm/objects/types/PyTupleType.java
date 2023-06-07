@@ -25,7 +25,7 @@ public class PyTupleType extends PyTypeType {
           result.add(itr.next());
         }
         return result;
-      }else if (args.get(0) instanceof TypeIterable itr) {
+      } else if (args.get(0) instanceof TypeIterable itr) {
         TypeDoIterate iterator = itr.getIterator();
         PyTupleObject result = new PyTupleObject(iterator.size());
         int index = 0;
@@ -33,7 +33,7 @@ public class PyTupleType extends PyTypeType {
           result.set(index++, iterator.next());
         }
         return result;
-      }else
+      } else
         throw new PyTypeNotMatch("tuple() require an Iterable object");
     }
     throw new PyException("tuple() require 0 or 1 argument");

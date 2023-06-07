@@ -29,10 +29,8 @@ public class EvaluationLoop {
   public static final int FVC_ASCII = 0x3;
   public static final int FVS_MASK = 0x4;
   public static final int FVS_HAVE_SPEC = 0x4;
-
-  private PyException error;
-
   private final PyFrameObject frame;
+  private PyException error;
 
   public EvaluationLoop(PyFrameObject frame) {
     this.frame = frame;
@@ -97,14 +95,14 @@ public class EvaluationLoop {
           loadFromGlobal(frame, globals, builtins, name);
         }
         case LOAD_ATTR -> {
-          var name = (PyUnicodeObject)coNames.get(ins.getOparg());
+          var name = (PyUnicodeObject) coNames.get(ins.getOparg());
           frame.push(getClassMethod(name));
           // other features to be implemented
         }
         case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
         case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
         case LOAD_METHOD -> {
-          var name = (PyUnicodeObject)coNames.get(ins.getOparg());
+          var name = (PyUnicodeObject) coNames.get(ins.getOparg());
           PyObject obj = frame.pop();
           Class<? extends PyObject> clazz = obj.getClass();
           try {
@@ -126,10 +124,10 @@ public class EvaluationLoop {
           if (method instanceof PyMethodObject) {
             try {
               frame.push(Abstract.abstractCall(method, null, args, null, frame));
-            }catch (PyException e) {
+            } catch (PyException e) {
               error = e;
             }
-          }else
+          } else
             error = new PyException("object " + method.repr() + " can not be called");
         }
         case CALL_FUNCTION -> {
@@ -162,7 +160,7 @@ public class EvaluationLoop {
             frame.push(object);
           } catch (PyException e) {
             error = e;
-          }catch (Exception e) {
+          } catch (Exception e) {
             error = new PyException("Java native exception occurred : " + e.getMessage(), false);
           }
           // other callable object to be implemented
@@ -186,18 +184,18 @@ public class EvaluationLoop {
                 frame.push(tuple.get(size - 1 - i));
               continue;
             }
-          }else if (top instanceof PyListObject list) {
+          } else if (top instanceof PyListObject list) {
             if (list.size() == size) {
               for (int i = 0; i < list.size(); i++)
                 // push argument from right to left
                 frame.push(list.get(size - 1 - i));
               continue;
             }
-          }else if (top instanceof TypeDoIterate itr) {
+          } else if (top instanceof TypeDoIterate itr) {
             if (itr.size() == size) {
               frame.increaseStackPointer(size);
               for (int i = 0; i < size; i++) {
-                frame.setTop(i+1, itr.next());
+                frame.setTop(i + 1, itr.next());
               }
               continue;
             }
@@ -591,7 +589,8 @@ public class EvaluationLoop {
           frame.decreaseStackPointer(size);
           frame.push(tuple);
         }
-        case NOP -> {}
+        case NOP -> {
+        }
         default ->
             throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }

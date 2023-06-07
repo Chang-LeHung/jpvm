@@ -1,1 +1,1 @@
-print("%s %d"%("hello", 123))
+print("%s %d" % ("hello", 123))
