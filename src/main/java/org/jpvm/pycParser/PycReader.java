@@ -1,5 +1,6 @@
 package org.jpvm.pycParser;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.module.Marshal;
 
 import java.io.FileInputStream;
@@ -29,7 +30,7 @@ public class PycReader {
     pyc = filename;
   }
 
-  public void doParse() throws IOException {
+  public void doParse() throws IOException, PyException {
     var stream = new FileInputStream(pyc);
     magicNumber = BinaryUtil.nextInt(stream);
     bitFiled = BinaryUtil.nextInt(stream);

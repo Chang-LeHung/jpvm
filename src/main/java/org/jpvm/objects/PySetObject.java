@@ -14,6 +14,7 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -58,12 +59,20 @@ public class PySetObject extends PyObject implements TypeIterable,
     isFrozen = frozen;
   }
 
-  public void put(PyObject key) {
-    set.add(key);
+  public void put(PyObject key) throws PyException {
+    try {
+      set.add(key);
+    }catch (ConcurrentModificationException e) {
+      throw new PyException("can not change set while  iterating");
+    }
   }
 
-  public void putAll(PySetObject key) {
-    set.addAll(key.set);
+  public void putAll(PySetObject key) throws PyException {
+    try {
+      set.addAll(key.set);
+    }catch (ConcurrentModificationException e) {
+      throw new PyException("can not change set while  iterating");
+    }
   }
 
   public boolean contains(PyObject key) {
@@ -257,7 +266,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject sub(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
       ret.putAll(this);
@@ -268,7 +277,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject and(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
       ret.putAll(this);
@@ -279,7 +288,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject xor(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
       for (PyObject pyObject : set) {
@@ -296,7 +305,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject or(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
       ret.putAll(this);

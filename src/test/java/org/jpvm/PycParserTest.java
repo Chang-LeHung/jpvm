@@ -1,5 +1,6 @@
 package org.jpvm;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.module.Marshal;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class PycParserTest {
 
   @Test
-  public void testPycReader() throws IOException {
+  public void testPycReader() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/add.cpython-38.pyc";
     PycReader reader = new PycReader(filename);
     reader.doParse();
@@ -31,7 +32,7 @@ public class PycParserTest {
   }
 
   @Test
-  public void marshalTest() throws IOException {
+  public void marshalTest() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/add.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);

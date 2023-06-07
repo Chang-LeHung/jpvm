@@ -1,5 +1,6 @@
 package org.jpvm.pvm;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.pycParser.PycReader;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class PyMain {
     System.out.println("CodeObject = " + reader.getCodeObject());
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/add.cpython-38.pyc";
     PycReader reader = new PycReader(filename);
     reader.doParse();

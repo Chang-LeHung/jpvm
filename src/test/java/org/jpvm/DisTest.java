@@ -1,5 +1,6 @@
 package org.jpvm;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.module.Disassembler;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
@@ -14,7 +15,7 @@ import java.nio.ByteOrder;
 public class DisTest {
 
   @Test
-  public void test() throws IOException {
+  public void test() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/add.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);
@@ -30,7 +31,7 @@ public class DisTest {
   }
 
   @Test
-  public void testPyc() throws IOException {
+  public void testPyc() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/pycparser.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);
@@ -46,7 +47,7 @@ public class DisTest {
   }
 
   @Test
-  public void testLoop() throws IOException {
+  public void testLoop() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/loop.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);
@@ -61,7 +62,7 @@ public class DisTest {
   }
 
   @Test
-  public void test01() throws IOException {
+  public void test01() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/add.bin";
     FileInputStream stream = new FileInputStream(filename);
     int available = stream.available();
@@ -76,7 +77,7 @@ public class DisTest {
   }
 
   @Test
-  public void test02() throws IOException {
+  public void test02() throws IOException, PyException {
     String filename = "src/test/resources/pys/__pycache__/pyobjects.bin";
     FileInputStream stream = new FileInputStream(filename);
     int available = stream.available();
@@ -104,7 +105,7 @@ public class DisTest {
   }
 
   @Test
-  public void testString() throws IOException {
+  public void testString() throws IOException, PyException {
     String filename = "src/test/resources/syntax/__pycache__/test05.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);

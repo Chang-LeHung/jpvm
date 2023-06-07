@@ -1,9 +1,22 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.errors.PyException;
+import org.jpvm.objects.PyDictObject;
+import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
+
 public class PyDictType extends PyTypeType {
 
   public PyDictType() {
     super();
     name = "dict";
+  }
+
+  @Override
+  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 0)
+      return new PyDictObject();
+    else
+      throw new PyException("dict() takes no arguments");
   }
 }

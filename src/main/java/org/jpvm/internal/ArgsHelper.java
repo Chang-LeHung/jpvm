@@ -1,5 +1,6 @@
 package org.jpvm.internal;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFunctionObject;
 import org.jpvm.objects.PyObject;
@@ -12,7 +13,7 @@ public class ArgsHelper {
   private final PyDictObject args;
   private final PyFunctionObject func;
 
-  public ArgsHelper(PyFunctionObject functionObject) {
+  public ArgsHelper(PyFunctionObject functionObject) throws PyException {
     func = functionObject;
     this.args = new PyDictObject();
     parse(functionObject);
@@ -21,7 +22,7 @@ public class ArgsHelper {
   /**
    * parse the default parameters
    */
-  private void parse(PyFunctionObject functionObject) {
+  private void parse(PyFunctionObject functionObject) throws PyException {
     PyCodeObject code = (PyCodeObject) functionObject.getFuncCode();
     PyTupleObject varNames = (PyTupleObject) code.getCoVarNames();
     PyTupleObject defaults = (PyTupleObject) functionObject.getFuncDefaults();
@@ -42,7 +43,7 @@ public class ArgsHelper {
   /**
    * parse the argument
    */
-  public PyDictObject doParse(boolean isKw, PyObject... args) {
+  public PyDictObject doParse(boolean isKw, PyObject... args) throws PyException {
     PyDictObject ans = new PyDictObject();
     ans.addAll(this.args);
     PyCodeObject code = (PyCodeObject) func.getFuncCode();

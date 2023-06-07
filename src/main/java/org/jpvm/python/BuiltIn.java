@@ -38,36 +38,40 @@ public class BuiltIn {
   static {
     PyObject.registerBaseObjectType();
     dict = new PyDictObject();
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("int", true),
-        PyLongObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("list", true),
-        PyListObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("tuple", true),
-        PyTupleObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true),
-        PyDictObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("bool", true),
-        PyBoolObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("complex", true),
-        PyComplexObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("str", true),
-        PyUnicodeObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("type", true),
-        PyTypeType.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("True", true),
-        BuiltIn.True);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("False", true),
-        BuiltIn.False);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("None", true),
-        BuiltIn.None);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("Ellipsis", true),
-        BuiltIn.ELLIPSIS);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true),
-        PyObject.type);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("stdout", true),
-        Sys.stdout);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("range", true),
-        PyRangeObject.type);
+    try {
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("int", true),
+          PyLongObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("list", true),
+          PyListObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("tuple", true),
+          PyTupleObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true),
+          PyDictObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("bool", true),
+          PyBoolObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("complex", true),
+          PyComplexObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("str", true),
+          PyUnicodeObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("type", true),
+          PyTypeType.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("True", true),
+          BuiltIn.True);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("False", true),
+          BuiltIn.False);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("None", true),
+          BuiltIn.None);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("Ellipsis", true),
+          BuiltIn.ELLIPSIS);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true),
+          PyObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("stdout", true),
+          Sys.stdout);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("range", true),
+          PyRangeObject.type);
+    } catch (PyException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static void doInit() {
@@ -88,7 +92,7 @@ public class BuiltIn {
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("max", true), mp);
       mp = new PyNativeMethodObject(clazz.getMethod("min", PyTupleObject.class, PyDictObject.class), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("min", true), mp);
-    } catch (NoSuchMethodException ignore) {
+    } catch (NoSuchMethodException | PyException ignore) {
     }
   }
 

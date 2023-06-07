@@ -24,8 +24,12 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     this.map = new HashMap<>();
   }
 
-  public PyObject put(PyObject key, PyObject val) {
-    return map.put(key, val);
+  public PyObject put(PyObject key, PyObject val) throws PyException {
+    try {
+      return map.put(key, val);
+    }catch (ConcurrentModificationException e) {
+      throw new PyException("can not put new items while iterating");
+    }
   }
 
   public PyObject add(PyObject key, PyObject val) {
@@ -406,7 +410,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
      * not implemented in the current version
      */
     @Override
-    public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject sub(PyObject o) throws PyException {
       return PyNumberMethods.super.sub(o);
     }
 
@@ -414,7 +418,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
      * not implemented in the current version
      */
     @Override
-    public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject and(PyObject o) throws PyException {
       return PyNumberMethods.super.and(o);
     }
 
@@ -422,7 +426,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
      * not implemented in the current version
      */
     @Override
-    public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject xor(PyObject o) throws PyException {
       return PyNumberMethods.super.xor(o);
     }
 
@@ -430,7 +434,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
      * not implemented in the current version
      */
     @Override
-    public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject or(PyObject o) throws PyException {
       return PyNumberMethods.super.or(o);
     }
 

@@ -1,5 +1,6 @@
 package org.jpvm.module;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
@@ -63,14 +64,14 @@ public class Marshal {
     }
   }
 
-  public PyObject loadPyObject(FileInputStream stream) throws IOException {
+  public PyObject loadPyObject(FileInputStream stream) throws IOException, PyException {
     int size = stream.available();
     byte[] bytes = new byte[size];
     var s = stream.read(bytes);
     return loadPyObject(ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN));
   }
 
-  public PyObject loadPyObject(ByteBuffer buffer) {
+  public PyObject loadPyObject(ByteBuffer buffer) throws PyException {
     int code = (buffer.get() & 0xff);
     int type = code & (~TYPE.FLAG_REF);
     flag = code & TYPE.FLAG_REF;
@@ -124,12 +125,12 @@ public class Marshal {
    * @param stream byte[]
    * @return {@link PyCodeObject}
    */
-  public PyCodeObject loadCodeObject(byte[] stream) {
+  public PyCodeObject loadCodeObject(byte[] stream) throws PyException {
     ByteBuffer buffer = ByteBuffer.wrap(stream).order(ByteOrder.LITTLE_ENDIAN);
     return (PyCodeObject) loadPyObject(buffer);
   }
 
-  public PyCodeObject loadCodeObject(FileInputStream stream) throws IOException {
+  public PyCodeObject loadCodeObject(FileInputStream stream) throws IOException, PyException {
     var size = stream.available();
     byte[] bytes = new byte[size];
     var s = stream.read(bytes);
@@ -137,7 +138,7 @@ public class Marshal {
     return (PyCodeObject) loadPyObject(buffer);
   }
 
-  public PyCodeObject loadCodeObject(ByteBuffer buffer) {
+  public PyCodeObject loadCodeObject(ByteBuffer buffer) throws PyException {
     PyCodeObject pyCodeObject = new PyCodeObject();
     int idx = RREFReserve();
     pyCodeObject.setCoArgument(buffer.getInt());
@@ -172,7 +173,7 @@ public class Marshal {
     return refs.get(i);
   }
 
-  private PySetObject loadSet(ByteBuffer buffer, boolean isFrozen) {
+  private PySetObject loadSet(ByteBuffer buffer, boolean isFrozen) throws PyException {
     int size = buffer.getInt();
     if (isFrozen && size == 0) {
       RREF(BuiltIn.FROZENSET);
@@ -194,7 +195,7 @@ public class Marshal {
     }
   }
 
-  private PyObject loadDictionary(ByteBuffer buffer) {
+  private PyObject loadDictionary(ByteBuffer buffer) throws PyException {
     PyDictObject dictObject = new PyDictObject();
     RREF(dictObject);
     for (; ; ) {
@@ -207,7 +208,7 @@ public class Marshal {
     return dictObject;
   }
 
-  private PyListObject loadList(ByteBuffer buffer) {
+  private PyListObject loadList(ByteBuffer buffer) throws PyException {
     int size = buffer.getInt();
     PyListObject listObject = new PyListObject(size);
     RREF(listObject);
@@ -253,7 +254,7 @@ public class Marshal {
     return longObject;
   }
 
-  private PyTupleObject loadTuple(ByteBuffer buffer) {
+  private PyTupleObject loadTuple(ByteBuffer buffer) throws PyException {
     int s = buffer.getInt();
     PyTupleObject tupleObject = new PyTupleObject(s);
     RREF(tupleObject);
@@ -263,7 +264,7 @@ public class Marshal {
     return tupleObject;
   }
 
-  private PyTupleObject loadSmallTuple(ByteBuffer buffer) {
+  private PyTupleObject loadSmallTuple(ByteBuffer buffer) throws PyException {
     int s = (buffer.get() & 0xff);
     PyTupleObject tupleObject = new PyTupleObject(s);
     RREF(tupleObject);

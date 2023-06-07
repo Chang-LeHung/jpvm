@@ -17,7 +17,7 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_subtract
    */
-  default PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject sub(PyObject o) throws PyException {
     throw new PyNotImplemented("sub is not implemented");
   }
 
@@ -101,21 +101,21 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_and
    */
-  default PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject and(PyObject o) throws PyException {
     throw new PyNotImplemented("v is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_xor
    */
-  default PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject xor(PyObject o) throws PyException {
     throw new PyNotImplemented("xor is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_or
    */
-  default PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject or(PyObject o) throws PyException {
     throw new PyNotImplemented("or is not implemented");
   }
 
