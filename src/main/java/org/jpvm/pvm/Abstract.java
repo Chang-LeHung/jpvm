@@ -396,8 +396,6 @@ public class Abstract {
   }
 
   public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op) throws PyUnsupportedOperator {
-    if (v.getType() != w.getType())
-      return BuiltIn.notImplemented;
     return w.richCompare(v, op);
   }
 

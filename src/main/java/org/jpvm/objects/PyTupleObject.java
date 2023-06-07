@@ -1,11 +1,14 @@
 package org.jpvm.objects;
 
+import com.sun.source.tree.ReturnTree;
 import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyTupleType;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
@@ -14,7 +17,7 @@ import org.jpvm.python.BuiltIn;
  * tuple is a size-fixed array
  */
 public class PyTupleObject extends PyObject implements TypeIterable,
-    PySequenceMethods {
+    PySequenceMethods , PyNumberMethods {
 
   public static PyObject type = new PyTupleType();
 
@@ -61,6 +64,26 @@ public class PyTupleObject extends PyObject implements TypeIterable,
     builder.append(")");
     return builder.toString();
   }
+
+  @Override
+  public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    if(o instanceof PyLongObject pyLongObject){
+      PyTupleObject o1 = new PyTupleObject((int) (size() * pyLongObject.getData()));
+      for(int i = 0; i < pyLongObject.getData(); i++){
+        for(int j = 0; j < size(); j++){
+          o1.obItem[i*size()+j] = obItem[j];
+        }
+      }
+      return o1;
+    }
+    throw new PyTypeNotMatch("require PyTupleObject type");
+  }
+
+  @Override
+  public PyObject add(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return sqConcat(o);
+  }
+
 
   @Override
   public Object toJavaType() {
@@ -110,6 +133,19 @@ public class PyTupleObject extends PyObject implements TypeIterable,
       }
       return BuiltIn.True;
     }
+    if (op == Operator.PyCmp_IN) {
+      for (PyObject pyObject : obItem) {
+        if (pyObject.richCompare(o, Operator.Py_EQ).isTrue())
+          return BuiltIn.True;
+      }
+      return BuiltIn.False;
+    }else if (op == Operator.PyCmp_NOT_IN) {
+      for (PyObject pyObject : obItem) {
+        if (pyObject.richCompare(o, Operator.Py_NE).isTrue())
+          return BuiltIn.True;
+      }
+      return BuiltIn.False;
+    }
     return BuiltIn.False;
   }
 
@@ -120,7 +156,18 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   @Override
   public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
-    return PySequenceMethods.super.sqConcat(o);
+    if(o instanceof PyTupleObject tupleObject){
+      PyTupleObject o1 = new PyTupleObject(size() + tupleObject.size());
+      for (int i = 0; i < o1.size(); i++){
+        if(i < obItem.length){
+          o1.obItem[i] = obItem[i];
+        }else {
+          o1.obItem[i] = tupleObject.obItem[i - size()];
+        }
+      }
+      return o1;
+    }
+    throw new PyTypeNotMatch("require PyTupleObject type");
   }
 
   @Override
@@ -145,6 +192,37 @@ public class PyTupleObject extends PyObject implements TypeIterable,
       return result;
     }
     throw new PyTypeNotMatch("require PyNumberMethods type");
+  }
+
+  /**
+   * only use @PyClassMethod annotation could be called in python source code
+   */
+  @PyClassMethod
+  public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      for (int i = 0 ; i < size(); i++) {
+        if (get(i).richCompare(o, Operator.Py_EQ).isTrue()) {
+          return PyLongObject.getLongObject(i);
+        }
+      }
+      return PyLongObject.getLongObject(-1);
+    }
+    throw new PyTypeNotMatch("PyTupleObject method index only require one argument");
+  }
+
+  @PyClassMethod
+  public PyObject count(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
+    if(args.size() == 1){
+      int count = 0;
+      for(int i = 0; i < size(); i++){
+        if(obItem[i].richCompare(args.get(0), Operator.Py_EQ).isTrue()){
+          count ++;
+        }
+      }
+      return PyLongObject.getLongObject(count);
+    }
+    throw new PyTypeNotMatch("PyTupleObject method count only require one argument");
   }
 
   @Override
@@ -210,4 +288,5 @@ public class PyTupleObject extends PyObject implements TypeIterable,
       return idx < size();
     }
   }
+
 }

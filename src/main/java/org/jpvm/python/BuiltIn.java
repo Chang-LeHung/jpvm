@@ -8,6 +8,8 @@ import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.pyinterface.TypeRichCompare;
+import org.jpvm.objects.types.PyListType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -15,6 +17,7 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 
 import java.io.IOException;
+import java.util.Collections;
 
 
 public class BuiltIn {
@@ -41,6 +44,8 @@ public class BuiltIn {
         PyLongObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("list", true),
         PyListObject.type);
+    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("tuple", true),
+            PyTupleObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true),
         PyDictObject.type);
     dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("bool", true),
@@ -79,6 +84,12 @@ public class BuiltIn {
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("iter", true), mp);
       mp = new PyNativeMethodObject(clazz.getMethod("len", parameterTypes), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("len", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("sorted", PyTupleObject.class, PyDictObject.class), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("sorted", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("max", PyTupleObject.class, PyDictObject.class), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("max", true), mp);
+      mp = new PyNativeMethodObject(clazz.getMethod("min", PyTupleObject.class, PyDictObject.class), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("min", true), mp);
     } catch (NoSuchMethodException ignore) {
     }
   }
@@ -156,5 +167,37 @@ public class BuiltIn {
       }
     }
     throw new PyTypeError("sum only require one iterable argument");
+  }
+
+  public static PyObject sorted(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyListObject list = PyListType.getListFromIterable(args, kwArgs);
+    list.sort(args, kwArgs);
+    return list;
+  }
+
+  public static PyObject max(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyListObject list = PyListType.getListFromIterable(args, kwArgs);
+    if (list.size() == 0)
+      return BuiltIn.None;
+    PyObject res = list.get(0);
+    for (int i = 0; i < list.size(); i++) {
+      if (res.richCompare(list.get(i), TypeRichCompare.Operator.Py_LE).isTrue()) {
+        res = list.get(i);
+      }
+    }
+    return res;
+  }
+
+  public static PyObject min(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyListObject list = PyListType.getListFromIterable(args, kwArgs);
+    if (list.size() == 0)
+      return BuiltIn.None;
+    PyObject res = list.get(0);
+    for (int i = 0; i < list.size(); i++) {
+      if (res.richCompare(list.get(i), TypeRichCompare.Operator.Py_GT).isTrue()) {
+        res = list.get(i);
+      }
+    }
+    return res;
   }
 }

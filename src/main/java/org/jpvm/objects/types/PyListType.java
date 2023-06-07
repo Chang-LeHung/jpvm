@@ -9,6 +9,8 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 
+import javax.swing.plaf.SeparatorUI;
+
 public class PyListType extends PyTypeType {
   public PyListType() {
     super();
@@ -18,6 +20,12 @@ public class PyListType extends PyTypeType {
 
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return getListFromIterable(args, kwArgs);
+  }
+
+  public static PyListObject getListFromIterable(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 0)
+      return new PyListObject();
     if (args.size() == 1) {
       PyListObject result = new PyListObject();
       if (args.get(0) instanceof TypeDoIterate itr) {

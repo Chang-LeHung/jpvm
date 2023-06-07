@@ -79,4 +79,14 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
       return bool == ((PyBoolObject) obj).bool;
     return false;
   }
+
+  @Override
+  public PyUnicodeObject str() {
+    return PyUnicodeObject.getOrCreateFromInternStringPool(toString(), true);
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return str();
+  }
 }
