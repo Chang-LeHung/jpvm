@@ -78,22 +78,22 @@ public class BuiltIn {
     Class<BuiltIn> clazz = BuiltIn.class;
     try {
       // load builtin function & object into builtin dict
-      PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod("print", parameterTypes), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("print", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("sum", parameterTypes), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("sum", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("iter", parameterTypes), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("iter", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("len", parameterTypes), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("len", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("sorted", PyTupleObject.class, PyDictObject.class), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("sorted", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("max", PyTupleObject.class, PyDictObject.class), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("max", true), mp);
-      mp = new PyNativeMethodObject(clazz.getMethod("min", PyTupleObject.class, PyDictObject.class), true);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("min", true), mp);
+      registerBuiltinFunction("print");
+      registerBuiltinFunction("sum");
+      registerBuiltinFunction("iter");
+      registerBuiltinFunction("len");
+      registerBuiltinFunction("sorted");
+      registerBuiltinFunction("max");
+      registerBuiltinFunction("min");
+      registerBuiltinFunction("sorted");
     } catch (NoSuchMethodException | PyException ignore) {
     }
+  }
+
+  public static void registerBuiltinFunction(String name) throws NoSuchMethodException, PyException {
+    Class<BuiltIn> clazz = BuiltIn.class;
+    PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod(name, PyTupleObject.class, PyDictObject.class), true);
+    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool(name, true), mp);
   }
 
   public static PyObject print(PyTupleObject args, PyDictObject kwArgs) throws PyException, IOException {

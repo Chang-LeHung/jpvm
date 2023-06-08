@@ -32,8 +32,8 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     }
   }
 
-  public PyObject add(PyObject key, PyObject val) {
-    return map.put(key, val);
+  public PyObject add(PyObject key, PyObject val) throws PyException {
+    return put(key, val);
   }
 
   public PyObject get(PyObject key) {
