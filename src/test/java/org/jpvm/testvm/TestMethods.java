@@ -34,4 +34,17 @@ public class TestMethods {
     assert ret != null;
     System.out.println("ret = " + ret.str().getData());
   }
+
+  @Test
+  public void testAllAny() throws IOException {
+    String filename = "src/test/resources/testpy/__pycache__/test02.cpython-38.pyc";
+    PyObject ret = null;
+    try {
+      ret = test(filename);
+    } catch (PyException e) {
+      e.printStackTrace();
+    }
+    assert ret != null;
+    System.out.println("ret = " + ret.str().getData());
+  }
 }
