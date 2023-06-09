@@ -87,6 +87,8 @@ public class BuiltIn {
       registerBuiltinFunction("max");
       registerBuiltinFunction("min");
       registerBuiltinFunction("sorted");
+      registerBuiltinFunction("all");
+      registerBuiltinFunction("any");
     } catch (NoSuchMethodException | PyException ignore) {
     }
   }
