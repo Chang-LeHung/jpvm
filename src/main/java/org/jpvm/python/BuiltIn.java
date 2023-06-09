@@ -12,6 +12,7 @@ import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyListType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
+import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 
@@ -201,5 +202,40 @@ public class BuiltIn {
       }
     }
     return res;
+  }
+
+  public static PyObject all(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    //  transform a iterable object to list
+    PyListObject list = PyListType.getListFromIterable(args, kwArgs);
+    if (list.size() == 0)
+      return BuiltIn.False;
+    for (int i = 0; i < list.size(); i++) {
+      PyObject o = list.get(i);
+      if(o == BuiltIn.False)
+        return BuiltIn.False;
+      else if (o instanceof PyNumberMethods num) {
+        if (((PyBoolObject) num.bool()).isFalse())
+          return BuiltIn.False;
+      }else
+        return BuiltIn.False;
+    }
+    return BuiltIn.True;
+  }
+
+  public static PyObject any(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    //  transform a iterable object to list
+    PyListObject list = PyListType.getListFromIterable(args, kwArgs);
+    if (list.size() == 0)
+      return BuiltIn.False;
+    for (int i = 0; i < list.size(); i++) {
+      PyObject o = list.get(i);
+      if(o == BuiltIn.True)
+        return BuiltIn.True;
+      else if (o instanceof PyNumberMethods num) {
+        if (((PyBoolObject) num.bool()).isTrue())
+          return BuiltIn.True;
+      }
+    }
+    return BuiltIn.False;
   }
 }
