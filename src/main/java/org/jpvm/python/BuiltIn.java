@@ -207,7 +207,7 @@ public class BuiltIn {
   }
 
   public static PyObject all(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    //  transform a iterable object to list
+    //  transform an iterable object to list
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
     if (list.size() == 0)
       return BuiltIn.False;
