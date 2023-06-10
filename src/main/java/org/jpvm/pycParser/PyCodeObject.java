@@ -1,5 +1,6 @@
 package org.jpvm.pycParser;
 
+import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
 
 
@@ -237,5 +238,9 @@ public class PyCodeObject extends PyObject {
         ", coWeakRefList=" + coWeakRefList +
         ", coExtra=" + coExtra +
         '}';
+  }
+
+  public boolean isGenerator() {
+    return (coFlags & Marshal.CO_GENERATOR) != 0;
   }
 }

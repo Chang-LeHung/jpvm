@@ -11,7 +11,7 @@ import java.io.IOException;
  * .pyc file structure
  * +----------------+
  * |  Magic Number  | 4 bytes
- * |   Bite Field   | 4 bytes
+ * |   Bit Field   | 4 bytes
  * |  Modified Date | 4 bytes
  * |   File Size    | 4 bytes
  * |  Code Object   |

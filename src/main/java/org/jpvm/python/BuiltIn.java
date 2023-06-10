@@ -89,6 +89,7 @@ public class BuiltIn {
       registerBuiltinFunction("sorted");
       registerBuiltinFunction("all");
       registerBuiltinFunction("any");
+      registerBuiltinFunction("next");
     } catch (NoSuchMethodException | PyException ignore) {
     }
   }
@@ -207,7 +208,7 @@ public class BuiltIn {
   }
 
   public static PyObject all(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    //  transform a iterable object to list
+    //  transform an iterable object to list
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
     if (list.size() == 0)
       return BuiltIn.False;
@@ -225,7 +226,7 @@ public class BuiltIn {
   }
 
   public static PyObject any(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    //  transform a iterable object to list
+    //  transform an iterable object to list
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
     if (list.size() == 0)
       return BuiltIn.False;
@@ -240,4 +241,15 @@ public class BuiltIn {
     }
     return BuiltIn.False;
   }
+
+  public static PyObject next(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject o = args.get(0);
+      if (o instanceof TypeDoIterate iterator) {
+        return iterator.next();
+      }
+    }
+    throw new PyException("next function require only 1 argument that is an iterator");
+  }
+
 }
