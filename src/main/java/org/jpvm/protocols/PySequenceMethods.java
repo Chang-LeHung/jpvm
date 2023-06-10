@@ -1,5 +1,6 @@
 package org.jpvm.protocols;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -45,7 +46,7 @@ public interface PySequenceMethods {
   /**
    * implementation of corresponding cpython sq_contains
    */
-  default PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch, PyUnsupportedOperator {
+  default PyObject sqContain(PyObject o) throws PyException {
     throw new PyNotImplemented("sqContain not implemented");
   }
 
