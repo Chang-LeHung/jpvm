@@ -92,40 +92,64 @@ public class PyLongObject extends PyObject
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (!(o instanceof PyLongObject n))
-      return BuiltIn.False;
-    switch (op) {
-      case Py_GT -> {
-        if (data > n.getData())
+    if(o instanceof  PyListObject n){
+      switch (op) {
+        case PyCmp_IN -> {
+          for(int i = 0; i < n.size(); i++){
+            if(this == n.get(i)){
+              return BuiltIn.True;
+            }
+          }
+          return BuiltIn.False;
+        }
+        case PyCmp_NOT_IN -> {
+          for(int i = 0; i < n.size(); i++){
+            if(this == n.get(i)){
+              return BuiltIn.False;
+            }
+          }
           return BuiltIn.True;
-        return BuiltIn.False;
-      }
-      case Py_EQ -> {
-        if (data == n.getData())
-          return BuiltIn.True;
-        return BuiltIn.False;
-      }
-      case Py_NE -> {
-        if (data != n.getData())
-          return BuiltIn.True;
-        return BuiltIn.False;
-      }
-      case Py_GE -> {
-        if (data >= n.getData())
-          return BuiltIn.True;
-        return BuiltIn.False;
-      }
-      case Py_LT -> {
-        if (data < n.getData())
-          return BuiltIn.True;
-        return BuiltIn.False;
-      }
-      case Py_LE -> {
-        if (data <= n.getData())
-          return BuiltIn.True;
-        return BuiltIn.False;
+        }
       }
     }
+    if (o instanceof PyLongObject n) {
+      switch (op) {
+        case Py_GT -> {
+          if (data > n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_EQ -> {
+          if (data == n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_NE -> {
+          if (data != n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_GE -> {
+          if (data >= n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_LT -> {
+          if (data < n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_LE -> {
+          if (data <= n.getData())
+            return BuiltIn.True;
+          return BuiltIn.False;
+        }
+      }
+
+      return BuiltIn.False;
+    }
+
+
     throw new PyUnsupportedOperator("not support operator " + op);
   }
 

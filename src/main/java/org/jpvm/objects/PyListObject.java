@@ -247,7 +247,7 @@ public class PyListObject extends PyObject
         obItem.set(n.intValue(), val);
       }
     }
-    throw new PyKeyError("key " + key.str() + " is not a key for list");
+    return BuiltIn.None;
   }
 
   @Override
@@ -477,6 +477,13 @@ public class PyListObject extends PyObject
     if (ref.error == null) return BuiltIn.None;
     throw ref.error;
   }
+
+  @PyClassMethod
+  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    obItem.clear();
+    return BuiltIn.None;
+  }
+
 
 
   public void addAll(PyListObject o) {

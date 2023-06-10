@@ -443,6 +443,7 @@ public class Abstract {
     if (obj instanceof PySequenceMethods seq) {
       try {
         seq.sqAssItem(key, val);
+        return;
       } catch (PyException e) {
         error = e;
       }
