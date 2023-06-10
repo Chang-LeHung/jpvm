@@ -145,7 +145,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch, PyUnsupportedOperator {
+  public PyObject sqContain(PyObject o) throws PyException {
     return PySequenceMethods.super.sqContain(o);
   }
 }

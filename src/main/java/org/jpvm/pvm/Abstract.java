@@ -398,7 +398,7 @@ public class Abstract {
     throw new PyException("abstract call error occurred");
   }
 
-  public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op) throws PyUnsupportedOperator {
+  public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op) throws PyException {
     return w.richCompare(v, op);
   }
 
@@ -447,6 +447,7 @@ public class Abstract {
     if (obj instanceof PySequenceMethods seq) {
       try {
         seq.sqAssItem(key, val);
+        return;
       } catch (PyException e) {
         error = e;
       }

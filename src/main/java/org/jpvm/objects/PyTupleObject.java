@@ -122,7 +122,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (o instanceof PyTupleObject tuple) {
       if (tuple.size() != size())
         return BuiltIn.False;
@@ -197,7 +197,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
    * only use @PyClassMethod annotation could be called in python source code
    */
   @PyClassMethod
-  public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
+  public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject o = args.get(0);
       for (int i = 0; i < size(); i++) {
@@ -211,7 +211,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
   }
 
   @PyClassMethod
-  public PyObject count(PyTupleObject args, PyDictObject kwArgs) throws PyUnsupportedOperator, PyTypeNotMatch {
+  public PyObject count(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       int count = 0;
       for (int i = 0; i < size(); i++) {
@@ -230,7 +230,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch, PyUnsupportedOperator {
+  public PyObject sqContain(PyObject o) throws PyException {
     return PySequenceMethods.super.sqContain(o);
   }
 
