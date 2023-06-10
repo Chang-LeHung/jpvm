@@ -7,6 +7,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNameError;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -31,9 +32,24 @@ public class EvaluationLoop {
   public static final int FVS_HAVE_SPEC = 0x4;
   private final PyFrameObject frame;
   private PyException error;
+  private final Iterator<Instruction> iterator;
+  private final PyTupleObject coNames;
+  private final PyDictObject globals;
+  private final PyDictObject locals;
+  private final PyDictObject builtins;
+  private final PyTupleObject consts;
+  private final ByteCodeBuffer byteCodeBuffer;
 
   public EvaluationLoop(PyFrameObject frame) {
     this.frame = frame;
+    PyCodeObject code = frame.getCode();
+    byteCodeBuffer = new ByteCodeBuffer(code);
+    iterator = byteCodeBuffer.iterator();
+    coNames = (PyTupleObject) code.getCoNames();
+    globals = frame.getGlobals();
+    locals = frame.getLocals();
+    builtins = frame.getBuiltins();
+    consts = (PyTupleObject) code.getCoConsts();
   }
 
   public PyTupleObject getArgs(Instruction ins) {
@@ -43,6 +59,42 @@ public class EvaluationLoop {
       args.set(size - i - 1, frame.pop());
     }
     return args;
+  }
+
+  public PyFrameObject getFrame() {
+    return frame;
+  }
+
+  public PyException getError() {
+    return error;
+  }
+
+  public Iterator<Instruction> getIterator() {
+    return iterator;
+  }
+
+  public PyTupleObject getCoNames() {
+    return coNames;
+  }
+
+  public PyDictObject getGlobals() {
+    return globals;
+  }
+
+  public PyDictObject getLocals() {
+    return locals;
+  }
+
+  public PyDictObject getBuiltins() {
+    return builtins;
+  }
+
+  public PyTupleObject getConsts() {
+    return consts;
+  }
+
+  public ByteCodeBuffer getByteCodeBuffer() {
+    return byteCodeBuffer;
   }
 
   public PyObject getClassMethod(PyUnicodeObject name) {
@@ -62,14 +114,6 @@ public class EvaluationLoop {
   }
 
   public PyObject pyEvalFrame() throws PyException {
-    PyCodeObject code = frame.getCode();
-    PyTupleObject coNames = (PyTupleObject) code.getCoNames();
-    ByteCodeBuffer byteCodeBuffer = new ByteCodeBuffer(code);
-    PyDictObject globals = frame.getGlobals();
-    PyDictObject locals = frame.getLocals();
-    PyDictObject builtins = frame.getBuiltins();
-    Iterator<Instruction> iterator = byteCodeBuffer.iterator();
-    PyTupleObject consts = (PyTupleObject) code.getCoConsts();
 
     // evaluation loop
     while (iterator.hasNext()) {
@@ -591,11 +635,22 @@ public class EvaluationLoop {
         }
         case NOP -> {
         }
+        case YIELD_VALUE -> {
+          PyObject res = frame.pop();
+          frame.increaseStackPointer(1);
+          if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0)
+            return res;
+          error = new PyException("yield value is not supported", false);
+        }
         default ->
             throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }
       if (error != null)
         throw new PyException("Execution error with op " + ins.getOpname() + " " + error.getMessage(), error.isInternalError());
+      // check top whether is PyExcStopIteration
+      if (frame.getUsed() > 0 && frame.top() == BuiltIn.PyExcStopIteration) {
+        throw new PyException("Execution error with op " + ins.getOpname() + " PyExcStopIteration is thrown", false);
+      }
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;

@@ -1,6 +1,7 @@
 package org.jpvm.pvm;
 
 import org.jpvm.errors.*;
+import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
@@ -388,7 +389,10 @@ public class Abstract {
         if (f.getLocal(i) == null)
           throw new PyParametersError("please pass argument " + coVarNames.get(i).repr(), false);
       }
+      if (((PyCodeObject)(func.getFuncCode())).isGenerator())
+        return new PyGeneratorObject(f);
       EvaluationLoop eval = new EvaluationLoop(f);
+      // common function that should be called immediately
       return eval.pyEvalFrame();
     }
     throw new PyException("abstract call error occurred");

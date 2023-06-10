@@ -123,6 +123,7 @@ public class PyFrameObject extends PyObject {
   }
 
   public PyObject top() {
+    assert used > 0;
     return stack[used - 1];
   }
 
