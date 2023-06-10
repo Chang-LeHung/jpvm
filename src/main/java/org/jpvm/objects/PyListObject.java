@@ -152,7 +152,7 @@ public class PyListObject extends PyObject
       int s = size();
       if (s != list.size()) return BuiltIn.False;
       for (int i = 0; i < s; i++) {
-        if (richCompare(list.get(i), Operator.Py_EQ).isFalse())
+        if (get(i).richCompare(list.get(i), Operator.Py_EQ).isFalse())
           return BuiltIn.False;
       }
       return BuiltIn.True;
