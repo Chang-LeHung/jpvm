@@ -1,5 +1,6 @@
 package org.jpvm.objects.pyinterface;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.PyBoolObject;
 import org.jpvm.objects.PyObject;
@@ -19,7 +20,7 @@ public interface TypeRichCompare {
   int PyCmp_EXC_MATCH = 10;
   int PyCmp_BAD = 11;
 
-  PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator;
+  PyBoolObject richCompare(PyObject o, Operator op) throws PyException;
 
   enum Operator {
     Py_EQ,

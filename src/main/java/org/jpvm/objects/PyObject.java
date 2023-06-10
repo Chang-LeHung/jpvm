@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -84,7 +85,7 @@ public class PyObject implements PyArgs, TypeCheck,
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (op == Operator.Py_EQ) {
       if (o == this)
         return BuiltIn.True;

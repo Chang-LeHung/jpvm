@@ -145,7 +145,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (op == Operator.Py_EQ) {
       if (!(o instanceof PyListObject list))
         return BuiltIn.False;
@@ -247,7 +247,7 @@ public class PyListObject extends PyObject
         obItem.set(n.intValue(), val);
       }
     }
-    return BuiltIn.None;
+    throw new PyKeyError("key " + key.str() + " is not a key for list");
   }
 
   @Override
@@ -311,7 +311,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqContain(PyObject o) throws PyUnsupportedOperator {
+  public PyObject sqContain(PyObject o) throws PyException {
     for (PyObject object : obItem) {
       if (object.richCompare(o, Operator.Py_EQ).isTrue())
         return BuiltIn.True;
@@ -446,6 +446,8 @@ public class PyListObject extends PyObject
             return -1;
         } catch (PyUnsupportedOperator e) {
           ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+        } catch (PyException e) {
+          ref.error = e;
         }
         return 0;
       });
@@ -469,6 +471,8 @@ public class PyListObject extends PyObject
               return -1;
           } catch (PyUnsupportedOperator e) {
             ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+          } catch (PyException e) {
+            ref.error = e;
           }
           return 0;
         });
@@ -479,7 +483,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) {
     obItem.clear();
     return BuiltIn.None;
   }
