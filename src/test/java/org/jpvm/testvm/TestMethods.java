@@ -23,7 +23,7 @@ public class TestMethods {
   }
 
   @Test
-  public void testHelloWorld() throws IOException {
+  public void testTupleMethods() throws IOException {
     String filename = "src/test/resources/testpy/__pycache__/test01.cpython-38.pyc";
     PyObject ret = null;
     try {

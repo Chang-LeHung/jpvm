@@ -273,12 +273,37 @@ public class PyUnicodeObject extends PyObject
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.Py_EQ) {
-      if (!(o instanceof PyUnicodeObject d))
+    switch (op){
+      case Py_EQ -> {
+        if (!(o instanceof PyUnicodeObject d))
+          return BuiltIn.False;
+        if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
+          return BuiltIn.True;
         return BuiltIn.False;
-      if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
-        return BuiltIn.True;
-      return BuiltIn.False;
+      }
+      case Py_LT -> {
+        if(!(o instanceof PyUnicodeObject d)){
+          return BuiltIn.False;
+        }else{
+          int llen = this.s.length();
+          int rlen = d.s.length();
+          int i = 0, j = 0;
+          for(; i < llen && j < rlen; i++, j++){
+            if(this.s.charAt(i)==d.s.charAt(j)){
+            }else if(this.s.charAt(i) < d.s.charAt(j)){
+              return BuiltIn.True;
+            }else{
+              return BuiltIn.False;
+            }
+          }
+          if(llen < rlen){
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
+
+        }
+      }
     }
     throw new PyUnsupportedOperator("not support operator " + op);
   }

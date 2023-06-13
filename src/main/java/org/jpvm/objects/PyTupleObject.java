@@ -123,29 +123,54 @@ public class PyTupleObject extends PyObject implements TypeIterable,
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
-    if (o instanceof PyTupleObject tuple) {
-      if (tuple.size() != size())
+    if(!(o instanceof PyTupleObject tuple)){
+      throw new PyTypeNotMatch("can only support PyTupleObject");
+    }
+    switch (op){
+      case Py_EQ -> {
+        if(tuple.size() != size()){
+            return BuiltIn.False;
+        }
+        for (int i = 0; i < size(); i++) {
+          if (obItem[i] != tuple.obItem[i])
+            return BuiltIn.False;
+        }
+        return BuiltIn.True;
+      }
+      case PyCmp_IN -> {
+        for (PyObject pyObject : obItem) {
+          if (pyObject.richCompare(o, Operator.Py_EQ).isTrue())
+            return BuiltIn.True;
+        }
         return BuiltIn.False;
-      for (int i = 0; i < size(); i++) {
-        if (obItem[i] != tuple.obItem[i])
+      }
+      case PyCmp_NOT_IN -> {
+        for (PyObject pyObject : obItem) {
+          if (pyObject.richCompare(o, Operator.Py_NE).isTrue())
+            return BuiltIn.True;
+        }
+        return BuiltIn.False;
+      }
+      case Py_LT -> {
+        int llen = size();
+        int rlen = tuple.size();
+        int i = 0, j =0;
+        for(; i < llen && j <rlen; i++, j++){
+          if(this.get(i).richCompare(tuple.get(j), Operator.Py_EQ).isTrue()) {
+          }else if(this.get(i).richCompare(tuple.get(j), Operator.Py_LT).isTrue()){
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
+        }
+        if(llen < rlen){
+          return BuiltIn.True;
+        }else{
           return BuiltIn.False;
+        }
       }
-      return BuiltIn.True;
     }
-    if (op == Operator.PyCmp_IN) {
-      for (PyObject pyObject : obItem) {
-        if (pyObject.richCompare(o, Operator.Py_EQ).isTrue())
-          return BuiltIn.True;
-      }
-      return BuiltIn.False;
-    } else if (op == Operator.PyCmp_NOT_IN) {
-      for (PyObject pyObject : obItem) {
-        if (pyObject.richCompare(o, Operator.Py_NE).isTrue())
-          return BuiltIn.True;
-      }
-      return BuiltIn.False;
-    }
-    return BuiltIn.False;
+    throw new PyTypeNotMatch("can only support PyTupleObject");
   }
 
   @Override
