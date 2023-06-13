@@ -187,6 +187,40 @@ public class PyTupleObject extends PyObject implements TypeIterable,
           return BuiltIn.False;
         }
       }
+      case Py_LE -> {
+        int llen = size();
+        int rlen = tuple.size();
+        int i = 0, j =0;
+        for(; i < llen && j <rlen; i++, j++){
+          if(this.get(i).richCompare(tuple.get(j), Operator.Py_EQ).isTrue() || this.get(i).richCompare(tuple.get(j), Operator.Py_LT).isTrue()) {
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
+        }
+        if(llen < rlen){
+          return BuiltIn.True;
+        }else{
+          return BuiltIn.False;
+        }
+      }
+      case Py_GE -> {
+        int llen = size();
+        int rlen = tuple.size();
+        int i = 0, j =0;
+        for(; i < llen && j <rlen; i++, j++){
+          if(this.get(i).richCompare(tuple.get(j), Operator.Py_EQ).isTrue() || this.get(i).richCompare(tuple.get(j), Operator.Py_GE).isTrue()) {
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
+        }
+        if(llen > rlen){
+          return BuiltIn.True;
+        }else{
+          return BuiltIn.False;
+        }
+      }
     }
     throw new PyTypeNotMatch("can only support PyTupleObject");
   }
