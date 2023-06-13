@@ -55,6 +55,26 @@ public class PyFileStreamObject extends PyObject {
     this.stderr = stderr;
   }
 
+  public String getEncoding() {
+    return encoding;
+  }
+
+  public String getFilename() {
+    return filename;
+  }
+
+  public boolean isStdout() {
+    return stdout;
+  }
+
+  public boolean isStdin() {
+    return stdin;
+  }
+
+  public boolean isStderr() {
+    return stderr;
+  }
+
   public void writeBytes(byte[] bytes) throws IOException {
     if (file != null) {
       file.write(bytes);
