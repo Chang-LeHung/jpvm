@@ -1,4 +1,4 @@
-# 创建一个元组
+#创建一个元组
 my_tuple = (1, 2, 3, 4, 5)
 
 # 使用元组方法进行测试
@@ -24,10 +24,10 @@ print(repeated_tuple)  # 输出: (1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
 # 元素是否存在于元组中
 print(3 in my_tuple)  # 输出: True
 print(6 in my_tuple)  # 输出: False
-print("*******")
+
 # 元素的索引
 print(my_tuple.index(3))  # 输出: 2
-print("*******")
+
 # 元素出现的次数
 print(my_tuple.count(4))  # 输出: 1
 
@@ -64,3 +64,39 @@ print(min(my_tuple))  # 输出: 1
 my_string = "Hello"
 converted_tuple = tuple(my_string)
 print(converted_tuple)  # 输出: ('H', 'e', 'l', 'l', 'o')
+
+# 数字元组
+tuple1 = (1, 2, 3)
+tuple2 = (4, 5, 6)
+tuple3 = (1, 2, 3)
+
+print(tuple1 < tuple2)  # 输出: True，因为 tuple1 的第一个元素 1 小于 tuple2 的第一个元素 4
+print(tuple1 < tuple3)  # 输出: False，因为两个元组的所有元素都相等
+
+# 字符串元组
+tuple4 = ("apple", "banana")
+tuple5 = ("cherry", "date")
+tuple6 = ("apple", "banana")
+
+print(tuple4 < tuple5)  # 输出: True，因为 tuple4 的第一个元素 "apple" 在字母表中小于 tuple5 的第一个元素 "cherry"
+print(tuple4 < tuple6)  # 输出: False，因为两个元组的所有元素都相等
+
+# 混合类型元组
+tuple7 = (1, "apple")
+tuple8 = (2, "banana")
+
+print(tuple7 < tuple8)  # 输出: True，因为两个元组的第一个元素类型相同，并且 tuple7 的第一个元素 1 小于 tuple8 的第一个元素 2
+
+# 元组长度不同
+tuple9 = (1, 2, 3)
+tuple10 = (1, 2)
+
+print(tuple9 < tuple10)  # 输出: False，因为 tuple9 的长度较长
+
+# 空元组
+tuple11 = ()
+tuple12 = (1, 2, 3)
+
+print(tuple11 < tuple12)  # 输出: True，因为空元组被认为比任何非空元组小
+
+
