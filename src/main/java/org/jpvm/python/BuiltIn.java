@@ -70,8 +70,7 @@ public class BuiltIn {
           Sys.stdout);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("range", true),
           PyRangeObject.type);
-    } catch (PyException e) {
-      throw new RuntimeException(e);
+    } catch (PyException ignore) {
     }
   }
 
