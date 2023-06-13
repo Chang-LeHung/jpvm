@@ -324,7 +324,48 @@ public class PyUnicodeObject extends PyObject
           }else{
             return BuiltIn.False;
           }
-
+        }
+      }
+      case Py_LE -> {
+        if(!(o instanceof PyUnicodeObject d)){
+          return BuiltIn.False;
+        }else{
+          int llen = this.s.length();
+          int rlen = d.s.length();
+          int i = 0, j = 0;
+          for(; i < llen && j < rlen; i++, j++){
+            if(this.s.charAt(i)<=d.s.charAt(j)){
+              return BuiltIn.True;
+            }else{
+              return BuiltIn.False;
+            }
+          }
+          if(llen < rlen){
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
+        }
+      }
+      case Py_GE -> {
+        if(!(o instanceof PyUnicodeObject d)){
+          return BuiltIn.False;
+        }else{
+          int llen = this.s.length();
+          int rlen = d.s.length();
+          int i = 0, j = 0;
+          for(; i < llen && j < rlen; i++, j++){
+            if(this.s.charAt(i)>=d.s.charAt(j)){
+              return BuiltIn.True;
+            }else{
+              return BuiltIn.False;
+            }
+          }
+          if(llen > rlen){
+            return BuiltIn.True;
+          }else{
+            return BuiltIn.False;
+          }
         }
       }
     }
