@@ -319,9 +319,9 @@ public class PyListObject extends PyObject
       Long i = 0L;
       while(iterator.hasNext()){
         if(i + start < end){
-          set((int) (i+start), iterator.get(Math.toIntExact(i)));
+          set((int) (i+start), iterator.next());
         }else{
-          insert((int) (i+start), iterator.get(Math.toIntExact(i)));
+          insert((int) (i+start), iterator.next());
         }
         i++;
       }
