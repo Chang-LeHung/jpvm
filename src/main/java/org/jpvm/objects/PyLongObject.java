@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -95,6 +96,18 @@ public class PyLongObject extends PyObject
 
     @Override
     public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
+        switch (op) {
+            case PyCmp_IS -> {
+                if (o == this)
+                    return BuiltIn.True;
+                return BuiltIn.False;
+            }
+            case PyCmp_IS_NOT -> {
+                if (o != this)
+                    return BuiltIn.True;
+                return BuiltIn.False;
+            }
+        }
         if (o instanceof TypeDoIterate itr) {
             switch (op) {
                 case PyCmp_IN -> {
@@ -174,7 +187,7 @@ public class PyLongObject extends PyObject
         }
 
 
-        throw new PyUnsupportedOperator("not support operator " + op);
+        throw new PyUnsupportedOperator("PyLongObject not support operator " + op);
     }
 
     @Override
@@ -304,6 +317,15 @@ public class PyLongObject extends PyObject
         if (!(o instanceof PyLongObject))
             throw new PyTypeNotMatch("can apply & on int and " + o.getTypeName());
         return new PyFloatObject((double) data / ((PyLongObject) o).getData());
+    }
+
+    @Override
+    public PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        if (o instanceof PyLongObject l) {
+            data += l.getData();
+            return this;
+        }
+        throw new PyTypeNotMatch("PyLongObject require PyLongObject argument");
     }
 
     @Override
