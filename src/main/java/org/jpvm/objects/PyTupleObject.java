@@ -302,7 +302,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
   }
 
   @Override
-  public PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
     return PySequenceMethods.super.sqAssItem(key, val);
   }
 

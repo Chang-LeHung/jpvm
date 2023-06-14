@@ -302,11 +302,28 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch {
-    Long n = NumberHelper.transformPyObject2Long(key);
-    if (n == null)
-      throw new PyTypeNotMatch("require PyNumberMethods type");
-    set(n.intValue(), val);
+  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
+    if(key instanceof PyNumberMethods){
+      Long n = NumberHelper.transformPyObject2Long(key);
+      if (n == null)
+        throw new PyTypeNotMatch("require PyNumberMethods type");
+      set(n.intValue(), val);
+    }
+    if(key instanceof PySliceObject pysli){
+      Long start = ((PyLongObject) pysli.getStart()).getData();
+      Long end = ((PyLongObject) pysli.getEnd()).getData();
+      if(!(val instanceof PyListObject o)){
+        throw new PyTypeNotMatch("can noly support pylistobject");
+      }
+      Long vlen = (long) o.size();
+      for(Long i = 0L; i < vlen; i++){
+        if(i + start < end){
+          set((int) (i+start), o.get(Math.toIntExact(i)));
+        }else{
+          insert((int) (i+start), o.get(Math.toIntExact(i)));
+        }
+      }
+    }
     return BuiltIn.None;
   }
 
