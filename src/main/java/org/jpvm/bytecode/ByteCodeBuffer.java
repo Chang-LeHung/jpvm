@@ -27,6 +27,10 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
     itr.resetCursor(pos);
   }
 
+  public void decrease(int delta) {
+    itr.decrease(delta);
+  }
+
   public void increase(int delta) {
     itr.increase(delta);
   }
@@ -81,6 +85,10 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
 
     public void increase(int delta) {
       cursor += delta;
+    }
+
+    public void decrease(int delta) {
+      cursor -= delta;
     }
   }
 

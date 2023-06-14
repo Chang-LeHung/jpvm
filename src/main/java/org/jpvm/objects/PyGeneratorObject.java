@@ -76,19 +76,28 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate,
 
   @PyClassMethod
   public PyObject __next__() throws PyException {
+    // whether generator started or not
     if (!runToYield)
       runToYield = true;
     else {
+      // push a dummy PyObject or sent value into stack
+      // if generator runToYield = true
       if (newVal) {
-        evalLoop.getFrame().push(yieldValue);
+        evalLoop.getFrame().setTop(1, yieldValue);
         newVal = false;
       }else {
-        evalLoop.getFrame().push(BuiltIn.None);
+        evalLoop.getFrame().setTop(1, BuiltIn.None);
       }
     }
+    PyObject res = evalLoop.pyEvalFrame();
     if (!evalLoop.getIterator().hasNext())
       return BuiltIn.PyExcStopIteration;
-    return evalLoop.pyEvalFrame();
+    else
+      return res;
+  }
+
+  public boolean started() {
+    return runToYield;
   }
 
   @PyClassMethod
@@ -118,5 +127,13 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate,
   @Override
   public TypeDoIterate getIterator() throws PyNotImplemented {
     return this;
+  }
+
+  public PyObject start(PyObject o) throws PyException {
+    if (started()) {
+      yieldValue = o;
+      newVal = true;
+    }
+    return next();
   }
 }

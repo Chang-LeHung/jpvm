@@ -45,8 +45,20 @@ public class TestGenerator {
   }
 
   @Test
-  public void testGenerator(){
+  public void testGenerator() throws IOException {
     String filename = "src/test/resources/testgen/__pycache__/test01.cpython-38.pyc";
+    try {
+      test(filename);
+    } catch (PyException ignore) {
+
+    } catch (Exception e) {
+      throw e;
+    }
+  }
+
+  @Test
+  public void testGeneratorSend(){
+    String filename = "src/test/resources/testgen/__pycache__/test02.cpython-38.pyc";
     try {
       test(filename);
     } catch (IOException | PyException e) {
@@ -55,8 +67,18 @@ public class TestGenerator {
   }
 
   @Test
-  public void testGeneratorSend(){
-    String filename = "src/test/resources/testgen/__pycache__/test02.cpython-38.pyc";
+  public void testGeneratorFrom(){
+    String filename = "src/test/resources/testgen/__pycache__/test03.cpython-38.pyc";
+    try {
+      test(filename);
+    } catch (IOException | PyException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testGeneratorSendFrom(){
+    String filename = "src/test/resources/testgen/__pycache__/test04.cpython-38.pyc";
     try {
       test(filename);
     } catch (IOException | PyException e) {

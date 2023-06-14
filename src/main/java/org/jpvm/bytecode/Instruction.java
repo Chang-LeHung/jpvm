@@ -2,6 +2,8 @@ package org.jpvm.bytecode;
 
 public class Instruction {
 
+  public static int sizeofByteCode = 2;
+
   private int pos;
   private OpMap.OpName opname;
   private int opcode;

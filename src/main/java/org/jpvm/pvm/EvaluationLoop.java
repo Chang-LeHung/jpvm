@@ -745,10 +745,38 @@ public class EvaluationLoop {
         case NOP -> {
         }
         case YIELD_VALUE -> {
-          PyObject res = frame.pop();
+          PyObject res = frame.top();
           if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0)
             return res;
           error = new PyException("yield value is not supported", false);
+        }
+        /*
+         * GET_YIELD_FROM_ITER If TOS is a generator iterator or
+         * coroutine object it is left as is.
+         * Otherwise, implements TOS = iter(TOS).
+         */
+        case GET_YIELD_FROM_ITER -> {
+          PyObject top = frame.top();
+          if (!(top instanceof PyGeneratorObject)) {
+            if (top instanceof TypeIterable iter) {
+              frame.setTop(1, (PyObject) iter.getIterator());
+              continue;
+            }
+            error = new PyException("require a generator or coroutine or iterable object");
+          }
+        }
+        case YIELD_FROM -> {
+          PyObject top = frame.pop();
+          PyObject gen = frame.top();
+          if (gen instanceof PyGeneratorObject g) {
+            frame.increaseStackPointer(1);
+            PyObject res = g.start(top);
+            if (res == BuiltIn.PyExcStopIteration)
+              continue;
+            byteCodeBuffer.decrease(Instruction.sizeofByteCode);
+            return res;
+          }else
+            error = new PyException("require a generator or coroutine or iterable object");
         }
         default ->
             throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
