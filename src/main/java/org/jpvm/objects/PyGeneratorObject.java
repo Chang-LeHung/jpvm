@@ -1,14 +1,17 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
+import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyGeneratorType;
 import org.jpvm.pvm.EvaluationLoop;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-public class PyGeneratorObject extends PyObject implements TypeDoIterate {
+public class PyGeneratorObject extends PyObject implements TypeDoIterate,
+    TypeIterable {
 
   public static PyObject type = new PyGeneratorType();
 
@@ -35,11 +38,16 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate {
 
   private final EvaluationLoop evalLoop;
 
+  private boolean runToYield = false;
+  private boolean newVal = false;
+  private PyObject yieldValue = BuiltIn.None;
+
 
   public PyGeneratorObject(PyFrameObject frame) {
     this.frame = frame;
     codeObject = frame.getCode();
     evalLoop = new EvaluationLoop(frame);
+    qualname = frame.getCode().getCoName();
   }
 
   public PyGeneratorObject(PyFrameObject frame, PyObject name, PyObject qualname) {
@@ -68,9 +76,31 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate {
 
   @PyClassMethod
   public PyObject __next__() throws PyException {
+    if (!runToYield)
+      runToYield = true;
+    else {
+      if (newVal) {
+        evalLoop.getFrame().push(yieldValue);
+        newVal = false;
+      }else {
+        evalLoop.getFrame().push(BuiltIn.None);
+      }
+    }
     if (!evalLoop.getIterator().hasNext())
       return BuiltIn.PyExcStopIteration;
     return evalLoop.pyEvalFrame();
+  }
+
+  @PyClassMethod
+  public PyObject send(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (!runToYield)
+      throw new PyException("can't send non-None value to a just-started generator");
+    if(args.size() == 1) {
+      yieldValue = args.get(0);
+      newVal = true;
+      return __next__();
+    }
+    throw new PyException("TypeError: send() takes exactly one argument");
   }
 
   @Override
@@ -81,8 +111,12 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate {
   @Override
   public String toString() {
     return "PyGeneratorObject{" +
-        "frame=" + frame +
-        ", qualname=" + qualname +
+        "qualname=" + qualname +
         '}';
+  }
+
+  @Override
+  public TypeDoIterate getIterator() throws PyNotImplemented {
+    return this;
   }
 }

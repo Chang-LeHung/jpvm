@@ -143,7 +143,7 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_inplace_add
    */
-  default PyObject inplaceAdd(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceAdd is not implemented");
   }
 

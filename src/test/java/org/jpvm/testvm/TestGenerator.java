@@ -53,4 +53,14 @@ public class TestGenerator {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void testGeneratorSend(){
+    String filename = "src/test/resources/testgen/__pycache__/test02.cpython-38.pyc";
+    try {
+      test(filename);
+    } catch (IOException | PyException e) {
+      e.printStackTrace();
+    }
+  }
 }

@@ -179,6 +179,7 @@ public class EvaluationLoop {
           PyObject pop = frame.pop();
           try {
             PyObject object = Abstract.abstractCall(pop, null, args, null, frame);
+            assert object != null;
             frame.push(object);
           } catch (PyException e) {
             error = e;
@@ -321,6 +322,114 @@ public class EvaluationLoop {
           PyObject right = frame.pop();
           PyObject left = frame.pop();
           PyObject res = Abstract.sub(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_ADD -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceAdd(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_AND -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceAnd(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_LSHIFT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceLshift(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_MULTIPLY -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceMul(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_OR -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceOr(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_SUBTRACT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceSub(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_POWER -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplacePow(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_FLOOR_DIVIDE -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceFloorDiv(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_RSHIFT -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceRshift(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_TRUE_DIVIDE -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceTrueDiv(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_MATRIX_MULTIPLY -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceMatrixMul(left, right);
+          if (res == BuiltIn.notImplemented) {
+            error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
+          }
+          frame.push(res);
+        }
+        case INPLACE_MODULO -> {
+          PyObject right = frame.pop();
+          PyObject left = frame.pop();
+          PyObject res = Abstract.inplaceMod(left, right);
           if (res == BuiltIn.notImplemented) {
             error = new PyException("can not apply add on " + left.repr() + " and " + right.repr());
           }
@@ -637,7 +746,6 @@ public class EvaluationLoop {
         }
         case YIELD_VALUE -> {
           PyObject res = frame.pop();
-          frame.increaseStackPointer(1);
           if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0)
             return res;
           error = new PyException("yield value is not supported", false);
@@ -646,7 +754,7 @@ public class EvaluationLoop {
             throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }
       if (error != null)
-        throw new PyException("Execution error with op " + ins.getOpname() + " " + error.getMessage(), error.isInternalError());
+        throw new PyException(errorMessageTip(ins));
       // check top whether is PyExcStopIteration
       if (frame.getUsed() > 0 && frame.top() == BuiltIn.PyExcStopIteration) {
         throw new PyException("Execution error with op " + ins.getOpname() + " PyExcStopIteration is thrown", false);
@@ -654,6 +762,14 @@ public class EvaluationLoop {
     }
     if (frame.hasArgs()) return frame.pop();
     return BuiltIn.None;
+  }
+
+  private String errorMessageTip(Instruction ins) {
+    return "Execution error with op " +
+        ins.getOpname() + ":\n"
+        + ">>>\n" +
+        error.getMessage()
+        + "\n<<<";
   }
 
   private void loadFromGlobal(PyFrameObject frame, PyDictObject globals, PyDictObject builtins, PyObject name) {

@@ -175,6 +175,27 @@ public class Abstract {
     throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
   }
 
+  public static PyObject inplaceMod(PyObject v, PyObject w) throws PyTypeNotMatch {
+    if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
+      try {
+        return nv.inplaceMod(w);
+      } catch (PyException ignore) {
+      }
+    }
+    throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
+  }
+
+  public static PyObject inplaceTrueDiv(PyObject v, PyObject w) throws PyTypeNotMatch {
+    if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
+      try {
+        return nv.inplaceTrueDiv(w);
+      } catch (PyException ignore) {
+      }
+    }
+    throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
+  }
+
+
   public static PyObject inplaceAnd(PyObject v, PyObject w) throws PyTypeNotMatch {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
       try {

@@ -3,6 +3,7 @@ package org.jpvm.objects;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.types.PyMethodType;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class PyMethodObject extends PyObject {
@@ -54,8 +55,8 @@ public class PyMethodObject extends PyObject {
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
     try {
       return (PyObject) method.invoke(this.self, args, kwArgs);
-    } catch (Exception e) {
-      throw new PyException(e.getMessage());
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      throw new PyException(e.getCause().getMessage());
     }
   }
 }
