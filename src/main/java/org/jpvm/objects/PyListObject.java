@@ -312,16 +312,18 @@ public class PyListObject extends PyObject
     if(key instanceof PySliceObject pysli){
       Long start = ((PyLongObject) pysli.getStart()).getData();
       Long end = ((PyLongObject) pysli.getEnd()).getData();
-      if(!(val instanceof PyListObject o)){
-        throw new PyTypeNotMatch("can noly support pylistobject");
+      if(!(val instanceof TypeIterable itr)){
+        throw new PyTypeNotMatch("can only assign an iterable");
       }
-      Long vlen = (long) o.size();
-      for(Long i = 0L; i < vlen; i++){
+      TypeDoIterate iterator = itr.getIterator();
+      Long i = 0L;
+      while(iterator.hasNext()){
         if(i + start < end){
-          set((int) (i+start), o.get(Math.toIntExact(i)));
+          set((int) (i+start), iterator.get(Math.toIntExact(i)));
         }else{
-          insert((int) (i+start), o.get(Math.toIntExact(i)));
+          insert((int) (i+start), iterator.get(Math.toIntExact(i)));
         }
+        i++;
       }
     }
     return BuiltIn.None;
