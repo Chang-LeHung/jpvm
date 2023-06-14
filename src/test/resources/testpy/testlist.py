@@ -107,6 +107,15 @@ my_list = [1, 2, 3, 4, 5]
 my_list[1:2] = (100, 100, 100)
 print(my_list) #[1, 100, 100, 100, 3, 4, 5]
 
+my_list = [1, 2, 3, 4, 5]
+my_list[0:4:2] = (100, 100)
+print(my_list)
+
+data = [i for i in range(10)]
+
+data[0:6:2] = (10, 20, 30)
+print(data)
+
 # # 列表的拼接
 # list1 = [1, 2, 3]
 # list2 = [4, 5, 6]

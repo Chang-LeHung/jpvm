@@ -312,6 +312,7 @@ public class PyListObject extends PyObject
     if(key instanceof PySliceObject pysli){
       Long start = ((PyLongObject) pysli.getStart()).getData();
       Long end = ((PyLongObject) pysli.getEnd()).getData();
+      long step = ((PyLongObject)pysli.getStep()).getData();
       if(!(val instanceof TypeIterable itr)){
         throw new PyTypeNotMatch("can only assign an iterable");
       }
@@ -323,7 +324,7 @@ public class PyListObject extends PyObject
         }else{
           insert((int) (i+start), iterator.next());
         }
-        i++;
+        i+=step;
       }
     }
     return BuiltIn.None;
