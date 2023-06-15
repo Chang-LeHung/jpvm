@@ -173,15 +173,7 @@ public class PyFunctionObject extends PyObject {
   @Override
   public String toString() {
     return "PyFunctionObject{" +
-        "funcCode=" + funcCode +
-        ", funcGlobals=" + funcGlobals +
-        ", funcClosure=" + funcClosure +
-        ", funcLocals=" + funcLocals +
-        ", funcDefaults=" + funcDefaults +
-        ", funcKwDefaults=" + funcKwDefaults +
-        ", funcDoc=" + funcDoc +
-        ", funcName=" + funcName +
-        ", funcDict=" + funcDict +
+        "funcName=" + funcName +
         ", funcQualName=" + funcQualName +
         '}';
   }

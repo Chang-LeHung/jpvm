@@ -385,9 +385,12 @@ public class Abstract {
       var kwDefaults = (PyDictObject) func.getFuncKwDefaults();
       var coVarNames = (PyTupleObject) code.getCoVarNames();
       // just for debugging to avoid cycle reference, idea will get stuck for toString method
-      PyDictObject globals = new PyDictObject();
-      if (frameObject != null)
-        globals.addAll(frameObject.getGlobals());
+//      {
+//        PyDictObject globals = new PyDictObject();
+//        if (frameObject != null)
+//          globals.addAll(frameObject.getGlobals());
+//      }
+      PyDictObject globals = (PyDictObject) func.getFuncGlobals();
       int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
       // use below in release version
 //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), frameObject.getGlobals(), frameObject);

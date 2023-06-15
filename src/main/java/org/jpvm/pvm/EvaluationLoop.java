@@ -700,9 +700,11 @@ public class EvaluationLoop {
           PyCodeObject codeObject = (PyCodeObject) frame.pop();
           var type = (PyFunctionType) PyFunctionObject.type;
           // just for debugging to avoid cycle reference, idea will get stuck for toString method
-          PyDictObject dict = new PyDictObject();
-          dict.addAll(globals);
-          PyFunctionObject function = type.createFunction(codeObject, dict, (PyUnicodeObject) qualname);
+//          {
+//            PyDictObject dict = new PyDictObject();
+//            dict.addAll(globals);
+//          }
+          PyFunctionObject function = type.createFunction(codeObject, globals, (PyUnicodeObject) qualname);
           int oparg = ins.getOparg();
           if ((oparg & 0x08) != 0) {
             function.setFuncClosure(frame.pop());
