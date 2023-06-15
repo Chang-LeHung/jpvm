@@ -660,6 +660,14 @@ public class EvaluationLoop {
           } else
             error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
         }
+        case POP_JUMP_IF_TRUE -> {
+          PyObject pop = frame.pop();
+          if (pop instanceof PyBoolObject b) {
+            if (b.isTrue())
+              byteCodeBuffer.reset(ins.getOparg());
+          } else
+            error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
+        }
         case COMPARE_OP -> {
           PyObject right = frame.pop();
           PyObject left = frame.pop();

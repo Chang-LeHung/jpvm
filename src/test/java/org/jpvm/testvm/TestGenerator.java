@@ -85,4 +85,14 @@ public class TestGenerator {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void testList(){
+    String filename = "src/test/resources/syntax/__pycache__/test19.cpython-38.pyc";
+    try {
+      test(filename);
+    } catch (IOException | PyException e) {
+      e.printStackTrace();
+    }
+  }
 }

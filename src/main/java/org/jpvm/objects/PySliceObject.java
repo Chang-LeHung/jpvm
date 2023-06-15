@@ -107,7 +107,7 @@ public class PySliceObject extends PyObject {
     }
     PyListObject list = new PyListObject();
     if (s < 0) {
-      for (int i = (e - 1 + it.size()) % it.size(); i >= ((b + it.size()) % it.size()); i += s) {
+      for (int i = (b + it.size()) % it.size(); i > ((e + it.size()) % it.size()); i += s) {
         assert i >= 0;
         list.append(new PyLongObject(i));
       }
