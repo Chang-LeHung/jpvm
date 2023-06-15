@@ -804,7 +804,7 @@ public class EvaluationLoop {
 
   private String errorMessageTip(Instruction ins) {
     return "Execution error with op " +
-        ins.getOpname() + ":\n"
+        ins.getOpname() + " in module " + frame.getCode().getCoName() + ":\n"
         + ">>>\n" +
         error.getMessage()
         + "\n<<<";
