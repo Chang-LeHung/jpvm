@@ -2,6 +2,7 @@ package org.jpvm.pycParser;
 
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
 
 
 public class PyCodeObject extends PyObject {
@@ -238,6 +239,18 @@ public class PyCodeObject extends PyObject {
         ", coWeakRefList=" + coWeakRefList +
         ", coExtra=" + coExtra +
         '}';
+  }
+
+  public int freeVarsSize(){
+    int c = 0;
+    int f = 0;
+    if (coFreeVars != null){
+      f = ((PyTupleObject)coFreeVars).size();
+    }
+    if (coCellVars != null){
+      c = ((PyTupleObject)coCellVars).size();
+    }
+    return c+f;
   }
 
   public boolean isGenerator() {

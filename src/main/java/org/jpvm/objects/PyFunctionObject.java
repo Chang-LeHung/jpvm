@@ -46,6 +46,14 @@ public class PyFunctionObject extends PyObject {
     this.funcName = funcName;
     this.funcDict = funcDict;
     this.funcQualName = funcQualName;
+    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    if (cellSize != 0) {
+      funcClosure = new PyTupleObject(cellSize);
+      for (int i = 0; i < cellSize; i++)
+        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
+    }
+    else
+      funcClosure = PyTupleObject.zero;
   }
 
   public PyFunctionObject(PyCodeObject code, PyDictObject globals,
@@ -53,7 +61,31 @@ public class PyFunctionObject extends PyObject {
     funcCode = code;
     funcGlobals = globals;
     this.funcQualName = funcQualName;
+    this.funcName = code.getCoName();
     funcDict = new PyDictObject();
+    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    if (cellSize != 0) {
+      funcClosure = new PyTupleObject(cellSize);
+      for (int i = 0; i < cellSize; i++)
+        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
+    }
+    else
+      funcClosure = PyTupleObject.zero;
+  }
+
+  public PyFunctionObject(PyCodeObject code, PyDictObject globals) {
+    funcCode = code;
+    funcGlobals = globals;
+    this.funcName = code.getCoName();
+    funcDict = new PyDictObject();
+    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    if (cellSize != 0) {
+      funcClosure = new PyTupleObject(cellSize);
+      for (int i = 0; i < cellSize; i++)
+        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
+    }
+    else
+      funcClosure = PyTupleObject.zero;
   }
 
   public static PyBoolObject check(PyObject o) {
@@ -194,4 +226,7 @@ public class PyFunctionObject extends PyObject {
     this.funcModule = funcModule;
   }
 
+  public int getFreeVarsSize() {
+    return ((PyCodeObject)funcCode).freeVarsSize();
+  }
 }

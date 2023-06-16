@@ -1,7 +1,6 @@
 package org.jpvm.pvm;
 
 import org.jpvm.errors.*;
-import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
@@ -394,7 +393,7 @@ public class Abstract {
       int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
       // use below in release version
 //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), frameObject.getGlobals(), frameObject);
-      PyFrameObject f = new PyFrameObject(code, BuiltIn.dict, globals, frameObject);
+      PyFrameObject f = new PyFrameObject(func, code, BuiltIn.dict, globals, frameObject);
       // start initialize parameters
       for (int i = 0; i < args.size(); i++) {
         f.setLocal(i, args.get(i));

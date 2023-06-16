@@ -24,6 +24,9 @@ public class PyFrameObject extends PyObject {
   private boolean isExecuting;
   private PyFrameObject back;
 
+  private PyFunctionObject func;
+  private PyObject[] cells;
+
   public PyFrameObject(PyCodeObject code,
                        PyDictObject builtins,
                        PyDictObject globals, PyFrameObject back) {
@@ -37,6 +40,26 @@ public class PyFrameObject extends PyObject {
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
+  public PyFrameObject(PyFunctionObject func, PyCodeObject code,
+                       PyDictObject builtins,
+                       PyDictObject globals, PyFrameObject back) {
+    assert code != null;
+    this.func = func;
+    this.code = code;
+    this.builtins = builtins;
+    this.globals = globals;
+    this.locals = new PyDictObject();
+    stack = new PyObject[code.getCoStackSize()];
+    this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[func.getFreeVarsSize()];
+    var funcClosure = (PyTupleObject)func.getFuncClosure();
+    for (int i = 0; i < func.getFreeVarsSize(); i++) {
+      cells[i] = funcClosure.get(i);
+    }
+  }
+
+
   public PyFrameObject(PyCodeObject code,
                        PyDictObject builtins,
                        PyDictObject globals, PyDictObject locals,
@@ -49,6 +72,27 @@ public class PyFrameObject extends PyObject {
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
+  }
+
+
+  public PyFrameObject(PyFunctionObject func, PyCodeObject code,
+                       PyDictObject builtins,
+                       PyDictObject globals, PyDictObject locals,
+                       PyFrameObject back) {
+    assert code != null;
+    this.func = func;
+    this.code = code;
+    this.builtins = builtins;
+    this.globals = globals;
+    this.locals = locals;
+    stack = new PyObject[code.getCoStackSize()];
+    this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[func.getFreeVarsSize()];
+    var funcClosure = (PyTupleObject)func.getFuncClosure();
+    for (int i = 0; i < func.getFreeVarsSize(); i++) {
+      cells[i] = funcClosure.get(i);
+    }
   }
 
   public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyFrameObject back) {
@@ -75,6 +119,23 @@ public class PyFrameObject extends PyObject {
 
   public PyDictObject getGlobals() {
     return globals;
+  }
+
+  public void setFreeVars(int idx, PyObject o) {
+    assert cells[idx] instanceof PyCellObject;
+    var cell = (PyCellObject)cells[idx];
+    cell.setRef(o);
+  }
+
+  public PyObject getFreeVars(int idx) {
+    assert cells[idx] instanceof PyCellObject;
+    var cell = (PyCellObject)cells[idx];
+    return cell.getRef();
+  }
+
+  public PyCellObject getFreeVarsCell(int idx) {
+    assert cells[idx] instanceof PyCellObject;
+    return (PyCellObject)cells[idx];
   }
 
   public void setGlobals(PyDictObject globals) {

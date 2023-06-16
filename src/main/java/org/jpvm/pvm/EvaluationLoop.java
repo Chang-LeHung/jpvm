@@ -50,6 +50,7 @@ public class EvaluationLoop {
     locals = frame.getLocals();
     builtins = frame.getBuiltins();
     consts = (PyTupleObject) code.getCoConsts();
+
   }
 
   public PyTupleObject getArgs(Instruction ins) {
@@ -125,6 +126,11 @@ public class EvaluationLoop {
           PyObject o = coNames.get(ins.getOparg());
           locals.put(o, top);
         }
+        case STORE_GLOBAL -> {
+          PyObject top = frame.pop();
+          PyObject o = coNames.get(ins.getOparg());
+          globals.put(o, top);
+        }
         case LOAD_NAME -> {
           PyObject name = coNames.get(ins.getOparg());
           PyObject v = locals.get(name);
@@ -145,6 +151,22 @@ public class EvaluationLoop {
         }
         case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
         case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
+        case DELETE_FAST -> {
+          int arg = ins.getOparg();
+          frame.setLocal(arg, null);
+        }
+        case LOAD_DEREF -> {
+          PyObject cell = frame.getFreeVars(ins.getOparg());
+          frame.push(cell);
+        }
+        case STORE_DEREF -> {
+          PyObject cell = frame.pop();
+          frame.setFreeVars(ins.getOparg(), cell);
+        }
+        case LOAD_CLOSURE -> {
+          PyObject cell = frame.getFreeVarsCell(ins.getOparg());
+          frame.push(cell);
+        }
         case LOAD_METHOD -> {
           var name = (PyUnicodeObject) coNames.get(ins.getOparg());
           PyObject obj = frame.pop();
@@ -647,6 +669,24 @@ public class EvaluationLoop {
           }
           frame.decreaseStackPointer(size);
           frame.push(listObject);
+        }
+        case BUILD_SET -> {
+          int size = ins.getOparg();
+          PySetObject setObject = new PySetObject();
+          for (int i = 0; i < size; i++){
+            setObject.add(frame.pop());
+          }
+          frame.push(setObject);
+        }
+        case BUILD_MAP -> {
+          PyDictObject dictObject = new PyDictObject();
+          int size = ins.getOparg();
+          for (int i = 0; i < size; i++){
+            PyObject val = frame.pop();
+            PyObject key = frame.pop();
+            dictObject.put(key, val);
+          }
+          frame.push(dictObject);
         }
         case JUMP_FORWARD -> {
           int oparg = ins.getOparg();
