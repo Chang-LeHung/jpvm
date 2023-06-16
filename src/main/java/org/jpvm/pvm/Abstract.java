@@ -476,6 +476,11 @@ public class Abstract {
         error = e;
       }
     }
+    String msg1 = "";
+    if(error != null){
+      msg1 = error.getMessage();
+    }
+
     if (obj instanceof PyMappingMethods map) {
       try {
         map.mpAssSubscript(key, val);
@@ -484,8 +489,12 @@ public class Abstract {
         error = e;
       }
     }
+    String msg2 = "";
+    if(error != null){
+      error.getMessage();
+    }
     if (null != error)
-      throw error;
+      throw new PyException(msg1 + msg2);
   }
 
 }
