@@ -13,7 +13,7 @@ public class TestCodeObject {
 
   @Test
   public void testClosure() throws IOException, PyException {
-    String filename = "/Users/huchang/IdeaProjects/jpvm/src/test/resources/closure/__pycache__/test01.cpython-38.pyc";
+    String filename = "src/test/resources/closure/__pycache__/test01.cpython-38.pyc";
     FileInputStream stream = new FileInputStream(filename);
     stream.skipNBytes(16);
     int available = stream.available();
