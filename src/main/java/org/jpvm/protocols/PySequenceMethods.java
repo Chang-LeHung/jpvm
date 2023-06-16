@@ -39,7 +39,7 @@ public interface PySequenceMethods {
   /**
    * implementation of corresponding cpython sq_ass_item
    */
-  default PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch, PyNotImplemented {
+  default PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
     throw new PyNotImplemented("sqAssItem not implemented");
   }
 

@@ -302,7 +302,53 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqAssItem(PyObject key, PyObject val) throws PyTypeNotMatch {
+  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
+    if(val instanceof TypeIterable itr){
+      TypeDoIterate iterator = itr.getIterator();
+      if(!(key instanceof PySliceObject slice)){
+        throw new PyTypeNotMatch("not a slicekey");
+      }
+      PyListObject keys = slice.unpacked(this);
+      Long step;
+      if(((PySliceObject) key).getStep() instanceof PyNoneObject){
+        step = 1L;
+      }else{
+        step = ((PyLongObject)slice.getStep()).getData();
+      }
+      if(step == 0){
+        throw new PyKeyError("slice step cannot be zero");
+      }
+      int i = 0;
+      int keyLast;
+      if(keys.size() != 0){
+        keyLast = (int) ((PyLongObject)keys.get(keys.size()-1)).getData();
+      }else{
+        keyLast = 0;
+      }
+
+      if(step != 1 && keys.size() != iterator.size()){
+        throw new PyException("attempt to assign sequence of size " + iterator.size() + " to extended slice of size " + keys.size());
+      }
+      while(iterator.hasNext()){
+        if(step == 1){
+          if(i < keys.size()){
+            set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());
+          }else{
+            insert((int) (keyLast + i - keys.size() + 1), iterator.next());
+          }
+        }else{
+          set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());
+        }
+        i++;
+      }
+      if(keys.size() > iterator.size()){
+        for(;i < keys.size(); i++){
+          pop();
+        }
+      }
+      return BuiltIn.None;
+
+    }
     Long n = NumberHelper.transformPyObject2Long(key);
     if (n == null)
       throw new PyTypeNotMatch("require PyNumberMethods type");
