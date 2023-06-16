@@ -321,11 +321,62 @@ public class PyLongObject extends PyObject
 
     @Override
     public PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-        if (o instanceof PyLongObject l) {
-            data += l.getData();
-            return this;
-        }
-        throw new PyTypeNotMatch("PyLongObject require PyLongObject argument");
+        return add(o);
+    }
+
+    @Override
+    public PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return sub(o);
+    }
+
+    @Override
+    public PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return mul(o);
+    }
+
+    @Override
+    public PyObject inplaceMod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return mod(o);
+    }
+
+    @Override
+    public PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return pow(o);
+    }
+
+    @Override
+    public PyObject inplaceLshift(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return lshift(o);
+    }
+
+    @Override
+    public PyObject inplaceRshift(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return rshift(o);
+    }
+
+    @Override
+    public PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return and(o);
+    }
+
+    @Override
+    public PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return xor(o);
+    }
+
+    @Override
+    public PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return or(o);
+    }
+
+    @Override
+    public PyObject inplaceFloorDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return floorDiv(o);
+    }
+
+    @Override
+    public PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+        return trueDiv(o);
     }
 
     @Override
