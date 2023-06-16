@@ -150,42 +150,42 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_inplace_subtract
    */
-  default PyObject inplaceSub(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceSub is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_multiply
    */
-  default PyObject inplaceMul(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceMul is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_remainder
    */
-  default PyObject inplaceMod(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceMod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceMod is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_power
    */
-  default PyObject inplacePow(PyObject o) throws PyNotImplemented {
+  default PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplacePow is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_lshift
    */
-  default PyObject inplaceLshift(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceLshift(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceLshift is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_rshift
    */
-  default PyObject inplaceRshift(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceRshift(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceRshift is not implemented");
   }
 
@@ -227,14 +227,14 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_inplace_floor_divide
    */
-  default PyObject inplaceFloorDiv(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceFloorDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceFloorDiv is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_true_divide
    */
-  default PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented {
+  default PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
     throw new PyNotImplemented("inplaceTrueDiv is not implemented");
   }
 

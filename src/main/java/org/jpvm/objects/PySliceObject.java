@@ -73,14 +73,18 @@ public class PySliceObject extends PyObject {
   }
 
   public PyListObject unpacked(PyObject o) {
-    if (!(o instanceof TypeIterable iter))
+    if (!((o instanceof TypeIterable) || o instanceof TypeDoIterate))
       return null;
     TypeDoIterate it;
-    try {
-      it = iter.getIterator();
-    } catch (PyNotImplemented e) {
-      throw new RuntimeException(e);
+    if (o instanceof TypeIterable iter) {
+      try {
+        it = iter.getIterator();
+      } catch (PyNotImplemented e) {
+        return null;
+      }
     }
+    else
+      it = (TypeDoIterate) o;
     int b, e, s;
     Long l;
     if (start == BuiltIn.None)
@@ -105,14 +109,23 @@ public class PySliceObject extends PyObject {
       assert l != null;
       s = l.intValue();
     }
+    if (s == 0)
+      return null;
+    if (e > it.size())
+      e = it.size();
+    if (e < -it.size())
+      return null;
+    if (b < -it.size())
+      return null;
     PyListObject list = new PyListObject();
+    int mod = it.size() + 1;
     if (s < 0) {
-      for (int i = (b + it.size()) % it.size(); i > ((e + it.size()) % it.size()); i += s) {
+      for (int i = (b + mod) % mod; i > ((e + mod) % mod); i += s) {
         assert i >= 0;
         list.append(new PyLongObject(i));
       }
     } else {
-      for (int i = ((b + it.size()) % it.size()); i < (e + it.size()) % it.size(); i += s) {
+      for (int i = ((b + mod) % mod); i < (e + mod) % mod; i += s) {
         assert i >= 0;
         list.append(new PyLongObject(i));
       }
