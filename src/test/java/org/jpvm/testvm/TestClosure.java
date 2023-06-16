@@ -26,7 +26,7 @@ public class TestClosure {
 
   @Test
   public void testClosure() throws IOException {
-    String filename = "/Users/huchang/IdeaProjects/jpvm/src/test/resources/closure/__pycache__/test01.cpython-38.pyc";
+    String filename = "src/test/resources/closure/__pycache__/test01.cpython-38.pyc";
     PyObject ret = null;
     try {
       ret = test(filename);
