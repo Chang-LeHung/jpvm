@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -133,7 +134,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
     } catch (PyNotImplemented e) {
       throw new PyNotImplemented("parameter o not implement function nbFloat");
     }
-    return new PyFloatObject(data - ((PyFloatObject) object).getData());
+    return new PyFloatObject(data % ((PyFloatObject) object).getData());
   }
 
   @Override
@@ -211,6 +212,41 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
       throw new PyNotImplemented("parameter o not implement function nbFloat");
     }
     return new PyFloatObject(data / ((PyFloatObject) object).getData());
+  }
+
+  @Override
+  public PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return add(o);
+  }
+
+  @Override
+  public PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return sub(o);
+  }
+
+  @Override
+  public PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return mul(o);
+  }
+
+  @Override
+  public PyObject inplaceMod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return mod(o);
+  }
+
+  @Override
+  public PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return pow(o);
+  }
+
+  @Override
+  public PyObject inplaceFloorDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return floorDiv(o);
+  }
+
+  @Override
+  public PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return trueDiv(o);
   }
 
   @Override

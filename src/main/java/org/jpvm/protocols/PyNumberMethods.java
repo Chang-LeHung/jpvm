@@ -199,14 +199,14 @@ public interface PyNumberMethods {
   /**
    * implementation of corresponding cpython nb_inplace_xor
    */
-  default PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceXor(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceXor is not implemented");
   }
 
   /**
    * implementation of corresponding cpython nb_inplace_or
    */
-  default PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceOr(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceOr is not implemented");
   }
 
