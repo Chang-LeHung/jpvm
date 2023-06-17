@@ -1,2 +1,10 @@
 # jpvm
-Implement a simple python virtual machine in Java
+
+# 项目介绍
+
+使用 Java 语言重写 python 虚拟机，整个虚拟机的架构如下所示：
+
+![](./docs/jpvm.pdf)
+
+本项目重点实现虚拟机的部分，因此仍然使用 python 作为语言的编译器，可以使用编译之后的结果文件 .pyc作为虚拟机的输入，本项目实现了对于 pyc 文件的解析与加载，并且将其封装成一个 `PyCodeObject` 对象。
+
