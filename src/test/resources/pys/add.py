@@ -2,7 +2,7 @@ def add(a, b=1, c=2):
     """hello add"""
     d = 2
     g = a * d
-    return g + b
+    return g + b + c
 
 
 def sub(a, b, /, c, d, *, h=1, w=2):

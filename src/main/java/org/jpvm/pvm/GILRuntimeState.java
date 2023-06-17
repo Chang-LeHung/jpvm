@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GILRuntimeState {
-  private final long interval;
+  private long interval;
   private final AtomicBoolean locked;
   private final ReentrantLock lock;
   private final Condition condition;
@@ -32,6 +32,9 @@ public class GILRuntimeState {
     return interval;
   }
 
+  public void setInterval(long interval) {
+    this.interval = interval;
+  }
 
   public boolean isLocked() {
     return locked.get();

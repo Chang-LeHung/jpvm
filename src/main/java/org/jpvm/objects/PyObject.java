@@ -101,6 +101,14 @@ public class PyObject implements PyArgs, TypeCheck,
     throw new PyUnsupportedOperator("not support operator " + op);
   }
 
+  public PyListObject getBases() {
+    return bases;
+  }
+
+  public void setBases(PyListObject bases) {
+    this.bases = bases;
+  }
+
   public PyDictObject getDict() {
     return dict;
   }

@@ -1,4 +1,150 @@
 package org.jpvm.pvm;
 
+import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.objects.*;
+import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.pycParser.PycReader;
+import org.jpvm.python.BuiltIn;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.IOException;
+import java.util.Map;
+
 public class PVM {
+
+  /**
+   * thread state of each thread
+   */
+  public static final ThreadLocal<ThreadState> tss = new ThreadLocal<>();
+
+  public static InterpreterState interpreterState = new InterpreterState(5000);
+
+  public static ThreadState getThreadState() {
+    ThreadState res = tss.get();
+    if (res != null)
+      return res;
+    res = new ThreadState();
+    res.setIs(interpreterState);
+    tss.set(res);
+    return res;
+  }
+
+  public static PVM create(String filename) throws PyException, IOException {
+    return new PVM(filename);
+  }
+
+  /**
+   * filename of the py file to be executed.
+   */
+  private final String filename;
+
+  /**
+   * code of the py file to be executed.
+   */
+  private PyCodeObject code;
+  /**
+   * global and local variables of the py file to be executed.
+   */
+  private PyDictObject globals;
+  private PyDictObject locals;
+
+  private PyDictObject builtins;
+
+  private PyModuleObject rootModule;
+
+  private PyFrameObject rootFrame;
+  private EvaluationLoop  loop;
+
+  public PVM(String filename) throws PyException, IOException {
+    this.filename = filename;
+    loadCode();
+    initVirtualMachine();
+  }
+
+  /**
+   * load bytecode of the py file to be executed.
+   */
+  private void loadCode() throws PyException, IOException {
+    PycReader reader = new PycReader(filename);
+    reader.doParse();
+    code = reader.getCodeObject();
+  }
+
+  private void initVirtualMachine() throws PyNotImplemented {
+    BuiltIn.doInit();
+    builtins = BuiltIn.dict;
+    /*
+     * in main module locals and globals are the same
+     */
+    rootModule = new PyModuleObject();
+    rootModule.setModuleName((PyUnicodeObject) code.getCoName());
+    globals = rootModule.getDict();
+    locals = rootModule.getDict();
+
+    // ensure that the main module is named "__main__"
+    rootModule.putAttribute(
+        PyUnicodeObject.getOrCreateFromInternStringPool("__name__", true),
+        PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
+    );
+
+    // register the Interpreter state
+    registerInterpreterState();
+
+    // register the module
+    PVM.getThreadState().getIs().addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
+        , rootModule);
+  }
+
+  public PyModuleObject getRootModule() {
+    return rootModule;
+  }
+
+  private void registerInterpreterState() {
+    interpreterState.setBuiltins(builtins);
+    Yaml yaml = new Yaml();
+    var map = yaml.loadAs(this.getClass().getResourceAsStream("/jpvm-config.yml"), Map.class);
+    Object o = map.get("vm-interval");
+    if (o instanceof Integer) {
+      interpreterState.setGILInterval((Integer) o);
+    }
+    o = map.get("max-recursive-depth");
+    if (o instanceof Integer ) {
+      interpreterState.setMaxRecursionDepth((Integer) o);
+    }
+  }
+
+  public String getFilename() {
+    return filename;
+  }
+
+  public void run() throws PyException {
+    rootFrame = new PyFrameObject(code, builtins, globals, locals);
+    loop = new EvaluationLoop(rootFrame);
+    loop.pyEvalFrame();
+  }
+
+  public PyCodeObject getCode() {
+    return code;
+  }
+
+  public PyDictObject getGlobals() {
+    return globals;
+  }
+
+  public PyDictObject getLocals() {
+    return locals;
+  }
+
+  public PyDictObject getBuiltins() {
+    return builtins;
+  }
+
+  public PyFrameObject getRootFrame() {
+    return rootFrame;
+  }
+
+  public EvaluationLoop getLoop() {
+    return loop;
+  }
 }
