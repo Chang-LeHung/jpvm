@@ -13,7 +13,6 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
-import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
@@ -746,13 +745,17 @@ public class EvaluationLoop {
             break;
           }
           PyCodeObject codeObject = (PyCodeObject) frame.pop();
-          var type = (PyFunctionType) PyFunctionObject.type;
           // just for debugging to avoid cycle reference, idea will get stuck for toString method
 //          {
 //            PyDictObject dict = new PyDictObject();
 //            dict.addAll(globals);
 //          }
-          PyFunctionObject function = type.createFunction(codeObject, globals, (PyUnicodeObject) qualname);
+          PyFunctionObject function = new PyFunctionObject(codeObject, globals, (PyUnicodeObject) qualname);
+          // Simply for compatibility with previous code
+          PyUnicodeObject module = frame.getModuleName();
+          if (module != null) {
+            function.setFuncModule(module);
+          }
           int oparg = ins.getOparg();
           if ((oparg & 0x08) != 0) {
             function.setFuncClosure(frame.pop());
@@ -839,7 +842,7 @@ public class EvaluationLoop {
       }
     }
     if (frame.hasArgs()) return frame.pop();
-    return BuiltIn.None;
+    return null;
   }
 
   private String errorMessageTip(Instruction ins) {

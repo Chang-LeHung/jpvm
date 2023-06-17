@@ -4,10 +4,10 @@ import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
+
 public class PyFunctionObject extends PyObject {
 
   public static PyObject type = new PyFunctionType();
-  public static PyUnicodeObject __name__;
   public static PyDictObject zero = new PyDictObject();
   /**
    * type of {@link PyCodeObject}
@@ -36,7 +36,7 @@ public class PyFunctionObject extends PyObject {
   private PyObject funcModule;
   private PyObject annotation;
 
-  public PyFunctionObject(PyObject funcCode, PyObject funcGlobals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
+  public PyFunctionObject(PyCodeObject funcCode, PyObject funcGlobals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
     this.funcCode = funcCode;
     this.funcGlobals = funcGlobals;
     this.funcLocals = new PyDictObject();
@@ -46,7 +46,7 @@ public class PyFunctionObject extends PyObject {
     this.funcName = funcName;
     this.funcDict = funcDict;
     this.funcQualName = funcQualName;
-    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    int cellSize = (funcCode).freeVarsSize();
     if (cellSize != 0) {
       funcClosure = new PyTupleObject(cellSize);
       for (int i = 0; i < cellSize; i++)
@@ -74,6 +74,7 @@ public class PyFunctionObject extends PyObject {
   }
 
   public PyFunctionObject(PyCodeObject code, PyDictObject globals) {
+    super();
     funcCode = code;
     funcGlobals = globals;
     this.funcName = code.getCoName();

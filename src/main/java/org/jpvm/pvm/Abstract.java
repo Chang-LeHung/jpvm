@@ -58,7 +58,8 @@ public class Abstract {
         return nw.add(v);
       } catch (PyException ignore) {
       }
-    } else if (v instanceof PySequenceMethods nv && w instanceof PySequenceMethods) {
+    }
+    if (v instanceof PySequenceMethods nv && w instanceof PySequenceMethods) {
       // like "hello" + "world"
       try {
         return ((PySequenceMethods) v).sqConcat(w);
@@ -394,17 +395,17 @@ public class Abstract {
       // use below in release version
 //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), frameObject.getGlobals(), frameObject);
       PyFrameObject f = new PyFrameObject(func, code, BuiltIn.dict, globals, frameObject);
-      // start initialize parameters
-      for (int i = 0; i < args.size(); i++) {
-        f.setLocal(i, args.get(i));
-      }
       Map<PyObject, Integer> map = new HashMap<>();
       for (int i = 0; i < coVarNames.size(); i++) {
         map.put(coVarNames.get(i), i);
       }
       kwDefaults.getMap().forEach((x, y) -> f.setLocal(map.get(x), y));
       for (int i = 0; i < defaults.size(); i++) {
-        f.setLocal(argSize - defaults.size() + i - 1, defaults.get(i));
+        f.setLocal(argSize - defaults.size() + i - kwDefaults.size(), defaults.get(i));
+      }
+      // start initialize parameters
+      for (int i = 0; i < args.size(); i++) {
+        f.setLocal(i, args.get(i));
       }
       // final update passed arguments
       kwArgs.getMap().forEach((x, y) -> f.setLocal(map.get(x), y));
@@ -415,8 +416,12 @@ public class Abstract {
       if (((PyCodeObject)(func.getFuncCode())).isGenerator())
         return new PyGeneratorObject(f);
       EvaluationLoop eval = new EvaluationLoop(f);
-      // common function that should be called immediately
-      return eval.pyEvalFrame();
+      PVM.getThreadState().increaseRecursionDepth();
+      if (PVM.getThreadState().isOverFlow())
+        throw new PyException("recursion depth exceeded");
+      PyObject res = eval.pyEvalFrame();
+      PVM.getThreadState().decreaseRecursionDepth();
+      return res;
     }
     throw new PyException("abstract call error occurred");
   }

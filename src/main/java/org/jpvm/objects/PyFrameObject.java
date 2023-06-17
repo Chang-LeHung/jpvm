@@ -95,6 +95,15 @@ public class PyFrameObject extends PyObject {
     }
   }
 
+  public PyFunctionObject getFunc() {
+    return func;
+  }
+
+  public void setFunc(PyFunctionObject func) {
+    this.func = func;
+  }
+
+  @Deprecated
   public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyFrameObject back) {
     this.code = code;
     this.builtins = builtins;
@@ -102,6 +111,15 @@ public class PyFrameObject extends PyObject {
     this.globals = new PyDictObject();
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
+    localPlus = new PyObject[code.getCoNLocals()];
+  }
+
+  public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyDictObject locals) {
+    this.code = code;
+    this.builtins = builtins;
+    this.locals = locals;
+    this.globals = globals;
+    stack = new PyObject[code.getCoStackSize()];
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
@@ -220,6 +238,13 @@ public class PyFrameObject extends PyObject {
 
   public void setLocal(int idx, PyObject o) {
     localPlus[idx] = o;
+  }
+
+  public PyUnicodeObject getModuleName() {
+    if (func != null) {
+      return (PyUnicodeObject)func.getFuncModule();
+    }
+    return null;
   }
 
   @Override

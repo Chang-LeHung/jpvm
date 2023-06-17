@@ -1,0 +1,2 @@
+vm-interval: 5000 # jil request max interval
+max-recursive-depth: 100
