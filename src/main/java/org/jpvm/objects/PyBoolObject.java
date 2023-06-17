@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.types.PyBoolType;
 import org.jpvm.protocols.PyNumberMethods;
 
@@ -94,5 +96,20 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject bool() throws PyNotImplemented {
     return this;
+  }
+
+  @Override
+  public PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return and(o);
+  }
+
+  @Override
+  public PyObject inplaceXor(PyObject o) throws PyException {
+    return xor(o);
+  }
+
+  @Override
+  public PyObject inplaceOr(PyObject o) throws PyException {
+    return or(o);
   }
 }
