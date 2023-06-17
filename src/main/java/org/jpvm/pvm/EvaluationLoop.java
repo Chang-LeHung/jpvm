@@ -117,6 +117,13 @@ public class EvaluationLoop {
 
     // evaluation loop
     while (iterator.hasNext()) {
+      InterpreterState is = PVM.getThreadState().getIs();
+      if (is.isDropGILRequest()) {
+        // release global interpreter lock
+        is.dropGIL();
+        // require  global interpreter lock
+        is.takeGIL();
+      }
       Instruction ins = iterator.next();
       switch (ins.getOpname()) {
         case LOAD_CONST -> frame.push(consts.get(ins.getOparg()));
