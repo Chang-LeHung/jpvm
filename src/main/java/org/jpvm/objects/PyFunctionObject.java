@@ -1,11 +1,14 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.objects.pyinterface.TypeDescriptorGet;
 import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
 
-public class PyFunctionObject extends PyObject {
+public class PyFunctionObject extends PyObject
+        implements TypeDescriptorGet {
 
   public static PyObject type = new PyFunctionType();
   public static PyDictObject zero = new PyDictObject();
@@ -229,5 +232,10 @@ public class PyFunctionObject extends PyObject {
 
   public int getFreeVarsSize() {
     return ((PyCodeObject)funcCode).freeVarsSize();
+  }
+
+  @Override
+  public PyObject descrGet(PyObject obj, PyObject cls) throws PyNotImplemented {
+    return new PyMethodObject(obj, this, ((PyUnicodeObject)funcName).getData());
   }
 }

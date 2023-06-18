@@ -13,6 +13,8 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
+import org.jpvm.objects.types.PyPythonType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
@@ -49,7 +51,6 @@ public class EvaluationLoop {
     locals = frame.getLocals();
     builtins = frame.getBuiltins();
     consts = (PyTupleObject) code.getCoConsts();
-
   }
 
   public PyTupleObject getArgs(Instruction ins) {
@@ -151,9 +152,20 @@ public class EvaluationLoop {
           loadFromGlobal(frame, globals, builtins, name);
         }
         case LOAD_ATTR -> {
+          PyObject top = frame.top();
           var name = (PyUnicodeObject) coNames.get(ins.getOparg());
-          frame.push(getClassMethod(name));
+          PyObject attr = top.getAttr(name);
+          if (null != attr) {
+            frame.pop();
+            frame.push(attr);
+          }else
+            frame.push(getClassMethod(name));
           // other features to be implemented
+        }
+        case STORE_ATTR -> {
+          var name = (PyUnicodeObject) coNames.get(ins.getOparg());
+          PyObject object = frame.pop();
+          object.setAttr(name, frame.pop());
         }
         case STORE_FAST -> frame.setLocal(ins.getOparg(), frame.pop());
         case LOAD_FAST -> frame.push(frame.getLocal(ins.getOparg()));
@@ -185,8 +197,14 @@ public class EvaluationLoop {
               frame.push(methodObject);
               continue;
             }
-          } catch (NoSuchMethodException e) {
-            error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+          } catch (NoSuchMethodException ignored) {
+          }
+          if (obj instanceof PyPythonObject o) {
+            PyObject method = o.getMethod(name);
+            if (method != null && method != BuiltIn.None) {
+              frame.push(method);
+              continue;
+            }
           }
           error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
         }
@@ -199,7 +217,10 @@ public class EvaluationLoop {
             } catch (PyException e) {
               error = e;
             }
-          } else
+          } else if (method instanceof PyTypeType type) {
+            type.call(null, args, null);
+          }
+          else
             error = new PyException("object " + method.repr() + " can not be called");
         }
         case CALL_FUNCTION -> {
@@ -744,6 +765,10 @@ public class EvaluationLoop {
           } catch (PyException e) {
             error = e;
           }
+        }
+        case LOAD_BUILD_CLASS -> {
+          PyObject res = builtins.get(PyUnicodeObject.getOrCreateFromInternStringPool("__build_class__", true));
+          frame.push(res);
         }
         case MAKE_FUNCTION -> {
           PyObject qualname = frame.pop();

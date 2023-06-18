@@ -15,6 +15,8 @@ import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
+import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.ThreadState;
 
 import java.io.IOException;
 
@@ -37,7 +39,6 @@ public class BuiltIn {
   public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
 
   static {
-    PyObject.registerBaseObjectType();
     dict = new PyDictObject();
     try {
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("int", true),
@@ -64,8 +65,6 @@ public class BuiltIn {
           BuiltIn.None);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("Ellipsis", true),
           BuiltIn.ELLIPSIS);
-      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true),
-          PyObject.type);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("stdout", true),
           Sys.stdout);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("range", true),
@@ -75,7 +74,6 @@ public class BuiltIn {
   }
 
   public static void doInit() {
-    Class<BuiltIn> clazz = BuiltIn.class;
     try {
       // load builtin function & object into builtin dict
       registerBuiltinFunction("print");
@@ -89,14 +87,19 @@ public class BuiltIn {
       registerBuiltinFunction("all");
       registerBuiltinFunction("any");
       registerBuiltinFunction("next");
+      registerBuiltinFunction("__build_class__");
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true),
+          PyObject.type);
     } catch (NoSuchMethodException | PyException ignore) {
     }
   }
 
   public static void registerBuiltinFunction(String name) throws NoSuchMethodException, PyException {
     Class<BuiltIn> clazz = BuiltIn.class;
-    PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod(name, PyTupleObject.class, PyDictObject.class), true);
-    dict.put(PyUnicodeObject.getOrCreateFromInternStringPool(name, true), mp);
+    if (dict.get(PyUnicodeObject.getOrCreateFromInternStringPool(name, true)) == null) {
+      PyNativeMethodObject mp = new PyNativeMethodObject(clazz.getMethod(name, PyTupleObject.class, PyDictObject.class), true);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool(name, true), mp);
+    }
   }
 
   public static PyObject print(PyTupleObject args, PyDictObject kwArgs) throws PyException, IOException {
@@ -249,6 +252,25 @@ public class BuiltIn {
       }
     }
     throw new PyException("next function require only 1 argument that is an iterator");
+  }
+
+  public static PyObject __build_class__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() < 3)
+      throw new PyException("buildClass function require at least 3 arguments");
+    PyObject function = args.get(0);
+    PyObject name = args.get(1);
+    PyTupleObject bases = new PyTupleObject(args.size() - 2);
+    for (int i = 2; i < args.size(); i++) {
+      bases.set(i-2, args.get(i));
+    }
+    PyDictObject locals = new PyDictObject();
+    ThreadState ts = PVM.getThreadState();
+    Abstract.abstractCall(function, null, null, null, ts.getCurrentFrame(), locals);
+    args = new PyTupleObject(3);
+    args.set(0, name);
+    args.set(1, bases);
+    args.set(2, locals);
+    return PyTypeType.type.call(null, args, kwArgs);
   }
 
 }

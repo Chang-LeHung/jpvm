@@ -1,6 +1,7 @@
 package org.jpvm.pvm;
 
 import org.jpvm.objects.PyDictObject;
+import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 
 public class ThreadState {
@@ -13,6 +14,8 @@ public class ThreadState {
   private PyObject curExcTrace;
 
   private PyDictObject builtins;
+
+  private PyFrameObject currentFrame;
 
 
   public ThreadState(InterpreterState is) {
@@ -57,6 +60,14 @@ public class ThreadState {
 
   public boolean isOverFlow() {
     return recursionDepth > is.getMaxRecursionDepth();
+  }
+
+  public PyFrameObject getCurrentFrame() {
+    return currentFrame;
+  }
+
+  public void setCurrentFrame(PyFrameObject currentFrame) {
+    this.currentFrame = currentFrame;
   }
 
   public PyObject getCurExcType() {

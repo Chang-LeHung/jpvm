@@ -16,9 +16,12 @@ public class PVM {
   /**
    * thread state of each thread
    */
-  public static final ThreadLocal<ThreadState> tss = new ThreadLocal<>();
+  public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
 
-  public static InterpreterState interpreterState = new InterpreterState(5000);
+  /**
+   * initialize here for compatibility
+   */
+  public static InterpreterState interpreterState = new InterpreterState(500);
 
   public static ThreadState getThreadState() {
     ThreadState res = tss.get();
@@ -33,7 +36,6 @@ public class PVM {
   public static PVM create(String filename) throws PyException, IOException {
     return new PVM(filename);
   }
-
   /**
    * filename of the py file to be executed.
    */
@@ -71,8 +73,21 @@ public class PVM {
     code = reader.getCodeObject();
   }
 
+  private void init() {
+    if (tss == null)
+      tss = new ThreadLocal<>();
+    if (interpreterState == null)
+      interpreterState = new InterpreterState(500);
+  }
+
   private void initVirtualMachine() throws PyNotImplemented {
+    // init type and object
+    PyObject.initBaseObject();
+    // init thread and vm state
+    init();
+    // init built-in functions
     BuiltIn.doInit();
+    // acquire builtins
     builtins = BuiltIn.dict;
     /*
      * in main module locals and globals are the same
@@ -94,6 +109,7 @@ public class PVM {
     // register the module
     PVM.getThreadState().getIs().addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
         , rootModule);
+
   }
 
   public PyModuleObject getRootModule() {
@@ -120,8 +136,19 @@ public class PVM {
 
   public void run() throws PyException {
     rootFrame = new PyFrameObject(code, builtins, globals, locals);
+    ThreadState ts = PVM.getThreadState();
+    ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);
     loop.pyEvalFrame();
+  }
+
+  public void exit() {
+    tss = null;
+    interpreterState = null;  // help gc
+  }
+
+  public void close() {
+    exit();
   }
 
   public PyCodeObject getCode() {

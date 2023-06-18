@@ -50,6 +50,28 @@ public class PyTupleObject extends PyObject implements TypeIterable,
     return obItem[idx];
   }
 
+  public static PyTupleObject getTupleFromIterator(PyObject object) throws PyException {
+    if (object instanceof TypeIterable iterable) {
+      TypeDoIterate iterator = iterable.getIterator();
+      PyTupleObject res = new PyTupleObject(iterator.size());
+      int n = 0;
+      while (iterator.hasNext()) {
+        PyObject next = iterator.next();
+        res.set(n++, next);
+      }
+      return res;
+    }else if (object instanceof TypeDoIterate iterator) {
+      PyTupleObject res = new PyTupleObject(iterator.size());
+      int n = 0;
+      while (iterator.hasNext()) {
+        PyObject next = iterator.next();
+        res.set(n++, next);
+      }
+      return res;
+    }
+    throw new PyException("getTupleFromIterator require TypeIterable or Iterator");
+  }
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();

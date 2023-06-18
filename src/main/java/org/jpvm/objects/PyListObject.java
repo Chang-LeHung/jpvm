@@ -174,11 +174,6 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyDictObject getDict() {
-    return super.getDict();
-  }
-
-  @Override
   public PyObject mpLength(PyObject o) {
     return new PyLongObject(size());
   }

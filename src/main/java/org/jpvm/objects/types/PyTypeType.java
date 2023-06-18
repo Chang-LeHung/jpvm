@@ -1,17 +1,19 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyUnsupportedOperator;
-import org.jpvm.objects.PyBoolObject;
-import org.jpvm.objects.PyObject;
-import org.jpvm.objects.PyTupleObject;
-import org.jpvm.objects.PyUnicodeObject;
-import org.jpvm.objects.pyinterface.TypeNew;
+import org.jpvm.objects.*;
+import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.pvm.MRO;
 import org.jpvm.python.BuiltIn;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PyTypeType extends PyObject implements TypeNew {
+/**
+ * all subclass must override method getType {@link org.jpvm.objects.pyinterface.TypeCheck}
+ */
+public class PyTypeType extends PyObject {
 
   /* Objects behave like an unbound method */
   public static int Py_TPFLAGS_METHOD_DESCRIPTOR = (1 << 17);
@@ -37,37 +39,89 @@ public class PyTypeType extends PyObject implements TypeNew {
 
   public static PyObject type = new PyTypeType();
 
+  protected List<PyObject> mro;
+  protected PyTupleObject _mro;
+  protected List<PyObject> bases;
+  protected PyTupleObject _bases;
+
   protected String name;
+  private boolean typeReady;
 
   public PyTypeType() {
     name = "type";
     // use List just to avoid ExceptionInInitializerError
     mro = new ArrayList<>();
-    mro.add(PyObject.type);
+    bases = new ArrayList<>();
+  }
+
+  public void addBase(PyObject base) {
+    for (PyObject basis : bases) {
+      if (basis == base)
+        return;
+    }
+    bases.add(base);
   }
 
   /**
    * this object is subtype of r or not
    */
-  public PyBoolObject isSubType(PyTypeType r) {
-    for (int i = 0; i < mro.size(); i++) {
-      PyObject pyObject = mro.get(i);
-      if (pyObject == r)
-        return BuiltIn.True;
+  public PyBoolObject isSubType(PyObject r) {
+    if (mro.stream().anyMatch(pyObject -> pyObject == r)) {
+      return BuiltIn.True;
     }
     return BuiltIn.False;
   }
 
-  public PyTupleObject getMro() {
-    PyTupleObject object = new PyTupleObject(mro.size());
-    for (int i = 0; i < mro.size(); i++) {
-      object.set(i, mro.get(i));
+  /**
+   * lazy loading
+   */
+  public PyTupleObject getMro() throws PyException {
+    if (!typeReady) {
+      if (_mro != null)
+        return _mro;
+      typeReady = true;
+      mro = MRO.mro(this);
+      PyTupleObject object = new PyTupleObject(mro.size());
+      for (int i = 0; i < mro.size(); i++) {
+        object.set(i, mro.get(i));
+      }
+      _mro = object;
+      return object;
+    }else
+      return _mro;
+  }
+
+  public List<PyObject> getBases() {
+    return bases;
+  }
+
+  public PyTupleObject getBasesClass() {
+    if (_bases != null) {
+      return _bases;
     }
+    PyTupleObject object = new PyTupleObject(bases.size());
+    for (int i = 0; i < bases.size(); i++) {
+      object.set(i, bases.get(i));
+    }
+    _bases = object;
     return object;
   }
 
+
   public void setMro(List<PyObject> mro) {
     this.mro = mro;
+  }
+
+  public void setBases(List<PyObject> bases) {
+    this.bases = bases;
+  }
+
+  public void set_mro(PyTupleObject _mro) {
+    this._mro = _mro;
+  }
+
+  public void set_bases(PyTupleObject _bases) {
+    this._bases = _bases;
   }
 
   @Override
@@ -103,5 +157,47 @@ public class PyTypeType extends PyObject implements TypeNew {
         return BuiltIn.False;
     }
     throw new PyUnsupportedOperator(getTypeName() + " not support operator " + op);
+  }
+
+  @Override
+  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      PyObject name = args.get(0);
+      String res = "<class '" + getType().getTypeName() + "' >";
+      return new PyUnicodeObject(res);
+    }
+    if (args.size() < 3)
+      throw new PyException(getTypeName() + " require at least 3 arguments");
+    PyObject name = args.get(0);
+    PyObject bases = args.get(1);
+    PyObject dict = args.get(2);
+    if (name == null)
+      name = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("name", true));
+    if (bases == null)
+      bases = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("bases", true));
+    if (dict == null)
+      dict = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true));
+    if (name instanceof PyUnicodeObject n && bases instanceof TypeIterable iter && dict instanceof PyDictObject d) {
+      PyTupleObject base = PyTupleObject.getTupleFromIterator(bases);
+      PyPythonType res = new PyPythonType(n, null, d);
+      base = ensureBaseObjectTypeInBases(base);
+      List<PyObject> bs = res.getBases();
+      for (int i = 0; i < base.size(); i++)
+        bs.add(base.get(i));
+      return res;
+    }
+    throw new PyException("type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
+  }
+
+  public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) {
+    for (int i = 0; i < bases.size(); i++) {
+      if (bases.get(i) == PyObject.type)
+        return bases;
+    }
+    PyTupleObject res = new PyTupleObject(bases.size() + 1);
+    for (int i = 0; i < bases.size(); i++)
+      res.set(i, bases.get(i));
+    res.set(bases.size(), PyBaseObjectType.type);
+    return res;
   }
 }

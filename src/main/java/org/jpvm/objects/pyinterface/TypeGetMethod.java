@@ -1,5 +1,6 @@
 package org.jpvm.objects.pyinterface;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.objects.PyMethodObject;
 import org.jpvm.objects.PyObject;
@@ -11,7 +12,7 @@ public interface TypeGetMethod {
    * @param name name of method will be loaded
    * @return {@link PyMethodObject} if not contain methodName then throw PyMissMethod
    */
-  default PyObject getMethod(String name) throws PyMissMethod {
+  default PyObject getMethod(String name) throws PyException {
     throw new PyMissMethod("not have method" + name);
   }
 
@@ -19,7 +20,7 @@ public interface TypeGetMethod {
    * @param name name of method will be loaded
    * @return {@link PyMethodObject} if not contain methodName then throw PyMissMethod
    */
-  default PyObject getMethod(PyUnicodeObject name) throws PyMissMethod {
+  default PyObject getMethod(PyUnicodeObject name) throws PyException {
     throw new PyMissMethod("not have method" + name.toJavaType());
   }
 }

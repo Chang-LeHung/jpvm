@@ -3,20 +3,22 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
-import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
 
-import java.util.List;
 
 /**
- * base class of all classes in python
+ * base class of all classes in python.
+ * all child classes in python are PyObject.
+ * Initialization operations must be executed within the subclass themselves
  */
 public class PyObject implements PyArgs, TypeCheck,
     TypeName, TypeStr, TypeRepr, TypeHash, TypeRichCompare,
-    TypeInit, TypeCall, PyHashable, TypeGetMethod {
+    TypeInit, TypeCall, PyHashable, TypeGetMethod, TypeNew,
+    TypeGetAttr, TypeGetAttro, TypeSetAttro, TypeSetAttr{
 
   public static PyObject type;
 
@@ -28,11 +30,14 @@ public class PyObject implements PyArgs, TypeCheck,
    * parameterTypes of callable methods
    */
   public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
-  protected List<PyObject> mro;
-  protected PyListObject bases;
+
   protected PyDictObject dict;
   protected PyLongObject hashCode;
   protected boolean hashDone;
+
+  public PyObject() {
+
+  }
 
   public static PyBoolObject check(PyObject o) {
     if (o == type)
@@ -101,14 +106,6 @@ public class PyObject implements PyArgs, TypeCheck,
     throw new PyUnsupportedOperator("not support operator " + op);
   }
 
-  public PyListObject getBases() {
-    return bases;
-  }
-
-  public void setBases(PyListObject bases) {
-    this.bases = bases;
-  }
-
   public PyDictObject getDict() {
     return dict;
   }
@@ -122,27 +119,74 @@ public class PyObject implements PyArgs, TypeCheck,
     return (int) hash().getData();
   }
 
-  /**
-   * initialize methods object
-   */
-  @Override
-  public PyObject init() throws PyNotImplemented {
-    type = new PyBaseObjectType();
-    return this;
+  public static void initBaseObject() {
+    if (type == null)
+      type = new PyBaseObjectType();
   }
 
   @Override
-  public PyObject getMethod(String name) throws PyMissMethod {
+  public PyObject getMethod(String name) throws PyException {
     return getMethod(new PyUnicodeObject(name));
   }
 
   @Override
-  public PyObject getMethod(PyUnicodeObject name) throws PyMissMethod {
-    return null;
-//    PyObject method = methods.get(name);
-//    if (method == null)
-//      throw new PyMissMethod("not have method" + name);
-//    return method;
+  public PyObject getMethod(PyUnicodeObject name) throws PyException {
+    PyObject function = getAttr(name);
+    if (function instanceof PyMethodObject)
+      return function;
+    throw new PyMissMethod(getTypeName() + " has no method " + name.getData());
   }
 
+  /**
+   * be careful with call stack overflow if t == PyTypeType.type
+   */
+  private PyObject lookUpType(PyObject key) throws PyException {
+    PyTypeType t = (PyTypeType)getType();
+    PyObject res = null;
+    PyTupleObject mro = t.getMro();
+    for (int i = 0; i < mro.size(); i++) {
+      PyObject object = mro.get(i);
+      if (object != PyTypeType.type) {
+        res = object.getAttr(key);
+        if (res != null)
+          return res;
+      }
+    }
+    return res;
+  }
+
+  @Override
+  public PyObject getAttr(PyObject key) throws PyException {
+    PyObject descr = lookUpType(key);;
+
+    if (descr instanceof TypeDescriptorGet && descr instanceof TypeDescriptorSet)
+      return descr;
+    PyObject object = null;
+    if (dict != null)
+      object = dict.get(key);
+    if (object != null)
+      return object;
+    if (descr != null) {
+      if (descr instanceof TypeDescriptorGet get)
+        return get.descrGet(this, getType());
+      return descr;
+    }
+    return null;
+  }
+
+  @Override
+  public PyObject getAttro(PyObject key) throws PyException {
+    return getAttr(key);
+  }
+
+  @Override
+  public PyObject setAttr(PyObject key, PyObject val) throws PyException {
+    dict.put(key, val);
+    return BuiltIn.None;
+  }
+
+  @Override
+  public PyObject setAttro(PyObject key, PyObject val) throws PyException {
+    return setAttr(key, val);
+  }
 }
