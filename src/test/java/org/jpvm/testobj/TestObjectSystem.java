@@ -28,4 +28,14 @@ public class TestObjectSystem {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  public void testClass02() {
+    String filename = "src/test/resources/obsy/__pycache__/test02.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

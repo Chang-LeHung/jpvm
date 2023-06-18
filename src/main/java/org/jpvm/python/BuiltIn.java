@@ -255,8 +255,8 @@ public class BuiltIn {
   }
 
   public static PyObject __build_class__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() < 3)
-      throw new PyException("buildClass function require at least 3 arguments");
+    if (args.size() < 2)
+      throw new PyException("buildClass function require at least 2 arguments");
     PyObject function = args.get(0);
     PyObject name = args.get(1);
     PyTupleObject bases = new PyTupleObject(args.size() - 2);
