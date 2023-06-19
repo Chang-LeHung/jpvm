@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -165,5 +166,30 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
     PyFloatObject c2_add_d2 = (PyFloatObject) c2.add(d2);
     PyFloatObject bc_sub_ad = (PyFloatObject) bc.sub(ad);
     return new PyComplexObject((PyFloatObject) ac_add_bd.trueDiv(c2_add_d2), (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
+  }
+
+  @Override
+  public PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return add(o);
+  }
+
+  @Override
+  public PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return sub(o);
+  }
+
+  @Override
+  public PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return mul(o);
+  }
+
+  @Override
+  public PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return pow(o);
+  }
+
+  @Override
+  public PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    return trueDiv(o);
   }
 }
