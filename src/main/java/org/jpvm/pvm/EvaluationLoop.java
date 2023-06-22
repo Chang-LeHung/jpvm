@@ -13,7 +13,6 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
-import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
@@ -199,12 +198,10 @@ public class EvaluationLoop {
             }
           } catch (NoSuchMethodException ignored) {
           }
-          if (obj instanceof PyPythonObject o) {
-            PyObject method = o.getMethod(name);
-            if (method != null && method != BuiltIn.None) {
-              frame.push(method);
-              continue;
-            }
+          PyObject method = obj.getMethod(name);
+          if (method != null && method != BuiltIn.None) {
+            frame.push(method);
+            continue;
           }
           error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
         }

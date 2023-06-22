@@ -2,6 +2,7 @@ package org.jpvm.pvm;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyDictObject;
+import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyModuleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
@@ -19,11 +20,14 @@ public class InterpreterState {
 
   private final GILRuntimeState gil;
 
+  private final PyListObject searchPath;
+
   private int maxRecursionDepth = 100;
 
   public InterpreterState(long interval) {
     modules = new PyDictObject();
     gil = new GILRuntimeState(interval);
+    searchPath = new PyListObject();
   }
 
   public InterpreterState(PyDictObject builtins, long interval) {
@@ -34,6 +38,14 @@ public class InterpreterState {
   public InterpreterState(PyDictObject builtins) {
     this(5000);
     this.builtins = builtins;
+  }
+
+  public PyListObject getSearchPath() {
+    return searchPath;
+  }
+
+  public void addSearchPath(PyUnicodeObject path){
+    searchPath.append(path);
   }
 
   public void setBuiltins(PyDictObject builtins) {

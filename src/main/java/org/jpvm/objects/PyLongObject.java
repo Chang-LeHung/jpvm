@@ -27,6 +27,10 @@ public class PyLongObject extends PyObject
         this.data = data;
     }
 
+    public PyLongObject() {
+        this.data = 0;
+    }
+
     public static PyBoolObject check(PyObject o) {
         return new PyBoolObject(o == type);
     }

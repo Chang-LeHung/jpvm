@@ -158,7 +158,6 @@ public class PyObject implements PyArgs, TypeCheck,
   @Override
   public PyObject getAttr(PyObject key) throws PyException {
     PyObject descr = lookUpType(key);;
-
     if (descr instanceof TypeDescriptorGet && descr instanceof TypeDescriptorSet)
       return descr;
     PyObject object = null;
@@ -188,5 +187,16 @@ public class PyObject implements PyArgs, TypeCheck,
   @Override
   public PyObject setAttro(PyObject key, PyObject val) throws PyException {
     return setAttr(key, val);
+  }
+
+  public void putAttribute(PyObject key, PyObject val) {
+    try {
+      dict.put(key, val);
+    } catch (PyException ignored) {
+    }
+  }
+
+  public PyObject getAttribute(PyObject key) {
+    return dict.getOrDefault(key, BuiltIn.None);
   }
 }

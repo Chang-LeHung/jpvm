@@ -92,8 +92,7 @@ public class PVM {
     /*
      * in main module locals and globals are the same
      */
-    rootModule = new PyModuleObject();
-    rootModule.setModuleName((PyUnicodeObject) code.getCoName());
+    rootModule = new PyModuleObject((PyUnicodeObject) code.getCoName());
     globals = rootModule.getDict();
     locals = rootModule.getDict();
 
@@ -109,7 +108,10 @@ public class PVM {
     // register the module
     PVM.getThreadState().getIs().addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
         , rootModule);
+  }
 
+  public static void addModule(PyUnicodeObject name, PyModuleObject module) {
+    getThreadState().getIs().addModule(name, module);
   }
 
   public PyModuleObject getRootModule() {

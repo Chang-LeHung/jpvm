@@ -12,7 +12,7 @@ public class PyModuleObject extends PyObject{
    */
   private PyUnicodeObject moduleName;
 
-  public PyModuleObject() {
+  private PyModuleObject() {
     dict = new PyDictObject();
   }
 
@@ -59,10 +59,4 @@ public class PyModuleObject extends PyObject{
     return moduleName.richCompare(o, op);
   }
 
-  public void putAttribute(PyObject key, PyObject val) {
-    try {
-      dict.put(key, val);
-    } catch (PyException ignored) {
-    }
-  }
 }
