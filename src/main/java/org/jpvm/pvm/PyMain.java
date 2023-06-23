@@ -1,10 +1,9 @@
 package org.jpvm.pvm;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.pycParser.PycReader;
-
 import java.io.IOException;
 import java.util.Date;
+import org.jpvm.errors.PyException;
+import org.jpvm.pycParser.PycReader;
 
 /**
  * jpvm boot from this class

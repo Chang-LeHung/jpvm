@@ -12,6 +12,7 @@ def test():
     for i in range(10):
         yield i
 
+
 def call():
     # 创建生成器
     gen = counter()
@@ -30,7 +31,6 @@ def call():
 
     # 继续迭代生成器，返回8（因为上一次send()发送了None）
     print(next(gen))  # 输出: 8
-
 
 
 t = call()

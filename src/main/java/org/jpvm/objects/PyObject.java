@@ -1,6 +1,5 @@
 package org.jpvm.objects;
 
-
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -9,39 +8,44 @@ import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
 
-
 /**
- * base class of all classes in python.
- * all child classes in python are PyObject.
- * Initialization operations must be executed within the subclass themselves
+ * base class of all classes in python. all child classes in python are PyObject. Initialization
+ * operations must be executed within the subclass themselves
  */
-public class PyObject implements PyArgs, TypeCheck,
-    TypeName, TypeStr, TypeRepr, TypeHash, TypeRichCompare,
-    TypeInit, TypeCall, PyHashable, TypeGetMethod, TypeNew,
-    TypeGetAttr, TypeGetAttro, TypeSetAttro, TypeSetAttr{
+public class PyObject
+    implements PyArgs,
+        TypeCheck,
+        TypeName,
+        TypeStr,
+        TypeRepr,
+        TypeHash,
+        TypeRichCompare,
+        TypeInit,
+        TypeCall,
+        PyHashable,
+        TypeGetMethod,
+        TypeNew,
+        TypeGetAttr,
+        TypeGetAttro,
+        TypeSetAttro,
+        TypeSetAttr {
 
   public static PyObject type;
 
-  /**
-   * base class name of all classes in python
-   */
+  /** base class name of all classes in python */
   public static PyUnicodeObject name;
-  /**
-   * parameterTypes of callable methods
-   */
-  public static Class<?>[] parameterTypes = new Class<?>[]{PyTupleObject.class, PyDictObject.class};
+  /** parameterTypes of callable methods */
+  public static Class<?>[] parameterTypes =
+      new Class<?>[] {PyTupleObject.class, PyDictObject.class};
 
   protected PyDictObject dict;
   protected PyLongObject hashCode;
   protected boolean hashDone;
 
-  public PyObject() {
-
-  }
+  public PyObject() {}
 
   public static PyBoolObject check(PyObject o) {
-    if (o == type)
-      return BuiltIn.True;
+    if (o == type) return BuiltIn.True;
     return BuiltIn.False;
   }
 
@@ -49,6 +53,10 @@ public class PyObject implements PyArgs, TypeCheck,
     if (type == null) {
       type = new PyBaseObjectType();
     }
+  }
+
+  public static void initBaseObject() {
+    if (type == null) type = new PyBaseObjectType();
   }
 
   @Override
@@ -93,13 +101,11 @@ public class PyObject implements PyArgs, TypeCheck,
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     switch (op) {
       case Py_EQ, PyCmp_IS -> {
-        if (o == this)
-          return BuiltIn.True;
+        if (o == this) return BuiltIn.True;
         return BuiltIn.False;
       }
       case PyCmp_IS_NOT -> {
-        if (o != this)
-          return BuiltIn.True;
+        if (o != this) return BuiltIn.True;
         return BuiltIn.False;
       }
     }
@@ -119,11 +125,6 @@ public class PyObject implements PyArgs, TypeCheck,
     return (int) hash().getData();
   }
 
-  public static void initBaseObject() {
-    if (type == null)
-      type = new PyBaseObjectType();
-  }
-
   @Override
   public PyObject getMethod(String name) throws PyException {
     return getMethod(new PyUnicodeObject(name));
@@ -132,24 +133,20 @@ public class PyObject implements PyArgs, TypeCheck,
   @Override
   public PyObject getMethod(PyUnicodeObject name) throws PyException {
     PyObject function = getAttr(name);
-    if (function instanceof PyMethodObject)
-      return function;
+    if (function instanceof PyMethodObject) return function;
     throw new PyMissMethod(getTypeName() + " has no method " + name.getData());
   }
 
-  /**
-   * be careful with call stack overflow if t == PyTypeType.type
-   */
+  /** be careful with call stack overflow if t == PyTypeType.type */
   private PyObject lookUpType(PyObject key) throws PyException {
-    PyTypeType t = (PyTypeType)getType();
+    PyTypeType t = (PyTypeType) getType();
     PyObject res = null;
     PyTupleObject mro = t.getMro();
     for (int i = 0; i < mro.size(); i++) {
       PyObject object = mro.get(i);
       if (object != PyTypeType.type) {
         res = object.getAttr(key);
-        if (res != null)
-          return res;
+        if (res != null) return res;
       }
     }
     return res;
@@ -157,17 +154,13 @@ public class PyObject implements PyArgs, TypeCheck,
 
   @Override
   public PyObject getAttr(PyObject key) throws PyException {
-    PyObject descr = lookUpType(key);;
-    if (descr instanceof TypeDescriptorGet && descr instanceof TypeDescriptorSet)
-      return descr;
+    PyObject descr = lookUpType(key);
+    if (descr instanceof TypeDescriptorGet && descr instanceof TypeDescriptorSet) return descr;
     PyObject object = null;
-    if (dict != null)
-      object = dict.get(key);
-    if (object != null)
-      return object;
+    if (dict != null) object = dict.get(key);
+    if (object != null) return object;
     if (descr != null) {
-      if (descr instanceof TypeDescriptorGet get)
-        return get.descrGet(this, getType());
+      if (descr instanceof TypeDescriptorGet get) return get.descrGet(this, getType());
       return descr;
     }
     return null;

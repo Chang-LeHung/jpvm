@@ -1,14 +1,13 @@
 package org.jpvm.module;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.objects.*;
-import org.jpvm.pycParser.PyCodeObject;
-import org.jpvm.python.BuiltIn;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import org.jpvm.errors.PyException;
+import org.jpvm.objects.*;
+import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.python.BuiltIn;
 
 /**
  * Before implementing this class, you should read cpython:marshal.c) carefully

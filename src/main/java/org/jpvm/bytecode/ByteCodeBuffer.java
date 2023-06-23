@@ -1,9 +1,8 @@
 package org.jpvm.bytecode;
 
+import java.util.Iterator;
 import org.jpvm.objects.PyBytesObject;
 import org.jpvm.pycParser.PyCodeObject;
-
-import java.util.Iterator;
 
 public class ByteCodeBuffer implements Iterable<Instruction> {
 

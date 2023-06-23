@@ -1,13 +1,12 @@
 package org.jpvm.module;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.pycParser.PyCodeObject;
-
-import java.util.HashSet;
-import java.util.Iterator;
 
 public class Disassembler {
 

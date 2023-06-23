@@ -1,5 +1,9 @@
 package org.jpvm.objects;
 
+import java.util.ConcurrentModificationException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
@@ -13,11 +17,6 @@ import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
-
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public class PySetObject extends PyObject implements TypeIterable,
     PyNumberMethods, PySequenceMethods {

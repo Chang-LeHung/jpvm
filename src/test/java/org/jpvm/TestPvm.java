@@ -1,13 +1,12 @@
 package org.jpvm;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.pvm.PVM;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.jpvm.errors.PyException;
+import org.jpvm.pvm.PVM;
+import org.junit.Test;
 
 public class TestPvm {
 

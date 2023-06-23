@@ -1,17 +1,16 @@
 package org.jpvm;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.module.Marshal;
-import org.jpvm.pycParser.PyCodeObject;
-import org.jpvm.pycParser.PycReader;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
-
-import static org.junit.Assert.assertEquals;
+import org.jpvm.errors.PyException;
+import org.jpvm.module.Marshal;
+import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.pycParser.PycReader;
+import org.junit.Test;
 
 public class PycParserTest {
 

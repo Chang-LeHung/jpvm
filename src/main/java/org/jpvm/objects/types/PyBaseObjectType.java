@@ -1,8 +1,7 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.objects.PyObject;
-
 import java.util.ArrayList;
+import org.jpvm.objects.PyObject;
 
 public class PyBaseObjectType extends PyTypeType {
 

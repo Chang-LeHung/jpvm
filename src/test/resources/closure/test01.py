@@ -8,6 +8,7 @@ def outer_function():
 
     return inner_function
 
+
 # 创建闭包
 closure = outer_function()
 

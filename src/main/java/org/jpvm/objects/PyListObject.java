@@ -1,5 +1,8 @@
 package org.jpvm.objects;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -13,10 +16,6 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 import org.jpvm.python.BuiltIn;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class PyListObject extends PyObject
     implements TypeIterable, PySequenceMethods, PyMappingMethods {
@@ -329,7 +328,7 @@ public class PyListObject extends PyObject
           if(i < keys.size()){
             set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());
           }else{
-            insert((int) (keyLast + i - keys.size() + 1), iterator.next());
+            insert(keyLast + i - keys.size() + 1, iterator.next());
           }
         }else{
           set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());

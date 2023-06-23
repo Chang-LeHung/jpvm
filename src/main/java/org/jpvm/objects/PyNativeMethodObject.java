@@ -1,11 +1,9 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.objects.types.PyNativeMethodType;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.jpvm.errors.PyException;
+import org.jpvm.objects.types.PyNativeMethodType;
 
 public class PyNativeMethodObject extends PyObject {
 

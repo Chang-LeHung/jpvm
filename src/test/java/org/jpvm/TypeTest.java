@@ -1,10 +1,9 @@
 package org.jpvm;
 
+import java.util.Arrays;
 import org.jpvm.objects.PyLongObject;
 import org.jpvm.objects.PyObject;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class TypeTest {
 

@@ -6,7 +6,6 @@ import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-
 public class PyFunctionObject extends PyObject
         implements TypeDescriptorGet {
 

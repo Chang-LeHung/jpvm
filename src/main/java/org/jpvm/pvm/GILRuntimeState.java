@@ -6,10 +6,10 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GILRuntimeState {
-  private long interval;
   private final AtomicBoolean locked;
   private final ReentrantLock lock;
   private final Condition condition;
+  private long interval;
   private volatile boolean dropGILRequest;
   /**
    * purpose of use a1-a8/b1-b8/c1-c8 is to avoid false sharing

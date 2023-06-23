@@ -4,7 +4,6 @@ import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 
-
 public class PyCodeObject extends PyObject {
 
   /**

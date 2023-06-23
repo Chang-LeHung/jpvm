@@ -1,5 +1,7 @@
 package org.jpvm.pvm;
 
+import java.io.IOException;
+import java.util.Map;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.*;
@@ -7,9 +9,6 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 import org.yaml.snakeyaml.Yaml;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class PVM {
 
@@ -22,6 +21,29 @@ public class PVM {
    * initialize here for compatibility
    */
   public static InterpreterState interpreterState = new InterpreterState(500);
+  /**
+   * filename of the py file to be executed.
+   */
+  private final String filename;
+  /**
+   * code of the py file to be executed.
+   */
+  private PyCodeObject code;
+  /**
+   * global and local variables of the py file to be executed.
+   */
+  private PyDictObject globals;
+  private PyDictObject locals;
+  private PyDictObject builtins;
+  private PyModuleObject rootModule;
+  private PyFrameObject rootFrame;
+  private EvaluationLoop  loop;
+
+  public PVM(String filename) throws PyException, IOException {
+    this.filename = filename;
+    loadCode();
+    initVirtualMachine();
+  }
 
   public static ThreadState getThreadState() {
     ThreadState res = tss.get();
@@ -36,32 +58,9 @@ public class PVM {
   public static PVM create(String filename) throws PyException, IOException {
     return new PVM(filename);
   }
-  /**
-   * filename of the py file to be executed.
-   */
-  private final String filename;
 
-  /**
-   * code of the py file to be executed.
-   */
-  private PyCodeObject code;
-  /**
-   * global and local variables of the py file to be executed.
-   */
-  private PyDictObject globals;
-  private PyDictObject locals;
-
-  private PyDictObject builtins;
-
-  private PyModuleObject rootModule;
-
-  private PyFrameObject rootFrame;
-  private EvaluationLoop  loop;
-
-  public PVM(String filename) throws PyException, IOException {
-    this.filename = filename;
-    loadCode();
-    initVirtualMachine();
+  public static void addModule(PyUnicodeObject name, PyModuleObject module) {
+    getThreadState().getIs().addModule(name, module);
   }
 
   /**
@@ -108,10 +107,6 @@ public class PVM {
     // register the module
     PVM.getThreadState().getIs().addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
         , rootModule);
-  }
-
-  public static void addModule(PyUnicodeObject name, PyModuleObject module) {
-    getThreadState().getIs().addModule(name, module);
   }
 
   public PyModuleObject getRootModule() {

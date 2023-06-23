@@ -11,7 +11,6 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-
 /**
  * tuple is a size-fixed array
  */
@@ -40,16 +39,6 @@ public class PyTupleObject extends PyObject implements TypeIterable,
     return new PyTupleObject(size);
   }
 
-  public void set(int idx, PyObject obj) {
-    obItem[idx] = obj;
-  }
-
-  public PyObject get(int idx) {
-    if (idx >= obItem.length)
-      throw new IndexOutOfBoundsException("idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
-    return obItem[idx];
-  }
-
   public static PyTupleObject getTupleFromIterator(PyObject object) throws PyException {
     if (object instanceof TypeIterable iterable) {
       TypeDoIterate iterator = iterable.getIterator();
@@ -70,6 +59,16 @@ public class PyTupleObject extends PyObject implements TypeIterable,
       return res;
     }
     throw new PyException("getTupleFromIterator require TypeIterable or Iterator");
+  }
+
+  public void set(int idx, PyObject obj) {
+    obItem[idx] = obj;
+  }
+
+  public PyObject get(int idx) {
+    if (idx >= obItem.length)
+      throw new IndexOutOfBoundsException("idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
+    return obItem[idx];
   }
 
   @Override

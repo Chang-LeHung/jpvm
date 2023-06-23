@@ -1,5 +1,7 @@
 package org.jpvm.pvm;
 
+import java.lang.reflect.Method;
+import java.util.Iterator;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
@@ -18,9 +20,6 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-import java.lang.reflect.Method;
-import java.util.Iterator;
-
 public class EvaluationLoop {
 
   public static final int FVC_MASK = 0x3;
@@ -31,7 +30,6 @@ public class EvaluationLoop {
   public static final int FVS_MASK = 0x4;
   public static final int FVS_HAVE_SPEC = 0x4;
   private final PyFrameObject frame;
-  private PyException error;
   private final Iterator<Instruction> iterator;
   private final PyTupleObject coNames;
   private final PyDictObject globals;
@@ -39,6 +37,7 @@ public class EvaluationLoop {
   private final PyDictObject builtins;
   private final PyTupleObject consts;
   private final ByteCodeBuffer byteCodeBuffer;
+  private PyException error;
 
   public EvaluationLoop(PyFrameObject frame) {
     this.frame = frame;

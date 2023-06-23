@@ -1,14 +1,13 @@
 package org.jpvm.objects.types;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.pvm.MRO;
 import org.jpvm.python.BuiltIn;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * all subclass must override method getType {@link org.jpvm.objects.pyinterface.TypeCheck}
@@ -54,6 +53,18 @@ public class PyTypeType extends PyObject {
     bases = new ArrayList<>();
   }
 
+  public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) {
+    for (int i = 0; i < bases.size(); i++) {
+      if (bases.get(i) == PyObject.type)
+        return bases;
+    }
+    PyTupleObject res = new PyTupleObject(bases.size() + 1);
+    for (int i = 0; i < bases.size(); i++)
+      res.set(i, bases.get(i));
+    res.set(bases.size(), PyBaseObjectType.type);
+    return res;
+  }
+
   public void addBase(PyObject base) {
     for (PyObject basis : bases) {
       if (basis == base)
@@ -91,8 +102,16 @@ public class PyTypeType extends PyObject {
       return _mro;
   }
 
+  public void setMro(List<PyObject> mro) {
+    this.mro = mro;
+  }
+
   public List<PyObject> getBases() {
     return bases;
+  }
+
+  public void setBases(List<PyObject> bases) {
+    this.bases = bases;
   }
 
   public PyTupleObject getBasesClass() {
@@ -105,15 +124,6 @@ public class PyTypeType extends PyObject {
     }
     _bases = object;
     return object;
-  }
-
-
-  public void setMro(List<PyObject> mro) {
-    this.mro = mro;
-  }
-
-  public void setBases(List<PyObject> bases) {
-    this.bases = bases;
   }
 
   public void set_mro(PyTupleObject _mro) {
@@ -187,17 +197,5 @@ public class PyTypeType extends PyObject {
       return res;
     }
     throw new PyException("type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
-  }
-
-  public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) {
-    for (int i = 0; i < bases.size(); i++) {
-      if (bases.get(i) == PyObject.type)
-        return bases;
-    }
-    PyTupleObject res = new PyTupleObject(bases.size() + 1);
-    for (int i = 0; i < bases.size(); i++)
-      res.set(i, bases.get(i));
-    res.set(bases.size(), PyBaseObjectType.type);
-    return res;
   }
 }

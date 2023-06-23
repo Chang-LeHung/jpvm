@@ -1,11 +1,9 @@
 package org.jpvm.pycParser;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.module.Marshal;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-
+import org.jpvm.errors.PyException;
+import org.jpvm.module.Marshal;
 
 /**
  * .pyc file structure

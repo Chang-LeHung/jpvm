@@ -1,23 +1,19 @@
 package org.jpvm.objects;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.types.PyMethodType;
 import org.jpvm.pvm.Abstract;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class PyMethodObject extends PyObject {
 
   public static PyObject type = new PyMethodType();
 
   private final PyObject self;
-
-  private Method method;
-
-  private PyFunctionObject functionObject;
-
   private final String methodName;
+  private Method method;
+  private PyFunctionObject functionObject;
 
   public PyMethodObject(PyObject self, Method method, String methodName) {
     this.self = self;

@@ -1,9 +1,8 @@
 package org.jpvm.testvm;
 
+import java.util.Map;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
-
-import java.util.Map;
 
 public class TestVmConfig {
 

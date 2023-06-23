@@ -12,4 +12,3 @@ f = generator2()
 # print(f.send(2))
 for i in f:
     print(i)
-

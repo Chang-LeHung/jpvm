@@ -1,9 +1,8 @@
 package org.jpvm.objects;
 
+import java.util.Arrays;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
-
-import java.util.Arrays;
 
 public class PyFrameObject extends PyObject {
 
@@ -95,14 +94,6 @@ public class PyFrameObject extends PyObject {
     }
   }
 
-  public PyFunctionObject getFunc() {
-    return func;
-  }
-
-  public void setFunc(PyFunctionObject func) {
-    this.func = func;
-  }
-
   @Deprecated
   public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyFrameObject back) {
     this.code = code;
@@ -123,6 +114,14 @@ public class PyFrameObject extends PyObject {
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
+  public PyFunctionObject getFunc() {
+    return func;
+  }
+
+  public void setFunc(PyFunctionObject func) {
+    this.func = func;
+  }
+
   public PyCodeObject getCode() {
     return code;
   }
@@ -137,6 +136,10 @@ public class PyFrameObject extends PyObject {
 
   public PyDictObject getGlobals() {
     return globals;
+  }
+
+  public void setGlobals(PyDictObject globals) {
+    this.globals = globals;
   }
 
   public void setFreeVars(int idx, PyObject o) {
@@ -154,10 +157,6 @@ public class PyFrameObject extends PyObject {
   public PyCellObject getFreeVarsCell(int idx) {
     assert cells[idx] instanceof PyCellObject;
     return (PyCellObject)cells[idx];
-  }
-
-  public void setGlobals(PyDictObject globals) {
-    this.globals = globals;
   }
 
   public PyDictObject getLocals() {

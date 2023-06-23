@@ -1,5 +1,7 @@
 package org.jpvm.testvm;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.module.Disassembler;
 import org.jpvm.module.Marshal;
@@ -11,9 +13,6 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class TestGenerator {
 

@@ -1,6 +1,5 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;

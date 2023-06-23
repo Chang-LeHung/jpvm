@@ -1,10 +1,10 @@
 package org.jpvm.pycParser;
 
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 public class BinaryUtil {
 

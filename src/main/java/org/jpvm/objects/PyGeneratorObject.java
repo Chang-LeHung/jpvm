@@ -21,6 +21,11 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate,
    */
   private final PyFrameObject frame;
   /**
+   * {@link PyCodeObject} of this generator
+   */
+  private final PyObject codeObject;
+  private final EvaluationLoop evalLoop;
+  /**
    * name {@link PyUnicodeObject} of the generator
    */
   private PyObject name;
@@ -29,15 +34,7 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate,
    * there are more qualifier than name, such as module name.
    * You can find more detail in <a href="https://stackoverflow.com/questions/58108488/what-is-qualname-in-python">qualname</a>
    */
-  private PyObject qualname;
-
-  /**
-   * {@link PyCodeObject} of this generator
-   */
-  private final PyObject codeObject;
-
-  private final EvaluationLoop evalLoop;
-
+  private final PyObject qualname;
   private boolean runToYield = false;
   private boolean newVal = false;
   private PyObject yieldValue = BuiltIn.None;

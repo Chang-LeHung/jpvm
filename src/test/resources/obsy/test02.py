@@ -8,6 +8,7 @@ class MultiplicationTable:
                 print(f"{j} × {i} = {i * j}\t", end="")
             print()
 
+
 # 使用示例
 table = MultiplicationTable(9)
 table.print_table()

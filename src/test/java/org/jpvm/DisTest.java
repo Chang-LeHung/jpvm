@@ -1,16 +1,15 @@
 package org.jpvm;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.jpvm.errors.PyException;
 import org.jpvm.module.Disassembler;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
 import org.jpvm.pycParser.PyCodeObject;
 import org.junit.Test;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class DisTest {
 

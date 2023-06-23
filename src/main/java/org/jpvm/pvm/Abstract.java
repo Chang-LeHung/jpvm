@@ -1,5 +1,7 @@
 package org.jpvm.pvm;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.jpvm.errors.*;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
@@ -9,10 +11,6 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
-
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * implement a simple version, not implement all program semantics like cpython
@@ -44,7 +42,7 @@ public class Abstract {
    */
   public static boolean isSubType(PyObject v, PyObject w) {
     var type = (PyTypeType) w.getType();
-    PyBoolObject o = type.isSubType((PyTypeType) v.getType());
+    PyBoolObject o = type.isSubType(v.getType());
     return o.isTrue();
   }
 

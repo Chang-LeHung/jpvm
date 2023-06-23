@@ -1,5 +1,9 @@
 package org.jpvm.objects;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.jpvm.errors.*;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -11,11 +15,6 @@ import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Use {@linkplain StandardCharsets#UTF_8} as default charset

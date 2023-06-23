@@ -1,5 +1,8 @@
 package org.jpvm.module.filestream;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
@@ -9,10 +12,6 @@ import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.python.BuiltIn;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 public class PyFileStreamObject extends PyObject {
 
@@ -43,18 +42,6 @@ public class PyFileStreamObject extends PyObject {
     this.stderr = stderr;
   }
 
-  public void setStdout(boolean stdout) {
-    this.stdout = stdout;
-  }
-
-  public void setStdin(boolean stdin) {
-    this.stdin = stdin;
-  }
-
-  public void setStderr(boolean stderr) {
-    this.stderr = stderr;
-  }
-
   public String getEncoding() {
     return encoding;
   }
@@ -67,12 +54,24 @@ public class PyFileStreamObject extends PyObject {
     return stdout;
   }
 
+  public void setStdout(boolean stdout) {
+    this.stdout = stdout;
+  }
+
   public boolean isStdin() {
     return stdin;
   }
 
+  public void setStdin(boolean stdin) {
+    this.stdin = stdin;
+  }
+
   public boolean isStderr() {
     return stderr;
+  }
+
+  public void setStderr(boolean stderr) {
+    this.stderr = stderr;
   }
 
   public void writeBytes(byte[] bytes) throws IOException {

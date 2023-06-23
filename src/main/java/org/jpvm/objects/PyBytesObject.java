@@ -1,13 +1,12 @@
 package org.jpvm.objects;
 
+import java.util.Arrays;
 import org.jpvm.errors.*;
 import org.jpvm.objects.types.PyBytesType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
-
-import java.util.Arrays;
 
 public class PyBytesObject extends PyObject implements PyNumberMethods,
     PySequenceMethods, PyMappingMethods {

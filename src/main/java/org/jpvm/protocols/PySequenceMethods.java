@@ -3,7 +3,6 @@ package org.jpvm.protocols;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.PyObject;
 
 public interface PySequenceMethods {

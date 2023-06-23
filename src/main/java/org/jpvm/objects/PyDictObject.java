@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import java.util.*;
 import org.jpvm.errors.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -10,8 +11,6 @@ import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
-
-import java.util.*;
 
 public class PyDictObject extends PyObject implements PyMappingMethods,
     PySequenceMethods, TypeIterable {

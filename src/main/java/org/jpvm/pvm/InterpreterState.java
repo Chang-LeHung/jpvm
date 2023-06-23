@@ -12,16 +12,12 @@ public class InterpreterState {
    * modules have been imported
    */
   private final PyDictObject modules;
-
+  private final GILRuntimeState gil;
+  private final PyListObject searchPath;
   /**
    * the builtins module
    */
   private PyDictObject builtins;
-
-  private final GILRuntimeState gil;
-
-  private final PyListObject searchPath;
-
   private int maxRecursionDepth = 100;
 
   public InterpreterState(long interval) {
@@ -48,10 +44,6 @@ public class InterpreterState {
     searchPath.append(path);
   }
 
-  public void setBuiltins(PyDictObject builtins) {
-    this.builtins = builtins;
-  }
-
   public void addModule(PyUnicodeObject name, PyModuleObject module){
     try {
       modules.put(name, module);
@@ -61,6 +53,10 @@ public class InterpreterState {
 
   public PyDictObject getBuiltins() {
     return builtins;
+  }
+
+  public void setBuiltins(PyDictObject builtins) {
+    this.builtins = builtins;
   }
 
   public int getMaxRecursionDepth() {

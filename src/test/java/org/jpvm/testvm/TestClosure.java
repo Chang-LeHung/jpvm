@@ -1,5 +1,6 @@
 package org.jpvm.testvm;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.pvm.EvaluationLoop;
@@ -7,8 +8,6 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class TestClosure {
 

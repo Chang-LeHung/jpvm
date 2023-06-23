@@ -1,5 +1,6 @@
 package org.jpvm.python;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
@@ -17,9 +18,6 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 import org.jpvm.pvm.PVM;
 import org.jpvm.pvm.ThreadState;
-
-import java.io.IOException;
-
 
 public class BuiltIn {
 
