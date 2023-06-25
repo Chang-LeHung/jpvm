@@ -74,8 +74,8 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject sub(PyObject o) throws PyException {
-    PyObject sub__ = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__sub__", true));
-    if(sub__ instanceof PyMethodObject func){
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__sub__", true));
+    if(attr instanceof PyMethodObject func){
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -85,8 +85,8 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject mul(PyObject o) throws PyException {
-    PyObject mul__ = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mul__", true));
-    if(mul__ instanceof PyMethodObject func){
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mul__", true));
+    if(attr instanceof PyMethodObject func){
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -96,13 +96,24 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject mod(PyObject o) throws PyException {
-    PyObject mod__ = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mod__", true));
-    if(mod__ instanceof PyMethodObject func){
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mod__", true));
+    if(attr instanceof PyMethodObject func){
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
     }
     return PyNumberMethods.super.mod(o);
+  }
+
+  @Override
+  public PyObject trueDiv(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__truediv__", true));
+    if(attr instanceof PyMethodObject func){
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.trueDiv(o);
   }
 
 }

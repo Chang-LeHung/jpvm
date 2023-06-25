@@ -16,6 +16,9 @@ class A:
     def __mod__(self, other):
         return self.s % other.s
 
+    def __truediv__(self, other):
+        return self.s / other.s
+
 
 if __name__ == '__main__':
     a = A([1,2,3], 5)
@@ -26,3 +29,5 @@ if __name__ == '__main__':
     print(mulres)
     modres = b % a
     print(modres)
+    divres = b / a
+    print(divres)
