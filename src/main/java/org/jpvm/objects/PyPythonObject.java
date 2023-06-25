@@ -2,13 +2,14 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyNumberMethods;
+import org.jpvm.pvm.Abstract;
 
-/**
- * used in python code to represent a python object
- */
-public class PyPythonObject extends PyObject {
+/** used in python code to represent a python object */
+public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   private PyTypeType type;
+
   public PyPythonObject() {
     dict = new PyDictObject();
   }
@@ -55,5 +56,17 @@ public class PyPythonObject extends PyObject {
   @Override
   public PyDictObject getDict() {
     return super.getDict();
+  }
+
+  @Override
+  public PyObject add(PyObject o) throws PyException {
+    // get attribute from class
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__add__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.add(o);
   }
 }

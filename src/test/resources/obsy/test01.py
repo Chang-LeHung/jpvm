@@ -5,8 +5,12 @@ class A(object):
     def __init__(self):
         self.name = "hello world"
 
-    def hello(self):
+    @staticmethod
+    def hello():
         print("helloworld")
+
+    def __add__(self, other):
+        pass
 
 
 a = A()
