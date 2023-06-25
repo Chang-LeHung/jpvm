@@ -76,7 +76,7 @@ public class PyTupleObject extends PyObject implements TypeIterable,
     StringBuilder builder = new StringBuilder();
     builder.append("(");
     for (PyObject object : obItem) {
-      builder.append(object.toString());
+      builder.append(object.repr());
       builder.append(", ");
     }
     if (builder.length() > 2)

@@ -120,7 +120,7 @@ public class PyListObject extends PyObject
     StringBuilder builder = new StringBuilder();
     builder.append("[");
     for (PyObject object : obItem) {
-      builder.append(object.str());
+      builder.append(object.repr());
       builder.append(", ");
     }
     if (builder.length() > 2)
@@ -131,16 +131,7 @@ public class PyListObject extends PyObject
 
   @Override
   public PyUnicodeObject repr() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("[");
-    for (PyObject object : obItem) {
-      builder.append(object.repr());
-      builder.append(", ");
-    }
-    if (builder.length() > 2)
-      builder.delete(builder.length() - 2, builder.length());
-    builder.append("]");
-    return new PyUnicodeObject(builder.toString());
+    return str();
   }
 
   @Override

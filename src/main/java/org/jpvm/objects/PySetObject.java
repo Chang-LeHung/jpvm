@@ -18,8 +18,8 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-public class PySetObject extends PyObject implements TypeIterable,
-    PyNumberMethods, PySequenceMethods {
+public class PySetObject extends PyObject
+    implements TypeIterable, PyNumberMethods, PySequenceMethods {
 
   public static PyObject type = new PySetType();
 
@@ -41,11 +41,10 @@ public class PySetObject extends PyObject implements TypeIterable,
     StringBuilder builder = new StringBuilder();
     builder.append("{");
     for (PyObject object : set) {
-      builder.append(object.toString());
+      builder.append(object.repr());
       builder.append(", ");
     }
-    if (builder.length() > 2)
-      builder.delete(builder.length() - 2, builder.length());
+    if (builder.length() > 2) builder.delete(builder.length() - 2, builder.length());
     builder.append("}");
     return builder.toString();
   }
@@ -61,7 +60,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   public void put(PyObject key) throws PyException {
     try {
       set.add(key);
-    }catch (ConcurrentModificationException e) {
+    } catch (ConcurrentModificationException e) {
       throw new PyException("can not change set while  iterating");
     }
   }
@@ -69,7 +68,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   public void putAll(PySetObject key) throws PyException {
     try {
       set.addAll(key.set);
-    }catch (ConcurrentModificationException e) {
+    } catch (ConcurrentModificationException e) {
       throw new PyException("can not change set while  iterating");
     }
   }
@@ -89,8 +88,7 @@ public class PySetObject extends PyObject implements TypeIterable,
 
   @PyClassMethod
   public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (set.size() == 0)
-      return BuiltIn.None;
+    if (set.size() == 0) return BuiltIn.None;
     Iterator<PyObject> iterator = set.iterator();
     PyObject next = iterator.next();
     iterator.remove();
@@ -124,10 +122,8 @@ public class PySetObject extends PyObject implements TypeIterable,
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PySetObject o) {
-        if (o.set.containsAll(set))
-          return BuiltIn.True;
-        else
-          return BuiltIn.False;
+        if (o.set.containsAll(set)) return BuiltIn.True;
+        else return BuiltIn.False;
       }
     }
     throw new PyException("set method issubset only require one PySetObject argument");
@@ -138,10 +134,8 @@ public class PySetObject extends PyObject implements TypeIterable,
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PySetObject o) {
-        if (set.containsAll(o.set))
-          return BuiltIn.True;
-        else
-          return BuiltIn.False;
+        if (set.containsAll(o.set)) return BuiltIn.True;
+        else return BuiltIn.False;
       }
     }
     throw new PyException("set method issubset only require one PySetObject argument");
@@ -208,8 +202,7 @@ public class PySetObject extends PyObject implements TypeIterable,
         PySetObject result = new PySetObject();
         result.set.addAll(o.set);
         result.set.retainAll(set);
-        if (result.size() == 0)
-          return BuiltIn.True;
+        if (result.size() == 0) return BuiltIn.True;
         return BuiltIn.False;
       }
     }
@@ -219,7 +212,6 @@ public class PySetObject extends PyObject implements TypeIterable,
   public int size() {
     return set.size();
   }
-
 
   @Override
   public Object toJavaType() {
@@ -255,8 +247,7 @@ public class PySetObject extends PyObject implements TypeIterable,
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
     if (op == Operator.Py_EQ) {
       if (o instanceof PySetObject obj) {
-        if (set.equals(obj.toJavaType()))
-          return BuiltIn.True;
+        if (set.equals(obj.toJavaType())) return BuiltIn.True;
         return BuiltIn.False;
       }
       return BuiltIn.False;
@@ -291,12 +282,10 @@ public class PySetObject extends PyObject implements TypeIterable,
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
       for (PyObject pyObject : set) {
-        if (!s.contains(pyObject))
-          ret.put(pyObject);
+        if (!s.contains(pyObject)) ret.put(pyObject);
       }
       for (PyObject pyObject : s.set) {
-        if (!set.contains(pyObject))
-          ret.put(pyObject);
+        if (!set.contains(pyObject)) ret.put(pyObject);
       }
       return ret;
     }
@@ -328,12 +317,10 @@ public class PySetObject extends PyObject implements TypeIterable,
     if (o instanceof PySetObject s) {
       HashSet<PyObject> set = new HashSet<>();
       for (PyObject pyObject : this.set) {
-        if (!s.contains(pyObject))
-          set.add(pyObject);
+        if (!s.contains(pyObject)) set.add(pyObject);
       }
       for (PyObject pyObject : s.set) {
-        if (!this.set.contains(pyObject))
-          set.add(pyObject);
+        if (!this.set.contains(pyObject)) set.add(pyObject);
       }
       this.set.clear();
       this.set.addAll(set);
@@ -366,7 +353,6 @@ public class PySetObject extends PyObject implements TypeIterable,
     public PySetItrType() {
       name = "set_iterator";
     }
-
   }
 
   public class PySetItrObject extends PyObject implements TypeDoIterate {
@@ -378,8 +364,7 @@ public class PySetObject extends PyObject implements TypeIterable,
 
     @Override
     public PyObject next() {
-      if (iterator.hasNext())
-        return iterator.next();
+      if (iterator.hasNext()) return iterator.next();
       return BuiltIn.PyExcStopIteration;
     }
 
