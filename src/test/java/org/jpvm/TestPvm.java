@@ -87,7 +87,7 @@ public class TestPvm {
   @Test
   public void test03() {
     String filename =
-        "/Users/huchang/IdeaProjects/jpvm/src/test/resources/obsy/__pycache__/test03.cpython-38.pyc";
+        "src/test/resources/obsy/__pycache__/test03.cpython-38.pyc";
     try {
       new PVM(filename).run();
     } catch (PyException | IOException e) {
