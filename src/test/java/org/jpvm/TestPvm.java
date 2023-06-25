@@ -50,19 +50,37 @@ public class TestPvm {
     }
   }
 
-
   @Test
   public void testAllPyc() {
     List<String> files = scanFiles("src/test/resources/");
     for (String file : files) {
-      if (file.contains("dis") || file.contains("pycparser"))
-        continue;
+      if (file.contains("dis") || file.contains("pycparser")) continue;
       try {
         System.out.println("testing " + file + "...");
         new PVM(file).run();
       } catch (PyException | IOException e) {
         throw new RuntimeException(e);
       }
+    }
+  }
+
+  @Test
+  public void testStr() {
+    String filename = "src/test/resources/pys/__pycache__/str_test.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void testStr02() {
+    String filename = "src/test/resources/syntax/__pycache__/test05.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
     }
   }
 }

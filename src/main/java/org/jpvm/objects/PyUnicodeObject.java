@@ -16,12 +16,9 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-/**
- * Use {@linkplain StandardCharsets#UTF_8} as default charset
- */
+/** Use {@linkplain StandardCharsets#UTF_8} as default charset */
 public class PyUnicodeObject extends PyObject
-    implements PyNumberMethods, PySequenceMethods, PyMappingMethods,
-    TypeIterable {
+    implements PyNumberMethods, PySequenceMethods, PyMappingMethods, TypeIterable {
 
   public static PyObject type = new PyUnicodeType();
 
@@ -44,11 +41,9 @@ public class PyUnicodeObject extends PyObject
   }
 
   public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
-    if (internStr == null)
-      return new PyUnicodeObject(s);
+    if (internStr == null) return new PyUnicodeObject(s);
     if (intern) {
-      if (internStr.containsKey(s))
-        return internStr.get(s);
+      if (internStr.containsKey(s)) return internStr.get(s);
       else {
         PyUnicodeObject object = new PyUnicodeObject(s);
         internStr.put(s, object);
@@ -74,8 +69,7 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyUnicodeObject o) {
-        if (s.startsWith(o.s))
-          return BuiltIn.True;
+        if (s.startsWith(o.s)) return BuiltIn.True;
         return BuiltIn.False;
       }
     }
@@ -87,8 +81,7 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyUnicodeObject o) {
-        if (s.endsWith(o.s))
-          return BuiltIn.True;
+        if (s.endsWith(o.s)) return BuiltIn.True;
         return BuiltIn.False;
       }
     }
@@ -179,13 +172,11 @@ public class PyUnicodeObject extends PyObject
           if (o.get(i) instanceof PyUnicodeObject str) {
             builder.append(str.getData());
             builder.append(s);
-          } else
-            throw new PyException(o.repr() + " is not a str object");
+          } else throw new PyException(o.repr() + " is not a str object");
         }
         if (o.get(o.size() - 1) instanceof PyUnicodeObject str) {
           builder.append(str.getData());
-        } else
-          throw new PyException(o.repr() + " is not a str object");
+        } else throw new PyException(o.repr() + " is not a str object");
         return new PyUnicodeObject(builder.toString());
       }
     }
@@ -196,8 +187,7 @@ public class PyUnicodeObject extends PyObject
   public PyObject isnumeric(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       for (int i = 0; i < s.length(); i++) {
-        if (!Character.isDigit(s.charAt(i)))
-          return BuiltIn.False;
+        if (!Character.isDigit(s.charAt(i))) return BuiltIn.False;
       }
       return BuiltIn.True;
     }
@@ -208,8 +198,7 @@ public class PyUnicodeObject extends PyObject
   public PyObject isalpha(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       for (int i = 0; i < s.length(); i++) {
-        if (!Character.isAlphabetic(s.charAt(i)))
-          return BuiltIn.False;
+        if (!Character.isAlphabetic(s.charAt(i))) return BuiltIn.False;
       }
       return BuiltIn.True;
     }
@@ -267,102 +256,99 @@ public class PyUnicodeObject extends PyObject
 
   @Override
   public PyUnicodeObject repr() {
-    return new PyUnicodeObject(toString());
+    return new PyUnicodeObject("'" + s + "'");
   }
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    switch (op){
+    switch (op) {
       case Py_EQ -> {
-        if (!(o instanceof PyUnicodeObject d))
-          return BuiltIn.False;
-        if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
-          return BuiltIn.True;
+        if (!(o instanceof PyUnicodeObject d)) return BuiltIn.False;
+        if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType())) return BuiltIn.True;
         return BuiltIn.False;
       }
       case Py_LT -> {
-        if(!(o instanceof PyUnicodeObject d)){
+        if (!(o instanceof PyUnicodeObject d)) {
           return BuiltIn.False;
-        }else{
+        } else {
           int llen = this.s.length();
           int rlen = d.s.length();
           int i = 0, j = 0;
-          for(; i < llen && j < rlen; i++, j++){
-            if(this.s.charAt(i)==d.s.charAt(j)){
-            }else if(this.s.charAt(i) < d.s.charAt(j)){
+          for (; i < llen && j < rlen; i++, j++) {
+            if (this.s.charAt(i) == d.s.charAt(j)) {
+            } else if (this.s.charAt(i) < d.s.charAt(j)) {
               return BuiltIn.True;
-            }else{
+            } else {
               return BuiltIn.False;
             }
           }
-          if(llen < rlen){
+          if (llen < rlen) {
             return BuiltIn.True;
-          }else{
+          } else {
             return BuiltIn.False;
           }
-
         }
       }
       case Py_GT -> {
-        if(!(o instanceof PyUnicodeObject d)){
+        if (!(o instanceof PyUnicodeObject d)) {
           return BuiltIn.False;
-        }else{
+        } else {
           int llen = this.s.length();
           int rlen = d.s.length();
           int i = 0, j = 0;
-          for(; i < llen && j < rlen; i++, j++){
-            if(this.s.charAt(i)==d.s.charAt(j)){
-            }else if(this.s.charAt(i) > d.s.charAt(j)){
+          for (; i < llen && j < rlen; i++, j++) {
+            if (this.s.charAt(i) == d.s.charAt(j)) {
+            } else if (this.s.charAt(i) > d.s.charAt(j)) {
               return BuiltIn.True;
-            }else{
+            } else {
               return BuiltIn.False;
             }
           }
-          if(llen > rlen){
+          if (llen > rlen) {
             return BuiltIn.True;
-          }else{
+          } else {
             return BuiltIn.False;
           }
         }
       }
       case Py_LE -> {
-        if(!(o instanceof PyUnicodeObject d)){
+        if (!(o instanceof PyUnicodeObject d)) {
           return BuiltIn.False;
-        }else{
+        } else {
           int llen = this.s.length();
           int rlen = d.s.length();
           int i = 0, j = 0;
-          for(; i < llen && j < rlen; i++, j++){
-            if(this.s.charAt(i)<=d.s.charAt(j)){
+          for (; i < llen && j < rlen; i++, j++) {
+            if (this.s.charAt(i) <= d.s.charAt(j)) {
               return BuiltIn.True;
-            }else{
+            } else {
               return BuiltIn.False;
             }
           }
-          if(llen < rlen){
+          if (llen < rlen) {
             return BuiltIn.True;
-          }else{
+          } else {
             return BuiltIn.False;
           }
         }
       }
       case Py_GE -> {
-        if(!(o instanceof PyUnicodeObject d)){
+        if (!(o instanceof PyUnicodeObject d)) {
           return BuiltIn.False;
-        }else{
+        } else {
           int llen = this.s.length();
           int rlen = d.s.length();
           int i = 0, j = 0;
-          for(; i < llen && j < rlen; i++, j++){
-            if(this.s.charAt(i)>=d.s.charAt(j)){
+          for (; i < llen && j < rlen; i++, j++) {
+            if (this.s.charAt(i) >= d.s.charAt(j)) {
               return BuiltIn.True;
-            }else{
+            } else {
               return BuiltIn.False;
             }
           }
-          if(llen > rlen){
+          if (llen > rlen) {
             return BuiltIn.True;
-          }else{
+          } else {
             return BuiltIn.False;
           }
         }
@@ -394,8 +380,7 @@ public class PyUnicodeObject extends PyObject
       return new PyUnicodeObject(builder.toString());
     } else {
       Long n = NumberHelper.transformPyObject2Long(o);
-      if (n == null)
-        throw new PyTypeNotMatch("require PyNumberMethods type");
+      if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
       return new PyUnicodeObject(s.substring(n.intValue(), n.intValue() + 1));
     }
   }
@@ -438,8 +423,7 @@ public class PyUnicodeObject extends PyObject
   public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
     StringBuilder builder = new StringBuilder();
     Long l = NumberHelper.transformPyObject2Long(o);
-    if (l == null)
-      throw new PyTypeNotMatch("sqRepeat: parameter o require type PyNumberMethods");
+    if (l == null) throw new PyTypeNotMatch("sqRepeat: parameter o require type PyNumberMethods");
     builder.append(String.valueOf(s).repeat(Math.max(0, l.intValue())));
     return new PyUnicodeObject(builder.toString());
   }
@@ -461,7 +445,6 @@ public class PyUnicodeObject extends PyObject
     public PyUnicodeItrType() {
       this.name = "str_iterator";
     }
-
   }
 
   public class PyUnicodeItrObject extends PyObject implements TypeDoIterate {
@@ -475,15 +458,13 @@ public class PyUnicodeObject extends PyObject
 
     @Override
     public PyObject next() throws PyException {
-      if (idx < size())
-        return new PyUnicodeObject(s.substring(idx, ++idx));
+      if (idx < size()) return new PyUnicodeObject(s.substring(idx, ++idx));
       return BuiltIn.PyExcStopIteration;
     }
 
     @Override
     public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
-      if (idx >= size())
-        throw new PyIndexOutOfBound(idx + " is out of bound for str " + s);
+      if (idx >= size()) throw new PyIndexOutOfBound(idx + " is out of bound for str " + s);
       return new PyUnicodeObject(s.substring(idx, idx + 1));
     }
 

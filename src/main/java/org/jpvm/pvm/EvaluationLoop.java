@@ -156,8 +156,7 @@ public class EvaluationLoop {
           if (null != attr) {
             frame.pop();
             frame.push(attr);
-          }else
-            frame.push(getClassMethod(name));
+          } else frame.push(getClassMethod(name));
           // other features to be implemented
         }
         case STORE_ATTR -> {
@@ -215,9 +214,7 @@ public class EvaluationLoop {
             }
           } else if (method instanceof PyTypeType type) {
             type.call(null, args, null);
-          }
-          else
-            error = new PyException("object " + method.repr() + " can not be called");
+          } else error = new PyException("object " + method.repr() + " can not be called");
         }
         case CALL_FUNCTION -> {
           PyTupleObject args = getArgs(ins);
@@ -242,8 +239,7 @@ public class EvaluationLoop {
             kwArgs.put(tuple.get(i), frame.pop());
           }
           PyTupleObject args = new PyTupleObject(ins.getOparg() - tuple.size());
-          for (int i = args.size() - 1; i >= 0; i--)
-            args.set(i, frame.pop());
+          for (int i = args.size() - 1; i >= 0; i--) args.set(i, frame.pop());
           PyObject callable = frame.pop();
           try {
             PyObject object = Abstract.abstractCall(callable, null, args, kwArgs, frame);
@@ -319,7 +315,7 @@ public class EvaluationLoop {
           StringBuilder builder = new StringBuilder();
           for (int i = 0; i < size; i++) {
             PyObject object = frame.get(frame.getUsed() - size + i);
-            builder.append(object.repr().getData());
+            builder.append(object.str().getData());
           }
           frame.decreaseStackPointer(size);
           frame.push(new PyUnicodeObject(builder.toString()));
@@ -350,7 +346,9 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.multiply(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply multiply on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException(
+                    "can not apply multiply on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -522,8 +520,7 @@ public class EvaluationLoop {
             } catch (PyException e) {
               error = e;
             }
-          } else
-            error = new PyTypeError(top.repr() + " not support operator +");
+          } else error = new PyTypeError(top.repr() + " not support operator +");
         }
         case UNARY_NEGATIVE -> {
           PyObject top = frame.pop();
@@ -533,8 +530,7 @@ public class EvaluationLoop {
             } catch (PyException e) {
               error = e;
             }
-          } else
-            error = new PyTypeError(top.repr() + " not support operator -");
+          } else error = new PyTypeError(top.repr() + " not support operator -");
         }
         case UNARY_INVERT -> {
           PyObject top = frame.pop();
@@ -544,15 +540,12 @@ public class EvaluationLoop {
             } catch (PyException e) {
               error = e;
             }
-          } else
-            error = new PyTypeError(top.repr() + " not support operator ~");
+          } else error = new PyTypeError(top.repr() + " not support operator ~");
         }
         case UNARY_NOT -> {
           PyObject top = frame.pop();
-          if (Abstract.isTrue(top).isTrue())
-            frame.push(BuiltIn.False);
-          else
-            frame.push(BuiltIn.True);
+          if (Abstract.isTrue(top).isTrue()) frame.push(BuiltIn.False);
+          else frame.push(BuiltIn.True);
         }
         case BINARY_POWER -> {
           PyObject right = frame.pop();
@@ -568,7 +561,9 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.matrixMul(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply matrixMul on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException(
+                    "can not apply matrixMul on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -577,7 +572,8 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.trueDiv(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply trueDiv on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException("can not apply trueDiv on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -586,7 +582,9 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.floorDiv(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply floorDiv on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException(
+                    "can not apply floorDiv on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -616,9 +614,10 @@ public class EvaluationLoop {
           try {
             PyObject item = Abstract.getItem(container, sub);
             if (item == BuiltIn.notImplemented)
-              error = new PyException("can not apply BINARY_SUBSCR on " + container + " and " + sub.repr());
-            else
-              frame.push(item);
+              error =
+                  new PyException(
+                      "can not apply BINARY_SUBSCR on " + container + " and " + sub.repr());
+            else frame.push(item);
           } catch (PyException e) {
             error = e;
           }
@@ -634,7 +633,8 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.lshift(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply lshift on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException("can not apply lshift on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -643,7 +643,8 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.rshift(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply rshift on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException("can not apply rshift on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -670,7 +671,9 @@ public class EvaluationLoop {
           PyObject left = frame.pop();
           PyObject res = Abstract.inplaceXor(left, right);
           if (res == BuiltIn.notImplemented) {
-            error = new PyException("can not apply inplaceXor on " + left.repr() + " and " + right.repr());
+            error =
+                new PyException(
+                    "can not apply inplaceXor on " + left.repr() + " and " + right.repr());
           }
           frame.push(res);
         }
@@ -696,7 +699,7 @@ public class EvaluationLoop {
         case BUILD_SET -> {
           int size = ins.getOparg();
           PySetObject setObject = new PySetObject();
-          for (int i = 0; i < size; i++){
+          for (int i = 0; i < size; i++) {
             setObject.add(frame.pop());
           }
           frame.push(setObject);
@@ -704,7 +707,7 @@ public class EvaluationLoop {
         case BUILD_MAP -> {
           PyDictObject dictObject = new PyDictObject();
           int size = ins.getOparg();
-          for (int i = 0; i < size; i++){
+          for (int i = 0; i < size; i++) {
             PyObject val = frame.pop();
             PyObject key = frame.pop();
             dictObject.put(key, val);
@@ -718,18 +721,14 @@ public class EvaluationLoop {
         case POP_JUMP_IF_FALSE -> {
           PyObject pop = frame.pop();
           if (pop instanceof PyBoolObject b) {
-            if (b.isFalse())
-              byteCodeBuffer.reset(ins.getOparg());
-          } else
-            error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
+            if (b.isFalse()) byteCodeBuffer.reset(ins.getOparg());
+          } else error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
         }
         case POP_JUMP_IF_TRUE -> {
           PyObject pop = frame.pop();
           if (pop instanceof PyBoolObject b) {
-            if (b.isTrue())
-              byteCodeBuffer.reset(ins.getOparg());
-          } else
-            error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
+            if (b.isTrue()) byteCodeBuffer.reset(ins.getOparg());
+          } else error = new PyException("POP_JUMP_IF_FALSE require boo on stack top");
         }
         case COMPARE_OP -> {
           PyObject right = frame.pop();
@@ -737,24 +736,30 @@ public class EvaluationLoop {
           PyObject result;
           try {
             switch (ins.getOparg()) {
-              case TypeRichCompare.Py_LT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_LT);
-              case TypeRichCompare.Py_LE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_LE);
-              case TypeRichCompare.Py_EQ -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_EQ);
-              case TypeRichCompare.Py_NE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_NE);
-              case TypeRichCompare.Py_GT -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GT);
-              case TypeRichCompare.Py_GE -> result = Abstract.compare(left, right, TypeRichCompare.Operator.Py_GE);
-              case TypeRichCompare.PyCmp_IN ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
-              case TypeRichCompare.PyCmp_NOT_IN ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
-              case TypeRichCompare.PyCmp_IS ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
-              case TypeRichCompare.PyCmp_IS_NOT ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
-              case TypeRichCompare.PyCmp_EXC_MATCH ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
-              case TypeRichCompare.PyCmp_BAD ->
-                  result = Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
+              case TypeRichCompare.Py_LT -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_LT);
+              case TypeRichCompare.Py_LE -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_LE);
+              case TypeRichCompare.Py_EQ -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_EQ);
+              case TypeRichCompare.Py_NE -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_NE);
+              case TypeRichCompare.Py_GT -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_GT);
+              case TypeRichCompare.Py_GE -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.Py_GE);
+              case TypeRichCompare.PyCmp_IN -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
+              case TypeRichCompare.PyCmp_NOT_IN -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
+              case TypeRichCompare.PyCmp_IS -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
+              case TypeRichCompare.PyCmp_IS_NOT -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
+              case TypeRichCompare.PyCmp_EXC_MATCH -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
+              case TypeRichCompare.PyCmp_BAD -> result =
+                  Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
               default -> throw new PyException("Unknow COMPARE_OP operator" + ins.getOparg());
             }
             frame.push(result);
@@ -763,7 +768,9 @@ public class EvaluationLoop {
           }
         }
         case LOAD_BUILD_CLASS -> {
-          PyObject res = builtins.get(PyUnicodeObject.getOrCreateFromInternStringPool("__build_class__", true));
+          PyObject res =
+              builtins.get(
+                  PyUnicodeObject.getOrCreateFromInternStringPool("__build_class__", true));
           frame.push(res);
         }
         case MAKE_FUNCTION -> {
@@ -774,11 +781,12 @@ public class EvaluationLoop {
           }
           PyCodeObject codeObject = (PyCodeObject) frame.pop();
           // just for debugging to avoid cycle reference, idea will get stuck for toString method
-//          {
-//            PyDictObject dict = new PyDictObject();
-//            dict.addAll(globals);
-//          }
-          PyFunctionObject function = new PyFunctionObject(codeObject, globals, (PyUnicodeObject) qualname);
+          //          {
+          //            PyDictObject dict = new PyDictObject();
+          //            dict.addAll(globals);
+          //          }
+          PyFunctionObject function =
+              new PyFunctionObject(codeObject, globals, (PyUnicodeObject) qualname);
           // Simply for compatibility with previous code
           PyUnicodeObject module = frame.getModuleName();
           if (module != null) {
@@ -801,17 +809,13 @@ public class EvaluationLoop {
         }
         case JUMP_IF_FALSE_OR_POP -> {
           PyObject top = frame.top();
-          if (top == BuiltIn.False)
-            byteCodeBuffer.reset(ins.getOparg());
-          else
-            frame.pop();
+          if (top == BuiltIn.False) byteCodeBuffer.reset(ins.getOparg());
+          else frame.pop();
         }
         case JUMP_IF_TRUE_OR_POP -> {
           PyObject top = frame.top();
-          if (top == BuiltIn.True)
-            byteCodeBuffer.reset(ins.getOparg());
-          else
-            frame.pop();
+          if (top == BuiltIn.True) byteCodeBuffer.reset(ins.getOparg());
+          else frame.pop();
         }
         case BUILD_TUPLE -> {
           int size = ins.getOparg();
@@ -823,19 +827,17 @@ public class EvaluationLoop {
           frame.decreaseStackPointer(size);
           frame.push(tuple);
         }
-        case NOP -> {
-        }
+        case NOP -> {}
         case YIELD_VALUE -> {
           PyObject res = frame.top();
-          if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0)
-            return res;
+          if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0) return res;
           error = new PyException("yield value is not supported", false);
         }
-        /*
-         * GET_YIELD_FROM_ITER If TOS is a generator iterator or
-         * coroutine object it is left as is.
-         * Otherwise, implements TOS = iter(TOS).
-         */
+          /*
+           * GET_YIELD_FROM_ITER If TOS is a generator iterator or
+           * coroutine object it is left as is.
+           * Otherwise, implements TOS = iter(TOS).
+           */
         case GET_YIELD_FROM_ITER -> {
           PyObject top = frame.top();
           if (!(top instanceof PyGeneratorObject)) {
@@ -852,21 +854,19 @@ public class EvaluationLoop {
           if (gen instanceof PyGeneratorObject g) {
             frame.increaseStackPointer(1);
             PyObject res = g.start(top);
-            if (res == BuiltIn.PyExcStopIteration)
-              continue;
+            if (res == BuiltIn.PyExcStopIteration) continue;
             byteCodeBuffer.decrease(Instruction.sizeofByteCode);
             return res;
-          }else
-            error = new PyException("require a generator or coroutine or iterable object");
+          } else error = new PyException("require a generator or coroutine or iterable object");
         }
-        default ->
-            throw new PyException("not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
+        default -> throw new PyException(
+            "not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently", true);
       }
-      if (error != null)
-        throw new PyException(errorMessageTip(ins));
+      if (error != null) throw new PyException(errorMessageTip(ins));
       // check top whether is PyExcStopIteration
       if (frame.getUsed() > 0 && frame.top() == BuiltIn.PyExcStopIteration) {
-        throw new PyException("Execution error with op " + ins.getOpname() + " PyExcStopIteration is thrown", false);
+        throw new PyException(
+            "Execution error with op " + ins.getOpname() + " PyExcStopIteration is thrown", false);
       }
     }
     if (frame.hasArgs()) return frame.pop();
@@ -874,14 +874,18 @@ public class EvaluationLoop {
   }
 
   private String errorMessageTip(Instruction ins) {
-    return "Execution error with op " +
-        ins.getOpname() + " in module " + frame.getCode().getCoName() + ":\n"
-        + ">>>\n" +
-        error.getMessage()
+    return "Execution error with op "
+        + ins.getOpname()
+        + " in module "
+        + frame.getCode().getCoName()
+        + ":\n"
+        + ">>>\n"
+        + error.getMessage()
         + "\n<<<";
   }
 
-  private void loadFromGlobal(PyFrameObject frame, PyDictObject globals, PyDictObject builtins, PyObject name) {
+  private void loadFromGlobal(
+      PyFrameObject frame, PyDictObject globals, PyDictObject builtins, PyObject name) {
     PyObject v;
     v = globals.get(name);
     if (null == v) {

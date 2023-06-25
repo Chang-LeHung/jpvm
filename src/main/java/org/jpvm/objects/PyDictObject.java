@@ -58,9 +58,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     builder.append("{");
 
     map.forEach((x, y) -> {
-      builder.append(x.toString());
+      builder.append(x.repr());
       builder.append(": ");
-      builder.append(y.toString());
+      builder.append(y.repr());
       builder.append(", ");
     });
     if (builder.length() > 2)

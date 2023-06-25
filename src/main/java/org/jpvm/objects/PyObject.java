@@ -155,7 +155,8 @@ public class PyObject
   @Override
   public PyObject getAttr(PyObject key) throws PyException {
     PyObject descr = lookUpType(key);
-    if (descr instanceof TypeDescriptorGet && descr instanceof TypeDescriptorSet) return descr;
+    if (descr instanceof TypeDescriptorGet get && descr instanceof TypeDescriptorSet)
+      return get.descrGet(this, getType());
     PyObject object = null;
     if (dict != null) object = dict.get(key);
     if (object != null) return object;
