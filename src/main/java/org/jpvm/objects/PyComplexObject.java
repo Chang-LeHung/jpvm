@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
@@ -126,7 +127,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject pow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject pow(PyObject o) throws PyException {
     return PyNumberMethods.super.pow(o);
   }
 
@@ -183,7 +184,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplacePow(PyObject o) throws PyException {
     return pow(o);
   }
 
