@@ -18,7 +18,7 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_multiply */
-  default PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject mul(PyObject o) throws PyException {
     throw new PyNotImplemented("mul is not implemented");
   }
 
@@ -28,12 +28,12 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_divmod */
-  default PyObject divmod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject divmod(PyObject o) throws PyException {
     throw new PyNotImplemented("divmod is not implemented");
   }
 
   /** implementation of corresponding cpython nb_power */
-  default PyObject pow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject pow(PyObject o) throws PyException {
     throw new PyNotImplemented("pow is not implemented");
   }
 
@@ -123,7 +123,7 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_inplace_power */
-  default PyObject inplacePow(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplacePow(PyObject o) throws PyException {
     throw new PyNotImplemented("inplacePow is not implemented");
   }
 
@@ -158,7 +158,7 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_true_divide */
-  default PyObject trueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject trueDiv(PyObject o) throws PyException {
     throw new PyNotImplemented("trueDiv is not implemented");
   }
 

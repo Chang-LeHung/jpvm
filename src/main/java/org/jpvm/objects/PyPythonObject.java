@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pvm.Abstract;
@@ -69,4 +71,49 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
     }
     return PyNumberMethods.super.add(o);
   }
+
+  @Override
+  public PyObject sub(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__sub__", true));
+    if(attr instanceof PyMethodObject func){
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.sub(o);
+  }
+
+  @Override
+  public PyObject mul(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mul__", true));
+    if(attr instanceof PyMethodObject func){
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.mul(o);
+  }
+
+  @Override
+  public PyObject mod(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mod__", true));
+    if(attr instanceof PyMethodObject func){
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.mod(o);
+  }
+
+  @Override
+  public PyObject trueDiv(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__truediv__", true));
+    if(attr instanceof PyMethodObject func){
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.trueDiv(o);
+  }
+
 }
