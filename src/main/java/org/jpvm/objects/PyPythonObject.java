@@ -2,7 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pvm.Abstract;
@@ -75,7 +75,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject sub(PyObject o) throws PyException {
     PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__sub__", true));
-    if(attr instanceof PyMethodObject func){
+    if (attr instanceof PyMethodObject func) {
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -86,7 +86,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject mul(PyObject o) throws PyException {
     PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mul__", true));
-    if(attr instanceof PyMethodObject func){
+    if (attr instanceof PyMethodObject func) {
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -97,7 +97,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject mod(PyObject o) throws PyException {
     PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__mod__", true));
-    if(attr instanceof PyMethodObject func){
+    if (attr instanceof PyMethodObject func) {
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -108,7 +108,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject trueDiv(PyObject o) throws PyException {
     PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__truediv__", true));
-    if(attr instanceof PyMethodObject func){
+    if (attr instanceof PyMethodObject func) {
       PyTupleObject args = new PyTupleObject(1);
       args.set(0, o);
       return Abstract.abstractCall(func, this, args, null);
@@ -116,4 +116,16 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
     return PyNumberMethods.super.trueDiv(o);
   }
 
+  @Override
+  public PyObject abs() throws PyException {
+    var t = (PyPythonType) type;
+    PyObject res =
+        t.callPythonCode(
+            PyUnicodeObject.getOrCreateFromInternStringPool("__abs__", true),
+            this,
+            PyTupleObject.zero,
+            null);
+    if (res != null) return res;
+    return PyNumberMethods.super.abs();
+  }
 }

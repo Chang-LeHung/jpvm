@@ -48,7 +48,7 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython tp_absolute */
-  default PyObject abs() throws PyNotImplemented {
+  default PyObject abs() throws PyException {
     throw new PyNotImplemented("abs is not implemented");
   }
 

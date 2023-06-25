@@ -12,11 +12,8 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-/**
- * implement a simple version, not implement all program semantics like cpython
- */
+/** implement a simple version, not implement all program semantics like cpython */
 public class Abstract {
-
 
   public static PyObject multiply(PyObject v, PyObject w) throws PyTypeNotMatch {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
@@ -37,9 +34,7 @@ public class Abstract {
     throw new PyTypeNotMatch("can not apply mul on " + v.repr() + " and " + w.repr());
   }
 
-  /**
-   * whether w is subtype of v or not
-   */
+  /** whether w is subtype of v or not */
   public static boolean isSubType(PyObject v, PyObject w) {
     var type = (PyTypeType) w.getType();
     PyBoolObject o = type.isSubType(v.getType());
@@ -122,8 +117,8 @@ public class Abstract {
     if (v instanceof PyNumberMethods nv) {
       try {
         return nv.abs();
-      } catch (PyNotImplemented ignore) {
-        return BuiltIn.notImplemented;
+      } catch (PyException e) {
+        throw new RuntimeException(e);
       }
     }
     throw new PyTypeNotMatch("can not apply abs on " + v.repr());
@@ -192,7 +187,6 @@ public class Abstract {
     }
     throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
   }
-
 
   public static PyObject inplaceAnd(PyObject v, PyObject w) throws PyTypeNotMatch {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods nw) {
@@ -362,18 +356,30 @@ public class Abstract {
     throw new PyTypeNotMatch("can not apply inplaceXor on " + v.repr() + " and " + w.repr());
   }
 
-
-  public static PyObject abstractCall(PyObject callable, PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public static PyObject abstractCall(
+      PyObject callable, PyObject self, PyTupleObject args, PyDictObject kwArgs)
+      throws PyException {
     return abstractCall(callable, self, args, kwArgs, null);
   }
 
-  public static PyObject abstractCall(PyObject callable, PyObject self, PyTupleObject args,
-                                      PyDictObject kwArgs, PyFrameObject frameObject) throws PyException {
+  public static PyObject abstractCall(
+      PyObject callable,
+      PyObject self,
+      PyTupleObject args,
+      PyDictObject kwArgs,
+      PyFrameObject frameObject)
+      throws PyException {
     return abstractCall(callable, self, args, kwArgs, frameObject, null);
   }
 
-  public static PyObject abstractCall(PyObject callable, PyObject self, PyTupleObject args,
-                                      PyDictObject kwArgs, PyFrameObject frameObject, PyDictObject locals) throws PyException {
+  public static PyObject abstractCall(
+      PyObject callable,
+      PyObject self,
+      PyTupleObject args,
+      PyDictObject kwArgs,
+      PyFrameObject frameObject,
+      PyDictObject locals)
+      throws PyException {
     if (callable instanceof PyNativeMethodObject nativeMethodObject) {
       return (nativeMethodObject.call(self, args, kwArgs));
     } else if (callable instanceof PyTypeType t) {
@@ -382,26 +388,24 @@ public class Abstract {
       return callable.call(self, args, kwArgs);
     } else {
       if (callable instanceof PyFunctionObject func) {
-        if (kwArgs == null)
-          kwArgs = new PyDictObject();
-        if (args == null)
-          args = PyTupleObject.zero;
+        if (kwArgs == null) kwArgs = new PyDictObject();
+        if (args == null) args = PyTupleObject.zero;
         PyCodeObject code = (PyCodeObject) func.getFuncCode();
         var defaults = (PyTupleObject) func.getFuncDefaults();
         var kwDefaults = (PyDictObject) func.getFuncKwDefaults();
         var coVarNames = (PyTupleObject) code.getCoVarNames();
         // just for debugging to avoid cycle reference, idea will get stuck for toString method
-  //      {
-  //        PyDictObject globals = new PyDictObject();
-  //        if (frameObject != null)
-  //          globals.addAll(frameObject.getGlobals());
-  //      }
+        //      {
+        //        PyDictObject globals = new PyDictObject();
+        //        if (frameObject != null)
+        //          globals.addAll(frameObject.getGlobals());
+        //      }
         PyDictObject globals = (PyDictObject) func.getFuncGlobals();
         int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
         // use below in release version
-  //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(), frameObject.getGlobals(), frameObject);
-        if (locals == null)
-          locals = new PyDictObject();
+        //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(),
+        // frameObject.getGlobals(), frameObject);
+        if (locals == null) locals = new PyDictObject();
         PyFrameObject f = new PyFrameObject(func, code, BuiltIn.dict, globals, locals, frameObject);
         Map<PyObject, Integer> map = new HashMap<>();
         for (int i = 0; i < coVarNames.size(); i++) {
@@ -421,16 +425,14 @@ public class Abstract {
           if (f.getLocal(i) == null)
             throw new PyParametersError("please pass argument " + coVarNames.get(i).repr(), false);
         }
-        if (((PyCodeObject) (func.getFuncCode())).isGenerator())
-          return new PyGeneratorObject(f);
+        if (((PyCodeObject) (func.getFuncCode())).isGenerator()) return new PyGeneratorObject(f);
         EvaluationLoop eval = new EvaluationLoop(f);
         PVM.getThreadState().increaseRecursionDepth();
         ThreadState ts = PVM.getThreadState();
         // store current frame
         PyFrameObject cf = ts.getCurrentFrame();
         ts.setCurrentFrame(f);
-        if (ts.isOverFlow())
-          throw new PyException("recursion depth exceeded");
+        if (ts.isOverFlow()) throw new PyException("recursion depth exceeded");
         PyObject res = eval.pyEvalFrame();
         PVM.getThreadState().decreaseRecursionDepth();
         // restore current frame
@@ -441,7 +443,8 @@ public class Abstract {
     throw new PyException("abstract call error occurred");
   }
 
-  public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op) throws PyException {
+  public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op)
+      throws PyException {
     return w.richCompare(v, op);
   }
 
@@ -512,8 +515,6 @@ public class Abstract {
     if (error != null) {
       error.getMessage();
     }
-    if (null != error)
-      throw new PyException(msg1 + msg2);
+    if (null != error) throw new PyException(msg1 + msg2);
   }
-
 }

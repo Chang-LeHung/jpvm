@@ -14,8 +14,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   private PyFloatObject real;
   private PyFloatObject image;
 
-  public PyComplexObject() {
-  }
+  public PyComplexObject() {}
 
   public PyComplexObject(PyFloatObject real, PyFloatObject image) {
     this.real = real;
@@ -52,8 +51,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
    */
   @Override
   public Object toJavaType() {
-    return new double[]{(double) getImage().toJavaType(),
-        (double) getReal().toJavaType()};
+    return new double[] {(double) getImage().toJavaType(), (double) getReal().toJavaType()};
   }
 
   @Override
@@ -85,8 +83,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
     if (Operator.Py_EQ == op) {
       if (o instanceof PyComplexObject complex) {
-        if (complex.real == real && complex.image == image)
-          return BuiltIn.True;
+        if (complex.real == real && complex.image == image) return BuiltIn.True;
       }
       return BuiltIn.False;
     }
@@ -103,7 +100,9 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
     if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("can not apply function add on complex and " + o.getTypeName());
     }
-    return new PyComplexObject((PyFloatObject) (real.add(((PyComplexObject) o).getReal())), (PyFloatObject) (image.add(((PyComplexObject) o).getImage())));
+    return new PyComplexObject(
+        (PyFloatObject) (real.add(((PyComplexObject) o).getReal())),
+        (PyFloatObject) (image.add(((PyComplexObject) o).getImage())));
   }
 
   @Override
@@ -111,7 +110,9 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
     if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("cannot  apply function add on complex and " + o.getTypeName());
     }
-    return new PyComplexObject((PyFloatObject) (real.sub(((PyComplexObject) o).getReal())), (PyFloatObject) (image.sub(((PyComplexObject) o).getImage())));
+    return new PyComplexObject(
+        (PyFloatObject) (real.sub(((PyComplexObject) o).getReal())),
+        (PyFloatObject) (image.sub(((PyComplexObject) o).getImage())));
   }
 
   @Override
@@ -142,7 +143,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject abs() throws PyNotImplemented {
+  public PyObject abs() throws PyException {
     return PyNumberMethods.super.abs();
   }
 
@@ -165,7 +166,8 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
     PyFloatObject ac_add_bd = (PyFloatObject) ac.add(bd);
     PyFloatObject c2_add_d2 = (PyFloatObject) c2.add(d2);
     PyFloatObject bc_sub_ad = (PyFloatObject) bc.sub(ad);
-    return new PyComplexObject((PyFloatObject) ac_add_bd.trueDiv(c2_add_d2), (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
+    return new PyComplexObject(
+        (PyFloatObject) ac_add_bd.trueDiv(c2_add_d2), (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
   }
 
   @Override
