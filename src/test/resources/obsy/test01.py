@@ -5,8 +5,7 @@ class A(object):
     def __init__(self):
         self.name = "hello world"
 
-    @staticmethod
-    def hello():
+    def hello(self):
         print("helloworld")
 
     def __add__(self, other):
