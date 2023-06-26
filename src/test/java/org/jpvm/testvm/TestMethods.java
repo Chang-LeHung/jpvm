@@ -5,6 +5,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.pvm.EvaluationLoop;
+import org.jpvm.pvm.PVM;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
@@ -58,5 +59,15 @@ public class TestMethods {
     }
     assert ret != null;
     System.out.println("ret = " + ret.str().getData());
+  }
+
+  @Test
+  public void testLongOther() {
+    String filename = "src/test/resources/testpy/__pycache__/testOtherLong.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

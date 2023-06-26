@@ -210,6 +210,9 @@ public class PyLongObject extends PyObject
 
     @Override
     public PyObject mul(PyObject o) throws PyTypeNotMatch {
+        if(o instanceof PyListObject){
+
+        }
         if (!(o instanceof PyLongObject))
             throw new PyTypeNotMatch("can apply function mul on int and " + o.getTypeName());
         return new PyLongObject(data * ((PyLongObject) o).getData());
