@@ -25,6 +25,11 @@ public class Abstract {
         return nw.mul(v);
       } catch (PyException ignore) {
       }
+    }else if(v instanceof PyNumberMethods && w instanceof PySequenceMethods nw){
+      try {
+        return nw.sqRepeat(v);
+      } catch (PyNotImplemented | PyTypeNotMatch ignore) {
+      }
     } else if (v instanceof PySequenceMethods nv && w instanceof PyNumberMethods) {
       try {
         return nv.sqRepeat(w);
