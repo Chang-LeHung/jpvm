@@ -19,6 +19,24 @@ class A:
     def __truediv__(self, other):
         return self.s / other.s
 
+    def __lt__(self, other):
+        return self.s < other.s
+
+    def __le__(self, other):
+        return self.s <= other.s
+
+    def __eq__(self, other):
+        return self.s == other.s
+
+    def __ne__(self, other):
+        return self.s != other.s
+
+    def __gt__(self, other):
+        return self.s > other.s
+
+    def __ge__(self, other):
+        return self.s >= other.s
+
 
 if __name__ == '__main__':
     a = A([1,2,3], 5)
@@ -31,3 +49,9 @@ if __name__ == '__main__':
     print(modres)
     divres = b / a
     print(divres)
+    print(b < a)
+    print(b <= a)
+    print(b == a)
+    print(b != a)
+    print(b > a)
+    print(b >= a)

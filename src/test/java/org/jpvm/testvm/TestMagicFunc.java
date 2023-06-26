@@ -9,7 +9,7 @@ import java.io.IOException;
 public class TestMagicFunc {
 
     @Test
-    public void testPVM() {
+    public void testMagicFunc() {
         String filename = "src/test/resources/testpy/__pycache__/testMagicFunc.cpython-38.pyc";
         try {
             new PVM(filename).run();

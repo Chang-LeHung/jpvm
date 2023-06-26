@@ -52,6 +52,56 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
+    switch (op){
+      case Py_LT -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__lt__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+      case Py_LE -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__le__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+      case Py_EQ -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__eq__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+      case Py_NE -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__ne__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+      case Py_GT -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__gt__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+      case Py_GE -> {
+        PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__ge__", true));
+        if(attr instanceof PyMethodObject func){
+          PyTupleObject args = new PyTupleObject(1);
+          args.set(0, o);
+          return (PyBoolObject) Abstract.abstractCall(func, this, args, null);
+        }
+      }
+    }
     return super.richCompare(o, op);
   }
 
