@@ -33,7 +33,8 @@ public class PyListObject extends PyObject
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    if (o == type) return BuiltIn.True;
+    return BuiltIn.False;
   }
 
   public void app1(PyObject obj) {
@@ -63,13 +64,11 @@ public class PyListObject extends PyObject
   }
 
   public void sort(boolean reverse) {
-    if (reverse)
-      Collections.reverse(obItem);
+    if (reverse) Collections.reverse(obItem);
   }
 
   public PyObject get(int idx) {
-    if (idx >= obItem.size())
-      throw new IndexOutOfBoundsException();
+    if (idx >= obItem.size()) throw new IndexOutOfBoundsException();
     return obItem.get(idx);
   }
 
@@ -89,8 +88,7 @@ public class PyListObject extends PyObject
       builder.append(object.toString());
       builder.append(", ");
     }
-    if (builder.length() > 2)
-      builder.delete(builder.length() - 2, builder.length());
+    if (builder.length() > 2) builder.delete(builder.length() - 2, builder.length());
     builder.append("]");
     return builder.toString();
   }
@@ -123,8 +121,7 @@ public class PyListObject extends PyObject
       builder.append(object.repr());
       builder.append(", ");
     }
-    if (builder.length() > 2)
-      builder.delete(builder.length() - 2, builder.length());
+    if (builder.length() > 2) builder.delete(builder.length() - 2, builder.length());
     builder.append("]");
     return new PyUnicodeObject(builder.toString());
   }
@@ -137,13 +134,11 @@ public class PyListObject extends PyObject
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (op == Operator.Py_EQ) {
-      if (!(o instanceof PyListObject list))
-        return BuiltIn.False;
+      if (!(o instanceof PyListObject list)) return BuiltIn.False;
       int s = size();
       if (s != list.size()) return BuiltIn.False;
       for (int i = 0; i < s; i++) {
-        if (get(i).richCompare(list.get(i), Operator.Py_EQ).isFalse())
-          return BuiltIn.False;
+        if (get(i).richCompare(list.get(i), Operator.Py_EQ).isFalse()) return BuiltIn.False;
       }
       return BuiltIn.True;
     }
@@ -157,8 +152,7 @@ public class PyListObject extends PyObject
     }
     int s = size();
     for (int i = 0; i < data.getData(); i++) {
-      for (int j = 0; j < s; ++j)
-        append(get(j));
+      for (int j = 0; j < s; ++j) append(get(j));
     }
     return this;
   }
@@ -174,8 +168,7 @@ public class PyListObject extends PyObject
       try {
         PyObject n = num.nbInt();
         int idx = (int) ((PyLongObject) n).getData();
-        if (idx >= size())
-          throw new PyIndexOutOfBound("index " + idx + " out of bound");
+        if (idx >= size()) throw new PyIndexOutOfBound("index " + idx + " out of bound");
         return get(idx);
       } catch (PyNotImplemented ignored) {
       }
@@ -183,8 +176,7 @@ public class PyListObject extends PyObject
       try {
         PyObject index = num.index();
         int idx = (int) ((PyLongObject) index).getData();
-        if (idx >= size())
-          throw new PyIndexOutOfBound("index " + idx + " out of bound");
+        if (idx >= size()) throw new PyIndexOutOfBound("index " + idx + " out of bound");
         return get(idx);
       } catch (PyNotImplemented ignored) {
       }
@@ -213,8 +205,7 @@ public class PyListObject extends PyObject
         }
       } else {
         Long n = NumberHelper.transformPyObject2Long(key);
-        if (n == null)
-          throw new PyKeyError("key " + key.str() + " is not a key for list");
+        if (n == null) throw new PyKeyError("key " + key.str() + " is not a key for list");
         obItem.remove(n.intValue());
       }
     } else {
@@ -227,8 +218,7 @@ public class PyListObject extends PyObject
         }
       } else {
         Long n = NumberHelper.transformPyObject2Long(key);
-        if (n == null)
-          throw new PyKeyError("key " + key.str() + " is not a key for list");
+        if (n == null) throw new PyKeyError("key " + key.str() + " is not a key for list");
         obItem.set(n.intValue(), val);
       }
     }
@@ -248,8 +238,7 @@ public class PyListObject extends PyObject
     for (PyObject object : obItem) {
       list.append(object);
     }
-    for (int i = 0; i < l.size(); ++i)
-      list.append(l.get(i));
+    for (int i = 0; i < l.size(); ++i) list.append(l.get(i));
     return list;
   }
 
@@ -257,8 +246,7 @@ public class PyListObject extends PyObject
   public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch {
     PyListObject list = new PyListObject();
     Long n = NumberHelper.transformPyObject2Long(o);
-    if (n == null)
-      throw new PyTypeNotMatch("require PyNumberMethods type");
+    if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
     for (int i = 0; i < n.intValue(); ++i) {
       for (PyObject object : obItem) {
         list.append(object);
@@ -271,8 +259,7 @@ public class PyListObject extends PyObject
   public PyObject sqItem(PyObject o) throws PyTypeNotMatch {
     if (o instanceof PyLongObject) {
       Long n = NumberHelper.transformPyObject2Long(o);
-      if (n == null)
-        throw new PyTypeNotMatch("require PyNumberMethods type");
+      if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
       return get(n.intValue());
     } else if (o instanceof PySliceObject slice) {
       PyListObject idx = slice.unpacked(this);
@@ -288,55 +275,57 @@ public class PyListObject extends PyObject
 
   @Override
   public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
-    if(val instanceof TypeIterable itr){
+    if (val instanceof TypeIterable itr) {
       TypeDoIterate iterator = itr.getIterator();
-      if(!(key instanceof PySliceObject slice)){
+      if (!(key instanceof PySliceObject slice)) {
         throw new PyTypeNotMatch("not a slicekey");
       }
       PyListObject keys = slice.unpacked(this);
       Long step;
-      if(((PySliceObject) key).getStep() instanceof PyNoneObject){
+      if (((PySliceObject) key).getStep() instanceof PyNoneObject) {
         step = 1L;
-      }else{
-        step = ((PyLongObject)slice.getStep()).getData();
+      } else {
+        step = ((PyLongObject) slice.getStep()).getData();
       }
-      if(step == 0){
+      if (step == 0) {
         throw new PyKeyError("slice step cannot be zero");
       }
       int i = 0;
       int keyLast;
-      if(keys.size() != 0){
-        keyLast = (int) ((PyLongObject)keys.get(keys.size()-1)).getData();
-      }else{
+      if (keys.size() != 0) {
+        keyLast = (int) ((PyLongObject) keys.get(keys.size() - 1)).getData();
+      } else {
         keyLast = 0;
       }
 
-      if(step != 1 && keys.size() != iterator.size()){
-        throw new PyException("attempt to assign sequence of size " + iterator.size() + " to extended slice of size " + keys.size());
+      if (step != 1 && keys.size() != iterator.size()) {
+        throw new PyException(
+            "attempt to assign sequence of size "
+                + iterator.size()
+                + " to extended slice of size "
+                + keys.size());
       }
-      while(iterator.hasNext()){
-        if(step == 1){
-          if(i < keys.size()){
-            set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());
-          }else{
+      while (iterator.hasNext()) {
+        if (step == 1) {
+          if (i < keys.size()) {
+            set((int) ((PyLongObject) keys.get(i)).getData(), iterator.next());
+          } else {
             insert(keyLast + i - keys.size() + 1, iterator.next());
           }
-        }else{
-          set((int)((PyLongObject)keys.get(i)).getData(), iterator.next());
+        } else {
+          set((int) ((PyLongObject) keys.get(i)).getData(), iterator.next());
         }
         i++;
       }
-      if(keys.size() > iterator.size()){
-        for(;i < keys.size(); i++){
+      if (keys.size() > iterator.size()) {
+        for (; i < keys.size(); i++) {
           pop();
         }
       }
       return BuiltIn.None;
-
     }
     Long n = NumberHelper.transformPyObject2Long(key);
-    if (n == null)
-      throw new PyTypeNotMatch("require PyNumberMethods type");
+    if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
     set(n.intValue(), val);
     return BuiltIn.None;
   }
@@ -344,8 +333,7 @@ public class PyListObject extends PyObject
   @Override
   public PyObject sqContain(PyObject o) throws PyException {
     for (PyObject object : obItem) {
-      if (object.richCompare(o, Operator.Py_EQ).isTrue())
-        return BuiltIn.True;
+      if (object.richCompare(o, Operator.Py_EQ).isTrue()) return BuiltIn.True;
     }
     return BuiltIn.False;
   }
@@ -353,12 +341,10 @@ public class PyListObject extends PyObject
   @Override
   public PyObject sqInplaceRepeat(PyObject o) throws PyTypeNotMatch {
     Long n = NumberHelper.transformPyObject2Long(o);
-    if (n == null)
-      throw new PyTypeNotMatch("require PyNumberMethods type");
+    if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
     int size = size();
     for (int i = 0; i < n.intValue(); ++i) {
-      for (int j = 0; j < size; ++j)
-        obItem.add(obItem.get(j));
+      for (int j = 0; j < size; ++j) obItem.add(obItem.get(j));
     }
     return this;
   }
@@ -377,8 +363,7 @@ public class PyListObject extends PyObject
 
   @PyClassMethod
   public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 0)
-      return pop();
+    if (args.size() == 0) return pop();
     else {
       PyObject object = args.get(0);
       if (object instanceof PyLongObject o) {
@@ -406,14 +391,12 @@ public class PyListObject extends PyObject
     throw new PyException("list append method require one argument");
   }
 
-
   @PyClassMethod
   public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyListObject result = new PyListObject();
     result.addAll(this);
     return result;
   }
-
 
   @PyClassMethod
   public PyObject index(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -462,51 +445,52 @@ public class PyListObject extends PyObject
     throw new PyException("list count method require 1 method");
   }
 
-
   @PyClassMethod
   public PyObject sort(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    var ref = new Object() {
-      PyException error;
-    };
+    var ref =
+        new Object() {
+          PyException error;
+        };
     if (kwArgs == null) {
-      obItem.sort((x, y) -> {
-        try {
-          if (x.richCompare(y, Operator.Py_LT).isFalse()) {
-            return 1;
-          } else
-            return -1;
-        } catch (PyUnsupportedOperator e) {
-          ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
-        } catch (PyException e) {
-          ref.error = e;
-        }
-        return 0;
-      });
+      obItem.sort(
+          (x, y) -> {
+            try {
+              if (x.richCompare(y, Operator.Py_LT).isFalse()) {
+                return 1;
+              } else return -1;
+            } catch (PyUnsupportedOperator e) {
+              ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+            } catch (PyException e) {
+              ref.error = e;
+            }
+            return 0;
+          });
     } else {
       PyObject func = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("key", true));
       PyTupleObject tuple = new PyTupleObject(1);
       if (func != null) {
-        obItem.sort((x, y) -> {
-          try {
-            tuple.set(0, x);
-            x = Abstract.abstractCall(func, null, tuple, null);
-            tuple.set(0, y);
-            y = Abstract.abstractCall(func, null, tuple, null);
-          } catch (PyException e) {
-            ref.error = new PyTypeError(e.getMessage());
-          }
-          try {
-            if (x.richCompare(y, Operator.Py_LT).isFalse()) {
-              return 1;
-            } else
-              return -1;
-          } catch (PyUnsupportedOperator e) {
-            ref.error = new PyTypeError("'<' not supported between instances of 'str' and 'int'");
-          } catch (PyException e) {
-            ref.error = e;
-          }
-          return 0;
-        });
+        obItem.sort(
+            (x, y) -> {
+              try {
+                tuple.set(0, x);
+                x = Abstract.abstractCall(func, null, tuple, null);
+                tuple.set(0, y);
+                y = Abstract.abstractCall(func, null, tuple, null);
+              } catch (PyException e) {
+                ref.error = new PyTypeError(e.getMessage());
+              }
+              try {
+                if (x.richCompare(y, Operator.Py_LT).isFalse()) {
+                  return 1;
+                } else return -1;
+              } catch (PyUnsupportedOperator e) {
+                ref.error =
+                    new PyTypeError("'<' not supported between instances of 'str' and 'int'");
+              } catch (PyException e) {
+                ref.error = e;
+              }
+              return 0;
+            });
       }
     }
     if (ref.error == null) return BuiltIn.None;
@@ -519,11 +503,8 @@ public class PyListObject extends PyObject
     return BuiltIn.None;
   }
 
-
-
   public void addAll(PyListObject o) {
-    for (int i = 0; i < o.size(); i++)
-      append(o.get(i));
+    for (int i = 0; i < o.size(); i++) append(o.get(i));
   }
 
   public static class PyListItrType extends PyTypeType implements TypeName {
@@ -551,8 +532,7 @@ public class PyListObject extends PyObject
 
     @Override
     public PyObject get(int idx) throws PyIndexOutOfBound {
-      if (idx >= size())
-        throw new PyIndexOutOfBound("index " + idx + " out of bound");
+      if (idx >= size()) throw new PyIndexOutOfBound("index " + idx + " out of bound");
       return obItem.get(idx);
     }
 
