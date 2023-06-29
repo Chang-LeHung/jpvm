@@ -1,6 +1,8 @@
 package org.jpvm.pvm;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Map;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
@@ -12,32 +14,23 @@ import org.yaml.snakeyaml.Yaml;
 
 public class PVM {
 
-  /**
-   * thread state of each thread
-   */
+  /** thread state of each thread */
   public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
 
-  /**
-   * initialize here for compatibility
-   */
+  /** initialize here for compatibility */
   public static InterpreterState interpreterState = new InterpreterState(500);
-  /**
-   * filename of the py file to be executed.
-   */
+  /** filename of the py file to be executed. */
   private final String filename;
-  /**
-   * code of the py file to be executed.
-   */
+  /** code of the py file to be executed. */
   private PyCodeObject code;
-  /**
-   * global and local variables of the py file to be executed.
-   */
+  /** global and local variables of the py file to be executed. */
   private PyDictObject globals;
+
   private PyDictObject locals;
   private PyDictObject builtins;
   private PyModuleObject rootModule;
   private PyFrameObject rootFrame;
-  private EvaluationLoop  loop;
+  private EvaluationLoop loop;
 
   public PVM(String filename) throws PyException, IOException {
     this.filename = filename;
@@ -47,8 +40,7 @@ public class PVM {
 
   public static ThreadState getThreadState() {
     ThreadState res = tss.get();
-    if (res != null)
-      return res;
+    if (res != null) return res;
     res = new ThreadState();
     res.setIs(interpreterState);
     tss.set(res);
@@ -63,9 +55,7 @@ public class PVM {
     getThreadState().getIs().addModule(name, module);
   }
 
-  /**
-   * load bytecode of the py file to be executed.
-   */
+  /** load bytecode of the py file to be executed. */
   private void loadCode() throws PyException, IOException {
     PycReader reader = new PycReader(filename);
     reader.doParse();
@@ -73,10 +63,8 @@ public class PVM {
   }
 
   private void init() {
-    if (tss == null)
-      tss = new ThreadLocal<>();
-    if (interpreterState == null)
-      interpreterState = new InterpreterState(500);
+    if (tss == null) tss = new ThreadLocal<>();
+    if (interpreterState == null) interpreterState = new InterpreterState(500);
   }
 
   private void initVirtualMachine() throws PyNotImplemented {
@@ -98,15 +86,27 @@ public class PVM {
     // ensure that the main module is named "__main__"
     rootModule.putAttribute(
         PyUnicodeObject.getOrCreateFromInternStringPool("__name__", true),
-        PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
-    );
+        PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true));
 
     // register the Interpreter state
     registerInterpreterState();
 
     // register the module
-    PVM.getThreadState().getIs().addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true)
-        , rootModule);
+    PVM.getThreadState()
+        .getIs()
+        .addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true), rootModule);
+    // add stl path to search path all stl are under org/jpvm/stl
+    PVM.getThreadState()
+        .getIs()
+        .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvm/stl", true));
+    PVM.getThreadState()
+        .getIs()
+        .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt/", true));
+    var coFileName = ((PyUnicodeObject) code.getCoFileName()).getData();
+    File file = new File(coFileName.replace("\\", "/"));
+    String base = file.getParent();
+    base = Paths.get(base).toAbsolutePath().toString();
+    PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
   }
 
   public PyModuleObject getRootModule() {
@@ -122,7 +122,7 @@ public class PVM {
       interpreterState.setGILInterval((Integer) o);
     }
     o = map.get("max-recursive-depth");
-    if (o instanceof Integer ) {
+    if (o instanceof Integer) {
       interpreterState.setMaxRecursionDepth((Integer) o);
     }
   }
@@ -141,7 +141,7 @@ public class PVM {
 
   public void exit() {
     tss = null;
-    interpreterState = null;  // help gc
+    interpreterState = null; // help gc
   }
 
   public void close() {

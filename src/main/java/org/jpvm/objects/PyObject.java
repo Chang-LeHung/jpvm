@@ -138,7 +138,7 @@ public class PyObject
   }
 
   /** be careful with call stack overflow if t == PyTypeType.type */
-  private PyObject lookUpType(PyObject key) throws PyException {
+  protected PyObject lookUpType(PyObject key) throws PyException {
     PyTypeType t = (PyTypeType) getType();
     PyObject res = null;
     PyTupleObject mro = t.getMro();

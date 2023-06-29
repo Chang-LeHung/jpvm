@@ -3,13 +3,11 @@ package org.jpvm.objects;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.types.PyModuleType;
 
-public class PyModuleObject extends PyObject{
+public class PyModuleObject extends PyObject {
 
   public static PyObject type = new PyModuleType();
 
-  /**
-   * The module name.
-   */
+  /** The module name. */
   private PyUnicodeObject moduleName;
 
   private PyModuleObject() {
@@ -59,4 +57,16 @@ public class PyModuleObject extends PyObject{
     return moduleName.richCompare(o, op);
   }
 
+  @Override
+  public PyObject getMethod(String name) throws PyException {
+    PyUnicodeObject object = new PyUnicodeObject(name);
+    PyObject res = dict.get(object);
+    if (res instanceof PyFunctionObject) return res;
+    return null;
+  }
+
+  @Override
+  public PyObject getAttr(PyObject key) throws PyException {
+    return dict.get(key);
+  }
 }

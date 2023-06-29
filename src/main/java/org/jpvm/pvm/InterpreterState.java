@@ -1,10 +1,7 @@
 package org.jpvm.pvm;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.objects.PyDictObject;
-import org.jpvm.objects.PyListObject;
-import org.jpvm.objects.PyModuleObject;
-import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.*;
 
 public class InterpreterState {
 
@@ -49,6 +46,10 @@ public class InterpreterState {
       modules.put(name, module);
     } catch (PyException ignored) {
     }
+  }
+
+  public PyObject getModule(PyUnicodeObject name) throws PyException {
+    return modules.get(name);
   }
 
   public PyDictObject getBuiltins() {

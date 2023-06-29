@@ -1,7 +1,14 @@
 package org.jpvm.pvm;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.Objects;
+
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
@@ -18,6 +25,7 @@ import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
+import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 
 public class EvaluationLoop {
@@ -125,6 +133,73 @@ public class EvaluationLoop {
       }
       Instruction ins = iterator.next();
       switch (ins.getOpname()) {
+        case IMPORT_NAME -> {
+          frame.pop();
+          frame.pop();
+          PyObject name = coNames.get(ins.getOparg());
+          PyObject module = PVM.getThreadState().getIs().getModule((PyUnicodeObject) name);
+          if (module != null) {
+            frame.push(module);
+            continue;
+          }
+          String moduleName = ((PyUnicodeObject) name).getData();
+          PyListObject searchPath = PVM.getThreadState().getIs().getSearchPath();
+          boolean found = false;
+          for (int i = 0; i < searchPath.size(); i++) {
+            var path = ((PyUnicodeObject) searchPath.get(i)).getData();
+            if (path.endsWith("__pycache__")) {
+              File pyDir = new File(path);
+              File[] files = pyDir.listFiles();
+              if (files == null) continue;
+              for (File file : files) {
+                if (file.getName().startsWith(moduleName) && file.getName().endsWith(".pyc")) {
+                  PycReader reader = new PycReader(file.getAbsolutePath());
+                  try {
+                    reader.doParse();
+                    PyCodeObject code = reader.getCodeObject();
+                    PyModuleObject newModule = new PyModuleObject((PyUnicodeObject) name);
+                    evalModule(code, newModule.getDict());
+                    frame.push(newModule);
+                    PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, newModule);
+                    found = true;
+                    break;
+                  } catch (IOException ignore) {
+                  }
+                }
+              }
+            } else {
+              path = path.replace("/", ".");
+              PyModuleObject res = Utils.loadClass(path + "." + moduleName);
+              if (res != null) {
+                found = true;
+                PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
+                frame.push(res);
+                break;
+              }
+            }
+          }
+          if (!found) error = new PyException("can not find a module named " + moduleName);
+        }
+        case IMPORT_FROM -> {
+          var name = coNames.get(ins.getOparg());
+          PyObject top = frame.top();
+          PyObject res = Utils.loadFiled(top, (PyUnicodeObject) name);
+          if (res != null) {
+            frame.push(res);
+            continue;
+          }
+          res = Utils.loadClassMethod(top, (PyUnicodeObject) name);
+          if (res != null) {
+            frame.push(res);
+            continue;
+          }
+          res = top.getAttr(name);
+          if (res != null) {
+            frame.push(res);
+            continue;
+          }
+          error = new PyException("can not import " + name.repr() + " from " + top.repr());
+        }
         case LOAD_CONST -> frame.push(consts.get(ins.getOparg()));
         case STORE_NAME -> {
           PyObject top = frame.pop();
@@ -156,7 +231,9 @@ public class EvaluationLoop {
           if (null != attr) {
             frame.pop();
             frame.push(attr);
-          } else frame.push(getClassMethod(name));
+            continue;
+          }
+          frame.push(getClassMethod(name));
           // other features to be implemented
         }
         case STORE_ATTR -> {
@@ -898,5 +975,12 @@ public class EvaluationLoop {
     } else {
       frame.push(v);
     }
+  }
+
+  public static void evalModule(PyCodeObject codeObject, PyDictObject namespace)
+      throws PyException {
+    PyFrameObject frameObject =
+        new PyFrameObject(codeObject, PVM.getThreadState().getBuiltins(), namespace, namespace);
+    new EvaluationLoop(frameObject).pyEvalFrame();
   }
 }
