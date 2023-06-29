@@ -1,11 +1,10 @@
 package org.jpvm.objects;
 
-import org.jpvm.objects.annotation.PyClassAttribute;
-import org.jpvm.objects.annotation.PyClassMethod;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import org.jpvm.objects.annotation.PyClassAttribute;
+import org.jpvm.objects.annotation.PyClassMethod;
 
 public class Utils {
 
@@ -19,13 +18,13 @@ public class Utils {
     return res;
   }
 
-  public static PyModuleObject loadClass(String path) {
+  public static PyModuleObject loadClass(String path, PyUnicodeObject name) {
     PyModuleObject res = null;
     try {
       Class<?> clazz = Class.forName(path);
       if (PyModuleObject.class.isAssignableFrom(clazz)) {
-        Constructor<?> constructor = clazz.getDeclaredConstructor();
-        res = (PyModuleObject) constructor.newInstance();
+        Constructor<?> constructor = clazz.getDeclaredConstructor(PyUnicodeObject.class);
+        res = (PyModuleObject) constructor.newInstance(name);
       }
     } catch (Exception ignore) {
     }

@@ -7,8 +7,8 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class math extends PyModuleObject {
 
-  public math() {
-    super(PyUnicodeObject.getOrCreateFromInternStringPool("math", true));
+  public math(PyUnicodeObject name) {
+    super(name);
   }
 
   @PyClassMethod

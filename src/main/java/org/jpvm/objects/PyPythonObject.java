@@ -1,7 +1,6 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;

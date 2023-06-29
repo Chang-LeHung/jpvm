@@ -2,13 +2,8 @@ package org.jpvm.pvm;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Paths;
 import java.util.Iterator;
-import java.util.Objects;
-
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
@@ -57,6 +52,13 @@ public class EvaluationLoop {
     locals = frame.getLocals();
     builtins = frame.getBuiltins();
     consts = (PyTupleObject) code.getCoConsts();
+  }
+
+  public static void evalModule(PyCodeObject codeObject, PyDictObject namespace)
+      throws PyException {
+    PyFrameObject frameObject =
+        new PyFrameObject(codeObject, PVM.getThreadState().getBuiltins(), namespace, namespace);
+    new EvaluationLoop(frameObject).pyEvalFrame();
   }
 
   public PyTupleObject getArgs(Instruction ins) {
@@ -169,7 +171,16 @@ public class EvaluationLoop {
               }
             } else {
               path = path.replace("/", ".");
-              PyModuleObject res = Utils.loadClass(path + "." + moduleName);
+              PyModuleObject res = Utils.loadClass(path + "." + moduleName, (PyUnicodeObject) name);
+              if (res != null) {
+                found = true;
+                PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
+                frame.push(res);
+                break;
+              }
+              res =
+                  Utils.loadClass(
+                      path + "." + moduleName + ".PyModuleMain", (PyUnicodeObject) name);
               if (res != null) {
                 found = true;
                 PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
@@ -975,12 +986,5 @@ public class EvaluationLoop {
     } else {
       frame.push(v);
     }
-  }
-
-  public static void evalModule(PyCodeObject codeObject, PyDictObject namespace)
-      throws PyException {
-    PyFrameObject frameObject =
-        new PyFrameObject(codeObject, PVM.getThreadState().getBuiltins(), namespace, namespace);
-    new EvaluationLoop(frameObject).pyEvalFrame();
   }
 }
