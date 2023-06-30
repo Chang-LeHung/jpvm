@@ -107,7 +107,7 @@ public class EvaluationLoop {
   }
 
   public PyObject getClassMethod(PyUnicodeObject name) {
-    PyObject obj = frame.pop();
+    PyObject obj = frame.top();
     Class<? extends PyObject> clazz = obj.getClass();
     try {
       Method meth = clazz.getMethod(name.getData(), PyObject.parameterTypes);
@@ -116,9 +116,9 @@ public class EvaluationLoop {
         return new PyMethodObject(obj, meth, name.getData());
       }
     } catch (NoSuchMethodException e) {
-      error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+      error = new PyException("object " + obj.repr() + " not have method " + name.repr());
     }
-    error = new PyException("object + " + obj.repr() + " not have method " + name.repr());
+    error = new PyException("object " + obj.repr() + " not have method " + name.repr());
     return null;
   }
 
@@ -244,8 +244,20 @@ public class EvaluationLoop {
             frame.push(attr);
             continue;
           }
-          frame.push(getClassMethod(name));
-          // other features to be implemented
+          PyObject res = getClassMethod(name);
+          if (res != null) {
+            frame.pop();
+            frame.push(res);
+            continue;
+          }
+          error = null;
+          PyObject object = Utils.loadFiled(top, name);
+          if (object != null) {
+            frame.pop();
+            frame.push(object);
+            continue;
+          }
+          error = new PyException("can not find attribute " + name.repr() + " in " + top.repr());
         }
         case STORE_ATTR -> {
           var name = (PyUnicodeObject) coNames.get(ins.getOparg());

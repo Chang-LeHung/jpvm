@@ -2,14 +2,23 @@ package org.jpvm.stl;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
+import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.protocols.PyNumberMethods;
 
 public class math extends PyModuleObject {
+  @PyClassAttribute
+  public PyObject PI;
+
+  @PyClassAttribute
+  public PyObject pi;
 
   public math(PyUnicodeObject name) {
     super(name);
+    PI = new PyFloatObject(Math.PI);
+    pi = PI;
   }
+
 
   @PyClassMethod
   public PyObject abs(PyTupleObject args, PyDictObject kwArgs) throws PyException {

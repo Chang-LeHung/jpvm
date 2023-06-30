@@ -45,10 +45,7 @@ public class TestObjectSystem {
     try {
       PVM pvm = new PVM(filename);
       pvm.run();
-      long s = System.currentTimeMillis();
       System.out.println(pvm.call("fib", 10));
-      long t = System.currentTimeMillis();
-      System.out.println((t - s));
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }

@@ -19,4 +19,10 @@ public class TestImport {
     String filename = "src/test/resources/obsy/__pycache__/test05.cpython-38.pyc";
     new PVM(filename).run();
   }
+
+  @Test
+  public void testImport03() throws PyException, IOException {
+    String filename = "src/test/resources/obsy/__pycache__/test07.cpython-38.pyc";
+    new PVM(filename).run();
+  }
 }
