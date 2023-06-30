@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
@@ -171,6 +173,61 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
             null);
     if (res != null) return res;
     return PyNumberMethods.super.abs();
+  }
+
+  @Override
+  public PyObject inplaceAdd(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__iadd__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.inplaceAdd(o);
+  }
+
+  @Override
+  public PyObject inplaceSub(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__isub__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.inplaceSub(o);
+  }
+
+  @Override
+  public PyObject inplaceTrueDiv(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__itruediv__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.inplaceTrueDiv(o);
+  }
+
+  @Override
+  public PyObject inplaceMul(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__imul__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.inplaceMul(o);
+  }
+
+  @Override
+  public PyObject inplaceMod(PyObject o) throws PyException {
+    PyObject attr = getAttr(PyUnicodeObject.getOrCreateFromInternStringPool("__imod__", true));
+    if (attr instanceof PyMethodObject func) {
+      PyTupleObject args = new PyTupleObject(1);
+      args.set(0, o);
+      return Abstract.abstractCall(func, this, args, null);
+    }
+    return PyNumberMethods.super.inplaceMod(o);
   }
 
   @Override

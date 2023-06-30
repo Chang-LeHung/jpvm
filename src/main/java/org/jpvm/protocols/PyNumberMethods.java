@@ -103,22 +103,22 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_inplace_add */
-  default PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceAdd(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceAdd is not implemented");
   }
 
   /** implementation of corresponding cpython nb_inplace_subtract */
-  default PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceSub(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceSub is not implemented");
   }
 
   /** implementation of corresponding cpython nb_inplace_multiply */
-  default PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceMul(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceMul is not implemented");
   }
 
   /** implementation of corresponding cpython nb_inplace_remainder */
-  default PyObject inplaceMod(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceMod(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceMod is not implemented");
   }
 
@@ -168,7 +168,7 @@ public interface PyNumberMethods {
   }
 
   /** implementation of corresponding cpython nb_inplace_true_divide */
-  default PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  default PyObject inplaceTrueDiv(PyObject o) throws PyException {
     throw new PyNotImplemented("inplaceTrueDiv is not implemented");
   }
 
