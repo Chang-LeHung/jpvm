@@ -141,7 +141,7 @@ public class math extends PyModuleObject {
 }
 ```
 
-在进行扩展的时候需要注意所有的字段都必须是 `PyObject` 对象，函数返回的对象类型必须是 `PyObject` 类型，函数参数签名必须是 `PyTupleObject args, PyDictObject kwArgs` 。
+在进行扩展的时候需要注意所有的字段都必须是 `PyObject` 对象，函数返回的对象类型必须是 `PyObject` 类型，函数参数签名必须是 `PyTupleObject args, PyDictObject kwArgs` 。同时需要保证有一个构造函数的函数参数的函数签名为 `public math(PyUnicodeObject name)` 。
 
 - 除此之外你还可以使用下面一种方式进行扩展，有的时候我们需要扩展的模块非常复杂，写在一个类文件当中过于臃肿，因此你可以使用这种方式，在 org/jpvm/stl 目录下创建你的包名，包名需要和你在 python 层面导入的包名需要相同，然后在这个包下创建一个名为 PyModuleMain 的 Java 类，比如你要导入的包名为 random，那么你的文件目录结构需要如下：
 
