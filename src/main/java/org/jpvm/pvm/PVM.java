@@ -14,6 +14,16 @@ import org.yaml.snakeyaml.Yaml;
 
 public class PVM {
 
+  enum PVM_STATE {
+    UNINITIALIZED,
+    INIT,
+    RUNNING,
+    FINISHED,
+    EXIT
+  }
+
+  private PVM_STATE state;
+
   /** thread state of each thread */
   public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
 
@@ -34,6 +44,7 @@ public class PVM {
 
   public PVM(String filename) throws PyException, IOException {
     this.filename = filename;
+    state = PVM_STATE.UNINITIALIZED;
     loadCode();
     initVirtualMachine();
   }
@@ -107,6 +118,8 @@ public class PVM {
     String base = file.getParent();
     base = Paths.get(base).toAbsolutePath().toString();
     PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
+
+    state = PVM_STATE.INIT;
   }
 
   public PyModuleObject getRootModule() {
@@ -132,16 +145,19 @@ public class PVM {
   }
 
   public void run() throws PyException {
+    state = PVM_STATE.RUNNING;
     rootFrame = new PyFrameObject(code, builtins, globals, locals);
     ThreadState ts = PVM.getThreadState();
     ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);
     loop.pyEvalFrame();
+    state = PVM_STATE.FINISHED;
   }
 
   public void exit() {
     tss = null;
     interpreterState = null; // help gc
+    state = PVM_STATE.EXIT;
   }
 
   public void close() {
@@ -154,6 +170,56 @@ public class PVM {
 
   public PyDictObject getGlobals() {
     return globals;
+  }
+
+  private boolean isFinished() {
+    return state == PVM_STATE.FINISHED;
+  }
+
+  private void ensureFinished() throws PyException {
+    if (!isFinished()) {
+      throw new PyException("VM not finished, please call run() first");
+    }
+  }
+
+  public PyObject call(PyUnicodeObject name, PyTupleObject args, PyDictObject kwargs)
+      throws PyException {
+    ensureFinished();
+    PyObject func = rootModule.getAttr(name);
+    if (func instanceof PyFunctionObject f) {
+      return Abstract.abstractCall(f, null, args, kwargs);
+    }
+    throw new PyException("function" + name + " not found");
+  }
+
+  public PyObject call(String name, PyTupleObject args, PyDictObject kwargs) throws PyException {
+    return call(new PyUnicodeObject(name), args, kwargs);
+  }
+
+  public PyObject call(String name, PyObject... args) throws PyException {
+    return call(name, new PyTupleObject(args), null);
+  }
+
+  public PyObject call(String name, Object... rawArgs) throws PyException {
+    var args = (PyTupleObject)transformToPyObject(rawArgs);
+    return call(name, args, null);
+  }
+
+  public PyObject transformToPyObject(Object o) throws PyException {
+    return Utils.transformToPyObject(o);
+  }
+
+  public Object transformFromPyObject(PyObject o) throws PyException {
+    return Utils.transformFromPyObject(o);
+  }
+
+  public PyObject getVariable(PyUnicodeObject name) throws PyException {
+    ensureFinished();
+    PyObject attr = rootModule.getAttr(name);
+    if (attr == null) {
+      throw new PyException("variable " + name + " not found");
+    }
+    return attr;
   }
 
   public PyDictObject getLocals() {

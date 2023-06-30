@@ -27,6 +27,10 @@ public class PyTupleObject extends PyObject implements TypeIterable,
     obItem = new PyObject[size];
   }
 
+  public PyTupleObject(PyObject[] obItem) {
+    this.obItem = obItem;
+  }
+
   public static PyBoolObject check(PyObject o) {
     if (type == o)
       return BuiltIn.True;
