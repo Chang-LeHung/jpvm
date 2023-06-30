@@ -101,7 +101,7 @@ public class PVM {
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvm/stl", true));
     PVM.getThreadState()
         .getIs()
-        .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt/", true));
+        .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt", true));
     var coFileName = ((PyUnicodeObject) code.getCoFileName()).getData();
     File file = new File(coFileName.replace("\\", "/"));
     String base = file.getParent();
