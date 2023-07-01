@@ -134,4 +134,54 @@ public class math extends PyModuleObject {
     }
     throw new PyException("TypeError : atan() argument must be a number");
   }
+
+  @PyClassMethod
+  public PyObject comb(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 2) {
+      var value1 = args.get(0);
+      var value2 = args.get(1);
+      if (value1 instanceof PyLongObject object1 && value2 instanceof PyLongObject object2){
+        return new PyLongObject(factorial((int) object1.getData()) / (factorial((int) object2.getData()) * factorial((int) (object1.getData()- object2.getData()))));
+      }
+
+    }
+    throw new PyException("TypeError : comb() argument must be a number");
+  }
+
+  @PyClassMethod
+  public PyObject factorial(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      var value = args.get(0);
+      if (value instanceof PyLongObject object){
+        return new PyLongObject(factorial((int) object.getData()));
+      }
+    }
+    throw new PyException("TypeError : factorial() argument must be a number");
+  }
+
+  @PyClassMethod
+  public PyObject perm(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 2) {
+      var value1 = args.get(0);
+      var value2 = args.get(1);
+      if (value1 instanceof PyLongObject object1){
+        if(value2 instanceof PyLongObject object2){
+          return new PyLongObject(factorial((int) object1.getData()) / factorial((int) (object1.getData() - object2.getData())));
+        }else if(value2 instanceof PyNoneObject){
+          return new PyLongObject(factorial((int) object1.getData()));
+        }
+      }
+    }
+    throw new PyException("TypeError : perm() argument must be a number");
+  }
+
+
+  public static long factorial(int n) {
+    long result = 1;
+    for (int i = 1; i <= n; i++) {
+      result *= i;
+    }
+    return result;
+  }
+
 }
