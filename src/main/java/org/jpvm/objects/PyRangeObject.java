@@ -47,12 +47,16 @@ public class PyRangeObject extends PyObject implements TypeIterable {
 
   @Override
   public String toString() {
-    return "PyRangeObject{" +
-        "start=" + start +
-        ", end=" + end +
-        ", step=" + step +
-        ", cur=" + cur +
-        '}';
+    return "PyRangeObject{"
+        + "start="
+        + start
+        + ", end="
+        + end
+        + ", step="
+        + step
+        + ", cur="
+        + cur
+        + '}';
   }
 
   @Override
@@ -77,10 +81,9 @@ public class PyRangeObject extends PyObject implements TypeIterable {
 
   public static class PyRangeItrType extends PyTypeType {
     public PyRangeItrType() {
+      super(PyRangeObject.class);
       name = "range_iterator";
     }
-
-
   }
 
   private class PyRangeItrObject extends PyObject implements TypeDoIterate {
@@ -99,10 +102,8 @@ public class PyRangeObject extends PyObject implements TypeIterable {
 
     @Override
     public boolean hasNext() {
-      if (step < 0)
-        return (step + cur) >= end;
-      else
-        return (step + cur) <= end;
+      if (step < 0) return (step + cur) >= end;
+      else return (step + cur) <= end;
     }
   }
 }

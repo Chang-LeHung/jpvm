@@ -509,6 +509,7 @@ public class PyListObject extends PyObject
 
   public static class PyListItrType extends PyTypeType implements TypeName {
     public PyListItrType() {
+      super(PyListItrObject.class);
       name = "list_iterator";
     }
   }

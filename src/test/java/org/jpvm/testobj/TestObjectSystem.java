@@ -5,6 +5,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.pvm.PVM;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,6 +47,10 @@ public class TestObjectSystem {
       PVM pvm = new PVM(filename);
       pvm.run();
       System.out.println(pvm.call("fib", 10));
+      PyListObject list = new PyListObject();
+      var type = (PyTypeType) list.getType();
+      System.out.println(type.getMro());
+      System.out.println(PyObject.type);
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }

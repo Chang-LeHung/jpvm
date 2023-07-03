@@ -1,6 +1,7 @@
 package org.jpvm.objects.types;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.objects.PyBoolObject;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
@@ -9,7 +10,7 @@ import org.jpvm.protocols.PyNumberMethods;
 public class PyBoolType extends PyTypeType {
 
   public PyBoolType() {
-    super();
+    super(PyBoolObject.class);
     name = "bool";
   }
 

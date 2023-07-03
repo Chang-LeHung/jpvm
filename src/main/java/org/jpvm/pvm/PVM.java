@@ -14,6 +14,12 @@ import org.yaml.snakeyaml.Yaml;
 
 public class PVM {
 
+  // prepare object system
+  static {
+    // init type and object
+    PyObject.initBaseObject();
+  }
+
   enum PVM_STATE {
     UNINITIALIZED,
     INIT,
@@ -46,6 +52,15 @@ public class PVM {
     this.filename = filename;
     state = PVM_STATE.UNINITIALIZED;
     loadCode();
+    // init thread and vm state
+    init();
+    // init built-in functions
+    BuiltIn.doInit();
+    // acquire builtins
+    builtins = BuiltIn.dict;
+    /*
+     * in main module locals and globals are the same
+     */
     initVirtualMachine();
   }
 
@@ -79,17 +94,6 @@ public class PVM {
   }
 
   private void initVirtualMachine() throws PyNotImplemented {
-    // init type and object
-    PyObject.initBaseObject();
-    // init thread and vm state
-    init();
-    // init built-in functions
-    BuiltIn.doInit();
-    // acquire builtins
-    builtins = BuiltIn.dict;
-    /*
-     * in main module locals and globals are the same
-     */
     rootModule = new PyModuleObject((PyUnicodeObject) code.getCoName());
     globals = rootModule.getDict();
     locals = rootModule.getDict();
@@ -201,7 +205,7 @@ public class PVM {
   }
 
   public PyObject call(String name, Object... rawArgs) throws PyException {
-    var args = (PyTupleObject)transformToPyObject(rawArgs);
+    var args = (PyTupleObject) transformToPyObject(rawArgs);
     return call(name, args, null);
   }
 

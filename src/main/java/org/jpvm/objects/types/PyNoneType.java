@@ -1,9 +1,10 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.objects.PyNoneObject;
+
 public class PyNoneType extends PyTypeType {
   public PyNoneType() {
-    super();
+    super(PyNoneObject.class);
     name = "none";
   }
-
 }

@@ -1,8 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
@@ -233,5 +232,17 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public String toString() {
     return "PyPythonObject{" + "type=" + type + '}';
+  }
+
+  @Override
+  @PyClassMethod
+  public PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
+    return super.__init__(args, kwArgs);
+  }
+
+  @Override
+  @PyClassMethod
+  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+    return super.__new__(args, kwArgs);
   }
 }

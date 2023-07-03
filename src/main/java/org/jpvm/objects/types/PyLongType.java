@@ -10,20 +10,21 @@ import org.jpvm.protocols.PyNumberMethods;
 public class PyLongType extends PyTypeType {
 
   public PyLongType() {
-    super();
+    super(PyLongObject.class);
     name = "int";
   }
 
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 0){
+    if (args.size() == 0) {
       return PyLongObject.getLongObject(0);
-    }else if (args.size() == 1){
+    } else if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyNumberMethods num) {
         return num.nbInt();
       }
     }
-    throw new PyException("TypeError: int() takes exactly one argument (" + args.size() + " given)");
+    throw new PyException(
+        "TypeError: int() takes exactly one argument (" + args.size() + " given)");
   }
 }

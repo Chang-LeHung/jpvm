@@ -12,8 +12,8 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-public class PyDictObject extends PyObject implements PyMappingMethods,
-    PySequenceMethods, TypeIterable {
+public class PyDictObject extends PyObject
+    implements PyMappingMethods, PySequenceMethods, TypeIterable {
 
   public static PyObject type = new PyDictType();
 
@@ -26,7 +26,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   public PyObject put(PyObject key, PyObject val) throws PyException {
     try {
       return map.put(key, val);
-    }catch (ConcurrentModificationException e) {
+    } catch (ConcurrentModificationException e) {
       throw new PyException("can not put new items while iterating");
     }
   }
@@ -44,8 +44,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   }
 
   public void addAll(PyDictObject dict) {
-    if (dict != null)
-      map.putAll(dict.getMap());
+    if (dict != null) map.putAll(dict.getMap());
   }
 
   public Map<PyObject, PyObject> getMap() {
@@ -57,14 +56,14 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     StringBuilder builder = new StringBuilder();
     builder.append("{");
 
-    map.forEach((x, y) -> {
-      builder.append(x.repr());
-      builder.append(": ");
-      builder.append(y.repr());
-      builder.append(", ");
-    });
-    if (builder.length() > 2)
-      builder.delete(builder.length() - 2, builder.length());
+    map.forEach(
+        (x, y) -> {
+          builder.append(x.repr());
+          builder.append(": ");
+          builder.append(y.repr());
+          builder.append(", ");
+        });
+    if (builder.length() > 2) builder.delete(builder.length() - 2, builder.length());
     builder.append("}");
     return builder.toString();
   }
@@ -136,8 +135,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject remove = map.remove(args.get(0));
-      if (remove == null)
-        return BuiltIn.None;
+      if (remove == null) return BuiltIn.None;
       return remove;
     }
     throw new PyException("dict pop method only require one argument");
@@ -161,13 +159,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     throw new PyException("dict update method only require one PyDictObject object");
   }
 
-
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
     if (op == Operator.Py_EQ) {
       if (o instanceof PyDictObject dict) {
-        if (map.equals(dict.toJavaType()))
-          return BuiltIn.True;
+        if (map.equals(dict.toJavaType())) return BuiltIn.True;
         return BuiltIn.False;
       }
       return BuiltIn.False;
@@ -175,23 +171,21 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     throw new PyUnsupportedOperator("not support operator " + op);
   }
 
-
   @Override
   public PyObject mpLength(PyObject o) throws PyNotImplemented {
     return new PyLongObject(map.size());
   }
 
   @Override
-  public PyObject mpSubscript(PyObject o) throws PyIndexOutOfBound, PyKeyError, PyTypeNotMatch, PyNotImplemented {
+  public PyObject mpSubscript(PyObject o)
+      throws PyIndexOutOfBound, PyKeyError, PyTypeNotMatch, PyNotImplemented {
     return map.getOrDefault(o, BuiltIn.None);
   }
 
   @Override
   public PyObject mpAssSubscript(PyObject key, PyObject val) throws PyKeyError, PyNotImplemented {
-    if (null == val)
-      map.remove(key);
-    else
-      map.put(key, val);
+    if (null == val) map.remove(key);
+    else map.put(key, val);
     return BuiltIn.None;
   }
 
@@ -222,8 +216,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
   @Override
   public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    if (map.containsKey(o))
-      return BuiltIn.True;
+    if (map.containsKey(o)) return BuiltIn.True;
     return BuiltIn.False;
   }
 
@@ -256,6 +249,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
   public static class PyDictItrType extends PyTypeType {
     public PyDictItrType() {
+      super(PyDictItrObject.class);
       name = "dict_key_iterator";
     }
   }
@@ -263,9 +257,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   public static class PyDictValuesType extends PyTypeType {
 
     public PyDictValuesType() {
+      super(PyDictValuesObject.class);
       name = "dict_values";
     }
-
   }
 
   public static class PyDictValuesObject extends PyObject
@@ -283,11 +277,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       StringBuilder builder = new StringBuilder();
       builder.append("dict_values[");
       for (PyObject value : values) {
-        builder.append(value.toString())
-            .append(", ");
+        builder.append(value.toString()).append(", ");
       }
-      if (builder.length() >= 14)
-        builder.delete(builder.length() - 2, builder.length());
+      if (builder.length() >= 14) builder.delete(builder.length() - 2, builder.length());
       builder.append("]");
       return builder.toString();
     }
@@ -312,7 +304,6 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       return new PyUnicodeObject(toString());
     }
 
-
     @Override
     public PyObject sqLength(PyObject o) throws PyNotImplemented {
       return new PyLongObject(values.size());
@@ -325,13 +316,12 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
     public static class PyDictValuesItrType extends PyTypeType {
       public PyDictValuesItrType() {
+        super(PyDictValuesItrObject.class);
         name = "dict_value_iterator";
       }
-
     }
 
-    public class PyDictValuesItrObject extends PyObject
-        implements TypeDoIterate {
+    public class PyDictValuesItrObject extends PyObject implements TypeDoIterate {
 
       public static PyObject type = new PyDictValuesItrType();
       Iterator<PyObject> iterator;
@@ -342,8 +332,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
       @Override
       public PyObject next() throws PyException {
-        if (iterator.hasNext())
-          return iterator.next();
+        if (iterator.hasNext()) return iterator.next();
         return BuiltIn.PyExcStopIteration;
       }
 
@@ -357,6 +346,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
   public static class PyDictKeysType extends PyTypeType {
 
     public PyDictKeysType() {
+      super(PyDictKeysObject.class);
       this.name = "dict_keys";
     }
   }
@@ -376,11 +366,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       StringBuilder builder = new StringBuilder();
       builder.append("dict_keys{");
       for (PyObject value : set) {
-        builder.append(value.toString())
-            .append(", ");
+        builder.append(value.toString()).append(", ");
       }
-      if (builder.length() > 10)
-        builder.delete(builder.length() - 2, builder.length());
+      if (builder.length() > 10) builder.delete(builder.length() - 2, builder.length());
       builder.append("}");
       return builder.toString();
     }
@@ -405,33 +393,25 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
       return new PyUnicodeObject(toString());
     }
 
-    /**
-     * not implemented in the current version
-     */
+    /** not implemented in the current version */
     @Override
     public PyObject sub(PyObject o) throws PyException {
       return PyNumberMethods.super.sub(o);
     }
 
-    /**
-     * not implemented in the current version
-     */
+    /** not implemented in the current version */
     @Override
     public PyObject and(PyObject o) throws PyException {
       return PyNumberMethods.super.and(o);
     }
 
-    /**
-     * not implemented in the current version
-     */
+    /** not implemented in the current version */
     @Override
     public PyObject xor(PyObject o) throws PyException {
       return PyNumberMethods.super.xor(o);
     }
 
-    /**
-     * not implemented in the current version
-     */
+    /** not implemented in the current version */
     @Override
     public PyObject or(PyObject o) throws PyException {
       return PyNumberMethods.super.or(o);
@@ -444,8 +424,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
     @Override
     public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (set.contains(o))
-        return BuiltIn.True;
+      if (set.contains(o)) return BuiltIn.True;
       return BuiltIn.False;
     }
 
@@ -456,12 +435,12 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
     public static class PyDictKeysItrType extends PyTypeType {
       public PyDictKeysItrType() {
+        super(PyDictKeysItrObject.class);
         name = "dict_value_iterator";
       }
     }
 
-    private class PyDictKeysItrObject extends PyObject
-        implements TypeDoIterate {
+    private class PyDictKeysItrObject extends PyObject implements TypeDoIterate {
       public static PyObject type = new PyDictKeysItrType();
       Iterator<PyObject> iterator;
 
@@ -471,8 +450,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
       @Override
       public PyObject next() throws PyException {
-        if (iterator.hasNext())
-          return iterator.next();
+        if (iterator.hasNext()) return iterator.next();
         return BuiltIn.PyExcStopIteration;
       }
 
@@ -485,9 +463,9 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
   public static class PyDictItemsType extends PyTypeType {
     public PyDictItemsType() {
+      super(PyDictItemsObject.class);
       name = "dict_items";
     }
-
   }
 
   public static class PyDictItemsObject extends PyObject
@@ -504,13 +482,11 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     public String toString() {
       StringBuilder builder = new StringBuilder();
       builder.append("dict_items[");
-      map.forEach((key, val) -> {
-        builder.append("(")
-            .append(key).append(", ")
-            .append(val).append("), ");
-      });
-      if (builder.length() > 11)
-        builder.delete(builder.length() - 2, builder.length());
+      map.forEach(
+          (key, val) -> {
+            builder.append("(").append(key).append(", ").append(val).append("), ");
+          });
+      if (builder.length() > 11) builder.delete(builder.length() - 2, builder.length());
       builder.append("]");
       return builder.toString();
     }
@@ -549,10 +525,10 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
-        map.forEach((x, y) -> {
-          if (item.map.containsKey(x))
-            ret.map.remove(x);
-        });
+        map.forEach(
+            (x, y) -> {
+              if (item.map.containsKey(x)) ret.map.remove(x);
+            });
         return ret;
       }
       throw new PyTypeNotMatch("require type PyDictItemsObject");
@@ -562,14 +538,14 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
-        map.forEach((x, y) -> {
-          if (item.map.containsKey(x))
-            ret.map.put(x, y);
-        });
-        item.map.forEach((x, y) -> {
-          if (map.containsKey(x))
-            ret.map.put(x, y);
-        });
+        map.forEach(
+            (x, y) -> {
+              if (item.map.containsKey(x)) ret.map.put(x, y);
+            });
+        item.map.forEach(
+            (x, y) -> {
+              if (map.containsKey(x)) ret.map.put(x, y);
+            });
         return ret;
       }
       throw new PyTypeNotMatch("require type PyDictItemsObject");
@@ -579,14 +555,14 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
     public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
-        map.forEach((x, y) -> {
-          if (!item.map.containsKey(x))
-            ret.map.put(x, y);
-        });
-        item.map.forEach((x, y) -> {
-          if (!map.containsKey(x))
-            ret.map.put(x, y);
-        });
+        map.forEach(
+            (x, y) -> {
+              if (!item.map.containsKey(x)) ret.map.put(x, y);
+            });
+        item.map.forEach(
+            (x, y) -> {
+              if (!map.containsKey(x)) ret.map.put(x, y);
+            });
         return ret;
       }
       throw new PyTypeNotMatch("require type PyDictItemsObject");
@@ -610,19 +586,18 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
     @Override
     public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-      if (map.containsKey(o))
-        return BuiltIn.True;
+      if (map.containsKey(o)) return BuiltIn.True;
       return BuiltIn.False;
     }
 
     public static class PyDictItemsItrType extends PyTypeType {
       public PyDictItemsItrType() {
+        super(PyDictItemsItrObject.class);
         name = "dict_items";
       }
     }
 
-    public class PyDictItemsItrObject extends PyObject
-        implements TypeDoIterate {
+    public class PyDictItemsItrObject extends PyObject implements TypeDoIterate {
       private final PyObject type = new PyDictItemsItrType();
       private final Iterator<Map.Entry<PyObject, PyObject>> iterator;
 
@@ -669,8 +644,7 @@ public class PyDictObject extends PyObject implements PyMappingMethods,
 
     @Override
     public PyObject next() {
-      if (iterator.hasNext())
-        return iterator.next();
+      if (iterator.hasNext()) return iterator.next();
       return BuiltIn.PyExcStopIteration;
     }
 

@@ -7,18 +7,16 @@ import org.jpvm.objects.pyinterface.TypeIterable;
 
 public class PySetType extends PyTypeType {
   public PySetType() {
-    super();
+    super(PySetObject.class);
     name = "set";
   }
 
-  /**
-   * code like `set()` or `set(listobject)` will call this method
-   */
+  /** code like `set()` or `set(listobject)` will call this method */
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       return new PySetObject();
-    }else {
+    } else {
       PyObject iterable = args.get(0);
       PySetObject result = new PySetObject();
       if (iterable instanceof TypeIterable itr) {
@@ -27,7 +25,7 @@ public class PySetType extends PyTypeType {
           result.add(iterator.next());
         }
         return result;
-      }else if (iterable instanceof TypeDoIterate iterator) {
+      } else if (iterable instanceof TypeDoIterate iterator) {
         while (iterator.hasNext()) {
           result.add(iterator.next());
         }

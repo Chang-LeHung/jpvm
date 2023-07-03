@@ -6,7 +6,7 @@ import org.jpvm.objects.*;
 public class PyRangeType extends PyTypeType {
 
   public PyRangeType() {
-    super();
+    super(PyRangeObject.class);
     name = "range";
   }
 

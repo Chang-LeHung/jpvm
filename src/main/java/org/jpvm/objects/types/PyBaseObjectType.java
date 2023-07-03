@@ -8,6 +8,7 @@ public class PyBaseObjectType extends PyTypeType {
   public static PyObject type = PyTypeType.type;
 
   public PyBaseObjectType() {
+    super(PyObject.class);
     mro = new ArrayList<>();
     name = "object";
   }

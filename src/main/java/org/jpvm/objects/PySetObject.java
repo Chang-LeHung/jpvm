@@ -351,6 +351,7 @@ public class PySetObject extends PyObject
   public static class PySetItrType extends PyTypeType implements TypeName {
 
     public PySetItrType() {
+      super(PySetItrObject.class);
       name = "set_iterator";
     }
   }
