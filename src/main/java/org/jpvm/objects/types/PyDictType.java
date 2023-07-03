@@ -8,15 +8,13 @@ import org.jpvm.objects.PyTupleObject;
 public class PyDictType extends PyTypeType {
 
   public PyDictType() {
-    super();
+    super(PyDictObject.class);
     name = "dict";
   }
 
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 0)
-      return new PyDictObject();
-    else
-      throw new PyException("dict() takes no arguments");
+    if (args.size() == 0) return new PyDictObject();
+    else throw new PyException("dict() takes no arguments");
   }
 }

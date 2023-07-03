@@ -1,8 +1,10 @@
 package org.jpvm.objects.types;
 
-public class PyCellType extends PyTypeType{
+import org.jpvm.objects.PyCellObject;
+
+public class PyCellType extends PyTypeType {
   public PyCellType() {
-    super();
+    super(PyCellObject.class);
     name = "cell";
   }
 }

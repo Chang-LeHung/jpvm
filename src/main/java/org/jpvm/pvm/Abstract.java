@@ -40,7 +40,7 @@ public class Abstract {
   }
 
   /** whether w is subtype of v or not */
-  public static boolean isSubType(PyObject v, PyObject w) {
+  public static boolean isSubType(PyObject v, PyObject w) throws PyException {
     var type = (PyTypeType) w.getType();
     PyBoolObject o = type.isSubType(v.getType());
     return o.isTrue();

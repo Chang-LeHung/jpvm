@@ -443,6 +443,7 @@ public class PyUnicodeObject extends PyObject
 
   public static class PyUnicodeItrType extends PyTypeType {
     public PyUnicodeItrType() {
+      super(PyUnicodeItrObject.class);
       this.name = "str_iterator";
     }
   }

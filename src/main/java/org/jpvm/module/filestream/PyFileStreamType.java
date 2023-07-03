@@ -8,6 +8,7 @@ public class PyFileStreamType extends PyTypeType {
   private final PyUnicodeObject name;
 
   public PyFileStreamType() {
+    super(PyFileStreamObject.class);
     name = new PyUnicodeObject("bool");
   }
 
@@ -15,5 +16,4 @@ public class PyFileStreamType extends PyTypeType {
   public PyUnicodeObject getTypeName() {
     return name;
   }
-
 }

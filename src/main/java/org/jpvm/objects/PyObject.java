@@ -3,9 +3,11 @@ package org.jpvm.objects;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyTypeMethods;
 import org.jpvm.python.BuiltIn;
 
 /**
@@ -28,7 +30,8 @@ public class PyObject
         TypeGetAttr,
         TypeGetAttro,
         TypeSetAttro,
-        TypeSetAttr {
+        TypeSetAttr,
+        PyTypeMethods {
 
   public static PyObject type;
 
@@ -149,6 +152,7 @@ public class PyObject
         if (res != null) return res;
       }
     }
+    res = Utils.loadClassMethod(this, (PyUnicodeObject) key);
     return res;
   }
 
@@ -192,5 +196,17 @@ public class PyObject
 
   public PyObject getAttribute(PyObject key) {
     return dict.getOrDefault(key, BuiltIn.None);
+  }
+
+  @Override
+  @PyClassMethod
+  public PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
+    return PyTypeMethods.super.__init__(args, kwArgs);
+  }
+
+  @Override
+  @PyClassMethod
+  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+    return PyTypeMethods.super.__new__(args, kwArgs);
   }
 }

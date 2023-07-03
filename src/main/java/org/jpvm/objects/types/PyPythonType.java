@@ -4,19 +4,20 @@ import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.pvm.Abstract;
 
-/**
- * used in python code to represent a python type
- */
+/** used in python code to represent a python type */
 public class PyPythonType extends PyTypeType {
   public static PyObject type = PyTypeType.type;
 
   public PyPythonType() {
-    super();
+    super(PyPythonObject.class);
   }
 
   public PyPythonType(PyUnicodeObject name, PyTupleObject bases, PyDictObject dict) {
-    super();
-    this.name = dict.get(PyUnicodeObject.getOrCreateFromInternStringPool("__module__", true)) + "." + name.getData();
+    this();
+    this.name =
+        dict.get(PyUnicodeObject.getOrCreateFromInternStringPool("__module__", true))
+            + "."
+            + name.getData();
     this._bases = bases;
     this.dict = dict;
   }
@@ -37,7 +38,9 @@ public class PyPythonType extends PyTypeType {
     return res;
   }
 
-  public PyObject callPythonCode(PyUnicodeObject name, PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject callPythonCode(
+      PyUnicodeObject name, PyObject self, PyTupleObject args, PyDictObject kwArgs)
+      throws PyException {
     PyObject function = dict.get(name);
     args = Utils.packSelfAsTuple(self, args);
     if (function != null) {
