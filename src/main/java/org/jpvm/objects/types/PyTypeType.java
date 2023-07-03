@@ -41,7 +41,10 @@ public class PyTypeType extends PyObject {
   protected List<PyObject> bases;
   protected PyTupleObject _bases;
 
-  /** used in super to call clazz's method */
+  /**
+   * used in super to call clazz's method this is the {@code Class} of class object of this class
+   * such as {@code clazz} in {@link PyLongType} is {@code PyLongObject.class}
+   */
   protected Class<?> clazz;
 
   protected String name;
