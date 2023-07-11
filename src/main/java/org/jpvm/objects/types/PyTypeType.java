@@ -1,10 +1,14 @@
 package org.jpvm.objects.types;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.*;
+import org.jpvm.objects.annotation.PyClassMethod;
+import org.jpvm.objects.pyinterface.TypeDescriptorGet;
+import org.jpvm.objects.pyinterface.TypeDescriptorSet;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.pvm.MRO;
 import org.jpvm.python.BuiltIn;
@@ -69,7 +73,7 @@ public class PyTypeType extends PyObject {
     }
     PyTupleObject res = new PyTupleObject(bases.size() + 1);
     for (int i = 0; i < bases.size(); i++) res.set(i, bases.get(i));
-    res.set(bases.size(), PyBaseObjectType.type);
+    res.set(bases.size(), PyObject.type);
     return res;
   }
 
@@ -194,10 +198,66 @@ public class PyTypeType extends PyObject {
       PyPythonType res = new PyPythonType(n, null, d);
       base = ensureBaseObjectTypeInBases(base);
       List<PyObject> bs = res.getBases();
+      bs.clear(); // clean bs see `public PyTypeType(Class<?> clazz)`
       for (int i = 0; i < base.size(); i++) bs.add(base.get(i));
       return res;
     }
     throw new PyException(
         "type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
+  }
+
+  @Override
+  protected PyObject lookUpType(PyObject key) throws PyException {
+    PyObject res;
+    PyTupleObject mro = getMro();
+    for (int i = 0; i < mro.size(); i++) {
+      PyObject object = mro.get(i);
+      if (object != PyTypeType.type && object != this) {
+        res = object.getAttr(key);
+        if (res != null) return res;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public PyObject getAttr(PyObject key) throws PyException {
+    PyObject descr = lookUpType(key);
+    if (descr instanceof TypeDescriptorGet get && descr instanceof TypeDescriptorSet)
+      return get.descrGet(this, getType());
+    PyObject object = null;
+    if (dict != null) {
+      object = dict.get(key);
+    }
+    var name = (PyUnicodeObject) key;
+    if (object == null) {
+      try {
+        Method method = this.getClass().getMethod(name.getData(), PyObject.parameterTypes);
+        if (method.isAnnotationPresent(PyClassMethod.class))
+          object = new PyMethodObject(this, method, name.getData());
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
+    if (object == null) {
+      object = Utils.loadFiled(this, name);
+    }
+    if (object == null) {
+      try {
+        Method method = clazz.getMethod(name.getData(), PyObject.parameterTypes);
+        if (method.isAnnotationPresent(PyClassMethod.class))
+          object = new PyMethodObject(method, name.getData());
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
+    // PyFunctionObject take priority over PyMethodObject
+    if (descr instanceof PyFunctionObject func && object instanceof PyMethodObject) {
+      return func;
+    }
+    if (object != null) return object;
+    if (descr != null) {
+      if (descr instanceof TypeDescriptorGet get) return get.descrGet(this, getType());
+      return descr;
+    }
+    return null;
   }
 }

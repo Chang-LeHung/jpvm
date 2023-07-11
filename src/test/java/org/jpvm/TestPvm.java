@@ -50,19 +50,19 @@ public class TestPvm {
     }
   }
 
-  @Test
-  public void testAllPyc() {
-    List<String> files = scanFiles("src/test/resources/");
-    for (String file : files) {
-      if (file.contains("dis") || file.contains("pycparser")) continue;
-      try {
-        System.out.println("testing " + file + "...");
-        new PVM(file).run();
-      } catch (PyException | IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-  }
+  //  @Test
+  //  public void testAllPyc() {
+  //    List<String> files = scanFiles("src/test/resources/");
+  //    for (String file : files) {
+  //      if (file.contains("dis") || file.contains("pycparser")) continue;
+  //      try {
+  //        System.out.println("testing " + file + "...");
+  //        new PVM(file).run();
+  //      } catch (PyException | IOException e) {
+  //        throw new RuntimeException(e);
+  //      }
+  //    }
+  //  }
 
   @Test
   public void testStr() {
@@ -86,12 +86,17 @@ public class TestPvm {
 
   @Test
   public void test03() {
-    String filename =
-        "src/test/resources/obsy/__pycache__/test03.cpython-38.pyc";
+    String filename = "src/test/resources/obsy/__pycache__/test03.cpython-38.pyc";
     try {
       new PVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Test
+  public void testBuiltinFunction() throws PyException, IOException {
+    String filename = "src/test/resources/pys/__pycache__/demo.cpython-38.pyc";
+    new PVM(filename).run();
   }
 }

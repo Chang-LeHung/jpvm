@@ -56,17 +56,4 @@ public class PyModuleObject extends PyObject {
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     return moduleName.richCompare(o, op);
   }
-
-  @Override
-  public PyObject getMethod(String name) throws PyException {
-    PyUnicodeObject object = new PyUnicodeObject(name);
-    PyObject res = dict.get(object);
-    if (res instanceof PyFunctionObject) return res;
-    return null;
-  }
-
-  @Override
-  public PyObject getAttr(PyObject key) throws PyException {
-    return dict.get(key);
-  }
 }

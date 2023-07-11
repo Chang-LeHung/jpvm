@@ -25,7 +25,7 @@ public class Abstract {
         return nw.mul(v);
       } catch (PyException ignore) {
       }
-    }else if(v instanceof PyNumberMethods && w instanceof PySequenceMethods nw){
+    } else if (v instanceof PyNumberMethods && w instanceof PySequenceMethods nw) {
       try {
         return nw.sqRepeat(v);
       } catch (PyNotImplemented | PyTypeNotMatch ignore) {
@@ -399,17 +399,8 @@ public class Abstract {
         var defaults = (PyTupleObject) func.getFuncDefaults();
         var kwDefaults = (PyDictObject) func.getFuncKwDefaults();
         var coVarNames = (PyTupleObject) code.getCoVarNames();
-        // just for debugging to avoid cycle reference, idea will get stuck for toString method
-        //      {
-        //        PyDictObject globals = new PyDictObject();
-        //        if (frameObject != null)
-        //          globals.addAll(frameObject.getGlobals());
-        //      }
         PyDictObject globals = (PyDictObject) func.getFuncGlobals();
         int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
-        // use below in release version
-        //      PyFrameObject f = new PyFrameObject(code, frameObject.getBuiltins(),
-        // frameObject.getGlobals(), frameObject);
         if (locals == null) locals = new PyDictObject();
         PyFrameObject f = new PyFrameObject(func, code, BuiltIn.dict, globals, locals, frameObject);
         Map<PyObject, Integer> map = new HashMap<>();
