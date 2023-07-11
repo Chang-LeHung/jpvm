@@ -11,6 +11,7 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyListType;
+import org.jpvm.objects.types.PySuperType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -41,6 +42,8 @@ public class BuiltIn {
     try {
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("int", true),
           PyLongObject.type);
+      dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("super", true),
+          PySuperObject.type);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("list", true),
           PyListObject.type);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("tuple", true),

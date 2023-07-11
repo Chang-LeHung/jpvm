@@ -10,6 +10,8 @@ import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyTypeMethods;
 import org.jpvm.python.BuiltIn;
 
+import java.lang.reflect.Method;
+
 /**
  * base class of all classes in python. all child classes in python are PyObject. Initialization
  * operations must be executed within the subclass themselves
@@ -137,13 +139,17 @@ public class PyObject
   public PyObject getMethod(PyUnicodeObject name) throws PyException {
     PyObject function = getAttr(name);
     if (function instanceof PyMethodObject) return function;
-    throw new PyMissMethod(getTypeName() + " has no method " + name.getData());
+    if (function instanceof PyFunctionObject) {
+      return new PyMethodObject(this, (PyFunctionObject) function, name.getData());
+    }
+    throw new PyMissMethod(
+        getTypeName() + " " + this.repr().toString() + " has no method " + name.getData());
   }
 
   /** be careful with call stack overflow if t == PyTypeType.type */
   protected PyObject lookUpType(PyObject key) throws PyException {
     PyTypeType t = (PyTypeType) getType();
-    PyObject res = null;
+    PyObject res;
     PyTupleObject mro = t.getMro();
     for (int i = 0; i < mro.size(); i++) {
       PyObject object = mro.get(i);
@@ -152,8 +158,7 @@ public class PyObject
         if (res != null) return res;
       }
     }
-    res = Utils.loadClassMethod(this, (PyUnicodeObject) key);
-    return res;
+    return null;
   }
 
   @Override
@@ -163,6 +168,22 @@ public class PyObject
       return get.descrGet(this, getType());
     PyObject object = null;
     if (dict != null) object = dict.get(key);
+    var name = (PyUnicodeObject) key;
+    if (object == null) {
+      object = Utils.loadFiled(this, name);
+    }
+    if (object == null) {
+      try {
+        Method method = this.getClass().getMethod(name.getData(), PyObject.parameterTypes);
+        if (method.isAnnotationPresent(PyClassMethod.class))
+          object = new PyMethodObject(this, method, name.getData());
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
+    // PyFunctionObject take priority over PyMethodObject
+    if (descr instanceof PyFunctionObject func && object instanceof PyMethodObject) {
+      return func;
+    }
     if (object != null) return object;
     if (descr != null) {
       if (descr instanceof TypeDescriptorGet get) return get.descrGet(this, getType());

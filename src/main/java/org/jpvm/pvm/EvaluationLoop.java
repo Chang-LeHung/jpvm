@@ -285,17 +285,6 @@ public class EvaluationLoop {
         case LOAD_METHOD -> {
           var name = (PyUnicodeObject) coNames.get(ins.getOparg());
           PyObject obj = frame.pop();
-          Class<? extends PyObject> clazz = obj.getClass();
-          try {
-            Method meth = clazz.getMethod(name.getData(), PyObject.parameterTypes);
-            PyClassMethod annotation = meth.getAnnotation(PyClassMethod.class);
-            if (annotation != null) {
-              PyMethodObject methodObject = new PyMethodObject(obj, meth, name.getData());
-              frame.push(methodObject);
-              continue;
-            }
-          } catch (NoSuchMethodException ignored) {
-          }
           PyObject method = obj.getMethod(name);
           if (method != null && method != BuiltIn.None) {
             frame.push(method);
@@ -324,6 +313,7 @@ public class EvaluationLoop {
             assert object != null;
             frame.push(object);
           } catch (PyException e) {
+            e.printStackTrace();
             error = e;
           }
           // other callable object to be implemented
@@ -347,6 +337,7 @@ public class EvaluationLoop {
           } catch (PyException e) {
             error = e;
           } catch (Exception e) {
+            e.printStackTrace();
             error = new PyException("Java native exception occurred : " + e.getMessage(), false);
           }
           // other callable object to be implemented
