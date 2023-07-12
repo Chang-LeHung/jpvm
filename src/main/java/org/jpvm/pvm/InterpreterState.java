@@ -96,8 +96,8 @@ public class InterpreterState {
     gil.setSwitchNumber(switchNumber);
   }
 
-  public Thread getLastHolder() {
-    return gil.getLastHolder();
+  public Thread getCurrentHolder() {
+    return gil.getCurrentHolder();
   }
 
   public boolean isDropGILRequest() {

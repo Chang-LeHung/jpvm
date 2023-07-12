@@ -22,4 +22,8 @@ public class PyPythonBaseExceptionType extends PyTypeType {
     else res = new PyPythonException(this, (PyUnicodeObject) args.get(0));
     return res;
   }
+
+  public PyPythonException call(String message) throws PyException {
+	  return new PyPythonException(this, new PyUnicodeObject(message));
+  }
 }

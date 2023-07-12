@@ -1,6 +1,10 @@
 package org.jpvm.objects;
 
 import java.util.Arrays;
+import java.util.Iterator;
+
+import org.jpvm.bytecode.ByteCodeBuffer;
+import org.jpvm.bytecode.Instruction;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
 
@@ -8,29 +12,28 @@ public class PyFrameObject extends PyObject {
 
   public static PyObject type = new PyFrameType();
   private final PyCodeObject code;
-  /**
-   * value stack
-   */
+  /** value stack */
   private final PyObject[] stack;
+
   private final PyObject[] localPlus;
   private PyDictObject builtins;
   private PyDictObject globals;
+  private final ByteCodeBuffer byteCodeBuffer;
   private PyDictObject locals;
-  /**
-   * shows how many slots of stack have been used
-   */
+  /** shows how many slots of stack have been used */
   private int used;
+
   private boolean isExecuting;
   private PyFrameObject back;
 
   private PyFunctionObject func;
   private PyObject[] cells;
 
-  public PyFrameObject(PyCodeObject code,
-                       PyDictObject builtins,
-                       PyDictObject globals, PyFrameObject back) {
+  public PyFrameObject(
+      PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyFrameObject back) {
     assert code != null;
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.globals = globals;
     this.locals = new PyDictObject();
@@ -39,12 +42,16 @@ public class PyFrameObject extends PyObject {
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
-  public PyFrameObject(PyFunctionObject func, PyCodeObject code,
-                       PyDictObject builtins,
-                       PyDictObject globals, PyFrameObject back) {
+  public PyFrameObject(
+      PyFunctionObject func,
+      PyCodeObject code,
+      PyDictObject builtins,
+      PyDictObject globals,
+      PyFrameObject back) {
     assert code != null;
     this.func = func;
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.globals = globals;
     this.locals = new PyDictObject();
@@ -52,19 +59,21 @@ public class PyFrameObject extends PyObject {
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
     cells = new PyObject[func.getFreeVarsSize()];
-    var funcClosure = (PyTupleObject)func.getFuncClosure();
+    var funcClosure = (PyTupleObject) func.getFuncClosure();
     for (int i = 0; i < func.getFreeVarsSize(); i++) {
       cells[i] = funcClosure.get(i);
     }
   }
 
-
-  public PyFrameObject(PyCodeObject code,
-                       PyDictObject builtins,
-                       PyDictObject globals, PyDictObject locals,
-                       PyFrameObject back) {
+  public PyFrameObject(
+      PyCodeObject code,
+      PyDictObject builtins,
+      PyDictObject globals,
+      PyDictObject locals,
+      PyFrameObject back) {
     assert code != null;
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.globals = globals;
     this.locals = locals;
@@ -73,14 +82,17 @@ public class PyFrameObject extends PyObject {
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
-
-  public PyFrameObject(PyFunctionObject func, PyCodeObject code,
-                       PyDictObject builtins,
-                       PyDictObject globals, PyDictObject locals,
-                       PyFrameObject back) {
+  public PyFrameObject(
+      PyFunctionObject func,
+      PyCodeObject code,
+      PyDictObject builtins,
+      PyDictObject globals,
+      PyDictObject locals,
+      PyFrameObject back) {
     assert code != null;
     this.func = func;
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.globals = globals;
     this.locals = locals;
@@ -88,7 +100,7 @@ public class PyFrameObject extends PyObject {
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
     cells = new PyObject[func.getFreeVarsSize()];
-    var funcClosure = (PyTupleObject)func.getFuncClosure();
+    var funcClosure = (PyTupleObject) func.getFuncClosure();
     for (int i = 0; i < func.getFreeVarsSize(); i++) {
       cells[i] = funcClosure.get(i);
     }
@@ -97,6 +109,7 @@ public class PyFrameObject extends PyObject {
   @Deprecated
   public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyFrameObject back) {
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.locals = new PyDictObject();
     this.globals = new PyDictObject();
@@ -105,8 +118,10 @@ public class PyFrameObject extends PyObject {
     localPlus = new PyObject[code.getCoNLocals()];
   }
 
-  public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyDictObject locals) {
+  public PyFrameObject(
+      PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyDictObject locals) {
     this.code = code;
+    byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
     this.locals = locals;
     this.globals = globals;
@@ -144,19 +159,19 @@ public class PyFrameObject extends PyObject {
 
   public void setFreeVars(int idx, PyObject o) {
     assert cells[idx] instanceof PyCellObject;
-    var cell = (PyCellObject)cells[idx];
+    var cell = (PyCellObject) cells[idx];
     cell.setRef(o);
   }
 
   public PyObject getFreeVars(int idx) {
     assert cells[idx] instanceof PyCellObject;
-    var cell = (PyCellObject)cells[idx];
+    var cell = (PyCellObject) cells[idx];
     return cell.getRef();
   }
 
   public PyCellObject getFreeVarsCell(int idx) {
     assert cells[idx] instanceof PyCellObject;
-    return (PyCellObject)cells[idx];
+    return (PyCellObject) cells[idx];
   }
 
   public PyDictObject getLocals() {
@@ -241,19 +256,42 @@ public class PyFrameObject extends PyObject {
 
   public PyUnicodeObject getModuleName() {
     if (func != null) {
-      return (PyUnicodeObject)func.getFuncModule();
+      return (PyUnicodeObject) func.getFuncModule();
     }
     return null;
   }
 
   @Override
   public String toString() {
-    return "PyFrameObject{" +
-        "stack=" + Arrays.toString(stack) +
-        ", localPlus=" + Arrays.toString(localPlus) +
-        ", builtins=" + builtins +
-        ", globals=" + globals +
-        ", locals=" + locals +
-        '}';
+    return "PyFrameObject{"
+        + "stack="
+        + Arrays.toString(stack)
+        + ", localPlus="
+        + Arrays.toString(localPlus)
+        + ", builtins="
+        + builtins
+        + ", globals="
+        + globals
+        + ", locals="
+        + locals
+        + '}';
+  }
+
+  public ByteCodeBuffer getByteCodeBuffer() {
+    return byteCodeBuffer;
+  }
+
+  public int addressToLine() {
+    int cursor = byteCodeBuffer.getCursor();
+    int line = code.getCoFirstLineNo();
+    var colnotab = (PyBytesObject) code.getColnotab();
+    byte[] data = colnotab.getData();
+    int idx = 0;
+    int i = 0;
+    while (idx < cursor) {
+      idx += data[i++] & 0xff;
+      line += data[i++] & 0xff;
+    }
+    return line;
   }
 }

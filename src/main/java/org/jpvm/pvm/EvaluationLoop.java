@@ -45,7 +45,7 @@ public class EvaluationLoop {
   public EvaluationLoop(PyFrameObject frame) {
     this.frame = frame;
     PyCodeObject code = frame.getCode();
-    byteCodeBuffer = new ByteCodeBuffer(code);
+    byteCodeBuffer = frame.getByteCodeBuffer();
     iterator = byteCodeBuffer.iterator();
     coNames = (PyTupleObject) code.getCoNames();
     globals = frame.getGlobals();

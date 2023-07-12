@@ -41,6 +41,6 @@ public class PyPythonException extends PyObject {
 
   @Override
   public PyUnicodeObject repr() {
-    return exceptionInformation;
+    return new PyUnicodeObject(name.getData() + "(" + exceptionInformation.repr() + ")");
   }
 }

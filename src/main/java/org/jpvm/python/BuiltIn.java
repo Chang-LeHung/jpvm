@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.excptions.types.*;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.*;
@@ -12,7 +12,6 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyListType;
-import org.jpvm.objects.types.PySuperType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -58,17 +57,17 @@ public class BuiltIn {
       addType("None", None);
       addType("Ellipsis", ELLIPSIS);
       addType("stdout", Sys.stdout);
-      addType("BaseException", new PyPythonBaseExceptionType());
-      addType("Exception", new PyExceptionType());
-      addType("AssertionError", new PyAssertionErrorType());
-      addType("AttributeError", new PyAttributeErrorType());
-      addType("KeyError", new PyKeyErrorType());
-      addType("NameError", new PyNameErrorType());
-      addType("NotImplementedError", new PyNotImplementedErrorType());
-      addType("RuntimeError", new PyRuntimeErrorType());
-      addType("TypeError", new PyTypeErrorType());
-      addType("ValueError", new PyValueErrorType());
-      addType("ZeroDivisionError", new PyZeroDivisionErrorType());
+      addType("BaseException", PyErrorUtils.BaseException);
+      addType("Exception", PyErrorUtils.Exception);
+      addType("AssertionError", PyErrorUtils.AssertionError);
+      addType("AttributeError", PyErrorUtils.AttributeError);
+      addType("KeyError", PyErrorUtils.KeyError);
+      addType("NameError", PyErrorUtils.NameError);
+      addType("NotImplementedError", PyErrorUtils.NotImplementedError);
+      addType("RuntimeError", PyErrorUtils.RuntimeError);
+      addType("TypeError", PyErrorUtils.TypeError);
+      addType("ValueError", PyErrorUtils.ValueError);
+      addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
     } catch (PyException ignore) {
     }
   }

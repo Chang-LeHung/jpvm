@@ -1,0 +1,7 @@
+print(Exception)
+print(KeyError)
+print(NameError)
+print(TypeError)
+print(ValueError)
+print(AttributeError)
+print(ZeroDivisionError)

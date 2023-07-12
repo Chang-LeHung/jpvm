@@ -11,6 +11,8 @@ import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.pvm.InterpreterState;
+import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyFileStreamObject extends PyObject {
@@ -25,7 +27,8 @@ public class PyFileStreamObject extends PyObject {
   private boolean stdin;
   private boolean stderr;
 
-  public PyFileStreamObject(String filename, String args, String encoding) throws FileNotFoundException {
+  public PyFileStreamObject(String filename, String args, String encoding)
+      throws FileNotFoundException {
     if (filename != null) {
       this.filename = filename;
       this.file = new RandomAccessFile(filename, args);
@@ -33,8 +36,7 @@ public class PyFileStreamObject extends PyObject {
     }
   }
 
-  public PyFileStreamObject() {
-  }
+  public PyFileStreamObject() {}
 
   public PyFileStreamObject(boolean stdout, boolean stdin, boolean stderr) {
     this.stdout = stdout;
@@ -75,6 +77,9 @@ public class PyFileStreamObject extends PyObject {
   }
 
   public void writeBytes(byte[] bytes) throws IOException {
+    InterpreterState is = PVM.getThreadState().getIs();
+    if (is.isDropGILRequest()) is.dropGIL();
+
     if (file != null) {
       file.write(bytes);
     } else if (stdout) {
@@ -82,6 +87,7 @@ public class PyFileStreamObject extends PyObject {
     } else {
       System.err.write(bytes);
     }
+    is.takeGIL();
   }
 
   public void writeString(String s) throws IOException {
