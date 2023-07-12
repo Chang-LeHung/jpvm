@@ -1,11 +1,13 @@
 package org.jpvm.objects.types;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.objects.*;
+import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDescriptorGet;
 import org.jpvm.objects.pyinterface.TypeDescriptorSet;
@@ -43,7 +45,7 @@ public class PyTypeType extends PyObject {
   protected List<PyObject> mro;
   protected PyTupleObject _mro;
   protected List<PyObject> bases;
-  protected PyTupleObject _bases;
+  @PyClassAttribute protected PyTupleObject __bases__;
 
   /**
    * used in super to call clazz's method this is the {@code Class} of class object of this class
@@ -84,6 +86,13 @@ public class PyTypeType extends PyObject {
     bases.add(base);
   }
 
+  public void addBase(int idx, PyObject base ) {
+	  for (PyObject basis : bases) {
+		  if (basis == base) return;
+	  }
+	  bases.add(idx, base);
+  }
+
   /** this object is subtype of r or not */
   public PyBoolObject isSubType(PyObject r) throws PyException {
     if (!typeReady) getMro();
@@ -108,6 +117,16 @@ public class PyTypeType extends PyObject {
     } else return _mro;
   }
 
+  @PyClassMethod
+  public PyObject mro(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return getMro();
+  }
+
+  @PyClassMethod
+  public PyObject __mro__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return getMro();
+  }
+
   public void setMro(List<PyObject> mro) {
     this.mro = mro;
   }
@@ -121,14 +140,14 @@ public class PyTypeType extends PyObject {
   }
 
   public PyTupleObject getBasesClass() {
-    if (_bases != null) {
-      return _bases;
+    if (__bases__ != null) {
+      return __bases__;
     }
     PyTupleObject object = new PyTupleObject(bases.size());
     for (int i = 0; i < bases.size(); i++) {
       object.set(i, bases.get(i));
     }
-    _bases = object;
+    __bases__ = object;
     return object;
   }
 
@@ -136,8 +155,8 @@ public class PyTypeType extends PyObject {
     this._mro = _mro;
   }
 
-  public void set_bases(PyTupleObject _bases) {
-    this._bases = _bases;
+  public void set__bases__(PyTupleObject __bases__) {
+    this.__bases__ = __bases__;
   }
 
   @Override
@@ -240,6 +259,27 @@ public class PyTypeType extends PyObject {
     }
     if (object == null) {
       object = Utils.loadFiled(this, name);
+    }
+    if (object == null) {
+      try {
+        Method method =
+            this.getClass().getSuperclass().getMethod(name.getData(), PyObject.parameterTypes);
+        if (method.isAnnotationPresent(PyClassMethod.class))
+          object = new PyMethodObject(this, method, name.getData());
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
+    if (object == null) {
+      Class<?> clazz = this.getClass().getSuperclass();
+      try {
+        Field field = clazz.getDeclaredField(name.getData());
+        if (field.isAnnotationPresent(PyClassAttribute.class)) {
+          field.setAccessible(true);
+          Object o = field.get(this);
+          return (PyObject) o;
+        }
+      } catch (NoSuchFieldException | IllegalAccessException ignore) {
+      }
     }
     if (object == null) {
       try {

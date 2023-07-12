@@ -1,13 +1,11 @@
 package org.jpvm.excptions.types;
 
-import org.jpvm.excptions.PyPythonException;
-import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.python.BuiltIn;
 
-public class PyNotImplementedErrorType extends PyTypeType {
+public class PyNotImplementedErrorType extends PyPythonBaseExceptionType {
 
   public PyNotImplementedErrorType() {
-    super(PyPythonException.class);
     name = "NotImplementedError";
-    addBase(PyPythonException.type);
+    addBase(0, BuiltIn.loadFromDict("Exception"));
   }
 }

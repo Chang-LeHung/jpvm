@@ -1,13 +1,11 @@
 package org.jpvm.excptions.types;
 
-import org.jpvm.excptions.PyPythonException;
-import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.python.BuiltIn;
 
-public class PyAssertionErrorType extends PyTypeType {
+public class PyAssertionErrorType extends PyPythonBaseExceptionType {
 
   public PyAssertionErrorType() {
-    super(PyPythonException.class);
     name = "AssertionError";
-    addBase(PyPythonException.type);
+    addBase(0, BuiltIn.loadFromDict("Exception"));
   }
 }

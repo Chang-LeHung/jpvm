@@ -1,17 +1,32 @@
 package org.jpvm.excptions;
 
-import org.jpvm.excptions.types.PyPythonBaseExceptionType;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PyPythonException extends PyObject {
 
-  public static PyObject type = new PyPythonBaseExceptionType();
+  private final PyObject type;
 
   private final PyUnicodeObject exceptionInformation;
 
-  public PyPythonException(PyUnicodeObject exceptionInformation) {
+  public PyPythonException(PyTypeType type, PyUnicodeObject exceptionInformation) {
+    this.type = type;
     this.exceptionInformation = exceptionInformation;
+  }
+
+  public PyUnicodeObject getExceptionInformation() {
+    return exceptionInformation;
+  }
+
+  @Override
+  public PyObject getType() {
+    return type;
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
   }
 
   @Override
