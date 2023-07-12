@@ -89,6 +89,13 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
     public void decrease(int delta) {
       cursor -= delta;
     }
+
+    public int getCursor() {
+	    return cursor;
+    }
   }
 
+  public int getCursor() {
+    return itr.getCursor();
+  }
 }

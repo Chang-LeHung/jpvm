@@ -21,4 +21,11 @@ public class TestSuper {
     PVM pvm = new PVM(filename);
     pvm.run();
   }
+
+  @Test
+  public void testSuper03() throws PyException, IOException {
+    String filename = "src/test/resources/obsy/__pycache__/test10.cpython-38.pyc";
+    PVM pvm = new PVM(filename);
+    pvm.run();
+  }
 }

@@ -1,14 +1,11 @@
 package org.jpvm.excptions.types;
 
-import org.jpvm.errors.PyNameError;
-import org.jpvm.excptions.PyPythonException;
-import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.python.BuiltIn;
 
-public class PyNameErrorType extends PyTypeType {
+public class PyNameErrorType extends PyPythonBaseExceptionType {
 
   public PyNameErrorType() {
-    super(PyNameError.class);
-    addBase(PyPythonException.type);
     name = "NameError";
+    addBase(0, BuiltIn.loadFromDict("Exception"));
   }
 }

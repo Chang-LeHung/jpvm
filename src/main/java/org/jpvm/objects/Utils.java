@@ -39,7 +39,7 @@ public class Utils {
   public static PyObject loadFiled(PyObject object, PyUnicodeObject name) {
     Class<? extends PyObject> clazz = object.getClass();
     try {
-      Field field = clazz.getField(name.getData());
+      Field field = clazz.getDeclaredField(name.getData());
       if (field.isAnnotationPresent(PyClassAttribute.class)) {
         field.setAccessible(true);
         Object o = field.get(object);

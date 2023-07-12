@@ -3,6 +3,7 @@ package org.jpvm.objects;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.*;
 import org.jpvm.objects.types.PyBaseObjectType;
@@ -10,6 +11,7 @@ import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyTypeMethods;
 import org.jpvm.python.BuiltIn;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -175,6 +177,27 @@ public class PyObject
     if (object == null) {
       try {
         Method method = this.getClass().getMethod(name.getData(), PyObject.parameterTypes);
+        if (method.isAnnotationPresent(PyClassMethod.class))
+          object = new PyMethodObject(this, method, name.getData());
+      } catch (NoSuchMethodException ignore) {
+      }
+    }
+    if (object == null) {
+      Class<?> clazz = this.getClass().getSuperclass();
+      try {
+        Field field = clazz.getDeclaredField(name.getData());
+        if (field.isAnnotationPresent(PyClassAttribute.class)) {
+          field.setAccessible(true);
+          Object o = field.get(this);
+          return (PyObject) o;
+        }
+      } catch (NoSuchFieldException | IllegalAccessException ignore) {
+      }
+    }
+    if (object == null) {
+      try {
+        Method method =
+            this.getClass().getSuperclass().getMethod(name.getData(), PyObject.parameterTypes);
         if (method.isAnnotationPresent(PyClassMethod.class))
           object = new PyMethodObject(this, method, name.getData());
       } catch (NoSuchMethodException ignore) {

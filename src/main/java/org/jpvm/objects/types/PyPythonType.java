@@ -18,7 +18,7 @@ public class PyPythonType extends PyTypeType {
         dict.get(PyUnicodeObject.getOrCreateFromInternStringPool("__module__", true))
             + "."
             + name.getData();
-    this._bases = bases;
+    this.__bases__ = bases;
     this.dict = dict;
   }
 
