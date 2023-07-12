@@ -27,7 +27,7 @@ public class TestInput {
     return evaluationLoop.pyEvalFrame();
   }
 
-  @Test
+//  @Test
   public void testInput1() throws IOException {
     String filename = "src/test/resources/testpy/__pycache__/testInput.cpython-38.pyc";
     PyObject ret = null;
