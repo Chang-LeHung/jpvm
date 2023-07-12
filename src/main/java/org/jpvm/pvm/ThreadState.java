@@ -1,17 +1,20 @@
 package org.jpvm.pvm;
 
+import org.jpvm.excptions.PyPythonException;
+import org.jpvm.excptions.types.PyPythonBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTraceBackObject;
 
 public class ThreadState {
 
   private InterpreterState is;
   private int recursionDepth;
 
-  private PyObject curExcType;
-  private PyObject curExcValue;
-  private PyObject curExcTrace;
+  private PyPythonBaseExceptionType curExcType;
+  private PyPythonException curExcValue;
+  private PyTraceBackObject curExcTrace;
 
   private PyDictObject builtins;
 
@@ -74,7 +77,7 @@ public class ThreadState {
     return curExcType;
   }
 
-  public void setCurExcType(PyObject curExcType) {
+  public void setCurExcType(PyPythonBaseExceptionType curExcType) {
     this.curExcType = curExcType;
   }
 
@@ -82,7 +85,7 @@ public class ThreadState {
     return curExcValue;
   }
 
-  public void setCurExcValue(PyObject curExcValue) {
+  public void setCurExcValue(PyPythonException curExcValue) {
     this.curExcValue = curExcValue;
   }
 
@@ -90,7 +93,7 @@ public class ThreadState {
     return curExcTrace;
   }
 
-  public void setCurExcTrace(PyObject curExcTrace) {
+  public void setCurExcTrace(PyTraceBackObject curExcTrace) {
     this.curExcTrace = curExcTrace;
   }
 

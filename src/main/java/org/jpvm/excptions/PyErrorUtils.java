@@ -3,7 +3,6 @@ package org.jpvm.excptions;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.types.*;
 import org.jpvm.objects.PyFrameObject;
-import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTraceBackObject;
 import org.jpvm.pvm.PVM;
 import org.jpvm.pvm.ThreadState;
@@ -23,6 +22,8 @@ public class PyErrorUtils {
   public static PyPythonBaseExceptionType ValueError = new PyValueErrorType();
   public static PyPythonBaseExceptionType ZeroDivisionError = new PyZeroDivisionErrorType();
 
+  public static PyImportErrorType ImportError = new PyImportErrorType();
+
   public static void pyErrorFormat(PyPythonBaseExceptionType type, String msg) throws PyException {
     PyPythonException call = type.call(msg);
     ThreadState ts = PVM.getThreadState();
@@ -32,7 +33,7 @@ public class PyErrorUtils {
     throw new PyException(msg);
   }
 
-  public static PyObject getTraceback(PyPythonException call) {
+  public static PyTraceBackObject getTraceback(PyPythonException call) {
     ThreadState ts = PVM.getThreadState();
     PyFrameObject currentFrame = ts.getCurrentFrame();
     PyTraceBackObject tb = new PyTraceBackObject(call);

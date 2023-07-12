@@ -69,6 +69,7 @@ public class BuiltIn {
       addType("RuntimeError", PyErrorUtils.RuntimeError);
       addType("TypeError", PyErrorUtils.TypeError);
       addType("ValueError", PyErrorUtils.ValueError);
+      addType("ImportError", PyErrorUtils.ImportError);
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
     } catch (PyException ignore) {
     }

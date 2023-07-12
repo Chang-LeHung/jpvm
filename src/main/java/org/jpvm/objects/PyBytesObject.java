@@ -114,7 +114,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyObject mpSubscript(PyObject o) throws PyIndexOutOfBound, PyKeyError, PyTypeNotMatch, PyNotImplemented {
+  public PyObject mpSubscript(PyObject o) throws PyException {
     return PyMappingMethods.super.mpSubscript(o);
   }
 
@@ -129,17 +129,17 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqConcat(o);
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 
   @Override
-  public PyObject sqItem(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqItem(PyObject o) throws PyException {
     return PySequenceMethods.super.sqItem(o);
   }
 

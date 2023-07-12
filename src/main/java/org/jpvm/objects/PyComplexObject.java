@@ -133,12 +133,12 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject neg() throws PyNotImplemented {
+  public PyObject neg() throws PyException {
     return PyNumberMethods.super.neg();
   }
 
   @Override
-  public PyObject pos() throws PyNotImplemented {
+  public PyObject pos() throws PyException {
     return PyNumberMethods.super.pos();
   }
 
@@ -148,12 +148,12 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject bool() throws PyNotImplemented {
+  public PyObject bool() throws PyException {
     return PyNumberMethods.super.bool();
   }
 
   @Override
-  public PyObject trueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject trueDiv(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
       throw new PyTypeNotMatch("cannot apply function div on complex and " + o.getTypeName());
     }
@@ -191,7 +191,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject inplaceTrueDiv(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceTrueDiv(PyObject o) throws PyException {
     return trueDiv(o);
   }
 }

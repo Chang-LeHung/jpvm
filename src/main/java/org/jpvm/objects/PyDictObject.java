@@ -195,17 +195,17 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqConcat(o);
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 
   @Override
-  public PyObject sqItem(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqItem(PyObject o) throws PyException {
     return PySequenceMethods.super.sqItem(o);
   }
 
@@ -221,12 +221,12 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqInplaceConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqInplaceConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceConcat(o);
   }
 
   @Override
-  public PyObject sqInplaceRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqInplaceRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceRepeat(o);
   }
 

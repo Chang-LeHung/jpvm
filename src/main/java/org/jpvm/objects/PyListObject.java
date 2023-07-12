@@ -171,6 +171,8 @@ public class PyListObject extends PyObject
         if (idx >= size()) throw new PyIndexOutOfBound("index " + idx + " out of bound");
         return get(idx);
       } catch (PyNotImplemented ignored) {
+      } catch (PyException e) {
+        throw new RuntimeException(e);
       }
 
       try {
@@ -178,7 +180,7 @@ public class PyListObject extends PyObject
         int idx = (int) ((PyLongObject) index).getData();
         if (idx >= size()) throw new PyIndexOutOfBound("index " + idx + " out of bound");
         return get(idx);
-      } catch (PyNotImplemented ignored) {
+      } catch (PyException ignored) {
       }
     } else if (o instanceof PySliceObject slice) {
       PyListObject list = slice.unpacked(this);

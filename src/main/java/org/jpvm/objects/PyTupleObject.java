@@ -265,7 +265,7 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 

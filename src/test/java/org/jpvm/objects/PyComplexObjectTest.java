@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.junit.Test;
@@ -37,11 +38,10 @@ public class PyComplexObjectTest {
   }
 
   @Test
-  public void pow() {
-  }
+  public void pow() {}
 
   @Test
-  public void trueDiv() throws PyTypeNotMatch, PyNotImplemented {
+  public void trueDiv() throws PyException {
     PyComplexObject o1 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(2));
     PyComplexObject o2 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(-2));
     var res = (PyComplexObject) o1.trueDiv(o2);

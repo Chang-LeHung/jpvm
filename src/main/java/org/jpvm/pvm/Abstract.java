@@ -22,20 +22,14 @@ public class Abstract {
         return nv.mul(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.mul(v);
-      } catch (PyException ignore) {
-      }
+      return nw.mul(v);
     } else if (v instanceof PyNumberMethods && w instanceof PySequenceMethods nw) {
       try {
         return nw.sqRepeat(v);
       } catch (PyNotImplemented | PyTypeNotMatch ignore) {
       }
     } else if (v instanceof PySequenceMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.sqRepeat(w);
-      } catch (PyNotImplemented | PyTypeNotMatch ignore) {
-      }
+      return nv.sqRepeat(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply mul on " + v.repr() + " and " + w.repr());
@@ -55,17 +49,10 @@ public class Abstract {
         return nv.add(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.add(v);
-      } catch (PyException ignore) {
-      }
-    }
-    if (v instanceof PySequenceMethods && w instanceof PySequenceMethods) {
+      return nw.add(v);
+    } else if (v instanceof PySequenceMethods && w instanceof PySequenceMethods) {
       // like "hello" + "world"
-      try {
-        return ((PySequenceMethods) v).sqConcat(w);
-      } catch (PyException ignore) {
-      }
+      return ((PySequenceMethods) v).sqConcat(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not add add on " + v.repr() + " and " + w.repr());
@@ -74,10 +61,7 @@ public class Abstract {
 
   public static PyObject sub(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.sub(w);
-      } catch (PyException ignore) {
-      }
+      return nv.sub(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply sub on " + v.repr() + " and " + w.repr());
@@ -86,10 +70,7 @@ public class Abstract {
 
   public static PyObject pow(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.pow(w);
-      } catch (PyException ignore) {
-      }
+      return nv.pow(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply pow on " + v.repr() + " and " + w.repr());
@@ -98,10 +79,7 @@ public class Abstract {
 
   public static PyObject lshift(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.lshift(w);
-      } catch (PyException ignore) {
-      }
+      return nv.lshift(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply lshift on " + v.repr() + " and " + w.repr());
@@ -110,10 +88,7 @@ public class Abstract {
 
   public static PyObject rshift(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.rshift(w);
-      } catch (PyException ignore) {
-      }
+      return nv.rshift(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply rshift on " + v.repr() + " and " + w.repr());
@@ -122,11 +97,7 @@ public class Abstract {
 
   public static PyObject index(PyObject v) throws PyException {
     if (v instanceof PyNumberMethods nv) {
-      try {
-        return nv.index();
-      } catch (PyNotImplemented ignore) {
-        return BuiltIn.notImplemented;
-      }
+      return nv.index();
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not index pow on " + v.repr());
     return null;
@@ -134,11 +105,7 @@ public class Abstract {
 
   public static PyObject abs(PyObject v) throws PyException {
     if (v instanceof PyNumberMethods nv) {
-      try {
-        return nv.abs();
-      } catch (PyException e) {
-        throw new RuntimeException(e);
-      }
+      return nv.abs();
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply abs on " + v.repr());
     return null;
@@ -150,10 +117,7 @@ public class Abstract {
         return nv.and(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.and(v);
-      } catch (PyException ignore) {
-      }
+      return nw.and(v);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply and on " + v.repr() + " and " + w.repr());
@@ -162,10 +126,7 @@ public class Abstract {
 
   public static PyObject divmod(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.divmod(w);
-      } catch (PyException ignore) {
-      }
+      return nv.divmod(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply divmod on " + v.repr() + " and " + w.repr());
@@ -174,10 +135,7 @@ public class Abstract {
 
   public static PyObject floorDiv(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.floorDiv(w);
-      } catch (PyException ignore) {
-      }
+      return nv.floorDiv(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply floorDiv on " + v.repr() + " and " + w.repr());
@@ -186,10 +144,7 @@ public class Abstract {
 
   public static PyObject inplaceAdd(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceAdd(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceAdd(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
@@ -198,10 +153,7 @@ public class Abstract {
 
   public static PyObject inplaceMod(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceMod(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceMod(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
@@ -210,10 +162,7 @@ public class Abstract {
 
   public static PyObject inplaceTrueDiv(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceTrueDiv(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceTrueDiv(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceTrueDiv on " + v.repr() + " and " + w.repr());
@@ -222,10 +171,7 @@ public class Abstract {
 
   public static PyObject inplaceAnd(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceAnd(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceAnd(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAnd on " + v.repr() + " and " + w.repr());
@@ -234,10 +180,7 @@ public class Abstract {
 
   public static PyObject inplaceFloorDiv(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceFloorDiv(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceFloorDiv(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError,
@@ -247,10 +190,7 @@ public class Abstract {
 
   public static PyObject inplaceMatrixMul(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceMatrixMul(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceMatrixMul(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError,
@@ -260,10 +200,7 @@ public class Abstract {
 
   public static PyObject trueDiv(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.trueDiv(w);
-      } catch (PyException ignore) {
-      }
+      return nv.trueDiv(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply trueDiv on " + v.repr() + " and " + w.repr());
@@ -272,10 +209,7 @@ public class Abstract {
 
   public static PyObject matrixMul(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.matrixMul(w);
-      } catch (PyException ignore) {
-      }
+      return nv.matrixMul(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply matrixMul on " + v.repr() + " and " + w.repr());
@@ -284,10 +218,7 @@ public class Abstract {
 
   public static PyObject mod(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv) {
-      try {
-        return nv.mod(w);
-      } catch (PyException ignore) {
-      }
+      return nv.mod(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply mod on " + v.repr() + " and " + w.repr());
@@ -296,10 +227,7 @@ public class Abstract {
 
   public static PyObject inplaceMul(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceMul(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceMul(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceMul on " + v.repr() + " and " + w.repr());
@@ -308,10 +236,7 @@ public class Abstract {
 
   public static PyObject inplaceOr(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceOr(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceOr(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceOr on " + v.repr() + " and " + w.repr());
@@ -320,10 +245,7 @@ public class Abstract {
 
   public static PyObject inplacePow(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplacePow(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplacePow(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplacePow on " + v.repr() + " and " + w.repr());
@@ -332,10 +254,7 @@ public class Abstract {
 
   public static PyObject inplaceRshift(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceRshift(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceRshift(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceRshift on " + v.repr() + " and " + w.repr());
@@ -344,10 +263,7 @@ public class Abstract {
 
   public static PyObject inplaceLshift(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceLshift(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceLshift(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceLshift on " + v.repr() + " and " + w.repr());
@@ -356,10 +272,7 @@ public class Abstract {
 
   public static PyObject inplaceSub(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceSub(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceSub(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceSub on " + v.repr() + " and " + w.repr());
@@ -368,10 +281,7 @@ public class Abstract {
 
   public static PyObject inplaceTrue(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceTrueDiv(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceTrueDiv(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceTrue on " + v.repr() + " and " + w.repr());
@@ -384,10 +294,7 @@ public class Abstract {
         return nv.or(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.or(v);
-      } catch (PyException ignore) {
-      }
+      return nw.or(v);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply or on " + v.repr() + " and " + w.repr());
@@ -400,10 +307,7 @@ public class Abstract {
         return nv.xor(w);
       } catch (PyException ignore) {
       }
-      try {
-        return nw.xor(v);
-      } catch (PyException ignore) {
-      }
+      return nw.xor(v);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply xor on " + v.repr() + " and " + w.repr());
@@ -412,10 +316,7 @@ public class Abstract {
 
   public static PyObject inplaceXor(PyObject v, PyObject w) throws PyException {
     if (v instanceof PyNumberMethods nv && w instanceof PyNumberMethods) {
-      try {
-        return nv.inplaceXor(w);
-      } catch (PyException ignore) {
-      }
+      return nv.inplaceXor(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceXor on " + v.repr() + " and " + w.repr());
@@ -511,20 +412,11 @@ public class Abstract {
     if (o == BuiltIn.False) return BuiltIn.False;
     if (o == BuiltIn.None) return BuiltIn.False;
     if (o instanceof PyNumberMethods num) {
-      try {
-        return (PyBoolObject) num.bool();
-      } catch (PyNotImplemented ignore) {
-      }
+      return (PyBoolObject) num.bool();
     } else if (o instanceof PySequenceMethods seq) {
-      try {
-        return isTrue(seq.sqLength(null));
-      } catch (PyNotImplemented ignore) {
-      }
+      return isTrue(seq.sqLength(null));
     } else if (o instanceof PyMappingMethods map) {
-      try {
-        return isTrue(map.mpLength(null));
-      } catch (PyNotImplemented ignore) {
-      }
+      return isTrue(map.mpLength(null));
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, o.repr() + "can not be seen as a bool object");
@@ -535,14 +427,11 @@ public class Abstract {
     if (v instanceof PySequenceMethods seq) {
       try {
         return seq.sqItem(w);
-      } catch (PyTypeNotMatch | PyNotImplemented ignore) {
+      } catch (Exception ignore) {
       }
     }
     if (v instanceof PyMappingMethods map) {
-      try {
-        return map.mpSubscript(w);
-      } catch (PyException ignore) {
-      }
+      return map.mpSubscript(w);
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not get " + w.repr() + " from " + v.repr());

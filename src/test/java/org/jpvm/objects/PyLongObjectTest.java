@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class PyLongObjectTest {
     var res = (PyLongObject) o2.sub(o1);
     System.out.println(res.repr());
     assert res.getData() == 1;
-//        Assert.assertEquals(res.getData(), 1);
+    //        Assert.assertEquals(res.getData(), 1);
     System.out.println("\u001B[32m method sub of PyLongObject pass\u001B[0m");
   }
 
@@ -49,7 +50,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void divmod() throws PyTypeNotMatch {
+  public void divmod() throws PyException {
     PyLongObject o1 = new PyLongObject(4);
     PyLongObject o2 = new PyLongObject(10);
     var res = (PyTupleObject) o2.divmod(o1);
@@ -183,7 +184,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void floorDiv() throws PyTypeNotMatch {
+  public void floorDiv() throws PyException {
     PyLongObject o1 = new PyLongObject(4);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o1.floorDiv(o2);
@@ -193,7 +194,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void trueDiv() throws PyTypeNotMatch {
+  public void trueDiv() throws PyException {
     PyLongObject o1 = new PyLongObject(10);
     PyLongObject o2 = new PyLongObject(4);
     var res = (PyFloatObject) o1.trueDiv(o2);
