@@ -140,9 +140,11 @@ public class BuiltIn {
               PyUnicodeObject.getOrCreateFromInternStringPool("\n", true));
     }
     if (!(std instanceof PyFileStreamObject stream)) {
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "std require stdout PyFileStreamObject");
       throw new PyTypeNotMatch("std require stdout PyFileStreamObject");
     }
     if (!(end instanceof PyUnicodeObject uni)) {
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "end require stdout PyUnicodeObject");
       throw new PyTypeNotMatch("end require stdout PyUnicodeObject");
     }
     TypeDoIterate iterator = args.getIterator();
@@ -163,9 +165,10 @@ public class BuiltIn {
       if (object instanceof TypeIterable itr) {
         return (PyObject) itr.getIterator();
       }
-      throw new PyException("object " + object.repr() + " can not be an iterator");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "std require stdout PyFileStreamObject");
     }
-    throw new PyException("iter function require only 1 argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "iter function require only 1 argument");
+    return null;
   }
 
   public static PyObject sum(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -182,7 +185,8 @@ public class BuiltIn {
         return result;
       }
     }
-    throw new PyTypeError("sum only require one iterable argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sum only require one iterable argument");
+    return null;
   }
 
   public static PyObject len(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -197,7 +201,8 @@ public class BuiltIn {
         return map.mpLength(null);
       }
     }
-    throw new PyTypeError("sum only require one iterable argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sum only require one iterable argument");
+    return null;
   }
 
   public static PyObject sorted(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -265,12 +270,16 @@ public class BuiltIn {
         return iterator.next();
       }
     }
-    throw new PyException("next function require only 1 argument that is an iterator");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "next function require only 1 argument that is an iterator");
+    return null;
   }
 
   public static PyObject __build_class__(PyTupleObject args, PyDictObject kwArgs)
       throws PyException {
-    if (args.size() < 2) throw new PyException("buildClass function require at least 2 arguments");
+    if (args.size() < 2)
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "buildClass function require at least 2 arguments");
     PyObject function = args.get(0);
     PyObject name = args.get(1);
     PyTupleObject bases = new PyTupleObject(args.size() - 2);

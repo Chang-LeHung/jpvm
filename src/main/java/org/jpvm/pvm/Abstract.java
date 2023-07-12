@@ -39,7 +39,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply mul on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply mul on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   /** whether w is subtype of v or not */
@@ -69,7 +69,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not add add on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not add add on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject sub(PyObject v, PyObject w) throws PyException {
@@ -81,7 +81,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply sub on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply sub on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject pow(PyObject v, PyObject w) throws PyException {
@@ -93,7 +93,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply pow on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply pow on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject lshift(PyObject v, PyObject w) throws PyException {
@@ -105,7 +105,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply lshift on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply lshift on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject rshift(PyObject v, PyObject w) throws PyException {
@@ -117,7 +117,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply rshift on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply rshift on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject index(PyObject v) throws PyException {
@@ -129,7 +129,7 @@ public class Abstract {
       }
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not index pow on " + v.repr());
-    throw new PyTypeNotMatch("can not apply index on " + v.repr());
+    return null;
   }
 
   public static PyObject abs(PyObject v) throws PyException {
@@ -141,7 +141,7 @@ public class Abstract {
       }
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply abs on " + v.repr());
-    throw new PyTypeNotMatch("can not apply abs on " + v.repr());
+    return null;
   }
 
   public static PyObject and(PyObject v, PyObject w) throws PyException {
@@ -157,7 +157,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply and on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply and on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject divmod(PyObject v, PyObject w) throws PyException {
@@ -169,7 +169,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply divmod on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply divmod on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject floorDiv(PyObject v, PyObject w) throws PyException {
@@ -181,7 +181,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply floorDiv on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply floorDiv on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceAdd(PyObject v, PyObject w) throws PyException {
@@ -193,7 +193,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceMod(PyObject v, PyObject w) throws PyException {
@@ -205,7 +205,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceAdd on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceTrueDiv(PyObject v, PyObject w) throws PyException {
@@ -217,7 +217,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceTrueDiv on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceTrueDiv on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceAnd(PyObject v, PyObject w) throws PyException {
@@ -229,7 +229,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceAnd on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceAnd on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceFloorDiv(PyObject v, PyObject w) throws PyException {
@@ -242,7 +242,7 @@ public class Abstract {
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError,
         "can not apply inplaceFloorDiv on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceFloorDiv on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceMatrixMul(PyObject v, PyObject w) throws PyException {
@@ -255,7 +255,7 @@ public class Abstract {
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError,
         "can not apply inplaceMatrixMul on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceMatrixMul on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject trueDiv(PyObject v, PyObject w) throws PyException {
@@ -267,7 +267,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply trueDiv on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply trueDiv on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject matrixMul(PyObject v, PyObject w) throws PyException {
@@ -279,7 +279,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply matrixMul on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply matrixMul on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject mod(PyObject v, PyObject w) throws PyException {
@@ -291,7 +291,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply mod on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply mod on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceMul(PyObject v, PyObject w) throws PyException {
@@ -303,7 +303,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceMul on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceMul on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceOr(PyObject v, PyObject w) throws PyException {
@@ -315,7 +315,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceOr on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceOr on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplacePow(PyObject v, PyObject w) throws PyException {
@@ -327,7 +327,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplacePow on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplacePow on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceRshift(PyObject v, PyObject w) throws PyException {
@@ -339,7 +339,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceRshift on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceRshift on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceLshift(PyObject v, PyObject w) throws PyException {
@@ -351,7 +351,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceLshift on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceLshift on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceSub(PyObject v, PyObject w) throws PyException {
@@ -363,7 +363,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceSub on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceSub on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceTrue(PyObject v, PyObject w) throws PyException {
@@ -375,7 +375,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceTrue on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceTrue on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject or(PyObject v, PyObject w) throws PyException {
@@ -391,7 +391,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply or on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply or on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject xor(PyObject v, PyObject w) throws PyException {
@@ -407,7 +407,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply xor on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply xor on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject inplaceXor(PyObject v, PyObject w) throws PyException {
@@ -419,7 +419,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not apply inplaceXor on " + v.repr() + " and " + w.repr());
-    throw new PyTypeNotMatch("can not apply inplaceXor on " + v.repr() + " and " + w.repr());
+    return null;
   }
 
   public static PyObject abstractCall(
@@ -528,7 +528,7 @@ public class Abstract {
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, o.repr() + "can not be seen as a bool object");
-    throw new PyTypeError(o.repr() + "can not be seen as a bool object");
+    return null;
   }
 
   public static PyObject getItem(PyObject v, PyObject w) throws PyException {
@@ -547,7 +547,7 @@ public class Abstract {
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "can not get " + w.repr() + " from " + v.repr());
     // get item from object `dict` to be implemented
-    throw new PyTypeError("can not get " + w.repr() + " from " + v.repr());
+    return null;
   }
 
   public static void assignItem(PyObject obj, PyObject key, PyObject val) throws PyException {
@@ -579,7 +579,6 @@ public class Abstract {
     }
     if (null != error) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, msg1 + msg2);
-      throw new PyException(msg1 + msg2);
     }
   }
 }
