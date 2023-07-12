@@ -122,7 +122,6 @@ public class PVM {
     String base = file.getParent();
     base = Paths.get(base).toAbsolutePath().toString();
     PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
-
     state = PVM_STATE.INIT;
   }
 

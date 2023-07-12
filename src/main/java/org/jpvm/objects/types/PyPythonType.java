@@ -30,18 +30,18 @@ public class PyPythonType extends PyTypeType {
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyPythonObject res = new PyPythonObject();
+    res.setType(this);
     PyUnicodeObject __init__ = PyUnicodeObject.getOrCreateFromInternStringPool("__init__", true);
     PyUnicodeObject __new__ = PyUnicodeObject.getOrCreateFromInternStringPool("__new__", true);
     callPythonCode(__new__, res, args, kwArgs);
     callPythonCode(__init__, res, args, kwArgs);
-    res.setType(this);
     return res;
   }
 
   public PyObject callPythonCode(
       PyUnicodeObject name, PyObject self, PyTupleObject args, PyDictObject kwArgs)
       throws PyException {
-    PyObject function = dict.get(name);
+    PyObject function = getAttr(name);
     args = Utils.packSelfAsTuple(self, args);
     if (function != null) {
       return Abstract.abstractCall(function, null, args, kwArgs);
