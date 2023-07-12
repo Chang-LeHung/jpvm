@@ -29,6 +29,7 @@ public class PyErrorUtils {
     ts.setCurExcType(type);
     ts.setCurExcValue(call);
     ts.setCurExcTrace(getTraceback(call));
+    throw new PyException(msg);
   }
 
   public static PyObject getTraceback(PyPythonException call) {
