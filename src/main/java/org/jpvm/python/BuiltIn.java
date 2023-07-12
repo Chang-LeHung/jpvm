@@ -1,6 +1,5 @@
 package org.jpvm.python;
 
-import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
@@ -18,6 +17,9 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 import org.jpvm.pvm.PVM;
 import org.jpvm.pvm.ThreadState;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 public class BuiltIn {
 
@@ -86,6 +88,7 @@ public class BuiltIn {
       registerBuiltinFunction("any");
       registerBuiltinFunction("next");
       registerBuiltinFunction("__build_class__");
+      registerBuiltinFunction("input");
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true),
           PyObject.type);
     } catch (NoSuchMethodException | PyException ignore) {
@@ -214,12 +217,12 @@ public class BuiltIn {
       return BuiltIn.False;
     for (int i = 0; i < list.size(); i++) {
       PyObject o = list.get(i);
-      if(o == BuiltIn.False)
+      if (o == BuiltIn.False)
         return BuiltIn.False;
       else if (o instanceof PyNumberMethods num) {
         if (((PyBoolObject) num.bool()).isFalse())
           return BuiltIn.False;
-      }else
+      } else
         return BuiltIn.False;
     }
     return BuiltIn.True;
@@ -232,7 +235,7 @@ public class BuiltIn {
       return BuiltIn.False;
     for (int i = 0; i < list.size(); i++) {
       PyObject o = list.get(i);
-      if(o == BuiltIn.True)
+      if (o == BuiltIn.True)
         return BuiltIn.True;
       else if (o instanceof PyNumberMethods num) {
         if (((PyBoolObject) num.bool()).isTrue())
@@ -259,7 +262,7 @@ public class BuiltIn {
     PyObject name = args.get(1);
     PyTupleObject bases = new PyTupleObject(args.size() - 2);
     for (int i = 2; i < args.size(); i++) {
-      bases.set(i-2, args.get(i));
+      bases.set(i - 2, args.get(i));
     }
     PyDictObject locals = new PyDictObject();
     ThreadState ts = PVM.getThreadState();
@@ -269,6 +272,30 @@ public class BuiltIn {
     args.set(1, bases);
     args.set(2, locals);
     return PyTypeType.type.call(null, args, kwArgs);
+  }
+
+  public static PyObject input(PyTupleObject args, PyDictObject kwArgs) throws PyException, IOException {
+    PyObject std;
+    PyObject out = None;
+    if (args.size() < 2) {
+      if (args.size() == 1) {
+        std = Sys.stdout;
+        out = args.get(0);
+        if (!(std instanceof PyFileStreamObject stream)) {
+          throw new PyTypeNotMatch("std require stdout PyFileStreamObject");
+        }
+        if (!(out instanceof PyUnicodeObject uni)) {
+          throw new PyTypeNotMatch("end require stdout PyUnicodeObject");
+        }
+        stream.writeString(uni.getData());
+      }
+
+      Scanner scanner = new Scanner(System.in);
+      String str = scanner.nextLine();
+      out = PyUnicodeObject.getOrCreateFromInternStringPool(str, false);
+      return out;
+    }
+    throw new PyException("input function require at most 1 argument");
   }
 
 }
