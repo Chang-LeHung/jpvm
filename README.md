@@ -63,13 +63,13 @@ public class Example {
 public void testCall(){
 		String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
 		try{
-      PVM pvm=new PVM(filename);
-      pvm.run();
-      System.out.println(pvm.call("fib",10));
+		PVM pvm=new PVM(filename);
+		pvm.run();
+		System.out.println(pvm.call("fib",10));
 		}catch(PyException|IOException e){
-      throw new RuntimeException(e);
+		throw new RuntimeException(e);
 		}
-}
+		}
 ```
 
 # 使用Java语言扩展标准库
@@ -128,7 +128,7 @@ public class math extends PyModuleObject {
 	public PyObject abs(PyTupleObject args, PyDictObject kwArgs) throws PyException {
 		if (args.size() == 1) {
 			var value = args.get(0);
-			
+
 			if (value instanceof PyNumberMethods num) {
 				return num.abs();
 			}
@@ -146,7 +146,7 @@ public class math extends PyModuleObject {
 				return new PyFloatObject(Math.ceil(floatObject.getData()));
 		}
 		PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, TypeError :ceil() argument must be a number ");
-          return null;
+		return null;
 	}
 }
 ```
