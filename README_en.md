@@ -44,14 +44,14 @@ import java.io.IOException;
 
 public class Example {
 
-	public static void main(String[] args) {
-		String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
-		try {
-			new PVM(filename).run();
-		} catch (PyException | IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static void main(String[] args) {
+    String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
 ```
 
@@ -61,16 +61,16 @@ In the above example, we defined a function called `fib`. We can directly call t
 possible to pass parameters using the function name and Java native objects:
 
 ```java
-public void testCall(){
-		String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
-		try{
-		PVM pvm=new PVM(filename);
-		pvm.run();
-		System.out.println(pvm.call("fib",10));
-		}catch(PyException|IOException e){
-		throw new RuntimeException(e);
-		}
-		}
+public void testCall() {
+  String filename = "src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
+  try {
+    PVM pvm = new PVM(filename);
+    pvm.run();
+    System.out.println(pvm.call("fib", 10));
+  } catch (PyException | IOException e) {
+    throw new RuntimeException(e);
+  }
+}
 ```
 
 # Extend the standard library using the Java language
@@ -106,52 +106,51 @@ In `math.java`, you need to create a method named `ceil`, and fields named `PI` 
 be annotated with `PyClassMethod` and `PyClassAttribute` respectively.
 
 ```java
-package org.jpvm.stl;
-
-import org.jpvm.errors.PyException;
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.objects.*;
-import org.jpvm.objects.annotation.PyClassAttribute;
-import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.protocols.PyNumberMethods;
-
 public class math extends PyModuleObject {
-	@PyClassAttribute
-	public PyObject PI;
+  @PyClassAttribute public PyObject PI;
 
-	@PyClassAttribute
-	public PyObject pi;
+  @PyClassAttribute public PyObject e;
+  @PyClassAttribute public PyObject pi;
 
-	public math(PyUnicodeObject name) {
-		super(name);
-		PI = new PyFloatObject(Math.PI);
-		pi = PI;
-	}
+  @PyClassAttribute public PyObject inf;
 
+  @PyClassAttribute private PyObject nan;
 
-	@PyClassMethod
-	public PyObject abs(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-		if (args.size() == 1) {
-			var value = args.get(0);
-			if (value instanceof PyNumberMethods num) {
-				return num.abs();
-			}
-		}
-		PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "TypeError : abs() argument must be a number");
-		return null;
-	}
+  public math(PyUnicodeObject name) {
+    super(name);
+    PI = new PyFloatObject(Math.PI);
+    pi = PI;
+    e = new PyFloatObject(Math.E);
+    inf = new PyFloatObject(Double.NEGATIVE_INFINITY);
+    nan = new PyFloatObject(Double.NaN);
+  }
 
-	@PyClassMethod
-	public PyObject ceil(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-		if (args.size() == 1) {
-			var value = args.get(0);
-			if (value instanceof PyLongObject object) return object;
-			if (value instanceof PyFloatObject floatObject)
-				return new PyFloatObject(Math.ceil(floatObject.getData()));
-		}
-		PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, TypeError :ceil() argument must be a number ");
-		return null;
-	}
+  @PyClassMethod
+  public PyObject fabs(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      var value = args.get(0);
+      if (value instanceof PyNumberMethods num) {
+        return num.abs();
+      }
+    }
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "TypeError : fabs() argument must be a number");
+    return null;
+  }
+  
+  @PyClassMethod
+  public PyObject ceil(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      var value = args.get(0);
+      if (value instanceof PyLongObject object) return object;
+      if (value instanceof PyFloatObject floatObject)
+        return new PyFloatObject(Math.ceil(floatObject.getData()));
+    }
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "TypeError : ceil() argument must be a number");
+    return null;
+  }
+
 }
 ```
 
