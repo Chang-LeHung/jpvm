@@ -4,6 +4,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyComplexType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.python.BuiltIn;
@@ -80,14 +81,15 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (Operator.Py_EQ == op) {
-      if (o instanceof PyComplexObject complex) {
-        if (complex.real == real && complex.image == image) return BuiltIn.True;
-      }
-      return BuiltIn.False;
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
+    if (Operator.Py_EQ != op) {
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+      return null;
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    if (o instanceof PyComplexObject complex) {
+      if (complex.real == real && complex.image == image) return BuiltIn.True;
+    }
+    return BuiltIn.False;
   }
 
   @Override
@@ -96,9 +98,10 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject add(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject add(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      throw new PyTypeNotMatch("can not apply function add on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply function add on complex and " + o.getTypeName());
+      return null;
     }
     return new PyComplexObject(
         (PyFloatObject) (real.add(((PyComplexObject) o).getReal())),
@@ -106,9 +109,10 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject sub(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      throw new PyTypeNotMatch("cannot  apply function add on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "cannot  apply function add on complex and " + o.getTypeName());
+      return null;
     }
     return new PyComplexObject(
         (PyFloatObject) (real.sub(((PyComplexObject) o).getReal())),
@@ -116,9 +120,10 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject mul(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      throw new PyTypeNotMatch("can not apply function mul on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply function mul on complex and " + o.getTypeName());
+      return null;
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
     PyFloatObject bd = (PyFloatObject) image.mul(((PyComplexObject) o).getImage());
@@ -155,7 +160,8 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject trueDiv(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      throw new PyTypeNotMatch("cannot apply function div on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "cannot apply function div on complex and " + o.getTypeName());
+      return null;
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
     PyFloatObject bd = (PyFloatObject) image.mul(((PyComplexObject) o).getImage());
@@ -171,17 +177,17 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyObject inplaceAdd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceAdd(PyObject o) throws PyException {
     return add(o);
   }
 
   @Override
-  public PyObject inplaceSub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceSub(PyObject o) throws PyException {
     return sub(o);
   }
 
   @Override
-  public PyObject inplaceMul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceMul(PyObject o) throws PyException {
     return mul(o);
   }
 

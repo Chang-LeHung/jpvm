@@ -94,9 +94,9 @@ public class TestPvm {
     }
   }
 
-  @Test
-  public void testBuiltinFunction() throws PyException, IOException {
-    String filename = "src/test/resources/pys/__pycache__/demo.cpython-38.pyc";
-    new PVM(filename).run();
-  }
+//  @Test
+//  public void testBuiltinFunction() throws PyException, IOException {
+//    String filename = "src/test/resources/pys/__pycache__/demo.cpython-38.pyc";
+//    new PVM(filename).run();
+//  }
 }

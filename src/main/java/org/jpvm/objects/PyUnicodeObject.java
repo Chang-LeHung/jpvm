@@ -368,7 +368,7 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyObject mpSubscript(PyObject o) throws PyTypeNotMatch {
+  public PyObject mpSubscript(PyObject o) throws PyException {
     if (o instanceof PySliceObject slice) {
       PyListObject list = slice.unpacked(this);
       assert list != null;

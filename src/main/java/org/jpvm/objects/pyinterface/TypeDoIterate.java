@@ -12,7 +12,7 @@ public interface TypeDoIterate {
     return BuiltIn.PyExcStopIteration;
   }
 
-  default PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
+  default PyObject get(int idx) throws PyException {
     throw new PyNotImplemented("TypeDoIterate get not implemented");
   }
 

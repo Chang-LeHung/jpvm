@@ -167,7 +167,7 @@ public class Marshal {
     return floatObject;
   }
 
-  private PyObject loadReference(ByteBuffer buffer) {
+  private PyObject loadReference(ByteBuffer buffer) throws PyException {
     int i = buffer.getInt();
     return refs.get(i);
   }

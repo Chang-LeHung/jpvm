@@ -1,13 +1,12 @@
 package org.jpvm.stl;
 
-import org.apache.commons.math3.util.FastMath;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.protocols.PyNumberMethods;
 import org.apache.commons.math3.special.Erf;
-import org.apache.commons.math3.util.Precision;
+
 
 public class math extends PyModuleObject {
   @PyClassAttribute
