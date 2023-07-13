@@ -8,7 +8,7 @@ import org.junit.Test;
 public class PyComplexObjectTest {
 
   @Test
-  public void add() throws PyTypeNotMatch, PyNotImplemented {
+  public void add() throws PyException {
     PyComplexObject o1 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(3));
     PyComplexObject o2 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(3));
     var res = (PyComplexObject) o1.add(o2);
@@ -18,7 +18,7 @@ public class PyComplexObjectTest {
   }
 
   @Test
-  public void sub() throws PyTypeNotMatch, PyNotImplemented {
+  public void sub() throws PyException {
     PyComplexObject o1 = new PyComplexObject(new PyFloatObject(4), new PyFloatObject(3));
     PyComplexObject o2 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(5));
     var res = (PyComplexObject) o1.sub(o2);
@@ -28,7 +28,7 @@ public class PyComplexObjectTest {
   }
 
   @Test
-  public void mul() throws PyTypeNotMatch, PyNotImplemented {
+  public void mul() throws PyException {
     PyComplexObject o1 = new PyComplexObject(new PyFloatObject(4), new PyFloatObject(3));
     PyComplexObject o2 = new PyComplexObject(new PyFloatObject(2), new PyFloatObject(5));
     var res = (PyComplexObject) o1.mul(o2);

@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -99,14 +100,17 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate,
 
   @PyClassMethod
   public PyObject send(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (!runToYield)
-      throw new PyException("can't send non-None value to a just-started generator");
+    if (!runToYield){
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can't send non-None value to a just-started generator");
+      return null;
+    }
     if(args.size() == 1) {
       yieldValue = args.get(0);
       newVal = true;
       return __next__();
     }
-    throw new PyException("TypeError: send() takes exactly one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "TypeError: send() takes exactly one argument");
+    return null;
   }
 
   @Override

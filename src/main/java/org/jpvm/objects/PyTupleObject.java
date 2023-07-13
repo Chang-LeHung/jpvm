@@ -270,7 +270,7 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
-  public PyObject sqItem(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqItem(PyObject o) throws PyException {
     if (o instanceof PyLongObject) {
       Long n = NumberHelper.transformPyObject2Long(o);
       if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");

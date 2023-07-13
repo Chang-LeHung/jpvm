@@ -8,7 +8,7 @@ import org.junit.Test;
 public class PyLongObjectTest {
 
   @Test
-  public void testAdd() throws PyTypeNotMatch {
+  public void testAdd() throws PyException {
     PyLongObject o1 = new PyLongObject(1);
     PyLongObject o2 = new PyLongObject(1);
     var res = (PyLongObject) o1.add(o2);
@@ -19,7 +19,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void sub() throws PyTypeNotMatch {
+  public void sub() throws PyException {
     PyLongObject o1 = new PyLongObject(1);
     PyLongObject o2 = new PyLongObject(2);
     var res = (PyLongObject) o2.sub(o1);
@@ -30,7 +30,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void mul() throws PyTypeNotMatch {
+  public void mul() throws PyException {
     PyLongObject o1 = new PyLongObject(2);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o1.mul(o2);
@@ -40,7 +40,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void mod() throws PyTypeNotMatch {
+  public void mod() throws PyException {
     PyLongObject o1 = new PyLongObject(2);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o2.mod(o1);
@@ -61,7 +61,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void pow() throws PyTypeNotMatch {
+  public void pow() throws PyException {
     PyLongObject o1 = new PyLongObject(2);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o2.pow(o1);
@@ -116,7 +116,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void lshift() throws PyTypeNotMatch {
+  public void lshift() throws PyException {
     PyLongObject o1 = new PyLongObject(1);
     PyLongObject o2 = new PyLongObject(2);
     var res = (PyLongObject) o1.lshift(o2);
@@ -126,7 +126,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void rshift() throws PyTypeNotMatch {
+  public void rshift() throws PyException {
     PyLongObject o1 = new PyLongObject(4);
     PyLongObject o2 = new PyLongObject(1);
     var res = (PyLongObject) o1.rshift(o2);
@@ -136,7 +136,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void and() throws PyTypeNotMatch {
+  public void and() throws PyException {
     PyLongObject o1 = new PyLongObject(1);
     PyLongObject o2 = new PyLongObject(2);
     var res = (PyLongObject) o1.and(o2);
@@ -146,7 +146,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void xor() throws PyTypeNotMatch {
+  public void xor() throws PyException {
     PyLongObject o1 = new PyLongObject(5);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o1.xor(o2);
@@ -156,7 +156,7 @@ public class PyLongObjectTest {
   }
 
   @Test
-  public void or() throws PyTypeNotMatch {
+  public void or() throws PyException {
     PyLongObject o1 = new PyLongObject(4);
     PyLongObject o2 = new PyLongObject(3);
     var res = (PyLongObject) o1.or(o2);
