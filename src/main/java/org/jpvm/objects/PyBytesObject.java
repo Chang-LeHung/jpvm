@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import java.util.Arrays;
 import org.jpvm.errors.*;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyBytesType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
@@ -80,17 +81,18 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
-    if (op == Operator.Py_EQ) {
-      if (null == o)
-        return BuiltIn.False;
-      if (o instanceof PyBytesObject bytes) {
-        if (Arrays.equals(data, bytes.data))
-          return BuiltIn.True;
-      }
-      return BuiltIn.False;
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
+    if (op != Operator.Py_EQ) {
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+      return null;
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    if (null == o)
+      return BuiltIn.False;
+    if (o instanceof PyBytesObject bytes) {
+      if (Arrays.equals(data, bytes.data))
+        return BuiltIn.True;
+    }
+    return BuiltIn.False;
   }
 
   @Override
