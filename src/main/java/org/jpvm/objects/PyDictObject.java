@@ -37,6 +37,10 @@ public class PyDictObject extends PyObject
     return put(key, val);
   }
 
+  public void remove(PyObject key) {
+    map.remove(key);
+  }
+
   public PyObject get(PyObject key) {
     return map.get(key);
   }
