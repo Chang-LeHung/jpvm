@@ -2,6 +2,7 @@ package org.jpvm.objects;
 
 import java.util.*;
 import org.jpvm.errors.*;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -27,7 +28,8 @@ public class PyDictObject extends PyObject
     try {
       return map.put(key, val);
     } catch (ConcurrentModificationException e) {
-      throw new PyException("can not put new items while iterating");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can not put new items while iterating");
+      return null;
     }
   }
 
@@ -121,7 +123,8 @@ public class PyDictObject extends PyObject
     if (args.size() == 1) {
       return map.getOrDefault(args.get(0), BuiltIn.None);
     }
-    throw new PyException("dict get method only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "dict get method only require one argument");
+    return null;
   }
 
   @PyClassMethod
@@ -138,7 +141,8 @@ public class PyDictObject extends PyObject
       if (remove == null) return BuiltIn.None;
       return remove;
     }
-    throw new PyException("dict pop method only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "dict pop method only require one argument");
+    return null;
   }
 
   @PyClassMethod
@@ -156,11 +160,12 @@ public class PyDictObject extends PyObject
         return BuiltIn.None;
       }
     }
-    throw new PyException("dict update method only require one PyDictObject object");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "dict update method only require one PyDictObject object");
+    return null;
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (op == Operator.Py_EQ) {
       if (o instanceof PyDictObject dict) {
         if (map.equals(dict.toJavaType())) return BuiltIn.True;
@@ -168,7 +173,8 @@ public class PyDictObject extends PyObject
       }
       return BuiltIn.False;
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+    return null;
   }
 
   @Override
@@ -522,7 +528,7 @@ public class PyDictObject extends PyObject
     }
 
     @Override
-    public PyObject sub(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject sub(PyObject o) throws PyException {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
         map.forEach(
@@ -531,11 +537,12 @@ public class PyDictObject extends PyObject
             });
         return ret;
       }
-      throw new PyTypeNotMatch("require type PyDictItemsObject");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
+      return null;
     }
 
     @Override
-    public PyObject and(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject and(PyObject o) throws PyException {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
         map.forEach(
@@ -548,11 +555,12 @@ public class PyDictObject extends PyObject
             });
         return ret;
       }
-      throw new PyTypeNotMatch("require type PyDictItemsObject");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
+      return null;
     }
 
     @Override
-    public PyObject xor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject xor(PyObject o) throws PyException {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
         map.forEach(
@@ -565,18 +573,20 @@ public class PyDictObject extends PyObject
             });
         return ret;
       }
-      throw new PyTypeNotMatch("require type PyDictItemsObject");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
+      return null;
     }
 
     @Override
-    public PyObject or(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+    public PyObject or(PyObject o) throws PyException {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
         ret.map.putAll(map);
         ret.map.putAll(item.map);
         return ret;
       }
-      throw new PyTypeNotMatch("require type PyDictItemsObject");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
+      return null;
     }
 
     @Override
