@@ -192,7 +192,7 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   }
 
   @Override
-  public PyOb    ject inplacePow(PyObject o) throws PyException {
+  public PyObject inplacePow(PyObject o) throws PyException {
     return pow(o);
   }
 
