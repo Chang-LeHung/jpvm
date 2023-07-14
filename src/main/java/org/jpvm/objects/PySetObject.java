@@ -8,6 +8,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -61,7 +62,7 @@ public class PySetObject extends PyObject
     try {
       set.add(key);
     } catch (ConcurrentModificationException e) {
-      throw new PyException("can not change set while  iterating");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can not change set while  iterating");
     }
   }
 
@@ -69,7 +70,7 @@ public class PySetObject extends PyObject
     try {
       set.addAll(key.set);
     } catch (ConcurrentModificationException e) {
-      throw new PyException("can not change set while  iterating");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can not change set while  iterating");
     }
   }
 
@@ -83,7 +84,8 @@ public class PySetObject extends PyObject
       set.add(args.get(0));
       return BuiltIn.None;
     }
-    throw new PyException("set method add only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method add only require one argument");
+    return null;
   }
 
   @PyClassMethod
@@ -101,7 +103,8 @@ public class PySetObject extends PyObject
       set.remove(args.get(0));
       return BuiltIn.None;
     }
-    throw new PyException("set method remove only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method add only require one argument");
+    return null;
   }
 
   @PyClassMethod
@@ -126,7 +129,8 @@ public class PySetObject extends PyObject
         else return BuiltIn.False;
       }
     }
-    throw new PyException("set method issubset only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method issubset only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -138,7 +142,8 @@ public class PySetObject extends PyObject
         else return BuiltIn.False;
       }
     }
-    throw new PyException("set method issubset only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method issuperset only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -152,7 +157,8 @@ public class PySetObject extends PyObject
         return result;
       }
     }
-    throw new PyException("set method intersection only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method intersection only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -164,7 +170,8 @@ public class PySetObject extends PyObject
         return BuiltIn.None;
       }
     }
-    throw new PyException("set method intersection_update only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method intersection_update only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -178,7 +185,8 @@ public class PySetObject extends PyObject
         return result;
       }
     }
-    throw new PyException("set method difference only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method difference only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -191,7 +199,8 @@ public class PySetObject extends PyObject
         return BuiltIn.None;
       }
     }
-    throw new PyException("set method difference_update only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method difference_update only require one PySetObject argument");
+    return null;
   }
 
   @PyClassMethod
@@ -206,7 +215,8 @@ public class PySetObject extends PyObject
         return BuiltIn.False;
       }
     }
-    throw new PyException("set method isdisjoint only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method isdisjoint only require one PySetObject argument");
+    return null;
   }
 
   public int size() {
@@ -244,7 +254,7 @@ public class PySetObject extends PyObject
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (op == Operator.Py_EQ) {
       if (o instanceof PySetObject obj) {
         if (set.equals(obj.toJavaType())) return BuiltIn.True;
@@ -252,7 +262,8 @@ public class PySetObject extends PyObject
       }
       return BuiltIn.False;
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+    return null;
   }
 
   @Override
@@ -263,7 +274,8 @@ public class PySetObject extends PyObject
       ret.set.removeAll((Set) s.toJavaType());
       return ret;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
@@ -274,7 +286,8 @@ public class PySetObject extends PyObject
       ret.set.retainAll((Set) s.toJavaType());
       return ret;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
@@ -289,7 +302,8 @@ public class PySetObject extends PyObject
       }
       return ret;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
@@ -300,20 +314,22 @@ public class PySetObject extends PyObject
       ret.set.addAll((Set) s.toJavaType());
       return ret;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
-  public PyObject inplaceAnd(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceAnd(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       set.retainAll(s.set);
       return this;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
-  public PyObject inplaceXor(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceXor(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       HashSet<PyObject> set = new HashSet<>();
       for (PyObject pyObject : this.set) {
@@ -326,16 +342,18 @@ public class PySetObject extends PyObject
       this.set.addAll(set);
       return this;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override
-  public PyObject inplaceOr(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject inplaceOr(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       set.addAll((Set) s.toJavaType());
       return this;
     }
-    throw new PyTypeNotMatch("set sub function require type set");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
+    return null;
   }
 
   @Override

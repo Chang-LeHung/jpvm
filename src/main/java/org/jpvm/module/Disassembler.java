@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
+import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.pycParser.PyCodeObject;
 
@@ -18,7 +19,7 @@ public class Disassembler {
     buf = new ByteCodeBuffer(pyCodeObject);
   }
 
-  public void dis() {
+  public void dis() throws PyException {
     HashSet<Integer> enterPoint = new HashSet<>();
     Iterator<Instruction> iterator = buf.iterator();
     for (Instruction ins : buf) {

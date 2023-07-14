@@ -447,7 +447,7 @@ public class math extends PyModuleObject {
     return null;
   }
 
-  public static double[] getArraysFromTuple(PyTupleObject tuple) {
+  public static double[] getArraysFromTuple(PyTupleObject tuple) throws PyException {
     double[] res = new double[tuple.size()];
     for (int i = 0; i < tuple.size(); i++) {
       if (tuple.get(i) instanceof PyLongObject object) {

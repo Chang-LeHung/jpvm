@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.jpvm.errors.*;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -73,7 +74,8 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    throw new PyException("str method startswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method startswith require one str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -85,7 +87,8 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    throw new PyException("str method endswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method endswith require one str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -97,7 +100,8 @@ public class PyUnicodeObject extends PyObject
         return PyLongObject.getLongObject(i);
       }
     }
-    throw new PyException("str method index require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method index require one str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -109,7 +113,8 @@ public class PyUnicodeObject extends PyObject
         return PyLongObject.getLongObject(i);
       }
     }
-    throw new PyException("str method startswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method cout require one str argument");
+    return null;
   }
 
   public int countSubstringOccurrences(String str, String substring) {
@@ -140,7 +145,8 @@ public class PyUnicodeObject extends PyObject
       }
       return list;
     }
-    throw new PyException("str method split error");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method split error");
+    return null;
   }
 
   @PyClassMethod
@@ -148,7 +154,8 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 0) {
       return new PyUnicodeObject(s.strip());
     }
-    throw new PyException("str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -159,7 +166,8 @@ public class PyUnicodeObject extends PyObject
         return new PyUnicodeObject(s.replace(o1.s, o2.s));
       }
     }
-    throw new PyException("str method replace require two str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method replace require two str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -172,15 +180,22 @@ public class PyUnicodeObject extends PyObject
           if (o.get(i) instanceof PyUnicodeObject str) {
             builder.append(str.getData());
             builder.append(s);
-          } else throw new PyException(o.repr() + " is not a str object");
+          } else {
+            PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, o.repr() + " is not a str object");
+            return null;
+          }
         }
         if (o.get(o.size() - 1) instanceof PyUnicodeObject str) {
           builder.append(str.getData());
-        } else throw new PyException(o.repr() + " is not a str object");
+        } else {
+          PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, o.repr() + " is not a str object");
+          return null;
+        }
         return new PyUnicodeObject(builder.toString());
       }
     }
-    throw new PyException("str method join require two str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method join require two str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -191,7 +206,8 @@ public class PyUnicodeObject extends PyObject
       }
       return BuiltIn.True;
     }
-    throw new PyException("str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
+    return null;
   }
 
   @PyClassMethod
@@ -202,7 +218,8 @@ public class PyUnicodeObject extends PyObject
       }
       return BuiltIn.True;
     }
-    throw new PyException("str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
+    return null;
   }
 
   public String getData() {
@@ -260,7 +277,7 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     switch (op) {
       case Py_EQ -> {
         if (!(o instanceof PyUnicodeObject d)) return BuiltIn.False;
@@ -354,7 +371,8 @@ public class PyUnicodeObject extends PyObject
         }
       }
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+    return null;
   }
 
   @Override
@@ -380,7 +398,10 @@ public class PyUnicodeObject extends PyObject
       return new PyUnicodeObject(builder.toString());
     } else {
       Long n = NumberHelper.transformPyObject2Long(o);
-      if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
+      if (n == null) {
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
+        return null;
+      }
       return new PyUnicodeObject(s.substring(n.intValue(), n.intValue() + 1));
     }
   }
@@ -403,7 +424,8 @@ public class PyUnicodeObject extends PyObject
       }
       return new PyUnicodeObject(String.format(s, objects));
     }
-    throw new PyException("str mod method require a tuple argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str mod method require a tuple argument");
+    return null;
   }
 
   @Override
@@ -412,28 +434,33 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqConcat(PyObject o) throws PyException {
     if (o instanceof PyUnicodeObject u) {
       return new PyUnicodeObject(s + u.getData());
     }
-    throw new PyTypeNotMatch("sqConcat: parameter o require type str");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sqConcat: parameter o require type str");
+    return null;
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqRepeat(PyObject o) throws PyException {
     StringBuilder builder = new StringBuilder();
     Long l = NumberHelper.transformPyObject2Long(o);
-    if (l == null) throw new PyTypeNotMatch("sqRepeat: parameter o require type PyNumberMethods");
+    if (l == null) {
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sqRepeat: parameter o require type PyNumberMethods");
+      return null;
+    }
     builder.append(String.valueOf(s).repeat(Math.max(0, l.intValue())));
     return new PyUnicodeObject(builder.toString());
   }
 
   @Override
-  public PyObject sqContain(PyObject o) throws PyTypeNotMatch {
+  public PyObject sqContain(PyObject o) throws PyException {
     if (o instanceof PyUnicodeObject u) {
       return new PyBoolObject(s.contains(u.getData()));
     }
-    throw new PyTypeNotMatch("sqContain: parameter o require type str");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sqContain: parameter o require type str");
+    return null;
   }
 
   @Override
@@ -464,8 +491,11 @@ public class PyUnicodeObject extends PyObject
     }
 
     @Override
-    public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
-      if (idx >= size()) throw new PyIndexOutOfBound(idx + " is out of bound for str " + s);
+    public PyObject get(int idx) throws PyException {
+      if (idx >= size()) {
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, idx + " is out of bound for str " + s);
+        return null;
+      }
       return new PyUnicodeObject(s.substring(idx, idx + 1));
     }
 

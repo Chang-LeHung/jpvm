@@ -3,6 +3,7 @@ package org.jpvm.objects;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyNativeMethodType;
 
 public class PyNativeMethodObject extends PyObject {
@@ -23,7 +24,8 @@ public class PyNativeMethodObject extends PyObject {
     try {
       return (PyObject) method.invoke(self, args, kwArgs);
     } catch (IllegalAccessException | InvocationTargetException e) {
-      throw new PyException(e.getCause().getMessage());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
+      return null;
     }
   }
 

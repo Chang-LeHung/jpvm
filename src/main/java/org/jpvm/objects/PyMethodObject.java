@@ -3,6 +3,7 @@ package org.jpvm.objects;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyMethodType;
 import org.jpvm.pvm.Abstract;
 
@@ -84,7 +85,8 @@ public class PyMethodObject extends PyObject {
         return Abstract.abstractCall(functionObject, null, args, kwArgs);
       }
     } catch (IllegalAccessException | InvocationTargetException e) {
-      throw new PyException(e.getCause().getMessage());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
+      return null;
     }
   }
 }
