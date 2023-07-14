@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PySuperType;
 
 public class PySuperObject extends PyObject {
@@ -51,6 +52,7 @@ public class PySuperObject extends PyObject {
       method.setSelf(self);
       return method;
     }
-    throw new PyException("super error: no such attribute");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "super error: no such attribute");
+    return null;
   }
 }

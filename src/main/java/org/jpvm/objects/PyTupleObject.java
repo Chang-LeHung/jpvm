@@ -1,6 +1,7 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.*;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -58,17 +59,19 @@ public class PyTupleObject extends PyObject
       }
       return res;
     }
-    throw new PyException("getTupleFromIterator require TypeIterable or Iterator");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "getTupleFromIterator require TypeIterable or Iterator");
+    return null;
   }
 
   public void set(int idx, PyObject obj) {
     obItem[idx] = obj;
   }
 
-  public PyObject get(int idx) {
-    if (idx >= obItem.length)
-      throw new IndexOutOfBoundsException(
-          "idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
+  public PyObject get(int idx) throws PyException {
+    if (idx >= obItem.length){
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, "idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
+      return null;
+    }
     return obItem[idx];
   }
 
@@ -86,7 +89,7 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
-  public PyObject mul(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject mul(PyObject o) throws PyException {
     if (o instanceof PyLongObject pyLongObject) {
       PyTupleObject o1 = new PyTupleObject((int) (size() * pyLongObject.getData()));
       for (int i = 0; i < pyLongObject.getData(); i++) {
@@ -96,11 +99,12 @@ public class PyTupleObject extends PyObject
       }
       return o1;
     }
-    throw new PyTypeNotMatch("require PyTupleObject type");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyTupleObject type");
+    return null;
   }
 
   @Override
-  public PyObject add(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
+  public PyObject add(PyObject o) throws PyException {
     return sqConcat(o);
   }
 
@@ -143,7 +147,8 @@ public class PyTupleObject extends PyObject
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (!(o instanceof PyTupleObject tuple)) {
-      throw new PyTypeNotMatch("can only support PyTupleObject");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can only support PyTupleObject");
+      return null;
     }
     switch (op) {
       case Py_EQ -> {
@@ -240,7 +245,8 @@ public class PyTupleObject extends PyObject
         }
       }
     }
-    throw new PyTypeNotMatch("can only support PyTupleObject");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can only support PyTupleObject");
+    return null;
   }
 
   @Override
@@ -249,7 +255,7 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyTypeNotMatch, PyNotImplemented {
+  public PyObject sqConcat(PyObject o) throws PyException {
     if (o instanceof PyTupleObject tupleObject) {
       PyTupleObject o1 = new PyTupleObject(size() + tupleObject.size());
       for (int i = 0; i < o1.size(); i++) {
@@ -261,7 +267,8 @@ public class PyTupleObject extends PyObject
       }
       return o1;
     }
-    throw new PyTypeNotMatch("require PyTupleObject type");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyTupleObject type");
+    return null;
   }
 
   @Override
@@ -273,7 +280,10 @@ public class PyTupleObject extends PyObject
   public PyObject sqItem(PyObject o) throws PyException {
     if (o instanceof PyLongObject) {
       Long n = NumberHelper.transformPyObject2Long(o);
-      if (n == null) throw new PyTypeNotMatch("require PyNumberMethods type");
+      if (n == null){
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
+        return null;
+      }
       return get(n.intValue());
     } else if (o instanceof PySliceObject slice) {
       PyListObject idx = slice.unpacked(this);
@@ -284,7 +294,8 @@ public class PyTupleObject extends PyObject
       }
       return result;
     }
-    throw new PyTypeNotMatch("require PyNumberMethods type");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
+    return null;
   }
 
   /** only use @PyClassMethod annotation could be called in python source code */
@@ -299,7 +310,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(-1);
     }
-    throw new PyTypeNotMatch("PyTupleObject method index only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyTupleObject method index only require one argument");
+    return null;
   }
 
   @PyClassMethod
@@ -313,7 +325,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(count);
     }
-    throw new PyTypeNotMatch("PyTupleObject method count only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyTupleObject method count only require one argument");
+    return null;
   }
 
   @Override
@@ -363,9 +376,10 @@ public class PyTupleObject extends PyObject
     }
 
     @Override
-    public PyObject get(int idx) throws PyIndexOutOfBound, PyNotImplemented {
+    public PyObject get(int idx) throws PyException {
       if (idx < obItem.length) return obItem[idx];
-      throw new PyIndexOutOfBound("tuple is out of bound for index " + idx);
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, "tuple is out of bound for index " + idx);
+      return null;
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -13,7 +14,7 @@ import org.jpvm.python.BuiltIn;
 
 public class Utils {
 
-  public static PyTupleObject packSelfAsTuple(PyObject self, PyTupleObject args) {
+  public static PyTupleObject packSelfAsTuple(PyObject self, PyTupleObject args) throws PyException {
     PyTupleObject res = new PyTupleObject(args.size() + 1);
     res.set(0, self);
 
@@ -103,7 +104,8 @@ public class Utils {
       }
       return res;
     }
-    throw new PyException("can't transform" + o + " to PyObject");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can't transform" + o + " to PyObject");
+    return null;
   }
 
   public static Object transformFromPyObject(PyObject o) throws PyException {
@@ -146,6 +148,7 @@ public class Utils {
       }
       return res;
     }
-    throw new PyException("can't transform" + o.repr() + " to Object");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can't transform" + o.repr() + " to Object");
+    return null;
   }
 }
