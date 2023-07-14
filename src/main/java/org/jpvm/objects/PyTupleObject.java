@@ -59,7 +59,7 @@ public class PyTupleObject extends PyObject
       }
       return res;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "getTupleFromIterator require TypeIterable or Iterator");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "getTupleFromIterator require TypeIterable or Iterator");
     return null;
   }
 

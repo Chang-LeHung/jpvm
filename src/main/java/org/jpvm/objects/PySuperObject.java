@@ -52,7 +52,7 @@ public class PySuperObject extends PyObject {
       method.setSelf(self);
       return method;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "super error: no such attribute");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "super error: no such attribute");
     return null;
   }
 }

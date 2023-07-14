@@ -74,7 +74,7 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method startswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method startswith require one str argument");
     return null;
   }
 
@@ -87,7 +87,7 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method endswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method endswith require one str argument");
     return null;
   }
 
@@ -100,7 +100,7 @@ public class PyUnicodeObject extends PyObject
         return PyLongObject.getLongObject(i);
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method index require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method index require one str argument");
     return null;
   }
 
@@ -113,7 +113,7 @@ public class PyUnicodeObject extends PyObject
         return PyLongObject.getLongObject(i);
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method cout require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method cout require one str argument");
     return null;
   }
 
@@ -145,7 +145,7 @@ public class PyUnicodeObject extends PyObject
       }
       return list;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method split error");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method split error");
     return null;
   }
 
@@ -154,7 +154,7 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 0) {
       return new PyUnicodeObject(s.strip());
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
     return null;
   }
 
@@ -166,7 +166,7 @@ public class PyUnicodeObject extends PyObject
         return new PyUnicodeObject(s.replace(o1.s, o2.s));
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method replace require two str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method replace require two str argument");
     return null;
   }
 
@@ -181,20 +181,20 @@ public class PyUnicodeObject extends PyObject
             builder.append(str.getData());
             builder.append(s);
           } else {
-            PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, o.repr() + " is not a str object");
+            PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, o.repr() + " is not a str object");
             return null;
           }
         }
         if (o.get(o.size() - 1) instanceof PyUnicodeObject str) {
           builder.append(str.getData());
         } else {
-          PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, o.repr() + " is not a str object");
+          PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, o.repr() + " is not a str object");
           return null;
         }
         return new PyUnicodeObject(builder.toString());
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method join require two str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method join require two str argument");
     return null;
   }
 
@@ -206,7 +206,7 @@ public class PyUnicodeObject extends PyObject
       }
       return BuiltIn.True;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
     return null;
   }
 
@@ -218,7 +218,7 @@ public class PyUnicodeObject extends PyObject
       }
       return BuiltIn.True;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str method strip require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method strip require one str argument");
     return null;
   }
 
@@ -424,7 +424,7 @@ public class PyUnicodeObject extends PyObject
       }
       return new PyUnicodeObject(String.format(s, objects));
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "str mod method require a tuple argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str mod method require a tuple argument");
     return null;
   }
 

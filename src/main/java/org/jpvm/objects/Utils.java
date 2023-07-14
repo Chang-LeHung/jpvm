@@ -104,7 +104,7 @@ public class Utils {
       }
       return res;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can't transform" + o + " to PyObject");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can't transform" + o + " to PyObject");
     return null;
   }
 
@@ -148,7 +148,7 @@ public class Utils {
       }
       return res;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "can't transform" + o.repr() + " to Object");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can't transform" + o.repr() + " to Object");
     return null;
   }
 }
