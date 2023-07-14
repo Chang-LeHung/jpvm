@@ -3,6 +3,7 @@ package org.jpvm.objects;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyMissMethod;
 import org.jpvm.errors.PyUnsupportedOperator;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.*;
@@ -116,7 +117,8 @@ public class PyObject
         return BuiltIn.False;
       }
     }
-    throw new PyUnsupportedOperator("not support operator " + op);
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
+    return null;
   }
 
   public PyDictObject getDict() {
@@ -144,8 +146,8 @@ public class PyObject
     if (function instanceof PyFunctionObject) {
       return new PyMethodObject(this, (PyFunctionObject) function, name.getData());
     }
-    throw new PyMissMethod(
-        getTypeName() + " " + this.repr().toString() + " has no method " + name.getData());
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, getTypeName() + " " + this.repr().toString() + " has no method " + name.getData());
+    return null;
   }
 
   /** be careful with call stack overflow if t == PyTypeType.type */
