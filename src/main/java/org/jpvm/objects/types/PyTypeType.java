@@ -69,7 +69,7 @@ public class PyTypeType extends PyObject {
     return clazz;
   }
 
-  public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) {
+  public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) throws PyException {
     for (int i = 0; i < bases.size(); i++) {
       if (bases.get(i) == PyObject.type) return bases;
     }

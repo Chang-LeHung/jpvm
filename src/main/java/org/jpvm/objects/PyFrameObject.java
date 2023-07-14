@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
+import org.jpvm.errors.PyException;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
 
@@ -47,7 +48,7 @@ public class PyFrameObject extends PyObject {
       PyCodeObject code,
       PyDictObject builtins,
       PyDictObject globals,
-      PyFrameObject back) {
+      PyFrameObject back) throws PyException {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -88,7 +89,7 @@ public class PyFrameObject extends PyObject {
       PyDictObject builtins,
       PyDictObject globals,
       PyDictObject locals,
-      PyFrameObject back) {
+      PyFrameObject back) throws PyException {
     assert code != null;
     this.func = func;
     this.code = code;

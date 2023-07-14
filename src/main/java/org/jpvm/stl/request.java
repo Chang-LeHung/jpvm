@@ -1,5 +1,6 @@
 package org.jpvm.stl;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -19,7 +20,7 @@ public class request extends PyModuleObject {
     }
 
     @PyClassMethod
-    public request urlopen(PyTupleObject args, PyDictObject kwArgs){
+    public request urlopen(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         if(args.size() == 1){
             var val = args.get(0);
             if(val instanceof PyUnicodeObject o){
