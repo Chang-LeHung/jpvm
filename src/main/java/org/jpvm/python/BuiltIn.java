@@ -71,6 +71,7 @@ public class BuiltIn {
       addType("ValueError", PyErrorUtils.ValueError);
       addType("ImportError", PyErrorUtils.ImportError);
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
+      addType("StackOverflowError", PyErrorUtils.StackOverflowError);
     } catch (PyException ignore) {
     }
   }

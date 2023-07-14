@@ -1,10 +1,10 @@
 package org.jpvm.excptions.types;
 
-import org.jpvm.python.BuiltIn;
+import org.jpvm.excptions.PyErrorUtils;
 
 public class PyTypeErrorType extends PyPythonBaseExceptionType {
   public PyTypeErrorType() {
     name = "TypeError";
-    addBase(0, BuiltIn.loadFromDict("Exception"));
+    addBase(0, PyErrorUtils.Exception);
   }
 }

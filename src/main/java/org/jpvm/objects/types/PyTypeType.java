@@ -86,11 +86,11 @@ public class PyTypeType extends PyObject {
     bases.add(base);
   }
 
-  public void addBase(int idx, PyObject base ) {
-	  for (PyObject basis : bases) {
-		  if (basis == base) return;
-	  }
-	  bases.add(idx, base);
+  public void addBase(int idx, PyObject base) {
+    for (PyObject basis : bases) {
+      if (basis == base) return;
+    }
+    bases.add(idx, base);
   }
 
   /** this object is subtype of r or not */
@@ -185,7 +185,7 @@ public class PyTypeType extends PyObject {
   }
 
   @Override
-  public PyBoolObject richCompare(PyObject o, Operator op) throws PyUnsupportedOperator {
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (Operator.Py_EQ == op) {
       if (this == o) return BuiltIn.True;
       else return BuiltIn.False;

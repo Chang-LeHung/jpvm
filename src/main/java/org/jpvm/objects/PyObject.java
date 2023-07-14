@@ -146,7 +146,9 @@ public class PyObject
     if (function instanceof PyFunctionObject) {
       return new PyMethodObject(this, (PyFunctionObject) function, name.getData());
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, getTypeName() + " " + this.repr().toString() + " has no method " + name.getData());
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError,
+        getTypeName() + " " + this.repr().toString() + " has no method " + name.getData());
     return null;
   }
 

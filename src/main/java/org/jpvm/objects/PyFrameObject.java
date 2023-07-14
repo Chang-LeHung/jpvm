@@ -1,11 +1,11 @@
 package org.jpvm.objects;
 
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Stack;
 
 import org.jpvm.bytecode.ByteCodeBuffer;
-import org.jpvm.bytecode.Instruction;
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.TryBlockHandler;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
 
@@ -30,6 +30,8 @@ public class PyFrameObject extends PyObject {
   private PyFunctionObject func;
   private PyObject[] cells;
 
+  private Stack<TryBlockHandler> tryBlockHandlerStack;
+
   public PyFrameObject(
       PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyFrameObject back) {
     assert code != null;
@@ -48,7 +50,8 @@ public class PyFrameObject extends PyObject {
       PyCodeObject code,
       PyDictObject builtins,
       PyDictObject globals,
-      PyFrameObject back) throws PyException {
+      PyFrameObject back)
+      throws PyException {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -89,7 +92,8 @@ public class PyFrameObject extends PyObject {
       PyDictObject builtins,
       PyDictObject globals,
       PyDictObject locals,
-      PyFrameObject back) throws PyException {
+      PyFrameObject back)
+      throws PyException {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -184,6 +188,10 @@ public class PyFrameObject extends PyObject {
   }
 
   public int getUsed() {
+    return used;
+  }
+
+  public int getStackSize() {
     return used;
   }
 
@@ -282,17 +290,42 @@ public class PyFrameObject extends PyObject {
     return byteCodeBuffer;
   }
 
-  public int addressToLine() {
-    int cursor = byteCodeBuffer.getCursor();
+  public int addressToLine(int addrQuery) {
     int line = code.getCoFirstLineNo();
     var colnotab = (PyBytesObject) code.getColnotab();
     byte[] data = colnotab.getData();
+    int size = data.length / 2;
+    int addr = 0;
     int idx = 0;
-    int i = 0;
-    while (idx < cursor) {
-      idx += data[i++] & 0xff;
-      line += data[i++] & 0xff;
+    while (--size >= 0) {
+      addr += data[idx++];
+      if (addr > addrQuery) break;
+      line += data[idx++];
     }
     return line;
+  }
+
+  public void pushTryBlockHandler(TryBlockHandler handler) {
+    if (tryBlockHandlerStack == null) tryBlockHandlerStack = new Stack<>();
+    tryBlockHandlerStack.push(handler);
+  }
+
+  public TryBlockHandler popTryBlockHandler() {
+    if (tryBlockHandlerStack == null || tryBlockHandlerStack.size() == 0) return null;
+    return tryBlockHandlerStack.pop();
+  }
+
+  public TryBlockHandler peekTryBlockHandler() {
+    if (tryBlockHandlerStack == null) return null;
+    return tryBlockHandlerStack.peek();
+  }
+
+  public int getTryBlockSize() {
+    if (tryBlockHandlerStack == null) return 0;
+    return tryBlockHandlerStack.size();
+  }
+
+  public int getLastI() {
+    return byteCodeBuffer.getCursor();
   }
 }

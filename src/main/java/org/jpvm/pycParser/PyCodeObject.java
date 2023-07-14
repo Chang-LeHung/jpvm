@@ -63,6 +63,8 @@ public class PyCodeObject extends PyObject {
   private PyObject coWeakRefList;
   private PyObject coExtra;
 
+  private String parentDir;
+
   public int getCoArgument() {
     return coArgument;
   }
@@ -254,5 +256,13 @@ public class PyCodeObject extends PyObject {
 
   public boolean isGenerator() {
     return (coFlags & Marshal.CO_GENERATOR) != 0;
+  }
+
+  public String getParentDir() {
+    return parentDir;
+  }
+
+  public void setParentDir(String parentDir) {
+    this.parentDir = parentDir;
   }
 }

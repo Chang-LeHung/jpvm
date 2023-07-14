@@ -1,12 +1,12 @@
 package org.jpvm.excptions.types;
 
-import org.jpvm.python.BuiltIn;
+import org.jpvm.excptions.PyErrorUtils;
 
 public class PyAttributeErrorType extends PyPythonBaseExceptionType {
 
   public PyAttributeErrorType() {
     name = "AttributeError";
-    addBase(0, BuiltIn.loadFromDict("Exception"));
+    addBase(0, PyErrorUtils.Exception);
   }
 
   @Override

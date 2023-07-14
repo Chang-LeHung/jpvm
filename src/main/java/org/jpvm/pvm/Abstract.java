@@ -21,13 +21,11 @@ public class Abstract {
       try {
         return nv.mul(w);
       } catch (PyException ignore) {
+        PyErrorUtils.cleanThreadException();
       }
       return nw.mul(v);
     } else if (v instanceof PyNumberMethods && w instanceof PySequenceMethods nw) {
-      try {
-        return nw.sqRepeat(v);
-      } catch (PyNotImplemented | PyTypeNotMatch ignore) {
-      }
+      return nw.sqRepeat(v);
     } else if (v instanceof PySequenceMethods nv && w instanceof PyNumberMethods) {
       return nv.sqRepeat(w);
     }
@@ -48,6 +46,7 @@ public class Abstract {
       try {
         return nv.add(w);
       } catch (PyException ignore) {
+        PyErrorUtils.cleanThreadException();
       }
       return nw.add(v);
     } else if (v instanceof PySequenceMethods && w instanceof PySequenceMethods) {
@@ -116,6 +115,7 @@ public class Abstract {
       try {
         return nv.and(w);
       } catch (PyException ignore) {
+        PyErrorUtils.cleanThreadException();
       }
       return nw.and(v);
     }
@@ -293,6 +293,7 @@ public class Abstract {
       try {
         return nv.or(w);
       } catch (PyException ignore) {
+        PyErrorUtils.cleanThreadException();
       }
       return nw.or(v);
     }
@@ -306,6 +307,7 @@ public class Abstract {
       try {
         return nv.xor(w);
       } catch (PyException ignore) {
+        PyErrorUtils.cleanThreadException();
       }
       return nw.xor(v);
     }
@@ -381,7 +383,8 @@ public class Abstract {
         kwArgs.getMap().forEach((x, y) -> f.setLocal(map.get(x), y));
         for (int i = 0; i < argSize; i++) {
           if (f.getLocal(i) == null)
-            throw new PyParametersError("please pass argument " + coVarNames.get(i).repr(), false);
+            PyErrorUtils.pyErrorFormat(
+                PyErrorUtils.TypeError, "please pass argument " + coVarNames.get(i).repr());
         }
         if (((PyCodeObject) (func.getFuncCode())).isGenerator()) return new PyGeneratorObject(f);
         EvaluationLoop eval = new EvaluationLoop(f);
@@ -390,7 +393,8 @@ public class Abstract {
         // store current frame
         PyFrameObject cf = ts.getCurrentFrame();
         ts.setCurrentFrame(f);
-        if (ts.isOverFlow()) throw new PyException("recursion depth exceeded");
+        if (ts.isOverFlow())
+          PyErrorUtils.pyErrorFormat(PyErrorUtils.StackOverflowError, "recursion depth exceeded");
         PyObject res = eval.pyEvalFrame();
         PVM.getThreadState().decreaseRecursionDepth();
         // restore current frame
@@ -399,7 +403,7 @@ public class Abstract {
       }
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "abstract call error occurred");
-    throw new PyException("abstract call error occurred");
+    return null;
   }
 
   public static PyObject compare(PyObject w, PyObject v, TypeRichCompare.Operator op)
@@ -428,6 +432,7 @@ public class Abstract {
       try {
         return seq.sqItem(w);
       } catch (Exception ignore) {
+        PyErrorUtils.cleanThreadException();
       }
     }
     if (v instanceof PyMappingMethods map) {
@@ -447,27 +452,15 @@ public class Abstract {
         return;
       } catch (PyException e) {
         error = e;
+        PyErrorUtils.cleanThreadException();
       }
-    }
-    String msg1 = "";
-    if (error != null) {
-      msg1 = error.getMessage();
     }
 
     if (obj instanceof PyMappingMethods map) {
-      try {
-        map.mpAssSubscript(key, val);
-        error = null;
-      } catch (PyException e) {
-        error = e;
-      }
-    }
-    String msg2 = "";
-    if (error != null) {
-      error.getMessage();
+      map.mpAssSubscript(key, val);
     }
     if (null != error) {
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, msg1 + msg2);
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, error.getMessage());
     }
   }
 }

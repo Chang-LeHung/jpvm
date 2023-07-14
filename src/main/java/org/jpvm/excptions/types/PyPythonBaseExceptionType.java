@@ -1,12 +1,11 @@
 package org.jpvm.excptions.types;
 
 import org.jpvm.errors.PyException;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.PyPythonException;
-import org.jpvm.objects.PyDictObject;
-import org.jpvm.objects.PyObject;
-import org.jpvm.objects.PyTupleObject;
-import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.*;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.python.BuiltIn;
 
 public class PyPythonBaseExceptionType extends PyTypeType {
 
@@ -24,6 +23,29 @@ public class PyPythonBaseExceptionType extends PyTypeType {
   }
 
   public PyPythonException call(String message) throws PyException {
-	  return new PyPythonException(this, new PyUnicodeObject(message));
+    return new PyPythonException(this, new PyUnicodeObject(message));
+  }
+
+  @Override
+  public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
+    switch (op) {
+      case PyCmp_EXC_MATCH -> {
+        PyTupleObject typeMro = getMro();
+        for (int i = 0; i < typeMro.size(); i++) {
+          if (typeMro.get(i) == o) return BuiltIn.True;
+        }
+        return BuiltIn.False;
+      }
+      case PyCmp_IS -> {
+        if (o == this) return BuiltIn.True;
+        return BuiltIn.False;
+      }
+      case PyCmp_IS_NOT -> {
+        if (o == this) return BuiltIn.False;
+        return BuiltIn.True;
+      }
+    }
+    return (PyBoolObject)
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "Unsupported Operator " + op);
   }
 }

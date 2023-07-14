@@ -1,8 +1,6 @@
 package org.jpvm.protocols;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.PyObject;
 

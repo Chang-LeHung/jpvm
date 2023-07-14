@@ -2,15 +2,20 @@ package org.jpvm.pvm;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
+import org.jsoup.nodes.Entities;
 import org.yaml.snakeyaml.Yaml;
+
+import static org.jsoup.nodes.Entities.EscapeMode.base;
 
 public class PVM {
 
@@ -117,11 +122,13 @@ public class PVM {
     PVM.getThreadState()
         .getIs()
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt", true));
-    var coFileName = ((PyUnicodeObject) code.getCoFileName()).getData();
-    File file = new File(coFileName.replace("\\", "/"));
-    String base = file.getParent();
-    base = Paths.get(base).toAbsolutePath().toString();
-    PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
+
+    Path path = Paths.get(filename);
+    String base = path.toAbsolutePath().getParent().toString();
+    code.setParentDir(path.toAbsolutePath().getParent().getParent().toString());
+    PVM.getThreadState()
+        .getIs()
+        .addSearchPath(new PyUnicodeObject(Entities.EscapeMode.base + "/__pycache__"));
     state = PVM_STATE.INIT;
   }
 
@@ -153,7 +160,8 @@ public class PVM {
     ThreadState ts = PVM.getThreadState();
     ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);
-    loop.pyEvalFrame();
+    PyObject object = loop.pyEvalFrame();
+    if (object == null) PyErrorUtils.printExceptionInformation();
     state = PVM_STATE.FINISHED;
   }
 
