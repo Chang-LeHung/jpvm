@@ -1,6 +1,6 @@
 try:
     a = 1 / 0
 except Exception:
-    a = 1 / 0
+    pass
 finally:
-    print("pass")
+    a = 1 / 0

@@ -3,7 +3,6 @@ package org.jpvm.excptions;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
@@ -43,13 +42,11 @@ public class PyTraceBackObject extends PyObject {
     if (frame.getCode().getCoFileName() != null) {
       Path path = Paths.get(((PyUnicodeObject) frame.getCode().getCoFileName()).getData());
       File file = path.toFile();
-      try {
-        Scanner scanner = new Scanner(file);
+      try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         int n = 0;
         while (n++ < lineNo) {
-          code = scanner.nextLine();
+          code = reader.readLine();
         }
-        scanner.close();
       } catch (IOException ignore) {
       }
     }

@@ -1,6 +1,8 @@
 package org.jpvm.exception;
 
 import java.io.IOException;
+
+import org.apache.commons.math3.exception.ZeroException;
 import org.jpvm.errors.PyException;
 import org.jpvm.pvm.PVM;
 import org.junit.Test;
@@ -78,6 +80,28 @@ public class TestException {
   @Test
   public void test07() {
     String file = "src/test/resources/exception/__pycache__/demo07.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test08() {
+    String file = "src/test/resources/exception/__pycache__/demo08.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test09() {
+    String file = "src/test/resources/exception/__pycache__/demo09.cpython-38.pyc";
     try {
       PVM pvm = new PVM(file);
       pvm.run();

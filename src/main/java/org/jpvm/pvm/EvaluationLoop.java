@@ -43,6 +43,8 @@ public class EvaluationLoop {
   private PyException error;
   private PyObject result;
 
+  private boolean breakFromEND_FINALLY;
+
   public EvaluationLoop(PyFrameObject frame) {
     this.frame = frame;
     PyCodeObject code = frame.getCode();
@@ -741,6 +743,7 @@ public class EvaluationLoop {
                 PyObject val = frame.pop();
                 PyObject tb = frame.pop();
                 PyErrorUtils.restoreExceptionState(type, val, tb);
+                breakFromEND_FINALLY = true;
                 break main_loop;
               }
             }
@@ -921,7 +924,9 @@ public class EvaluationLoop {
       }
       // If run to this, some errors occurred
       // We should save traceback of this function or module
-      PyErrorUtils.pyTraceBackHere();
+      if (!breakFromEND_FINALLY) {
+        PyErrorUtils.pyTraceBackHere();
+      } else breakFromEND_FINALLY = false;
       while (frame.getTryBlockSize() > 0) {
         ThreadState ts = PVM.getThreadState();
         TryBlockHandler blockHandler = frame.popTryBlockHandler();
@@ -953,7 +958,6 @@ public class EvaluationLoop {
           var curExcValue = (PyPythonException) ts.getCurExcValue();
           PyObject curExcType = ts.getCurExcType();
           PyErrorUtils.cleanThreadException();
-          curExcValue.setTraceBack((PyTraceBackObject) curExcTrace);
           exceptionInfo = new ExceptionInfo();
           exceptionInfo.setCurExcTrace(curExcTrace);
           exceptionInfo.setCurExcValue(curExcValue);

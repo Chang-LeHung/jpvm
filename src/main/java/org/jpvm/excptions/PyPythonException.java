@@ -12,7 +12,6 @@ public class PyPythonException extends PyObject {
   /** {@link PyTraceBackObject} */
   private PyTraceBackObject traceBack;
 
-  private ExceptionInfo previousExceptionInfo;
 
   public PyPythonException(PyTypeType type, PyUnicodeObject exceptionInformation) {
     this.type = type;
@@ -64,11 +63,4 @@ public class PyPythonException extends PyObject {
     this.traceBack = traceBack;
   }
 
-  public ExceptionInfo getPreviousExceptionInfo() {
-    return previousExceptionInfo;
-  }
-
-  public void setPreviousExceptionInfo(ExceptionInfo previousExceptionInfo) {
-    this.previousExceptionInfo = previousExceptionInfo;
-  }
 }

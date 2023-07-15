@@ -34,7 +34,7 @@ public class PyErrorUtils {
     // create an instance of the exception
     PyPythonException call = type.call(msg);
     ThreadState ts = PVM.getThreadState();
-    call.setPreviousExceptionInfo(ts.getExceptionInfo());
+    call.setContext((PyPythonException) ts.getExceptionInfo().getCurExcValue());
     ts.setCurExcType(type);
     ts.setCurExcValue(call);
     throw new PyException(msg);
@@ -56,29 +56,30 @@ public class PyErrorUtils {
   public static void printExceptionInformation() {
     System.err.print("\033[31m");
     ThreadState ts = PVM.getThreadState();
-    ExceptionInfo exceptionInfo = ts.getExceptionInfo();
     PyObject curExcType = ts.getCurExcType();
     if (curExcType != null) {
-      PyObject curExcTrace = ts.getCurExcTrace();
-      System.err.print("Traceback (most recent call last):\n");
-      System.err.print(curExcTrace.repr());
-      System.err.print(curExcType.getTypeName());
-      System.err.print(": ");
       var curExcValue = (PyPythonException) ts.getCurExcValue();
-      System.err.println(curExcValue.getExceptionInformation());
-    }
-    while (exceptionInfo != null) {
-      var curExcValue = (PyPythonException) exceptionInfo.getCurExcValue();
-      if (curExcValue != null) {
-        PyTraceBackObject traceBack = curExcValue.getTraceBack();
-        System.err.print(traceBack.repr());
-        exceptionInfo = curExcValue.getPreviousExceptionInfo();
-        if (exceptionInfo != null)
-          System.err.println("During handling of the above exception, another exception occurred:");
-      } else break;
+      System.err.print("Traceback (most recent call last):\n");
+      recursivePrintExceptionInformation(curExcValue);
     }
     System.err.print("\033[0m");
     System.err.flush();
+  }
+
+  private static boolean recursivePrintExceptionInformation(PyPythonException excValue) {
+    if (excValue != null) {
+      PyPythonException context = excValue.getContext();
+      boolean p = recursivePrintExceptionInformation(context);
+      if (p)
+        System.err.println(
+            "\nDuring handling of the above exception, another exception occurred:\n");
+      System.err.print(excValue.getTraceBack().repr());
+      System.err.print(excValue.getType().getTypeName());
+      System.err.print(": ");
+      System.err.println(excValue.getExceptionInformation());
+      return true;
+    }
+    return false;
   }
 
   public static boolean isExceptionClass(PyObject object) {
@@ -106,5 +107,6 @@ public class PyErrorUtils {
     PyTraceBackObject tb = getTraceback();
     tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
+    ((PyPythonException) ts.getCurExcValue()).setTraceBack(tb);
   }
 }
