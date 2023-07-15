@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyMissMethod;
-import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -11,9 +11,6 @@ import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyTypeMethods;
 import org.jpvm.python.BuiltIn;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * base class of all classes in python. all child classes in python are PyObject. Initialization

@@ -2,7 +2,6 @@ package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;

@@ -2,7 +2,6 @@ package org.jpvm.testobj;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;
-import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.types.PyTypeType;

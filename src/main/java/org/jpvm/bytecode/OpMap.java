@@ -130,7 +130,6 @@ public class OpMap {
     instructions.put(161, OpName.CALL_METHOD);
     instructions.put(162, OpName.CALL_FINALLY);
     instructions.put(163, OpName.POP_FINALLY);
-
   }
 
   public enum OpName {

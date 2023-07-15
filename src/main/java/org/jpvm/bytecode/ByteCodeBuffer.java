@@ -32,6 +32,10 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
     itr.increase(delta);
   }
 
+  public int getCursor() {
+    return itr.getCursor();
+  }
+
   private class Itr implements Iterator<Instruction> {
 
     private int cursor;
@@ -91,9 +95,5 @@ public class ByteCodeBuffer implements Iterable<Instruction> {
     public int getCursor() {
       return currentInstructionCursor;
     }
-  }
-
-  public int getCursor() {
-    return itr.getCursor();
   }
 }

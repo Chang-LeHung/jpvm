@@ -2,7 +2,6 @@ package org.jpvm.objects;
 
 import java.util.Arrays;
 import java.util.Stack;
-
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.TryBlockHandler;
@@ -17,9 +16,9 @@ public class PyFrameObject extends PyObject {
   private final PyObject[] stack;
 
   private final PyObject[] localPlus;
+  private final ByteCodeBuffer byteCodeBuffer;
   private PyDictObject builtins;
   private PyDictObject globals;
-  private final ByteCodeBuffer byteCodeBuffer;
   private PyDictObject locals;
   /** shows how many slots of stack have been used */
   private int used;

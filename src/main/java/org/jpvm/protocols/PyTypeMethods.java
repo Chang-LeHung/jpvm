@@ -7,11 +7,11 @@ import org.jpvm.python.BuiltIn;
 
 public interface PyTypeMethods {
 
-	 default PyObject __init__(PyTupleObject args, PyDictObject kwArgs){
-		 return BuiltIn.None;
-	 }
+  default PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
+    return BuiltIn.None;
+  }
 
-	default PyObject __new__(PyTupleObject args, PyDictObject kwArgs){
-		return BuiltIn.None;
-	}
+  default PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+    return BuiltIn.None;
+  }
 }

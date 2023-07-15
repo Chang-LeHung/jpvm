@@ -1,9 +1,6 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -188,8 +185,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject add(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function add on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function add on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data + ((PyLongObject) o).getData());
@@ -197,8 +195,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject sub(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function sub on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function sub on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data - ((PyLongObject) o).getData());
@@ -206,8 +205,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject mul(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function mul on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function mul on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data * ((PyLongObject) o).getData());
@@ -215,8 +215,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject mod(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function mod on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function mod on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data % ((PyLongObject) o).getData());
@@ -224,8 +225,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject divmod(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function divmod on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function divmod on int and " + o.getTypeName());
       return null;
     }
     PyTupleObject ret = new PyTupleObject(2);
@@ -236,8 +238,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject pow(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply function pow on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply function pow on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject((long) Math.pow(data, ((PyLongObject) o).getData()));
@@ -270,8 +273,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject lshift(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply << on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply << on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data << ((PyLongObject) o).getData());
@@ -279,8 +283,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject rshift(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply >> on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply >> on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data >> ((PyLongObject) o).getData());
@@ -288,8 +293,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject and(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply & on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply & on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data & ((PyLongObject) o).getData());
@@ -297,8 +303,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject xor(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply ^ on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply ^ on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data ^ ((PyLongObject) o).getData());
@@ -306,8 +313,9 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject or(PyObject o) throws PyException {
-    if (!(o instanceof PyLongObject)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can apply or on int and " + o.getTypeName());
+    if (!(o instanceof PyLongObject)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can apply or on int and " + o.getTypeName());
       return null;
     }
     return new PyLongObject(data | ((PyLongObject) o).getData());
@@ -329,7 +337,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
       PyErrorUtils.pyErrorFormat(
           PyErrorUtils.NotImplementedError, "can apply / on int and " + o.getTypeName());
     assert o instanceof PyLongObject;
-    var d = (PyLongObject) o;
+    PyLongObject d = (PyLongObject) o;
     if (d.getData() == 0) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.ZeroDivisionError, "division by zero");
     }
@@ -342,7 +350,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
       PyErrorUtils.pyErrorFormat(
           PyErrorUtils.NotImplementedError, "can apply / on int and " + o.getTypeName());
     assert o instanceof PyLongObject;
-    var d = (PyLongObject) o;
+    PyLongObject d = (PyLongObject) o;
     if (d.getData() == 0) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.ZeroDivisionError, "division by zero");
     }

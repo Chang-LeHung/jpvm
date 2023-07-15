@@ -51,7 +51,7 @@ public class PycParserTest {
   @Test
   public void syntaxTest() {
     byte c = (byte) 0xe3;
-//      int d = c & 0xff;
+    //      int d = c & 0xff;
     System.out.println(c);
     byte[] bytes = {1, 2, 3};
     byte[] bytes1 = new byte[1];

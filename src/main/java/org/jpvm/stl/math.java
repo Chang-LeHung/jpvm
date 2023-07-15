@@ -1,12 +1,12 @@
 package org.jpvm.stl;
 
+import org.apache.commons.math3.special.Erf;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.protocols.PyNumberMethods;
-import org.apache.commons.math3.special.Erf;
 
 public class math extends PyModuleObject {
   @PyClassAttribute public PyObject PI;
@@ -16,7 +16,7 @@ public class math extends PyModuleObject {
 
   @PyClassAttribute public PyObject inf;
 
-  @PyClassAttribute private PyObject nan;
+  @PyClassAttribute private final PyObject nan;
 
   public math(PyUnicodeObject name) {
     super(name);
@@ -25,6 +25,27 @@ public class math extends PyModuleObject {
     e = new PyFloatObject(Math.E);
     inf = new PyFloatObject(Double.NEGATIVE_INFINITY);
     nan = new PyFloatObject(Double.NaN);
+  }
+
+  public static double[] getArraysFromTuple(PyTupleObject tuple) throws PyException {
+    double[] res = new double[tuple.size()];
+    for (int i = 0; i < tuple.size(); i++) {
+      if (tuple.get(i) instanceof PyLongObject object) {
+        res[i] = object.getData();
+      }
+      if (tuple.get(i) instanceof PyFloatObject object) {
+        res[i] = object.getData();
+      }
+    }
+    return res;
+  }
+
+  public static long factorial(int n) {
+    long result = 1;
+    for (int i = 1; i <= n; i++) {
+      result *= i;
+    }
+    return result;
   }
 
   @PyClassMethod
@@ -445,26 +466,5 @@ public class math extends PyModuleObject {
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "TypeError : perm() argument must be a number");
     return null;
-  }
-
-  public static double[] getArraysFromTuple(PyTupleObject tuple) throws PyException {
-    double[] res = new double[tuple.size()];
-    for (int i = 0; i < tuple.size(); i++) {
-      if (tuple.get(i) instanceof PyLongObject object) {
-        res[i] = object.getData();
-      }
-      if (tuple.get(i) instanceof PyFloatObject object) {
-        res[i] = object.getData();
-      }
-    }
-    return res;
-  }
-
-  public static long factorial(int n) {
-    long result = 1;
-    for (int i = 1; i <= n; i++) {
-      result *= i;
-    }
-    return result;
   }
 }

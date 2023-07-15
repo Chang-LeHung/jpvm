@@ -1,4 +1,3 @@
-
 class A:
     def __init__(self, n, s):
         self.n = n
@@ -39,8 +38,8 @@ class A:
 
 
 if __name__ == '__main__':
-    a = A([1,2,3], 5)
-    b = A([4,5,6], 9)
+    a = A([1, 2, 3], 5)
+    b = A([4, 5, 6], 9)
     subres = b - a
     print(subres)
     mulres = a * b

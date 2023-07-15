@@ -53,5 +53,4 @@ public class PyBoolObjectTest {
     assert !res.isFalse();
     System.out.println("\u001B[32m method or of PyBoolObject pass\u001B[0m");
   }
-
 }

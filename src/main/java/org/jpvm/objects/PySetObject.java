@@ -7,7 +7,6 @@ import java.util.Set;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNotImplemented;
 import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.errors.PyUnsupportedOperator;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;

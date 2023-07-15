@@ -65,10 +65,6 @@ public class PyTypeType extends PyObject {
     if (PyObject.type != null) bases.add(PyObject.type); // add base object to bases
   }
 
-  public Class<?> getClazz() {
-    return clazz;
-  }
-
   public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) throws PyException {
     for (int i = 0; i < bases.size(); i++) {
       if (bases.get(i) == PyObject.type) return bases;
@@ -77,6 +73,10 @@ public class PyTypeType extends PyObject {
     for (int i = 0; i < bases.size(); i++) res.set(i, bases.get(i));
     res.set(bases.size(), PyObject.type);
     return res;
+  }
+
+  public Class<?> getClazz() {
+    return clazz;
   }
 
   public void addBase(PyObject base) {
@@ -117,6 +117,10 @@ public class PyTypeType extends PyObject {
     } else return _mro;
   }
 
+  public void setMro(List<PyObject> mro) {
+    this.mro = mro;
+  }
+
   @PyClassMethod
   public PyObject mro(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return getMro();
@@ -125,10 +129,6 @@ public class PyTypeType extends PyObject {
   @PyClassMethod
   public PyObject __mro__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return getMro();
-  }
-
-  public void setMro(List<PyObject> mro) {
-    this.mro = mro;
   }
 
   public List<PyObject> getBases() {

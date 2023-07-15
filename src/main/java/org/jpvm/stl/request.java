@@ -1,13 +1,12 @@
 package org.jpvm.stl;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 
 public class request extends PyModuleObject {
 

@@ -1,5 +1,6 @@
 package org.jpvm.testvm;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
@@ -7,9 +8,6 @@ import org.jpvm.pvm.EvaluationLoop;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
-import org.junit.Test;
-
-import java.io.IOException;
 
 public class TestInput {
   public static void main(String[] args) throws IOException {
@@ -27,7 +25,7 @@ public class TestInput {
     return evaluationLoop.pyEvalFrame();
   }
 
-//  @Test
+  //  @Test
   public void testInput1() throws IOException {
     String filename = "src/test/resources/testpy/__pycache__/testInput.cpython-38.pyc";
     PyObject ret = null;

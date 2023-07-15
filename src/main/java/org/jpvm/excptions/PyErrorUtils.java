@@ -2,7 +2,6 @@ package org.jpvm.excptions;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.types.*;
-import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
@@ -28,6 +27,7 @@ public class PyErrorUtils {
   public static PyPythonBaseExceptionType StackOverflowError = new PyStackOverflowType();
 
   public static PyImportErrorType ImportError = new PyImportErrorType();
+  public static PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
 
   public static PyObject pyErrorFormat(PyPythonBaseExceptionType type, String msg)
       throws PyException {
@@ -37,7 +37,6 @@ public class PyErrorUtils {
     call.setPreviousExceptionInfo(ts.getExceptionInfo());
     ts.setCurExcType(type);
     ts.setCurExcValue(call);
-    ts.setCurExcTrace(getTraceback());
     throw new PyException(msg);
   }
 
@@ -61,6 +60,7 @@ public class PyErrorUtils {
     PyObject curExcType = ts.getCurExcType();
     if (curExcType != null) {
       PyObject curExcTrace = ts.getCurExcTrace();
+      System.err.print("Traceback (most recent call last):\n");
       System.err.print(curExcTrace.repr());
       System.err.print(curExcType.getTypeName());
       System.err.print(": ");
@@ -98,6 +98,13 @@ public class PyErrorUtils {
     ThreadState ts = PVM.getThreadState();
     ts.setCurExcType(type);
     ts.setCurExcValue(val);
+    ts.setCurExcTrace(tb);
+  }
+
+  public static void pyTraceBackHere() {
+    ThreadState ts = PVM.getThreadState();
+    PyTraceBackObject tb = getTraceback();
+    tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
   }
 }

@@ -10,9 +10,8 @@ import org.jpvm.pvm.Abstract;
 public class PyMethodObject extends PyObject {
 
   public static PyObject type = new PyMethodType();
-
-  private PyObject self;
   private final String methodName;
+  private PyObject self;
   private Method method;
   private PyFunctionObject functionObject;
 
@@ -53,10 +52,6 @@ public class PyMethodObject extends PyObject {
     return new PyUnicodeObject(toString());
   }
 
-  public void setSelf(PyObject self) {
-    this.self = self;
-  }
-
   @Override
   public PyUnicodeObject repr() {
     return str();
@@ -64,6 +59,10 @@ public class PyMethodObject extends PyObject {
 
   public PyObject getSelf() {
     return self;
+  }
+
+  public void setSelf(PyObject self) {
+    this.self = self;
   }
 
   @Override

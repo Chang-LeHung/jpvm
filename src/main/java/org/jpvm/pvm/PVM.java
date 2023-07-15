@@ -1,6 +1,5 @@
 package org.jpvm.pvm;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,12 +11,14 @@ import org.jpvm.objects.*;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
-import org.jsoup.nodes.Entities;
 import org.yaml.snakeyaml.Yaml;
 
-import static org.jsoup.nodes.Entities.EscapeMode.base;
-
 public class PVM {
+
+  /** thread state of each thread */
+  public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
+  /** initialize here for compatibility */
+  public static InterpreterState interpreterState = new InterpreterState(500);
 
   // prepare object system
   static {
@@ -25,34 +26,18 @@ public class PVM {
     PyObject.initBaseObject();
   }
 
-  enum PVM_STATE {
-    UNINITIALIZED,
-    INIT,
-    RUNNING,
-    FINISHED,
-    EXIT
-  }
-
-  private PVM_STATE state;
-
-  /** thread state of each thread */
-  public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
-
-  /** initialize here for compatibility */
-  public static InterpreterState interpreterState = new InterpreterState(500);
   /** filename of the py file to be executed. */
   private final String filename;
+  private PVM_STATE state;
   /** code of the py file to be executed. */
   private PyCodeObject code;
   /** global and local variables of the py file to be executed. */
   private PyDictObject globals;
-
   private PyDictObject locals;
-  private PyDictObject builtins;
+  private final PyDictObject builtins;
   private PyModuleObject rootModule;
   private PyFrameObject rootFrame;
   private EvaluationLoop loop;
-
   public PVM(String filename) throws PyException, IOException {
     this.filename = filename;
     state = PVM_STATE.UNINITIALIZED;
@@ -126,9 +111,14 @@ public class PVM {
     Path path = Paths.get(filename);
     String base = path.toAbsolutePath().getParent().toString();
     code.setParentDir(path.toAbsolutePath().getParent().getParent().toString());
-    PVM.getThreadState()
-        .getIs()
-        .addSearchPath(new PyUnicodeObject(Entities.EscapeMode.base + "/__pycache__"));
+    PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
+
+    // set CodeObject filename
+    Path basedir = path.toAbsolutePath().getParent().getParent();
+    String[] split = filename.split("/");
+    String name = split[split.length - 1].split("\\.")[0];
+    String absFilePath = basedir.resolve(name + ".py").toString();
+    this.code.updateFileName(absFilePath);
     state = PVM_STATE.INIT;
   }
 
@@ -166,6 +156,7 @@ public class PVM {
   }
 
   public void exit() {
+    tss.remove();
     tss = null;
     interpreterState = null; // help gc
     state = PVM_STATE.EXIT;
@@ -247,5 +238,13 @@ public class PVM {
 
   public EvaluationLoop getLoop() {
     return loop;
+  }
+
+  enum PVM_STATE {
+    UNINITIALIZED,
+    INIT,
+    RUNNING,
+    FINISHED,
+    EXIT
   }
 }

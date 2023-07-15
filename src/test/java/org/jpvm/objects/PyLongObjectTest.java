@@ -1,7 +1,6 @@
 package org.jpvm.objects;
 
 import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyTypeNotMatch;
 import org.junit.Assert;
 import org.junit.Test;
 

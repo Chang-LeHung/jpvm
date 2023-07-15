@@ -392,6 +392,7 @@ public class Abstract {
         ThreadState ts = PVM.getThreadState();
         // store current frame
         PyFrameObject cf = ts.getCurrentFrame();
+        f.getCode().setParentDir(cf.getCode().getParentDir());
         ts.setCurrentFrame(f);
         if (ts.isOverFlow())
           PyErrorUtils.pyErrorFormat(PyErrorUtils.StackOverflowError, "recursion depth exceeded");
@@ -458,6 +459,7 @@ public class Abstract {
 
     if (obj instanceof PyMappingMethods map) {
       map.mpAssSubscript(key, val);
+      return;
     }
     if (null != error) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, error.getMessage());

@@ -1,5 +1,7 @@
 package org.jpvm.python;
 
+import java.io.IOException;
+import java.util.Scanner;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
@@ -18,9 +20,6 @@ import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
 import org.jpvm.pvm.PVM;
 import org.jpvm.pvm.ThreadState;
-
-import java.io.IOException;
-import java.util.Scanner;
 
 public class BuiltIn {
 
@@ -72,6 +71,7 @@ public class BuiltIn {
       addType("ImportError", PyErrorUtils.ImportError);
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
       addType("StackOverflowError", PyErrorUtils.StackOverflowError);
+      addType("IndexError", PyErrorUtils.IndexError);
     } catch (PyException ignore) {
     }
   }

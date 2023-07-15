@@ -9,8 +9,7 @@ public class Instruction {
   private int opcode;
   private int oparg;
 
-  public Instruction() {
-  }
+  public Instruction() {}
 
   public Instruction(OpMap.OpName opname, int opcode, int oparg) {
     this.opname = opname;
@@ -52,10 +51,6 @@ public class Instruction {
 
   @Override
   public String toString() {
-    return "Instruction{" +
-        "opname=" + opname +
-        ", opcode=" + opcode +
-        ", oparg=" + oparg +
-        '}';
+    return "Instruction{" + "opname=" + opname + ", opcode=" + opcode + ", oparg=" + oparg + '}';
   }
 }

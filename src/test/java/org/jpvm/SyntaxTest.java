@@ -10,8 +10,7 @@ public class SyntaxTest {
     for (int i = 0; i < 3; i++) {
       System.out.printf("start outer for loop index %d%n", i);
       for (int k = 0; k < 3; k++) {
-        if (k == 1)
-          break CONTINUELIABLE;
+        if (k == 1) break CONTINUELIABLE;
         System.out.printf("inner loop index %d%n", k);
       }
       System.out.printf("end outer for loop index %d%n", i);

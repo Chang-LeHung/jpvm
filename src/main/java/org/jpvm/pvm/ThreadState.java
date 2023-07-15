@@ -2,17 +2,18 @@ package org.jpvm.pvm;
 
 import org.jpvm.excptions.ExceptionInfo;
 import org.jpvm.excptions.PyPythonException;
+import org.jpvm.excptions.PyTraceBackObject;
 import org.jpvm.excptions.types.PyPythonBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
-import org.jpvm.excptions.PyTraceBackObject;
 
 public class ThreadState {
 
   private InterpreterState is;
   private int recursionDepth;
 
+  /** point to stack top exception, exception being handled currently. */
   private ExceptionInfo exceptionInfo;
 
   /** {@link PyPythonBaseExceptionType} */
@@ -102,8 +103,7 @@ public class ThreadState {
   }
 
   public ExceptionInfo getExceptionInfo() {
-    if (exceptionInfo == null)
-      exceptionInfo = new ExceptionInfo();
+    if (exceptionInfo == null) exceptionInfo = new ExceptionInfo();
     return exceptionInfo;
   }
 

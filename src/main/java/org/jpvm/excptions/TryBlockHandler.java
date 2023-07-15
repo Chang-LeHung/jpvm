@@ -21,20 +21,20 @@ public class TryBlockHandler {
     return type;
   }
 
-  public int getHandler() {
-    return handler;
-  }
-
-  public int getLevel() {
-    return level;
-  }
-
   public void setType(int type) {
     this.type = type;
   }
 
+  public int getHandler() {
+    return handler;
+  }
+
   public void setHandler(int handler) {
     this.handler = handler;
+  }
+
+  public int getLevel() {
+    return level;
   }
 
   public void setLevel(int level) {

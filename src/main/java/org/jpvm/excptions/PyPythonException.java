@@ -7,13 +7,12 @@ import org.jpvm.objects.types.PyTypeType;
 public class PyPythonException extends PyObject {
 
   private final PyObject type;
+  private final PyUnicodeObject exceptionInformation;
   private PyPythonException context;
   /** {@link PyTraceBackObject} */
   private PyTraceBackObject traceBack;
 
-  private final PyUnicodeObject exceptionInformation;
-
-  private ExceptionInfo  previousExceptionInfo;
+  private ExceptionInfo previousExceptionInfo;
 
   public PyPythonException(PyTypeType type, PyUnicodeObject exceptionInformation) {
     this.type = type;

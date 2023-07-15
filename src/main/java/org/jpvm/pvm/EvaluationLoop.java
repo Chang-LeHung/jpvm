@@ -10,9 +10,7 @@ import org.jpvm.bytecode.OpMap;
 import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyNameError;
 import org.jpvm.errors.PyTypeNotMatch;
-import org.jpvm.excptions.ExceptionInfo;
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.TryBlockHandler;
+import org.jpvm.excptions.*;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -599,7 +597,9 @@ public class EvaluationLoop {
             }
             case UNARY_NOT -> {
               PyObject top = frame.pop();
-              if (Abstract.isTrue(top).isTrue()) frame.push(BuiltIn.False);
+              assert top != null;
+              PyBoolObject res = Abstract.isTrue(top);
+              if (res != null && res.isTrue()) frame.push(BuiltIn.False);
               else frame.push(BuiltIn.True);
             }
             case BINARY_POWER -> {
@@ -865,8 +865,12 @@ public class EvaluationLoop {
             case YIELD_VALUE -> {
               PyObject res = frame.top();
               if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0) {
-                result = res;
-                break exit_loop;
+                if (res != null) {
+                  result = res;
+                  break exit_loop;
+                } else {
+                  break main_loop;
+                }
               }
               PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "yield value is not supported");
             }
@@ -915,22 +919,30 @@ public class EvaluationLoop {
           break;
         }
       }
+      // If run to this, some errors occurred
+      // We should save traceback of this function or module
+      PyErrorUtils.pyTraceBackHere();
       while (frame.getTryBlockSize() > 0) {
         ThreadState ts = PVM.getThreadState();
         TryBlockHandler blockHandler = frame.popTryBlockHandler();
         if (blockHandler.getType() == TryBlockHandler.EXCEPT_HANDLER) {
           assert frame.getStackSize() >= blockHandler.getLevel() + 3;
-          // resume thread exception state
+          // resume thread exceptionInfo state
           while (frame.getStackSize() > blockHandler.getLevel() + 3) {
             frame.pop();
           }
-          ts.setCurExcType(frame.pop());
-          ts.setCurExcValue(frame.pop());
-          ts.setCurExcTrace(frame.pop());
+          ExceptionInfo exceptionInfo = ts.getExceptionInfo();
+          exceptionInfo.setCurExcType(frame.pop());
+          exceptionInfo.setCurExcValue(frame.pop());
+          exceptionInfo.setCurExcTrace(frame.pop());
         }
         // resume stack state
         while (blockHandler.getLevel() < frame.getStackSize()) frame.pop();
         if (blockHandler.getType() == TryBlockHandler.SETUP_FINALLY) {
+          // save current thread exceptionInfo into stack to resume later, such as instruction
+          // POP_EXCEPT
+          // save current exception info (3 variables) into thread exceptionInfo
+          // finally clear current thread exception (3 variables) to continue to execute
           ExceptionInfo exceptionInfo = ts.getExceptionInfo();
           frame.pushTryBlockHandler(
               new TryBlockHandler(TryBlockHandler.EXCEPT_HANDLER, -1, frame.getStackSize()));
@@ -938,12 +950,15 @@ public class EvaluationLoop {
           frame.push(exceptionInfo.getCurExcValue());
           frame.push(exceptionInfo.getCurExcType());
           PyObject curExcTrace = ts.getCurExcTrace();
-          PyObject curExcValue = ts.getCurExcValue();
+          var curExcValue = (PyPythonException) ts.getCurExcValue();
           PyObject curExcType = ts.getCurExcType();
           PyErrorUtils.cleanThreadException();
+          curExcValue.setTraceBack((PyTraceBackObject) curExcTrace);
+          exceptionInfo = new ExceptionInfo();
           exceptionInfo.setCurExcTrace(curExcTrace);
           exceptionInfo.setCurExcValue(curExcValue);
           exceptionInfo.setCurExcType(curExcType);
+          ts.setExceptionInfo(exceptionInfo);
           frame.push(curExcTrace);
           frame.push(curExcValue);
           frame.push(curExcType);
@@ -951,6 +966,7 @@ public class EvaluationLoop {
           continue exit_loop;
         }
       }
+      // some error occurred and can not continue to execute, quit virtual machine
       break;
     }
     return result;

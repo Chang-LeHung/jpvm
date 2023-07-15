@@ -1,62 +1,41 @@
 package org.jpvm.pycParser;
 
+import org.jpvm.errors.PyException;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.PyUnicodeObject;
 
 public class PyCodeObject extends PyObject {
 
-  /**
-   * non-KwOnly argument count
-   */
+  /** non-KwOnly argument count */
   private int coArgument;
-  /**
-   * KwOnly argument count
-   */
+  /** KwOnly argument count */
   private int coKwOnlyArCnt;
-  /**
-   * Positional only argument count
-   */
+  /** Positional only argument count */
   private int coPosOnlyArCnt;
+
   private int coNLocals;
   private int coStackSize;
   private int coFlags;
   private int coFirstLineNo;
-  /**
-   * type of {@link org.jpvm.objects.PyBytesObject}
-   */
+  /** type of {@link org.jpvm.objects.PyBytesObject} */
   private PyObject coCode;
-  /**
-   * type of {@link org.jpvm.objects.PyTupleObject}
-   */
+  /** type of {@link org.jpvm.objects.PyTupleObject} */
   private PyObject coConsts;
-  /**
-   * type of {@link org.jpvm.objects.PyTupleObject}
-   */
+  /** type of {@link org.jpvm.objects.PyTupleObject} */
   private PyObject coNames;
-  /**
-   * type of {@link org.jpvm.objects.PyTupleObject}
-   */
+  /** type of {@link org.jpvm.objects.PyTupleObject} */
   private PyObject coVarNames;
-  /**
-   * type of {@link org.jpvm.objects.PyTupleObject}
-   */
+  /** type of {@link org.jpvm.objects.PyTupleObject} */
   private PyObject coFreeVars;
-  /**
-   * type of {@link org.jpvm.objects.PyTupleObject}
-   */
+  /** type of {@link org.jpvm.objects.PyTupleObject} */
   private PyObject coCellVars;
-  /**
-   * type of {@link org.jpvm.objects.PyUnicodeObject}
-   */
+  /** type of {@link org.jpvm.objects.PyUnicodeObject} */
   private PyObject coFileName;
-  /**
-   * type of {@link org.jpvm.objects.PyUnicodeObject}
-   */
+  /** type of {@link org.jpvm.objects.PyUnicodeObject} */
   private PyObject coName;
-  /**
-   * type of {@link org.jpvm.objects.PyBytesObject}
-   */
+  /** type of {@link org.jpvm.objects.PyBytesObject} */
   private PyObject colnotab;
 
   private PyObject coZombieFrame;
@@ -219,39 +198,58 @@ public class PyCodeObject extends PyObject {
 
   @Override
   public String toString() {
-    return "CodeObject{" +
-        "coArgument=" + coArgument +
-        ", coKwOnlyArCnt=" + coKwOnlyArCnt +
-        ", coPosOnlyArCnt=" + coPosOnlyArCnt +
-        ", coNLocals=" + coNLocals +
-        ", coStackSize=" + coStackSize +
-        ", coFlags=" + coFlags +
-        ", coFirstLineNo=" + coFirstLineNo +
-        ", coCode=" + coCode +
-        ", coConsts=" + coConsts +
-        ", coNames=" + coNames +
-        ", coVarNames=" + coVarNames +
-        ", coFreeVars=" + coFreeVars +
-        ", coCellVars=" + coCellVars +
-        ", coFileName=" + coFileName +
-        ", coName=" + coName +
-        ", colnotab=" + colnotab +
-        ", coZombieFrame=" + coZombieFrame +
-        ", coWeakRefList=" + coWeakRefList +
-        ", coExtra=" + coExtra +
-        '}';
+    return "CodeObject{"
+        + "coArgument="
+        + coArgument
+        + ", coKwOnlyArCnt="
+        + coKwOnlyArCnt
+        + ", coPosOnlyArCnt="
+        + coPosOnlyArCnt
+        + ", coNLocals="
+        + coNLocals
+        + ", coStackSize="
+        + coStackSize
+        + ", coFlags="
+        + coFlags
+        + ", coFirstLineNo="
+        + coFirstLineNo
+        + ", coCode="
+        + coCode
+        + ", coConsts="
+        + coConsts
+        + ", coNames="
+        + coNames
+        + ", coVarNames="
+        + coVarNames
+        + ", coFreeVars="
+        + coFreeVars
+        + ", coCellVars="
+        + coCellVars
+        + ", coFileName="
+        + coFileName
+        + ", coName="
+        + coName
+        + ", colnotab="
+        + colnotab
+        + ", coZombieFrame="
+        + coZombieFrame
+        + ", coWeakRefList="
+        + coWeakRefList
+        + ", coExtra="
+        + coExtra
+        + '}';
   }
 
-  public int freeVarsSize(){
+  public int freeVarsSize() {
     int c = 0;
     int f = 0;
-    if (coFreeVars != null){
-      f = ((PyTupleObject)coFreeVars).size();
+    if (coFreeVars != null) {
+      f = ((PyTupleObject) coFreeVars).size();
     }
-    if (coCellVars != null){
-      c = ((PyTupleObject)coCellVars).size();
+    if (coCellVars != null) {
+      c = ((PyTupleObject) coCellVars).size();
     }
-    return c+f;
+    return c + f;
   }
 
   public boolean isGenerator() {
@@ -264,5 +262,19 @@ public class PyCodeObject extends PyObject {
 
   public void setParentDir(String parentDir) {
     this.parentDir = parentDir;
+  }
+
+  public void updateFileName(String absFileName) {
+    coFileName = new PyUnicodeObject(absFileName);
+    var consts = (PyTupleObject) coConsts;
+    for (int i = 0; i < consts.size(); i++) {
+      try {
+        PyObject object = consts.get(i);
+        if (object instanceof PyCodeObject code) {
+          code.setCoFileName(coFileName);
+        }
+      } catch (PyException ignore) {
+      }
+    }
   }
 }

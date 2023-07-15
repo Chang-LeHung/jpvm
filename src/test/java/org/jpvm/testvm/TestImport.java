@@ -1,12 +1,11 @@
 package org.jpvm.testvm;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.pvm.PVM;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class TestImport {
 
@@ -29,14 +28,13 @@ public class TestImport {
   }
 
   @Test
-  public void testJsoup(){
+  public void testJsoup() {
     try {
       Document document = Jsoup.connect("http://www.baidu.com").get();
       System.out.println(document.title());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-
   }
 
   @Test
