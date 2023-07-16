@@ -158,6 +158,7 @@ public class BuiltIn {
       o = iterator.next();
     }
     stream.writeString(uni.getData());
+    stream.flush();
     return BuiltIn.None;
   }
 

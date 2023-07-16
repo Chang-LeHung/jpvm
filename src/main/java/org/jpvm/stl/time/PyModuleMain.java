@@ -32,7 +32,8 @@ public class PyModuleMain extends PyModuleObject {
         InterpreterState is = PVM.getThreadState().getIs();
         is.dropGIL();
         try {
-          TimeUnit.MILLISECONDS.sleep((long) o.getData() * 1000);
+          long l = (long) (o.getData() * 1000);
+          TimeUnit.MILLISECONDS.sleep(l);
         } catch (InterruptedException ignore) {
         }
         is.takeGIL();

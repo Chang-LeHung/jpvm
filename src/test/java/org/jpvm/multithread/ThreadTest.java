@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class Threading {
+public class ThreadTest {
 
   @Test
   public void test01() {
@@ -22,6 +22,17 @@ public class Threading {
   @Test
   public void test02() {
     String file = "src/test/resources/thread/__pycache__/demo02.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test03() {
+    String file = "src/test/resources/thread/__pycache__/demo03.cpython-38.pyc";
     try {
       PVM pvm = new PVM(file);
       pvm.run();

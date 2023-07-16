@@ -109,4 +109,12 @@ public class PyThreadObject extends PyObject {
     STARTED,
     FINISHED,
   }
+
+  public THREAD_STATE getState() {
+    return state;
+  }
+
+  public void setState(THREAD_STATE state) {
+    this.state = state;
+  }
 }

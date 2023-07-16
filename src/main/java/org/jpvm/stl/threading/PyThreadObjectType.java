@@ -38,6 +38,7 @@ public class PyThreadObjectType extends PyTypeType {
     if (t == null) {
       // must be main thread
       PyThreadObject thread = new PyThreadObject(null, new PyUnicodeObject("MainThread"), null);
+      thread.setState(PyThreadObject.THREAD_STATE.STARTED);
       tss.set(thread);
       return thread;
     }

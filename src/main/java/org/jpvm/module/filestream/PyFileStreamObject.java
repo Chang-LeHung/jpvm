@@ -117,6 +117,17 @@ public class PyFileStreamObject extends PyObject {
     }
   }
 
+  public void flush() {
+    InterpreterState is = PVM.getThreadState().getIs();
+    if (is.isDropGILRequest()) is.dropGIL();
+    if (stdout) {
+      System.out.flush();
+    } else {
+      System.err.flush();
+    }
+    is.takeGIL();
+  }
+
   @Override
   public String toString() {
     return "<file> " + filename;
