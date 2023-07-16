@@ -109,4 +109,26 @@ public class TestException {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  public void test10() {
+    String file = "src/test/resources/exception/__pycache__/demo10.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test11() {
+    String file = "src/test/resources/exception/__pycache__/demo11.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

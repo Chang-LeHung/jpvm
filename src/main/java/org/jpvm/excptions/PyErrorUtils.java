@@ -109,4 +109,27 @@ public class PyErrorUtils {
     ts.setCurExcTrace(tb);
     ((PyPythonException) ts.getCurExcValue()).setTraceBack(tb);
   }
+
+  public static boolean raiseException(PyObject exc, PyObject cause) throws PyException {
+    ThreadState ts = PVM.getThreadState();
+    if (exc == null) {
+      ExceptionInfo exceptionInfo = ts.getExceptionInfo();
+      ts.setCurExcValue(exceptionInfo.getCurExcValue());
+      ts.setCurExcType(exceptionInfo.getCurExcType());
+      ts.setCurExcTrace(exceptionInfo.getCurExcTrace());
+      return true;
+    }
+    PyPythonBaseExceptionType type = null;
+    if (exc instanceof PyPythonException pyExc) {
+      type = (PyPythonBaseExceptionType) pyExc.getType();
+    } else if (exc instanceof PyPythonBaseExceptionType excType) {
+      type = excType;
+      exc = excType.call("");
+    }
+    ts.setCurExcType(type);
+    ts.setCurExcValue(exc);
+    assert exc instanceof PyPythonException;
+    ts.setCurExcTrace(((PyPythonException) exc).getTraceBack());
+    return false;
+  }
 }

@@ -355,6 +355,21 @@ public class EvaluationLoop {
               frame.push(object);
               // other callable object to be implemented
             }
+            case RAISE_VARARGS -> {
+              PyObject cause = null, exc = null;
+              switch (ins.getOparg()) {
+                case 2:
+                  cause = frame.pop();
+                case 1:
+                  exc = frame.pop();
+                case 0:
+                  if (PyErrorUtils.raiseException(exc, cause)) {
+                    breakFromEND_FINALLY = true;
+                  }
+                  break main_loop;
+              }
+              break main_loop;
+            }
             case BUILD_CONST_KEY_MAP -> {
               var keys = (PyTupleObject) frame.pop();
               PyDictObject dict = new PyDictObject();
@@ -772,6 +787,7 @@ public class EvaluationLoop {
               PyObject pop = frame.pop();
               if (pop instanceof PyBoolObject b) {
                 if (b.isTrue()) byteCodeBuffer.reset(ins.getOparg());
+                continue;
               }
               PyErrorUtils.pyErrorFormat(
                   PyErrorUtils.TypeError, "POP_JUMP_IF_FALSE require boo on stack top");
@@ -916,6 +932,8 @@ public class EvaluationLoop {
           ThreadState ts = PVM.getThreadState();
           // print helping information to locate exception point
           if (ts.getCurExcType() == null) {
+            System.err.println("Internal error: " + e.getMessage());
+            System.err.println("Executing instruction: " + ins);
             e.printStackTrace();
             result = BuiltIn.None;
             return result;
