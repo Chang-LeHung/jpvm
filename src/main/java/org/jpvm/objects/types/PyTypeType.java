@@ -240,7 +240,7 @@ public class PyTypeType extends PyObject {
   }
 
   @Override
-  public PyObject getAttr(PyObject key) throws PyException {
+  public PyObject getAttrInternal(PyObject key) throws PyException {
     PyObject descr = lookUpType(key);
     if (descr instanceof TypeDescriptorGet get && descr instanceof TypeDescriptorSet)
       return get.descrGet(this, getType());

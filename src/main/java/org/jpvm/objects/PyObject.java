@@ -161,8 +161,7 @@ public class PyObject
     return null;
   }
 
-  @Override
-  public PyObject getAttr(PyObject key) throws PyException {
+  protected PyObject getAttrInternal(PyObject key) throws PyException {
     PyObject descr = lookUpType(key);
     if (descr instanceof TypeDescriptorGet get && descr instanceof TypeDescriptorSet)
       return get.descrGet(this, getType());
@@ -211,6 +210,18 @@ public class PyObject
       return descr;
     }
     return null;
+  }
+
+  @Override
+  public PyObject getAttr(PyObject key) throws PyException {
+    if (dict == null) {
+      dict = new PyDictObject();
+    }
+    PyObject res = dict.get(key);
+    if (res != null) return res;
+    PyObject attr = getAttrInternal(key);
+    dict.put(key, attr);
+    return attr;
   }
 
   @Override

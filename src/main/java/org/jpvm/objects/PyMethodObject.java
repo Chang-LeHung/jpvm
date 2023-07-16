@@ -88,4 +88,8 @@ public class PyMethodObject extends PyObject {
       return null;
     }
   }
+
+  public Method getNativeMethod() {
+    return method;
+  }
 }

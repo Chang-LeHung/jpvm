@@ -10,7 +10,7 @@ shared_resource = 0
 # 线程函数
 def increment():
     global shared_resource
-    for _ in range(100000000):
+    for _ in range(1000000):
         # 获取锁
         lock.acquire()
         try:
