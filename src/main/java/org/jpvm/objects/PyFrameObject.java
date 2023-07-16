@@ -50,7 +50,7 @@ public class PyFrameObject extends PyObject {
       PyDictObject builtins,
       PyDictObject globals,
       PyFrameObject back)
-      throws PyException {
+       {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -64,7 +64,11 @@ public class PyFrameObject extends PyObject {
     cells = new PyObject[func.getFreeVarsSize()];
     var funcClosure = (PyTupleObject) func.getFuncClosure();
     for (int i = 0; i < func.getFreeVarsSize(); i++) {
-      cells[i] = funcClosure.get(i);
+      try {
+        cells[i] = funcClosure.get(i);
+      } catch (PyException ignore) {
+
+      }
     }
   }
 

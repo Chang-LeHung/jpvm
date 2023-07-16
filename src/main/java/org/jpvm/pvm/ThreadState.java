@@ -10,6 +10,7 @@ import org.jpvm.objects.PyObject;
 
 public class ThreadState {
 
+  private boolean isMainThread;
   private InterpreterState is;
   private int recursionDepth;
 
@@ -109,5 +110,13 @@ public class ThreadState {
 
   public void setExceptionInfo(ExceptionInfo exceptionInfo) {
     this.exceptionInfo = exceptionInfo;
+  }
+
+  public boolean isMainThread() {
+    return isMainThread;
+  }
+
+  public void setMainThread(boolean mainThread) {
+    isMainThread = mainThread;
   }
 }

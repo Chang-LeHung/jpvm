@@ -1,0 +1,32 @@
+package org.jpvm.multithread;
+
+import org.jpvm.errors.PyException;
+import org.jpvm.pvm.PVM;
+import org.junit.Test;
+
+import java.io.IOException;
+
+public class Threading {
+
+  @Test
+  public void test01() {
+    String file = "src/test/resources/thread/__pycache__/demo01.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test02() {
+    String file = "src/test/resources/thread/__pycache__/demo02.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+}

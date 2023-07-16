@@ -130,9 +130,10 @@ public class EvaluationLoop {
     exit_loop:
     for (; ; ) {
       // evaluation loop
+      InterpreterState is = PVM.getThreadState().getIs();
+      is.takeGIL();
       main_loop:
       while (iterator.hasNext()) {
-        InterpreterState is = PVM.getThreadState().getIs();
         if (is.isDropGILRequest()) {
           // release global interpreter lock
           is.dropGIL();

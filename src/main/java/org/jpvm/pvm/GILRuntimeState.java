@@ -26,6 +26,7 @@ public class GILRuntimeState {
     switchNumber = 0;
     locked = new AtomicBoolean();
     locked.set(false);
+    currentHolder = null;
   }
 
   public long getInterval() {
