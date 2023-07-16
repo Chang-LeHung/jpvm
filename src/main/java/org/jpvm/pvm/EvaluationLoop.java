@@ -305,7 +305,7 @@ public class EvaluationLoop {
             case LOAD_METHOD -> {
               var name = (PyUnicodeObject) coNames.get(ins.getOparg());
               PyObject obj = frame.pop();
-              PyObject method = obj.getMethod(name);
+              PyObject method = obj.getAttr(name);
               if (method != null && method != BuiltIn.None) {
                 frame.push(method);
                 continue;

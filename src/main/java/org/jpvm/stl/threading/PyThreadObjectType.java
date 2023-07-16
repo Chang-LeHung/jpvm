@@ -14,6 +14,7 @@ public class PyThreadObjectType extends PyTypeType {
   public PyThreadObjectType(Class<?> clazz) {
     super(clazz);
     threadNum = 0;
+    name = "Thread";
   }
 
   @Override

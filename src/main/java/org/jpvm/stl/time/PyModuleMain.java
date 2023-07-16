@@ -43,4 +43,10 @@ public class PyModuleMain extends PyModuleObject {
     return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "time.sleep only require 1 int argument");
   }
+
+  @PyClassMethod
+  public PyObject time(PyTupleObject args, PyDictObject kwArgs) {
+    long l = System.currentTimeMillis();
+    return new PyFloatObject(l / 1000.0);
+  }
 }

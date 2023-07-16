@@ -40,4 +40,26 @@ public class ThreadTest {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  public void test04() {
+    String file = "src/test/resources/thread/__pycache__/demo04.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void test05() {
+    String file = "src/test/resources/thread/__pycache__/demo05.cpython-38.pyc";
+    try {
+      PVM pvm = new PVM(file);
+      pvm.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
