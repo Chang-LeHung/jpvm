@@ -28,6 +28,7 @@ public class PyErrorUtils {
 
   public static PyImportErrorType ImportError = new PyImportErrorType();
   public static PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
+  public static PyFileNotFoundErrorType FileNotFoundError = new PyFileNotFoundErrorType();
 
   public static PyObject pyErrorFormat(PyPythonBaseExceptionType type, String msg)
       throws PyException {

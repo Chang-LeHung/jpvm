@@ -72,6 +72,7 @@ public class BuiltIn {
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
       addType("StackOverflowError", PyErrorUtils.StackOverflowError);
       addType("IndexError", PyErrorUtils.IndexError);
+      addType("FileNotFoundError", PyErrorUtils.FileNotFoundError);
     } catch (PyException ignore) {
     }
   }
