@@ -6,6 +6,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.errors.PyTypeError;
 import org.jpvm.errors.PyTypeNotMatch;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.module.filestream.PyFileOpenObject;
 import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;
 import org.jpvm.objects.*;
@@ -96,6 +97,7 @@ public class BuiltIn {
       registerBuiltinFunction("next");
       registerBuiltinFunction("__build_class__");
       registerBuiltinFunction("input");
+      registerBuiltinFunction("open");
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool("object", true), PyObject.type);
     } catch (NoSuchMethodException | PyException ignore) {
     }
@@ -323,4 +325,23 @@ public class BuiltIn {
     }
     throw new PyException("input function require at most 1 argument");
   }
+
+  public static PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyFileOpenObject file;
+    if(args.size() == 1){
+      String path = args.get(0).toString();
+      return new PyFileOpenObject(path);
+    }else if(args.size() == 2){
+      String path = args.get(0).toString();
+      String mode = args.get(1).toString();
+      if(mode.equals("r") || mode.equals("w") || mode.equals("rw") || mode.equals("a")){
+        return new PyFileOpenObject(path, mode);
+      }else{
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "not support file mode");
+      }
+    }
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "the num of attributes error");
+    return null;
+  }
+
 }
