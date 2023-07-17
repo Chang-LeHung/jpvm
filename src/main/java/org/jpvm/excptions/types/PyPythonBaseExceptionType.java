@@ -23,6 +23,7 @@ public class PyPythonBaseExceptionType extends PyTypeType {
   }
 
   public PyPythonException call(String message) throws PyException {
+    if (message == null) message = "";
     return new PyPythonException(this, new PyUnicodeObject(message));
   }
 

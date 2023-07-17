@@ -10,7 +10,7 @@ shared_resource = 0
 # 线程函数
 def increment():
     global shared_resource
-    for _ in range(1000000):
+    for _ in range(10000):
         # 获取锁
         lock.acquire()
         try:
@@ -34,3 +34,4 @@ thread2.join()
 
 # 打印最终结果
 print("Final value of shared_resource:", shared_resource)
+assert shared_resource == 20000

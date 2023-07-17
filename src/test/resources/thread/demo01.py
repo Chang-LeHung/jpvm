@@ -4,7 +4,7 @@ import time
 
 def thread_job():
     print(threading.current_thread())
-    time.sleep(2)
+    time.sleep(0.1)
 
 
 def main():
