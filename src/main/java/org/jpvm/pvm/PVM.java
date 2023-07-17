@@ -160,7 +160,6 @@ public class PVM {
     PyObject object = loop.pyEvalFrame();
     if (object == null) PyErrorUtils.printExceptionInformation();
     ts.getIs().dropGIL();
-    tss.remove();
     PyThreadObject.type.tss.remove();
     state = PVM_STATE.FINISHED;
   }
