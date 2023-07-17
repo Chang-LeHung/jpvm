@@ -1,6 +1,8 @@
 package org.jpvm.testvm;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
@@ -70,4 +72,27 @@ public class TestMethods {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  public void testOpen(){
+    String filename = "src/test/resources/testpy/__pycache__/testopen.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  @Test
+  public void testBr() throws IOException {
+    String path = "src/test/resources/testpy/test.txt";
+    try {
+      BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+      bw.write("Hello, this is a test!\n");
+      bw.write("This is the second line.\n");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+
 }
