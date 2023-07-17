@@ -2,6 +2,8 @@ package org.jpvm.objects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
@@ -34,6 +36,24 @@ public class PyObject
         TypeSetAttro,
         TypeSetAttr,
         PyTypeMethods {
+
+  public static Operator[] compareOpMap;
+
+  static {
+    compareOpMap = new Operator[PyCmp_BAD + 1];
+    compareOpMap[Py_EQ] = Operator.Py_EQ;
+    compareOpMap[Py_NE] = Operator.Py_NE;
+    compareOpMap[Py_GT] = Operator.Py_GT;
+    compareOpMap[Py_GE] = Operator.Py_GE;
+    compareOpMap[Py_LE] = Operator.Py_LE;
+    compareOpMap[Py_LT] = Operator.Py_LT;
+    compareOpMap[PyCmp_IN] = Operator.PyCmp_IN;
+    compareOpMap[PyCmp_NOT_IN] = Operator.PyCmp_NOT_IN;
+    compareOpMap[PyCmp_IS] = Operator.PyCmp_IS;
+    compareOpMap[PyCmp_IS_NOT] = Operator.PyCmp_IS_NOT;
+    compareOpMap[PyCmp_EXC_MATCH] = Operator.PyCmp_EXC_MATCH;
+    compareOpMap[PyCmp_BAD] = Operator.PyCmp_BAD;
+  }
 
   public static PyObject type;
 
