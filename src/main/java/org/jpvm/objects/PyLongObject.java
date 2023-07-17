@@ -97,16 +97,45 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
-    switch (op) {
-      case PyCmp_IS -> {
-        if (o == this) return BuiltIn.True;
-        return BuiltIn.False;
+
+    if (o instanceof PyLongObject n) {
+      switch (op) {
+        case Py_GT -> {
+          if (data > n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_EQ -> {
+          if (data == n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_NE -> {
+          if (data != n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_GE -> {
+          if (data >= n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_LT -> {
+          if (data < n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case Py_LE -> {
+          if (data <= n.getData()) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case PyCmp_IS -> {
+          if (o == this) return BuiltIn.True;
+          return BuiltIn.False;
+        }
+        case PyCmp_IS_NOT -> {
+          if (o != this) return BuiltIn.True;
+          return BuiltIn.False;
+        }
       }
-      case PyCmp_IS_NOT -> {
-        if (o != this) return BuiltIn.True;
-        return BuiltIn.False;
-      }
+      return BuiltIn.False;
     }
+
     if (o instanceof TypeDoIterate itr) {
       switch (op) {
         case PyCmp_IN -> {
@@ -146,37 +175,6 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
           return BuiltIn.True;
         }
       }
-    }
-
-    if (o instanceof PyLongObject n) {
-      switch (op) {
-        case Py_GT -> {
-          if (data > n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-        case Py_EQ -> {
-          if (data == n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-        case Py_NE -> {
-          if (data != n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-        case Py_GE -> {
-          if (data >= n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-        case Py_LT -> {
-          if (data < n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-        case Py_LE -> {
-          if (data <= n.getData()) return BuiltIn.True;
-          return BuiltIn.False;
-        }
-      }
-
-      return BuiltIn.False;
     }
 
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyLongObject not support operator " + op);

@@ -23,6 +23,8 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 
+import static org.jpvm.objects.PyObject.compareOpMap;
+
 public class EvaluationLoop {
 
   public static final int FVC_MASK = 0x3;
@@ -795,34 +797,7 @@ public class EvaluationLoop {
             case COMPARE_OP -> {
               PyObject right = frame.pop();
               PyObject left = frame.pop();
-              PyObject result;
-              switch (ins.getOparg()) {
-                case TypeRichCompare.Py_LT -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_LT);
-                case TypeRichCompare.Py_LE -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_LE);
-                case TypeRichCompare.Py_EQ -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_EQ);
-                case TypeRichCompare.Py_NE -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_NE);
-                case TypeRichCompare.Py_GT -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_GT);
-                case TypeRichCompare.Py_GE -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.Py_GE);
-                case TypeRichCompare.PyCmp_IN -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IN);
-                case TypeRichCompare.PyCmp_NOT_IN -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_NOT_IN);
-                case TypeRichCompare.PyCmp_IS -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS);
-                case TypeRichCompare.PyCmp_IS_NOT -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_IS_NOT);
-                case TypeRichCompare.PyCmp_EXC_MATCH -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_EXC_MATCH);
-                case TypeRichCompare.PyCmp_BAD -> result =
-                    Abstract.compare(left, right, TypeRichCompare.Operator.PyCmp_BAD);
-                default -> throw new PyException("Unknow COMPARE_OP operator" + ins.getOparg());
-              }
+              PyObject result = Abstract.compare(left, right, compareOpMap[ins.getOparg()]);
               frame.push(result);
             }
             case LOAD_BUILD_CLASS -> {
