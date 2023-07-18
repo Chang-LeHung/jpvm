@@ -45,7 +45,7 @@ def matrix_multiply(matrix1, matrix2):
 
 # 生成两个矩阵
 matrix1 = generate_matrix(16, 800)
-matrix2 = generate_matrix(800, 80000)
+matrix2 = generate_matrix(800, 10000)
 
 import time
 
