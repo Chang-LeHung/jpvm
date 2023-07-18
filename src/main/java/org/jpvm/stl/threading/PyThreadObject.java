@@ -104,17 +104,17 @@ public class PyThreadObject extends PyObject {
     return str();
   }
 
-  enum THREAD_STATE {
-    UNINITIALIZED,
-    STARTED,
-    FINISHED,
-  }
-
   public THREAD_STATE getState() {
     return state;
   }
 
   public void setState(THREAD_STATE state) {
     this.state = state;
+  }
+
+  enum THREAD_STATE {
+    UNINITIALIZED,
+    STARTED,
+    FINISHED,
   }
 }

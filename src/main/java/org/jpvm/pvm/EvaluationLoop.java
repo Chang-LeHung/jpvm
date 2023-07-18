@@ -1,5 +1,7 @@
 package org.jpvm.pvm;
 
+import static org.jpvm.objects.PyObject.compareOpMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -16,14 +18,11 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
-
-import static org.jpvm.objects.PyObject.compareOpMap;
 
 public class EvaluationLoop {
 

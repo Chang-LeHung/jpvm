@@ -1,21 +1,20 @@
 package org.jpvm.module.filestream;
 
+import java.io.*;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 
-import java.io.*;
-
 public class PyFileOpenObject extends PyObject {
     private int index;
 
-    private String path;
+    private final String path;
 
     /**
      * 'r' 'rw' 'a' 'w'
      */
-    private String mode;
+    private final String mode;
     private int tal = 0;
     private RandomAccessFile rf;
 
@@ -73,7 +72,7 @@ public class PyFileOpenObject extends PyObject {
                 return new PyUnicodeObject(res);
             }
             if (index == rf.length()) {
-                return new PyUnicodeObject(new String(""));
+                return new PyUnicodeObject("");
             } else {
                 String res = "";
                 String line = "";
@@ -102,7 +101,7 @@ public class PyFileOpenObject extends PyObject {
             }
             String s = rf.readLine();
             if (s == null) {
-                return new PyUnicodeObject(new String(""));
+                return new PyUnicodeObject("");
             }
             index = s.length() + "\n".length();
             return new PyUnicodeObject(s);
@@ -130,7 +129,7 @@ public class PyFileOpenObject extends PyObject {
                 String s = args.get(0).toString();
                 tal = 1;
                 wf.write(s);
-                return new PyUnicodeObject(new String("1"));
+                return new PyUnicodeObject("1");
             } catch (IOException e) {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
                 return null;
@@ -139,7 +138,7 @@ public class PyFileOpenObject extends PyObject {
             try (BufferedWriter wf = new BufferedWriter(new FileWriter(path, true))) {
                 String s = args.get(0).toString();
                 wf.write(s);
-                return new PyUnicodeObject(new String("1"));
+                return new PyUnicodeObject("1");
             } catch (IOException e) {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
                 return null;
@@ -156,7 +155,7 @@ public class PyFileOpenObject extends PyObject {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
             }
         }
-        return new PyUnicodeObject(new String("1"));
+        return new PyUnicodeObject("1");
     }
 
     @PyClassMethod
@@ -167,7 +166,7 @@ public class PyFileOpenObject extends PyObject {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.ValueError, "only support 0");
             }
             index = (int) o.getData();
-            return new PyUnicodeObject(new String("1"));
+            return new PyUnicodeObject("1");
         }
         PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "only support one argument");
         return null;

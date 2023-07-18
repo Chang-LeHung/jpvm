@@ -9,14 +9,11 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.protocols.PyNumberMethods;
 
 public class math extends PyModuleObject {
+  @PyClassAttribute private final PyObject nan;
   @PyClassAttribute public PyObject PI;
-
   @PyClassAttribute public PyObject e;
   @PyClassAttribute public PyObject pi;
-
   @PyClassAttribute public PyObject inf;
-
-  @PyClassAttribute private final PyObject nan;
 
   public math(PyUnicodeObject name) {
     super(name);

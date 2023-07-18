@@ -1,5 +1,6 @@
 package org.jpvm.stl.time;
 
+import java.util.concurrent.TimeUnit;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -7,8 +8,6 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
 import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
-
-import java.util.concurrent.TimeUnit;
 
 public class PyModuleMain extends PyModuleObject {
   public PyModuleMain(PyUnicodeObject moduleName) {

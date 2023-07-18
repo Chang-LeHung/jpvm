@@ -1,10 +1,9 @@
 package org.jpvm.multithread;
 
+import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.pvm.PVM;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class ThreadTest {
 

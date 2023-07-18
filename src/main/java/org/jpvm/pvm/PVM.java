@@ -12,7 +12,6 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
 import org.jpvm.stl.threading.PyThreadObject;
-import org.jpvm.stl.threading.PyThreadObjectType;
 import org.yaml.snakeyaml.Yaml;
 
 public class PVM {
@@ -30,15 +29,13 @@ public class PVM {
 
   /** filename of the py file to be executed. */
   private final String filename;
-
+  private final PyDictObject builtins;
   private PVM_STATE state;
   /** code of the py file to be executed. */
   private PyCodeObject code;
   /** global and local variables of the py file to be executed. */
   private PyDictObject globals;
-
   private PyDictObject locals;
-  private final PyDictObject builtins;
   private PyModuleObject rootModule;
   private PyFrameObject rootFrame;
   private EvaluationLoop loop;

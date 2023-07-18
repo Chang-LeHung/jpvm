@@ -80,5 +80,4 @@ public class TestHelloWorld {
     assert ret != null;
     System.out.println("return val = " + ret.str().getData());
   }
-
 }

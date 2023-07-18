@@ -2,8 +2,6 @@ package org.jpvm.objects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Map;
-
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
@@ -38,6 +36,12 @@ public class PyObject
         PyTypeMethods {
 
   public static Operator[] compareOpMap;
+  public static PyObject type;
+  /** base class name of all classes in python */
+  public static PyUnicodeObject name;
+  /** parameterTypes of callable methods */
+  public static Class<?>[] parameterTypes =
+      new Class<?>[] {PyTupleObject.class, PyDictObject.class};
 
   static {
     compareOpMap = new Operator[PyCmp_BAD + 1];
@@ -54,14 +58,6 @@ public class PyObject
     compareOpMap[PyCmp_EXC_MATCH] = Operator.PyCmp_EXC_MATCH;
     compareOpMap[PyCmp_BAD] = Operator.PyCmp_BAD;
   }
-
-  public static PyObject type;
-
-  /** base class name of all classes in python */
-  public static PyUnicodeObject name;
-  /** parameterTypes of callable methods */
-  public static Class<?>[] parameterTypes =
-      new Class<?>[] {PyTupleObject.class, PyDictObject.class};
 
   protected PyDictObject dict;
   protected PyLongObject hashCode;

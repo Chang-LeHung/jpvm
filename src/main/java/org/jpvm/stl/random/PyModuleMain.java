@@ -18,7 +18,7 @@ public class PyModuleMain extends PyModuleObject {
 	}
 
 	@PyClassMethod
-	public PyObject randint(PyTupleObject args, PyDictObject kwArgs) throws PyException, PyException {
+	public PyObject randint(PyTupleObject args, PyDictObject kwArgs) throws PyException {
 		if (args.size() == 2) {
 			PyObject start = args.get(0);
 			PyObject end = args.get(1);

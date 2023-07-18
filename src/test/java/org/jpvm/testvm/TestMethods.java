@@ -1,8 +1,6 @@
 package org.jpvm.testvm;
 
 import java.io.*;
-import java.util.Arrays;
-
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
