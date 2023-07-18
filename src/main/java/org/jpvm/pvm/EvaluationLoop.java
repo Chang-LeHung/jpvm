@@ -121,9 +121,9 @@ public class EvaluationLoop {
         return new PyMethodObject(obj, meth, name.getData());
       }
     } catch (NoSuchMethodException e) {
-      error = new PyException("object " + obj.repr() + " not have method " + name.repr());
+      error = new PyException("object " + obj.repr() + " do not have method " + name.repr());
     }
-    error = new PyException("object " + obj.repr() + " not have method " + name.repr());
+    error = new PyException("object " + obj.repr() + " do not have method " + name.repr());
     return null;
   }
 
@@ -302,6 +302,7 @@ public class EvaluationLoop {
             }
             case LOAD_CLOSURE -> {
               PyObject cell = frame.getFreeVarsCell(ins.getOparg());
+              assert cell != null;
               frame.push(cell);
             }
             case LOAD_METHOD -> {
@@ -564,12 +565,12 @@ public class EvaluationLoop {
               frame.push(o2);
             }
             case ROT_THREE -> {
-              PyObject o1 = frame.pop();
-              PyObject o2 = frame.pop();
-              PyObject o3 = frame.pop();
+              PyObject o1 = frame.pop(); // top
+              PyObject o2 = frame.pop(); // second
+              PyObject o3 = frame.pop(); // third
               frame.push(o1);
-              frame.push(o2);
               frame.push(o3);
+              frame.push(o2);
             }
             case ROT_FOUR -> {
               PyObject o1 = frame.pop();
@@ -577,9 +578,9 @@ public class EvaluationLoop {
               PyObject o3 = frame.pop();
               PyObject o4 = frame.pop();
               frame.push(o1);
-              frame.push(o2);
-              frame.push(o3);
               frame.push(o4);
+              frame.push(o3);
+              frame.push(o2);
             }
             case DUP_TOP -> {
               PyObject top = frame.top();
