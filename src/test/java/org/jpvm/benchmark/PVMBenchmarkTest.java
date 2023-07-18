@@ -28,10 +28,10 @@ public class PVMBenchmarkTest {
   //    pvm.run();
   //  }
 
-  //  @Test
-  //  public void testMatrixMultiplyConcurrent() throws PyException, IOException {
-  //    String filename = "src/test/resources/benchmark/__pycache__/conmatrix.cpython-38.pyc";
-  //    PVM pvm = new PVM(filename);
-  //    pvm.run();
-  //  }
+    @Test
+    public void testMatrixMultiplyConcurrent() throws PyException, IOException {
+      String filename = "src/test/resources/benchmark/__pycache__/conmatrix.cpython-38.pyc";
+      PVM pvm = new PVM(filename);
+      pvm.run();
+    }
 }
