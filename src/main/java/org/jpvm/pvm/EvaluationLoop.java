@@ -128,10 +128,10 @@ public class EvaluationLoop {
 
   public PyObject pyEvalFrame() throws PyException {
 
+    InterpreterState is = PVM.getThreadState().getIs();
     exit_loop:
     for (; ; ) {
       // evaluation loop
-      InterpreterState is = PVM.getThreadState().getIs();
       is.takeGIL();
       main_loop:
       while (iterator.hasNext()) {
@@ -869,11 +869,11 @@ public class EvaluationLoop {
               }
               PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "yield value is not supported");
             }
-            /*
-             * GET_YIELD_FROM_ITER If TOS is a generator iterator or
-             * coroutine object it is left as is.
-             * Otherwise, implements TOS = iter(TOS).
-             */
+              /*
+               * GET_YIELD_FROM_ITER If TOS is a generator iterator or
+               * coroutine object it is left as is.
+               * Otherwise, implements TOS = iter(TOS).
+               */
             case GET_YIELD_FROM_ITER -> {
               PyObject top = frame.top();
               if (!(top instanceof PyGeneratorObject)) {
