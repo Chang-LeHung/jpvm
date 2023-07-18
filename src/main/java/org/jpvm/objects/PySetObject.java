@@ -57,7 +57,7 @@ public class PySetObject extends PyObject
     isFrozen = frozen;
   }
 
-  public void put(PyObject key) throws PyException {
+  public synchronized void put(PyObject key) throws PyException {
     try {
       set.add(key);
     } catch (ConcurrentModificationException e) {
@@ -65,7 +65,7 @@ public class PySetObject extends PyObject
     }
   }
 
-  public void putAll(PySetObject key) throws PyException {
+  public synchronized void putAll(PySetObject key) throws PyException {
     try {
       set.addAll(key.set);
     } catch (ConcurrentModificationException e) {
@@ -78,7 +78,7 @@ public class PySetObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject add(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject add(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       set.add(args.get(0));
       return BuiltIn.None;
@@ -88,7 +88,7 @@ public class PySetObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (set.size() == 0) return BuiltIn.None;
     Iterator<PyObject> iterator = set.iterator();
     PyObject next = iterator.next();
@@ -97,7 +97,7 @@ public class PySetObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       set.remove(args.get(0));
       return BuiltIn.None;
@@ -107,14 +107,14 @@ public class PySetObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PySetObject result = new PySetObject();
     result.set.addAll(set);
     return result;
   }
 
   @PyClassMethod
-  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     set.clear();
     return BuiltIn.None;
   }
@@ -128,7 +128,8 @@ public class PySetObject extends PyObject
         else return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method issubset only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "set method issubset only require one PySetObject argument");
     return null;
   }
 
@@ -141,7 +142,8 @@ public class PySetObject extends PyObject
         else return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method issuperset only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "set method issuperset only require one PySetObject argument");
     return null;
   }
 
@@ -156,7 +158,8 @@ public class PySetObject extends PyObject
         return result;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method intersection only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "set method intersection only require one PySetObject argument");
     return null;
   }
 
@@ -169,7 +172,9 @@ public class PySetObject extends PyObject
         return BuiltIn.None;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method intersection_update only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception,
+        "set method intersection_update only require one PySetObject argument");
     return null;
   }
 
@@ -184,7 +189,8 @@ public class PySetObject extends PyObject
         return result;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method difference only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "set method difference only require one PySetObject argument");
     return null;
   }
 
@@ -198,7 +204,9 @@ public class PySetObject extends PyObject
         return BuiltIn.None;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method difference_update only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception,
+        "set method difference_update only require one PySetObject argument");
     return null;
   }
 
@@ -214,7 +222,8 @@ public class PySetObject extends PyObject
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "set method isdisjoint only require one PySetObject argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "set method isdisjoint only require one PySetObject argument");
     return null;
   }
 

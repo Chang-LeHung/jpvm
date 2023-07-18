@@ -38,23 +38,23 @@ public class PyListObject extends PyObject
     return BuiltIn.False;
   }
 
-  public void app1(PyObject obj) {
+  public synchronized void app1(PyObject obj) {
     obItem.add(obj);
   }
 
-  public void append(PyObject obj) {
+  public synchronized void append(PyObject obj) {
     obItem.add(obj);
   }
 
-  public void add(PyObject obj) {
+  public synchronized void add(PyObject obj) {
     app1(obj);
   }
 
-  public void insert(int idx, PyObject obj) {
+  public synchronized void insert(int idx, PyObject obj) {
     obItem.add(idx, obj);
   }
 
-  public PyObject pop() throws PyException {
+  public synchronized PyObject pop() throws PyException {
     if (obItem.size() == 0) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, "pop() PyListObject has no elements");
       return null;
@@ -62,11 +62,11 @@ public class PyListObject extends PyObject
     return obItem.remove(obItem.size() - 1);
   }
 
-  public boolean remove(PyObject obj) {
+  public synchronized boolean remove(PyObject obj) {
     return obItem.remove(obj);
   }
 
-  public void sort(boolean reverse) {
+  public synchronized void sort(boolean reverse) {
     if (reverse) Collections.reverse(obItem);
   }
 
@@ -78,7 +78,7 @@ public class PyListObject extends PyObject
     return obItem.get(idx);
   }
 
-  public void set(int idx, PyObject o) {
+  public synchronized void set(int idx, PyObject o) {
     obItem.set(idx, o);
   }
 
@@ -153,7 +153,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqInplaceConcat(PyObject o) throws PyException {
+  public synchronized PyObject sqInplaceConcat(PyObject o) throws PyException {
     if (!(o instanceof PyLongObject data)) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type int");
       return null;
@@ -206,7 +206,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject mpAssSubscript(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject mpAssSubscript(PyObject key, PyObject val) throws PyException {
     // means __delitem__
     if (null == val) {
       if (key instanceof PySliceObject slice) {
@@ -253,7 +253,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyException {
+  public synchronized PyObject sqConcat(PyObject o) throws PyException {
     if (!(o instanceof PyListObject l)) {
       PyErrorUtils.pyErrorFormat(
           PyErrorUtils.TypeError, "key " + "list concat require data type list");
@@ -268,7 +268,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyException {
+  public synchronized PyObject sqRepeat(PyObject o) throws PyException {
     PyListObject list = new PyListObject();
     Long n = NumberHelper.transformPyObject2Long(o);
     if (n == null) {
@@ -306,7 +306,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
     if (val instanceof TypeIterable itr) {
       TypeDoIterate iterator = itr.getIterator();
       if (!(key instanceof PySliceObject slice)) {
@@ -378,7 +378,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqInplaceRepeat(PyObject o) throws PyException {
+  public synchronized PyObject sqInplaceRepeat(PyObject o) throws PyException {
     Long n = NumberHelper.transformPyObject2Long(o);
     if (n == null) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
@@ -392,7 +392,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyListObject extend(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyListObject extend(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject o = args.get(0);
       if (o instanceof PyListObject list) {
@@ -406,7 +406,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) return pop();
     else {
       PyObject object = args.get(0);
@@ -419,7 +419,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject append(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject append(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       append(args.get(0));
       return BuiltIn.True;
@@ -429,7 +429,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject remove(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       if (remove(args.get(0))) return BuiltIn.True;
       return BuiltIn.False;
@@ -439,7 +439,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject copy(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyListObject result = new PyListObject();
     result.addAll(this);
     return result;
@@ -460,13 +460,13 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject reverse(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject reverse(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     Collections.reverse(obItem);
     return this;
   }
 
   @PyClassMethod
-  public PyObject insert(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject insert(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 2) {
       PyObject idx = args.get(0);
       if (idx instanceof PyLongObject l) {
@@ -496,7 +496,7 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject sort(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject sort(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     var ref =
         new Object() {
           PyException error;
@@ -548,12 +548,12 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) {
+  public synchronized PyObject clear(PyTupleObject args, PyDictObject kwArgs) {
     obItem.clear();
     return BuiltIn.None;
   }
 
-  public void addAll(PyListObject o) throws PyException {
+  public synchronized void addAll(PyListObject o) throws PyException {
     for (int i = 0; i < o.size(); i++) append(o.get(i));
   }
 
@@ -574,7 +574,7 @@ public class PyListObject extends PyObject
     }
 
     @Override
-    public PyObject next() {
+    public synchronized PyObject next() {
       if (idx < obItem.size()) {
         return obItem.get(idx++);
       }

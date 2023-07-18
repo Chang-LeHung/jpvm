@@ -15,15 +15,16 @@ public class PyFrameObject extends PyObject {
   /** value stack */
   private final PyObject[] stack;
 
+  private int used;
+
   private final PyObject[] localPlus;
   private final ByteCodeBuffer byteCodeBuffer;
   private PyDictObject builtins;
   private PyDictObject globals;
   private PyDictObject locals;
   /** shows how many slots of stack have been used */
-  private int used;
-
   private boolean isExecuting;
+
   private PyFrameObject back;
 
   private PyFunctionObject func;
@@ -42,6 +43,7 @@ public class PyFrameObject extends PyObject {
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[code.freeVarsSize()];
   }
 
   public PyFrameObject(
@@ -49,8 +51,7 @@ public class PyFrameObject extends PyObject {
       PyCodeObject code,
       PyDictObject builtins,
       PyDictObject globals,
-      PyFrameObject back)
-       {
+      PyFrameObject back) {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -67,7 +68,6 @@ public class PyFrameObject extends PyObject {
       try {
         cells[i] = funcClosure.get(i);
       } catch (PyException ignore) {
-
       }
     }
   }
@@ -87,6 +87,7 @@ public class PyFrameObject extends PyObject {
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[code.freeVarsSize()];
   }
 
   public PyFrameObject(
@@ -124,6 +125,7 @@ public class PyFrameObject extends PyObject {
     stack = new PyObject[code.getCoStackSize()];
     this.back = back;
     localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[code.freeVarsSize()];
   }
 
   public PyFrameObject(
@@ -135,6 +137,7 @@ public class PyFrameObject extends PyObject {
     this.globals = globals;
     stack = new PyObject[code.getCoStackSize()];
     localPlus = new PyObject[code.getCoNLocals()];
+    cells = new PyObject[code.freeVarsSize()];
   }
 
   public PyFunctionObject getFunc() {
@@ -169,6 +172,10 @@ public class PyFrameObject extends PyObject {
     assert cells[idx] instanceof PyCellObject;
     var cell = (PyCellObject) cells[idx];
     cell.setRef(o);
+  }
+
+  public int getFreeVarsSize() {
+    return cells.length;
   }
 
   public PyObject getFreeVars(int idx) {

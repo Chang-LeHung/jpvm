@@ -1,8 +1,6 @@
 package org.jpvm.exception;
 
 import java.io.IOException;
-
-import org.apache.commons.math3.exception.ZeroException;
 import org.jpvm.errors.PyException;
 import org.jpvm.pvm.PVM;
 import org.junit.Test;

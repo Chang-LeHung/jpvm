@@ -1,5 +1,7 @@
 package org.jpvm.pvm;
 
+import static org.jpvm.objects.PyObject.compareOpMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -16,14 +18,11 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
-
-import static org.jpvm.objects.PyObject.compareOpMap;
 
 public class EvaluationLoop {
 
@@ -132,16 +131,8 @@ public class EvaluationLoop {
     exit_loop:
     for (; ; ) {
       // evaluation loop
-      InterpreterState is = PVM.getThreadState().getIs();
-      is.takeGIL();
       main_loop:
       while (iterator.hasNext()) {
-        if (is.isDropGILRequest()) {
-          // release global interpreter lock
-          is.dropGIL();
-          // require  global interpreter lock
-          is.takeGIL();
-        }
         Instruction ins = iterator.next();
         try {
           switch (ins.getOpname()) {
@@ -302,6 +293,7 @@ public class EvaluationLoop {
             }
             case LOAD_CLOSURE -> {
               PyObject cell = frame.getFreeVarsCell(ins.getOparg());
+              assert cell != null;
               frame.push(cell);
             }
             case LOAD_METHOD -> {
@@ -564,12 +556,12 @@ public class EvaluationLoop {
               frame.push(o2);
             }
             case ROT_THREE -> {
-              PyObject o1 = frame.pop();
-              PyObject o2 = frame.pop();
-              PyObject o3 = frame.pop();
+              PyObject o1 = frame.pop(); // top
+              PyObject o2 = frame.pop(); // second
+              PyObject o3 = frame.pop(); // third
               frame.push(o1);
-              frame.push(o2);
               frame.push(o3);
+              frame.push(o2);
             }
             case ROT_FOUR -> {
               PyObject o1 = frame.pop();
@@ -577,9 +569,9 @@ public class EvaluationLoop {
               PyObject o3 = frame.pop();
               PyObject o4 = frame.pop();
               frame.push(o1);
-              frame.push(o2);
-              frame.push(o3);
               frame.push(o4);
+              frame.push(o3);
+              frame.push(o2);
             }
             case DUP_TOP -> {
               PyObject top = frame.top();

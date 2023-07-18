@@ -4,7 +4,6 @@ import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyThreadObject extends PyObject {
@@ -71,9 +70,7 @@ public class PyThreadObject extends PyObject {
           PyErrorUtils.TypeError, "only a stated thread can call this method");
     try {
       // deal lock warning
-      PVM.getThreadState().getIs().dropGIL();
       thread.join();
-      PVM.getThreadState().getIs().takeGIL();
     } catch (InterruptedException ignore) {
     }
     return BuiltIn.None;
@@ -104,17 +101,17 @@ public class PyThreadObject extends PyObject {
     return str();
   }
 
-  enum THREAD_STATE {
-    UNINITIALIZED,
-    STARTED,
-    FINISHED,
-  }
-
   public THREAD_STATE getState() {
     return state;
   }
 
   public void setState(THREAD_STATE state) {
     this.state = state;
+  }
+
+  enum THREAD_STATE {
+    UNINITIALIZED,
+    STARTED,
+    FINISHED,
   }
 }

@@ -79,14 +79,14 @@ public class PyTypeType extends PyObject {
     return clazz;
   }
 
-  public void addBase(PyObject base) {
+  public synchronized void addBase(PyObject base) {
     for (PyObject basis : bases) {
       if (basis == base) return;
     }
     bases.add(base);
   }
 
-  public void addBase(int idx, PyObject base) {
+  public synchronized void addBase(int idx, PyObject base) {
     for (PyObject basis : bases) {
       if (basis == base) return;
     }
@@ -103,7 +103,7 @@ public class PyTypeType extends PyObject {
   }
 
   /** lazy loading */
-  public PyTupleObject getMro() throws PyException {
+  public synchronized PyTupleObject getMro() throws PyException {
     if (!typeReady) {
       if (_mro != null) return _mro;
       typeReady = true;

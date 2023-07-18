@@ -74,7 +74,8 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method startswith require one str argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "str method startswith require one str argument");
     return null;
   }
 
@@ -87,7 +88,8 @@ public class PyUnicodeObject extends PyObject
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method endswith require one str argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "str method endswith require one str argument");
     return null;
   }
 
@@ -166,7 +168,8 @@ public class PyUnicodeObject extends PyObject
         return new PyUnicodeObject(s.replace(o1.s, o2.s));
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "str method replace require two str argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "str method replace require two str argument");
     return null;
   }
 
@@ -447,7 +450,8 @@ public class PyUnicodeObject extends PyObject
     StringBuilder builder = new StringBuilder();
     Long l = NumberHelper.transformPyObject2Long(o);
     if (l == null) {
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sqRepeat: parameter o require type PyNumberMethods");
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "sqRepeat: parameter o require type PyNumberMethods");
       return null;
     }
     builder.append(String.valueOf(s).repeat(Math.max(0, l.intValue())));

@@ -1,11 +1,11 @@
 package org.jpvm.benchmark;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.pvm.PVM;
-import org.openjdk.jmh.annotations.*;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import org.jpvm.errors.PyException;
+import org.jpvm.pvm.PVM;
+import org.junit.Test;
+import org.openjdk.jmh.annotations.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.SECONDS)
@@ -14,10 +14,24 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class PVMBenchmarkTest {
 
-  @Benchmark
-  public void testFib() throws PyException, IOException {
-    String filename = "src/test/resources/benchmark/__pycache__/fib.cpython-38.pyc";
-    PVM pvm = new PVM(filename);
-    pvm.run();
-  }
+  //  @Benchmark
+  //  public void testFib() throws PyException, IOException {
+  //    String filename = "src/test/resources/benchmark/__pycache__/fib.cpython-38.pyc";
+  //    PVM pvm = new PVM(filename);
+  //    pvm.run();
+  //  }
+
+  //  @Test
+  //  public void testMatrixMultiply() throws PyException, IOException {
+  //    String filename = "src/test/resources/benchmark/__pycache__/matrix.cpython-38.pyc";
+  //    PVM pvm = new PVM(filename);
+  //    pvm.run();
+  //  }
+
+  //  @Test
+  //  public void testMatrixMultiplyConcurrent() throws PyException, IOException {
+  //    String filename = "src/test/resources/benchmark/__pycache__/conmatrix.cpython-38.pyc";
+  //    PVM pvm = new PVM(filename);
+  //    pvm.run();
+  //  }
 }

@@ -26,12 +26,9 @@ public class PyCodeExecutor implements Runnable {
   @Override
   public void run() {
     try {
-      InterpreterState is = PVM.getThreadState().getIs();
       PyThreadObject.type.tss.set(owner);
-      is.takeGIL();
       PyObject res = Abstract.abstractCall(functionObject, null, args, kwArgs);
       if (res == null) PyErrorUtils.printExceptionInformation();
-      is.dropGIL();
       PyThreadObject.type.tss.remove();
     } catch (PyException ignore) {
       PyErrorUtils.printExceptionInformation();

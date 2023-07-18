@@ -21,7 +21,7 @@ public class PyCellObject extends PyObject{
     return ref;
   }
 
-  public void setRef(PyObject ref) {
+  public synchronized void setRef(PyObject ref) {
     this.ref = ref;
   }
 

@@ -1,5 +1,6 @@
 package org.jpvm.stl.time;
 
+import java.util.concurrent.TimeUnit;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -7,8 +8,6 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
 import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
-
-import java.util.concurrent.TimeUnit;
 
 public class PyModuleMain extends PyModuleObject {
   public PyModuleMain(PyUnicodeObject moduleName) {
@@ -21,22 +20,17 @@ public class PyModuleMain extends PyModuleObject {
       PyObject object = args.get(0);
       if (object instanceof PyLongObject o) {
         try {
-          InterpreterState is = PVM.getThreadState().getIs();
-          is.dropGIL();
           TimeUnit.SECONDS.sleep(o.getData());
-          is.takeGIL();
           return BuiltIn.None;
         } catch (InterruptedException ignore) {
         }
       } else if (object instanceof PyFloatObject o) {
         InterpreterState is = PVM.getThreadState().getIs();
-        is.dropGIL();
         try {
           long l = (long) (o.getData() * 1000);
           TimeUnit.MILLISECONDS.sleep(l);
         } catch (InterruptedException ignore) {
         }
-        is.takeGIL();
         return BuiltIn.None;
       }
     }

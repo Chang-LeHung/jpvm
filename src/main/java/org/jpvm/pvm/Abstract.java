@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jpvm.errors.*;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
+import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
@@ -364,28 +366,99 @@ public class Abstract {
         var kwDefaults = (PyDictObject) func.getFuncKwDefaults();
         var coVarNames = (PyTupleObject) code.getCoVarNames();
         PyDictObject globals = (PyDictObject) func.getFuncGlobals();
-        int argSize = code.getCoKwOnlyArCnt() + code.getCoPosOnlyArCnt() + code.getCoArgument();
+        int argSize = code.getCoKwOnlyArCnt() + code.getCoArgument();
         if (locals == null) locals = new PyDictObject();
         PyFrameObject f = new PyFrameObject(func, code, BuiltIn.dict, globals, locals, frameObject);
         Map<PyObject, Integer> map = new HashMap<>();
         for (int i = 0; i < coVarNames.size(); i++) {
           map.put(coVarNames.get(i), i);
         }
-        kwDefaults.getMap().forEach((x, y) -> f.setLocal(map.get(x), y));
-        for (int i = 0; i < defaults.size(); i++) {
-          f.setLocal(argSize - defaults.size() + i - kwDefaults.size(), defaults.get(i));
+        PyDictObject kwDict = null;
+        int i;
+        if ((code.getCoFlags() & Marshal.CO_VARKEYWORDS) != 0) {
+          kwDict = new PyDictObject();
+          i = argSize;
+          if ((code.getCoFlags() * Marshal.CO_VARARGS) != 0) i++;
+          f.setLocal(i, kwDict);
         }
-        // start initialize parameters
-        for (int i = 0; i < args.size(); i++) {
-          f.setLocal(i, args.get(i));
+        int n;
+        n = Math.min(args.size(), code.getCoArgument());
+        for (int j = 0; j < n; j++) {
+          f.setLocal(j, args.get(j));
         }
-        // final update passed arguments
-        kwArgs.getMap().forEach((x, y) -> f.setLocal(map.get(x), y));
-        for (int i = 0; i < argSize; i++) {
-          if (f.getLocal(i) == null)
-            PyErrorUtils.pyErrorFormat(
-                PyErrorUtils.TypeError, "please pass argument " + coVarNames.get(i).repr());
+        if ((code.getCoFlags() & Marshal.CO_VARARGS) != 0) {
+          PyTupleObject starArgs = new PyTupleObject(args.size() - n);
+          for (int j = n; j < args.size(); j++) {
+            starArgs.set(j - n, args.get(j));
+          }
+          f.setLocal(argSize, starArgs);
         }
+        TypeDoIterate iterator = kwArgs.getIterator();
+        while (iterator.hasNext()) {
+          PyObject key = iterator.next();
+          PyObject val = kwArgs.get(key);
+          if (map.get(key) == null) {
+            if (kwDict == null)
+              return PyErrorUtils.pyErrorFormat(
+                  PyErrorUtils.TypeError, "unexpected keyword argument " + key);
+            else kwDict.put(key, val);
+          } else {
+            if (f.getLocal(map.get(key)) != null) {
+              return PyErrorUtils.pyErrorFormat(
+                  PyErrorUtils.TypeError, "duplicate argument " + key);
+            }
+            f.setLocal(map.get(key), val);
+          }
+        }
+        if (args.size() > code.getCoArgument() && (code.getCoFlags() & Marshal.CO_VARARGS) == 0) {
+          return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "too many arguments");
+        }
+        if (args.size() < code.getCoArgument()) {
+          int m = code.getCoArgument() - defaults.size();
+          int missing = 0;
+          for (i = args.size(); i < m; i++) {
+            if (f.getLocal(i) == null) {
+              missing++;
+            }
+          }
+          if (missing > 0) {
+            return PyErrorUtils.pyErrorFormat(
+                PyErrorUtils.TypeError, "missing " + missing + " arguments");
+          }
+          if (n > m) i = n - m;
+          else i = 0;
+          for (; i < defaults.size(); i++) {
+            if (f.getLocal(m + i) == null) {
+              f.setLocal(m + i, defaults.get(i));
+            }
+          }
+        }
+        if (kwDefaults.size() > 0) {
+          PyObject name;
+          for (i = code.getCoArgument(); i < argSize; i++) {
+            if (f.getLocal(i) != null) {
+              continue;
+            }
+            name = ((PyTupleObject) code.getCoVarNames()).get(i);
+            PyObject val = kwDefaults.get(name);
+            if (val != null) {
+              f.setLocal(i, kwDefaults.get(name));
+            } else {
+              return PyErrorUtils.pyErrorFormat(
+                  PyErrorUtils.TypeError, "missing keyword only argument " + name);
+            }
+          }
+        }
+        var coCellVars = (PyTupleObject) code.getCoCellVars();
+        for (i = 0; i < coCellVars.size(); i++) {
+          PyObject key = coCellVars.get(i);
+          Integer idx = map.get(key);
+          if (idx != null) {
+            PyObject local = f.getLocal(idx);
+            f.setFreeVars(i, local);
+          }
+        }
+
         if (((PyCodeObject) (func.getFuncCode())).isGenerator()) return new PyGeneratorObject(f);
         EvaluationLoop eval = new EvaluationLoop(f);
         PVM.getThreadState().increaseRecursionDepth();

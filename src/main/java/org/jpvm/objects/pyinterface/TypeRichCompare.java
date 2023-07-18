@@ -4,7 +4,6 @@ import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyBoolObject;
 import org.jpvm.objects.PyObject;
 
-
 public interface TypeRichCompare {
 
   int Py_LT = 0;

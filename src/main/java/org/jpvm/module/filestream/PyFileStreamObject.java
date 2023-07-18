@@ -78,7 +78,6 @@ public class PyFileStreamObject extends PyObject {
 
   public void writeBytes(byte[] bytes) throws IOException {
     InterpreterState is = PVM.getThreadState().getIs();
-    if (is.isDropGILRequest()) is.dropGIL();
 
     if (file != null) {
       file.write(bytes);
@@ -87,7 +86,6 @@ public class PyFileStreamObject extends PyObject {
     } else {
       System.err.write(bytes);
     }
-    is.takeGIL();
   }
 
   public void writeString(String s) throws IOException {
@@ -119,13 +117,11 @@ public class PyFileStreamObject extends PyObject {
 
   public void flush() {
     InterpreterState is = PVM.getThreadState().getIs();
-    if (is.isDropGILRequest()) is.dropGIL();
     if (stdout) {
       System.out.flush();
     } else {
       System.err.flush();
     }
-    is.takeGIL();
   }
 
   @Override

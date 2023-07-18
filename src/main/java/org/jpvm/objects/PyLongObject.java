@@ -335,7 +335,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
       PyErrorUtils.pyErrorFormat(
           PyErrorUtils.NotImplementedError, "can apply / on int and " + o.getTypeName());
     assert o instanceof PyLongObject;
-    PyLongObject d = (PyLongObject) o;
+    var d = (PyLongObject) o;
     if (d.getData() == 0) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.ZeroDivisionError, "division by zero");
     }
@@ -348,7 +348,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
       PyErrorUtils.pyErrorFormat(
           PyErrorUtils.NotImplementedError, "can apply / on int and " + o.getTypeName());
     assert o instanceof PyLongObject;
-    PyLongObject d = (PyLongObject) o;
+    var d = (PyLongObject) o;
     if (d.getData() == 0) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.ZeroDivisionError, "division by zero");
     }
@@ -412,7 +412,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject inplaceTrueDiv(PyObject o) throws PyException {
-    return trueDiv(o);
+    return inplaceFloorDiv(o);
   }
 
   @Override

@@ -2,8 +2,6 @@ package org.jpvm.objects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Map;
-
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassAttribute;
@@ -38,6 +36,12 @@ public class PyObject
         PyTypeMethods {
 
   public static Operator[] compareOpMap;
+  public static PyObject type;
+  /** base class name of all classes in python */
+  public static PyUnicodeObject name;
+  /** parameterTypes of callable methods */
+  public static Class<?>[] parameterTypes =
+      new Class<?>[] {PyTupleObject.class, PyDictObject.class};
 
   static {
     compareOpMap = new Operator[PyCmp_BAD + 1];
@@ -55,14 +59,6 @@ public class PyObject
     compareOpMap[PyCmp_BAD] = Operator.PyCmp_BAD;
   }
 
-  public static PyObject type;
-
-  /** base class name of all classes in python */
-  public static PyUnicodeObject name;
-  /** parameterTypes of callable methods */
-  public static Class<?>[] parameterTypes =
-      new Class<?>[] {PyTupleObject.class, PyDictObject.class};
-
   protected PyDictObject dict;
   protected PyLongObject hashCode;
   protected boolean hashDone;
@@ -74,13 +70,13 @@ public class PyObject
     return BuiltIn.False;
   }
 
-  public static void registerBaseObjectType() {
+  public static synchronized void registerBaseObjectType() {
     if (type == null) {
       type = new PyBaseObjectType();
     }
   }
 
-  public static void initBaseObject() {
+  public static synchronized void initBaseObject() {
     if (type == null) type = new PyBaseObjectType();
   }
 
@@ -100,7 +96,7 @@ public class PyObject
   }
 
   @Override
-  public PyUnicodeObject getTypeName() {
+  public synchronized PyUnicodeObject getTypeName() {
     if (name == null) {
       name = new PyUnicodeObject("object");
     }
@@ -142,7 +138,7 @@ public class PyObject
     return dict;
   }
 
-  public void setDict(PyDictObject dict) {
+  public synchronized void setDict(PyDictObject dict) {
     this.dict = dict;
   }
 
@@ -234,8 +230,10 @@ public class PyObject
 
   @Override
   public PyObject getAttr(PyObject key) throws PyException {
-    if (dict == null) {
-      dict = new PyDictObject();
+    synchronized (this) {
+      if (dict == null) {
+        dict = new PyDictObject();
+      }
     }
     PyObject res = dict.get(key);
     if (res != null) return res;
@@ -256,11 +254,11 @@ public class PyObject
   }
 
   @Override
-  public PyObject setAttro(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject setAttro(PyObject key, PyObject val) throws PyException {
     return setAttr(key, val);
   }
 
-  public void putAttribute(PyObject key, PyObject val) {
+  public synchronized void putAttribute(PyObject key, PyObject val) {
     try {
       dict.put(key, val);
     } catch (PyException ignored) {
@@ -273,13 +271,13 @@ public class PyObject
 
   @Override
   @PyClassMethod
-  public PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
+  public synchronized PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
     return PyTypeMethods.super.__init__(args, kwArgs);
   }
 
   @Override
   @PyClassMethod
-  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+  public synchronized PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
     return PyTypeMethods.super.__new__(args, kwArgs);
   }
 }
