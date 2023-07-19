@@ -128,10 +128,10 @@ public class EvaluationLoop {
 
   public PyObject pyEvalFrame() throws PyException {
 
+    InterpreterState is = PVM.getThreadState().getIs();
     exit_loop:
     for (; ; ) {
       // evaluation loop
-      InterpreterState is = PVM.getThreadState().getIs();
       is.takeGIL();
       main_loop:
       while (iterator.hasNext()) {

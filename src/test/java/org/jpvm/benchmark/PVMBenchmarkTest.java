@@ -21,12 +21,12 @@ public class PVMBenchmarkTest {
     pvm.run();
   }
 
-  //  @Test
-  //  public void testMatrixMultiply() throws PyException, IOException {
-  //    String filename = "src/test/resources/benchmark/__pycache__/matrix.cpython-38.pyc";
-  //    PVM pvm = new PVM(filename);
-  //    pvm.run();
-  //  }
+  @Test
+  public void testMatrixMultiply() throws PyException, IOException {
+    String filename = "src/test/resources/benchmark/__pycache__/matrix.cpython-38.pyc";
+    PVM pvm = new PVM(filename);
+    pvm.run();
+  }
 
   @Test
   public void testMatrixMultiplyConcurrent() throws PyException, IOException {
