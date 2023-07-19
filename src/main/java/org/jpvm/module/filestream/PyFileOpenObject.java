@@ -1,6 +1,7 @@
 package org.jpvm.module.filestream;
 
 import java.io.*;
+
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -84,7 +85,6 @@ public class PyFileOpenObject extends PyObject {
             }
         }
     }
-
 
 
     @PyClassMethod
