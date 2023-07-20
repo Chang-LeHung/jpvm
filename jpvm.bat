@@ -1,4 +1,5 @@
 @echo off
+
 set RED=[0;31m
 set NC=[0m
 

@@ -15,4 +15,5 @@ else
     echo -e "${RED}Please input a .pyc file\nExample: You can use command python -m compileall demo.py to get a .pyc file of demo.py${NC}"
     exit 1
 fi
+
 java -jar target/jpvm-1.0-SNAPSHOT-jar-with-dependencies.jar $1
