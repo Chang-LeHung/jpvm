@@ -61,15 +61,15 @@ public class Example {
 
 ```java
 public void testCall(){
-		String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
-		try{
-		PVM pvm=new PVM(filename);
-		pvm.run();
-		System.out.println(pvm.call("fib",10));
-		}catch(PyException|IOException e){
-		throw new RuntimeException(e);
-		}
-		}
+  String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
+  try{
+    PVM pvm = new PVM(filename);
+    pvm.run();
+    System.out.println(pvm.call("fib",10));
+  }catch(PyException | IOException e){
+    throw new RuntimeException(e);
+  }
+}
 ```
 
 # 下载和使用
