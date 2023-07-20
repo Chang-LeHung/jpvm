@@ -13,13 +13,9 @@ def generate_matrix(rows, columns):
 
 
 def multiply(i, columns1, columns2, result, matrix1, matrix2):
-    tmp = [[0 for _ in range(columns2)] for _ in range(columns1)]
     for j in range(columns2):
         for k in range(columns1):
-            tmp[i][j] += matrix1[i][k] * matrix2[k][j]
-    for j in range(columns2):
-        for k in range(columns1):
-            result[i][j] += tmp[i][j]
+            result[i][j] += matrix1[i][k] * matrix2[k][j]
 
 
 def matrix_multiply(matrix1, matrix2):
