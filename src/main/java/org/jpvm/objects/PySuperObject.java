@@ -40,13 +40,16 @@ public class PySuperObject extends PyObject {
     return str();
   }
 
-
-
   @Override
   public PyObject getMethod(PyUnicodeObject name) throws PyException {
+    return getAttr(name);
+  }
+
+  @Override
+  public PyObject getAttr(PyObject name) throws PyException {
     PyObject function = cls.getAttr(name);
     if (function instanceof PyFunctionObject func) {
-      return new PyMethodObject(self, func, name.getData());
+      return new PyMethodObject(self, func, ((PyUnicodeObject) name).getData());
     }
     if (function instanceof PyMethodObject method) {
       method.setSelf(self);
