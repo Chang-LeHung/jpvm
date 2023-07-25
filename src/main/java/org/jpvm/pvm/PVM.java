@@ -19,7 +19,7 @@ public class PVM {
   /** thread state of each thread */
   public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
   /** initialize here for compatibility */
-  public static InterpreterState interpreterState = new InterpreterState(500);
+  public static volatile InterpreterState interpreterState = new InterpreterState(500);
 
   // prepare object system
   static {

@@ -59,49 +59,59 @@ public class GILRuntimeState {
 
   public void takeGIL() {
     if (currentHolder != Thread.currentThread()) {
-      try {
-        lock.lock();
-        for (; ; ) {
-          while (locked.get()) {
-            long saveSwitchNumber = switchNumber;
-            long start = System.currentTimeMillis();
-            try {
-              condition.await(interval, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException ignored) {
-              // do nothing
-            }
-            long end = System.currentTimeMillis();
-            if ((end - start) >= interval
-                && locked.get()
-                && !dropGILRequest
-                && saveSwitchNumber == switchNumber) {
-              dropGILRequest = true;
-            }
+      for (; ; ) {
+        while (locked.get()) {
+          long saveSwitchNumber = switchNumber;
+          long start = System.currentTimeMillis();
+          try {
+            lock.lock();
+            condition.await(interval, TimeUnit.MILLISECONDS);
+          } catch (InterruptedException ignored) {
+            // do nothing
+          } finally {
+            lock.unlock();
           }
-          // many threads can reach here at the same time
-          // so below code is critical section
-          // avoid data race by using atomic operations
-          if (locked.compareAndSet(false, true)) {
-            dropGILRequest = false;
-            currentHolder = Thread.currentThread();
-            break;
+          long end = System.currentTimeMillis();
+          if ((end - start) >= interval
+              && locked.get()
+              && !dropGILRequest
+              && saveSwitchNumber == switchNumber) {
+            dropGILRequest = true;
           }
         }
-      } finally {
-        lock.unlock();
+        // many threads can reach here at the same time
+        // so below code is critical section
+        // avoid data race by using atomic operations
+        if (locked.compareAndSet(false, true)) {
+          dropGILRequest = false;
+          switchNumber++;
+          currentHolder = Thread.currentThread();
+          break;
+        }
       }
     }
+    assert currentHolder == Thread.currentThread();
   }
 
   public void dropGIL() {
+    // if you do not hold GIL, you should not call this function
+    assert currentHolder == Thread.currentThread();
     if (currentHolder == Thread.currentThread()) {
       try {
         lock.lock();
         locked.set(false);
+        // fatal error will occur if not execute this statement
+        // because after finishing this function, you may call
+        // takGIL when locked = false and currentHolder equals
+        // to current thread so other threads could call takeGIL()
+        // successfully, which will cause 2 threads execute
+        // at the same time
+        currentHolder = null;
         condition.signal();
       } finally {
         lock.unlock();
       }
     }
+    assert currentHolder != Thread.currentThread();
   }
 }

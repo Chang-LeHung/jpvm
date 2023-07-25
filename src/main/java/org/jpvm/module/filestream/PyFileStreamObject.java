@@ -78,8 +78,7 @@ public class PyFileStreamObject extends PyObject {
 
   public void writeBytes(byte[] bytes) throws IOException {
     InterpreterState is = PVM.getThreadState().getIs();
-    if (is.isDropGILRequest()) is.dropGIL();
-
+    is.dropGIL();
     if (file != null) {
       file.write(bytes);
     } else if (stdout) {

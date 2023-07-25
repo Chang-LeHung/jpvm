@@ -23,19 +23,22 @@ public class PyModuleMain extends PyModuleObject {
           InterpreterState is = PVM.getThreadState().getIs();
           is.dropGIL();
           TimeUnit.SECONDS.sleep(o.getData());
-          is.takeGIL();
           return BuiltIn.None;
         } catch (InterruptedException ignore) {
+        } finally {
+          InterpreterState is = PVM.getThreadState().getIs();
+          is.takeGIL();
         }
       } else if (object instanceof PyFloatObject o) {
         InterpreterState is = PVM.getThreadState().getIs();
-        is.dropGIL();
         try {
+          is.dropGIL();
           long l = (long) (o.getData() * 1000);
           TimeUnit.MILLISECONDS.sleep(l);
         } catch (InterruptedException ignore) {
+        }finally{
+          is.takeGIL();
         }
-        is.takeGIL();
         return BuiltIn.None;
       }
     }

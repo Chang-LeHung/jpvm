@@ -7,7 +7,7 @@ data = []
 def worker():
     for i in range(10):
         data.append(i)
-        time.sleep(0.1)
+        time.sleep(0.3)
         print(data)
 
 
