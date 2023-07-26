@@ -80,6 +80,16 @@ public class TestMethods {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  public void testRWBfile(){
+    String filename = "src/test/resources/testpy/__pycache__/testrwbfile.cpython-38.pyc";
+    try {
+      new PVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
   @Test
   public void testBr() throws IOException {
     String path = "src/test/resources/testpy/test.txt";
