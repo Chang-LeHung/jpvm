@@ -8,6 +8,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
+import org.jpvm.pvm.PVM;
 
 public class PyFileOpenObject extends PyObject {
     private int index;
@@ -163,6 +164,7 @@ public class PyFileOpenObject extends PyObject {
                 FileOutputStream fileOutputStream = null;
                 try {
                     fileOutputStream = new FileOutputStream(path);
+                    PVM.getThreadState().getIs().dropGIL();
                     fileOutputStream.write(data);
                     fileOutputStream.close();
                     return new PyLongObject(1);
@@ -172,6 +174,8 @@ public class PyFileOpenObject extends PyObject {
                 } catch (IOException e) {
                     PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getMessage());
                     return null;
+                }finally {
+                    PVM.getThreadState().getIs().takeGIL();
                 }
             }else{
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "arguement error");
@@ -189,20 +193,26 @@ public class PyFileOpenObject extends PyObject {
             try (BufferedWriter wf = new BufferedWriter(new FileWriter(path))) {
                 String s = args.get(0).toString();
                 tal = 1;
+                PVM.getThreadState().getIs().dropGIL();
                 wf.write(s);
                 return new PyUnicodeObject("1");
             } catch (IOException e) {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
                 return null;
+            }finally {
+                PVM.getThreadState().getIs().takeGIL();
             }
         } else {
             try (BufferedWriter wf = new BufferedWriter(new FileWriter(path, true))) {
                 String s = args.get(0).toString();
+                PVM.getThreadState().getIs().dropGIL();
                 wf.write(s);
                 return new PyUnicodeObject("1");
             } catch (IOException e) {
                 PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
                 return null;
+            }finally {
+                PVM.getThreadState().getIs().takeGIL();
             }
         }
     }
