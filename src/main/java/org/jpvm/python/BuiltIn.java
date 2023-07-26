@@ -335,7 +335,7 @@ public class BuiltIn {
     }else if(args.size() == 2){
       String path = args.get(0).toString();
       String mode = args.get(1).toString();
-      if(mode.equals("r") || mode.equals("w") || mode.equals("rw") || mode.equals("a")){
+      if(mode.equals("r") || mode.equals("w") || mode.equals("rw") || mode.equals("a") || mode.equals("rb") || mode.equals("wb")){
         return new PyFileOpenObject(path, mode);
       }else{
         PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "not support file mode");
