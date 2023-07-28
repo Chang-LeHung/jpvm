@@ -84,6 +84,7 @@ public class PyMethodObject extends PyObject {
         return Abstract.abstractCall(functionObject, null, args, kwArgs);
       }
     } catch (IllegalAccessException | InvocationTargetException e) {
+      if (e.getCause() instanceof PyException) throw (PyException) e.getCause();
       PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
       return null;
     }

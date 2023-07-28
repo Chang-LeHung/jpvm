@@ -14,4 +14,18 @@ public class FSTest {
     PVM pvm = new PVM(filename);
     pvm.run();
   }
+
+  @Test
+  public void testCopyFile() throws PyException, IOException {
+    String filename = "src/test/resources/fs/__pycache__/copyfile.cpython-38.pyc";
+    PVM pvm = new PVM(filename);
+    pvm.run();
+  }
+
+  @Test
+  public void testCopyDir() throws PyException, IOException {
+    String filename = "src/test/resources/fs/__pycache__/copydir.cpython-38.pyc";
+    PVM pvm = new PVM(filename);
+    pvm.run();
+  }
 }

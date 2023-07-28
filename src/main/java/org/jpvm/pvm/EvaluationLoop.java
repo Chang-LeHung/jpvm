@@ -282,7 +282,7 @@ public class EvaluationLoop {
               }
               PyErrorUtils.pyErrorFormat(
                   PyErrorUtils.AttributeError,
-                  "can not find attribute " + name.repr() + " in " + top.repr());
+                  "can not find attribute '" + name.repr() + "' in " + top.repr());
             }
             case STORE_ATTR -> {
               var name = (PyUnicodeObject) coNames.get(ins.getOparg());
@@ -318,7 +318,7 @@ public class EvaluationLoop {
               }
               PyErrorUtils.pyErrorFormat(
                   PyErrorUtils.AttributeError,
-                  "object + " + obj.repr() + " not have method " + name.repr());
+                  "object '" + obj.repr() + "' not have method " + name.repr());
             }
             case CALL_METHOD -> {
               PyTupleObject args = getArgs(ins);
@@ -333,7 +333,8 @@ public class EvaluationLoop {
                 frame.push(res);
               } else
                 PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.AttributeError, "object " + method.repr() + " can not be called");
+                    PyErrorUtils.AttributeError,
+                    "object '" + method.repr() + "' can not be called");
             }
             case CALL_FUNCTION -> {
               PyTupleObject args = getArgs(ins);

@@ -1,7 +1,6 @@
 package org.jpvm.stl.url;
 
 import org.jpvm.objects.PyLongObject;
-import org.jpvm.objects.PyModuleObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.annotation.PyClassAttribute;
