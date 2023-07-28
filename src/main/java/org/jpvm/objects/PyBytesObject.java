@@ -14,11 +14,18 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
 
   public static PyObject type = new PyBytesType();
   private byte[] data;
+  private int size;
   private PyLongObject hashCode;
   private boolean hashDone;
 
   public PyBytesObject(byte[] data) {
     this.data = data;
+    size = data.length;
+  }
+
+  public PyBytesObject(byte[] data, int size) {
+    this.data = data;
+    this.size = size;
   }
 
   public byte[] getData() {
@@ -148,5 +155,12 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   @Override
   public PyObject sqContain(PyObject o) throws PyException {
     return PySequenceMethods.super.sqContain(o);
+  }
+
+  @Override
+  public PyObject bool() throws PyException {
+    if (size == 0)
+      return BuiltIn.False;
+    return BuiltIn.True;
   }
 }

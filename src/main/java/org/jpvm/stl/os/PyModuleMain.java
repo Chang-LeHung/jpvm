@@ -5,6 +5,9 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
+import org.jpvm.pvm.InterpreterState;
+import org.jpvm.pvm.PVM;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +30,8 @@ public class PyModuleMain extends PyModuleObject {
       path = Path.of(".");
     }
     if (path != null) {
+      InterpreterState is = PVM.getThreadState().getIs();
+      is.dropGIL();
       try (Stream<Path> list = Files.list(path)) {
         PyListObject res = new PyListObject();
         list.forEach(x -> res.append(new PyUnicodeObject(x.getFileName().toString())));
@@ -34,6 +39,8 @@ public class PyModuleMain extends PyModuleObject {
       } catch (IOException e) {
         return PyErrorUtils.pyErrorFormat(
             PyErrorUtils.FileNotFoundError, "can not find a dir named " + args.get(0));
+      } finally {
+        is.takeGIL();
       }
     }
     PyErrorUtils.pyErrorFormat(

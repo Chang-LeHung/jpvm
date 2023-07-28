@@ -328,7 +328,6 @@ public class BuiltIn {
   }
 
   public static PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    PyFileOpenObject file;
     if(args.size() == 1){
       String path = args.get(0).toString();
       return new PyFileOpenObject(path);
