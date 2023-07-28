@@ -10,7 +10,7 @@ public class PyModuleObject extends PyObject {
   /** The module name. */
   private PyUnicodeObject moduleName;
 
-  protected PyModuleObject() {
+  PyModuleObject() {
     dict = new PyDictObject();
   }
 
