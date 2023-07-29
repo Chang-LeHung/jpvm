@@ -6,12 +6,12 @@ import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.annotation.PyClassAttribute;
 
 public class PyParseResultObject extends PyObject {
-  @PyClassAttribute private PyUnicodeObject protocol;
-  @PyClassAttribute private PyUnicodeObject host;
-  @PyClassAttribute private PyLongObject port;
-  @PyClassAttribute private PyUnicodeObject path;
-  @PyClassAttribute private PyUnicodeObject query;
-  @PyClassAttribute private PyUnicodeObject fragment;
+  @PyClassAttribute private final PyUnicodeObject protocol;
+  @PyClassAttribute private final PyUnicodeObject host;
+  @PyClassAttribute private final PyLongObject port;
+  @PyClassAttribute private final PyUnicodeObject path;
+  @PyClassAttribute private final PyUnicodeObject query;
+  @PyClassAttribute private final PyUnicodeObject fragment;
 
   public PyParseResultObject(
       String protocol, String host, int port, String path, String query, String fragment) {
@@ -27,19 +27,18 @@ public class PyParseResultObject extends PyObject {
   public PyUnicodeObject str() {
 
     return new PyUnicodeObject(
-        new String(
-            "ParseResult(protocol='"
-                + protocol
-                + "', host='"
-                + host
-                + "', port='"
-                + port
-                + "', path='"
-                + path
-                + "', query='"
-                + query
-                + "', fragment='"
-                + fragment
-                + "')"));
+        "ParseResult(protocol='"
+            + protocol
+            + "', host='"
+            + host
+            + "', port='"
+            + port
+            + "', path='"
+            + path
+            + "', query='"
+            + query
+            + "', fragment='"
+            + fragment
+            + "')");
   }
 }

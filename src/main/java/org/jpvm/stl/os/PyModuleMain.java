@@ -1,5 +1,9 @@
 package org.jpvm.stl.os;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -7,11 +11,6 @@ import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
 import org.jpvm.pvm.PVM;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
 
 public class PyModuleMain extends PyModuleObject {
 

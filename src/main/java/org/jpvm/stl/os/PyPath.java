@@ -1,5 +1,7 @@
 package org.jpvm.stl.os;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -7,9 +9,6 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
 import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class PyPath extends PyModuleObject {
 
