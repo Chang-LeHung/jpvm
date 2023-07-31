@@ -7,6 +7,8 @@ import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
+import org.jpvm.pvm.InterpreterState;
+import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyModuleMain extends PyModuleObject {
@@ -46,18 +48,26 @@ public class PyModuleMain extends PyModuleObject {
     if (args.size() != 2) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "copytree() takes two arguments");
     }
+    InterpreterState is = PVM.getThreadState().getIs();
+    is.dropGIL();
     Path source = Paths.get(args.get(0).toString());
-    if (!Files.isDirectory(source))
+    if (!Files.isDirectory(source)) {
+      is.takeGIL();
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "Directory " + source + " not found");
+    }
     Path destination = Paths.get(args.get(1).toString());
-    if (!Files.isDirectory(destination))
+    if (!Files.isDirectory(destination)) {
+      is.takeGIL();
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "Directory " + destination + " not found");
+    }
     try {
       copyDirectory(source, destination);
     } catch (IOException e) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
+    } finally {
+      is.takeGIL();
     }
     return BuiltIn.None;
   }
@@ -67,9 +77,12 @@ public class PyModuleMain extends PyModuleObject {
     if (args.size() != 2) {
       throw new RuntimeException("copytree() takes two arguments");
     }
+    InterpreterState is = PVM.getThreadState().getIs();
     Path source = Paths.get(args.get(0).toString());
     Path destination = Paths.get(args.get(1).toString());
+    is.dropGIL();
     if (!Files.exists(source)) {
+      is.takeGIL();
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "File " + source + " not found");
     }
@@ -80,7 +93,9 @@ public class PyModuleMain extends PyModuleObject {
       copyFile(source, destination);
     } catch (IOException e) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
+    } finally {
+      is.takeGIL();
     }
-    return BuiltIn.None;
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, "copyfile error occurred");
   }
 }
