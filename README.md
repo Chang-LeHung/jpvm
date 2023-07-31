@@ -188,6 +188,16 @@ public class math extends PyModuleObject {
                 └── PyModuleMain.java
 ```
 
+## 性能测试
+
+![](docs/fs.svg)
+
+![](docs/mc.svg)
+
+
+
+![](docs/tc.svg)
+
 # Contribution
 
 如果你想为本项目进行标准库的扩展，请首先在本项目当中提出 issue，欢迎大家👏提交 pr。
