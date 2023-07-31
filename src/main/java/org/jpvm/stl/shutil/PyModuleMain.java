@@ -49,9 +49,6 @@ public class PyModuleMain extends PyModuleObject {
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "Directory " + source + " not found");
     Path destination = Paths.get(args.get(1).toString());
-    if (!Files.isDirectory(destination))
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.FileNotFoundError, "Directory " + destination + " not found");
     try {
       copyDirectory(source, destination);
     } catch (IOException e) {
