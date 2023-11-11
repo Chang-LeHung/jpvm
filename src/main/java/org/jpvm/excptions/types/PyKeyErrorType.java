@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyKeyErrorType extends PyPythonBaseExceptionType {
+public class PyKeyErrorType extends PyExceptionType {
 
   public PyKeyErrorType() {
     name = "KeyError";

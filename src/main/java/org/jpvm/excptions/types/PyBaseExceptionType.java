@@ -7,9 +7,9 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
 
-public class PyPythonBaseExceptionType extends PyTypeType {
+public class PyBaseExceptionType extends PyTypeType {
 
-  public PyPythonBaseExceptionType() {
+  public PyBaseExceptionType() {
     super(PyPythonException.class);
     name = "BaseException";
   }

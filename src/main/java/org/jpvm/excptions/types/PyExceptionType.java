@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyExceptionType extends PyPythonBaseExceptionType {
+public class PyExceptionType extends PyBaseExceptionType {
 
   public PyExceptionType() {
     name = "Exception";

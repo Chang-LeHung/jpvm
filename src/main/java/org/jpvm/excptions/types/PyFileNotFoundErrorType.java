@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyFileNotFoundErrorType extends PyPythonBaseExceptionType {
+public class PyFileNotFoundErrorType extends PyExceptionType {
 
 	public PyFileNotFoundErrorType() {
 		name = "FileNotFoundError";

@@ -11,27 +11,26 @@ import org.jpvm.vm.ThreadState;
 
 public class PyErrorUtils {
 
-  public static PyPythonBaseExceptionType BaseException = new PyPythonBaseExceptionType();
+  public static PyBaseExceptionType BaseException = new PyBaseExceptionType();
 
-  public static PyPythonBaseExceptionType Exception = new PyExceptionType();
-  public static PyPythonBaseExceptionType AssertionError = new PyAssertionErrorType();
-  public static PyPythonBaseExceptionType AttributeError = new PyAttributeErrorType();
-  public static PyPythonBaseExceptionType KeyError = new PyKeyErrorType();
-  public static PyPythonBaseExceptionType NameError = new PyNameErrorType();
-  public static PyPythonBaseExceptionType NotImplementedError = new PyNotImplementedErrorType();
-  public static PyPythonBaseExceptionType RuntimeError = new PyRuntimeErrorType();
-  public static PyPythonBaseExceptionType TypeError = new PyTypeErrorType();
-  public static PyPythonBaseExceptionType ValueError = new PyValueErrorType();
-  public static PyPythonBaseExceptionType ZeroDivisionError = new PyZeroDivisionErrorType();
+  public static PyBaseExceptionType Exception = new PyExceptionType();
+  public static PyBaseExceptionType AssertionError = new PyAssertionErrorType();
+  public static PyBaseExceptionType AttributeError = new PyAttributeErrorType();
+  public static PyBaseExceptionType KeyError = new PyKeyErrorType();
+  public static PyBaseExceptionType NameError = new PyNameErrorType();
+  public static PyBaseExceptionType NotImplementedError = new PyNotImplementedErrorType();
+  public static PyBaseExceptionType RuntimeError = new PyRuntimeErrorType();
+  public static PyBaseExceptionType TypeError = new PyTypeErrorType();
+  public static PyBaseExceptionType ValueError = new PyValueErrorType();
+  public static PyBaseExceptionType ZeroDivisionError = new PyZeroDivisionErrorType();
 
-  public static PyPythonBaseExceptionType StackOverflowError = new PyStackOverflowType();
+  public static PyBaseExceptionType StackOverflowError = new PyStackOverflowType();
 
   public static PyImportErrorType ImportError = new PyImportErrorType();
   public static PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
   public static PyFileNotFoundErrorType FileNotFoundError = new PyFileNotFoundErrorType();
 
-  public static PyObject pyErrorFormat(PyPythonBaseExceptionType type, String msg)
-      throws PyException {
+  public static PyObject pyErrorFormat(PyBaseExceptionType type, String msg) throws PyException {
     // create an instance of the exception
     PyPythonException call = type.call(msg);
     ThreadState ts = JPVM.getThreadState();
@@ -120,10 +119,10 @@ public class PyErrorUtils {
       ts.setCurExcTrace(exceptionInfo.getCurExcTrace());
       return true;
     }
-    PyPythonBaseExceptionType type = null;
+    PyBaseExceptionType type = null;
     if (exc instanceof PyPythonException pyExc) {
-      type = (PyPythonBaseExceptionType) pyExc.getType();
-    } else if (exc instanceof PyPythonBaseExceptionType excType) {
+      type = (PyBaseExceptionType) pyExc.getType();
+    } else if (exc instanceof PyBaseExceptionType excType) {
       type = excType;
       exc = excType.call("");
     }

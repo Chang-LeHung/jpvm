@@ -3,7 +3,7 @@ package org.jpvm.vm;
 import org.jpvm.excptions.ExceptionInfo;
 import org.jpvm.excptions.PyPythonException;
 import org.jpvm.excptions.PyTraceBackObject;
-import org.jpvm.excptions.types.PyPythonBaseExceptionType;
+import org.jpvm.excptions.types.PyBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
@@ -17,7 +17,7 @@ public class ThreadState {
   /** point to stack top exception, exception being handled currently. */
   private ExceptionInfo exceptionInfo;
 
-  /** {@link PyPythonBaseExceptionType} */
+  /** {@link PyBaseExceptionType} */
   private PyObject curExcType;
   /** {@link PyPythonException} */
   private PyObject curExcValue;

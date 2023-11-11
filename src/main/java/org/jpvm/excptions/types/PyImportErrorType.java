@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyImportErrorType extends PyPythonBaseExceptionType {
+public class PyImportErrorType extends PyExceptionType {
 
   public PyImportErrorType() {
     name = "ImportError";

@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyAssertionErrorType extends PyPythonBaseExceptionType {
+public class PyAssertionErrorType extends PyExceptionType {
 
   public PyAssertionErrorType() {
     name = "AssertionError";

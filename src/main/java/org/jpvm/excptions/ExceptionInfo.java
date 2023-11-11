@@ -1,11 +1,11 @@
 package org.jpvm.excptions;
 
-import org.jpvm.excptions.types.PyPythonBaseExceptionType;
+import org.jpvm.excptions.types.PyBaseExceptionType;
 import org.jpvm.objects.PyObject;
 
 public class ExceptionInfo {
 
-  /** {@link PyPythonBaseExceptionType} */
+  /** {@link PyBaseExceptionType} */
   private PyObject curExcType;
   /** {@link PyPythonException} */
   private PyObject curExcValue;

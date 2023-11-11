@@ -2,7 +2,7 @@ package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
 
-public class PyAttributeErrorType extends PyPythonBaseExceptionType {
+public class PyAttributeErrorType extends PyExceptionType {
 
   public PyAttributeErrorType() {
     name = "AttributeError";
