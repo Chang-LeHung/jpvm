@@ -35,22 +35,12 @@ def matrix_multiply(matrix1, matrix2):
 
 
 # 生成两个矩阵
-matrix1 = generate_matrix(3, 2)
-matrix2 = generate_matrix(2, 3)
+matrix1 = generate_matrix(16, 800)
+matrix2 = generate_matrix(800, 10000)
 
 import time
-
 start = time.time()
 result = matrix_multiply(matrix1, matrix2)
 end = time.time()
 print(end - start)
-print("matrix 1")
-for row in matrix1:
-    print(row)
-print("matrix 2")
-for row in matrix2:
-    print(row)
 
-print("matrix 1 * matrix 2")
-for row in result:
-    print(row)

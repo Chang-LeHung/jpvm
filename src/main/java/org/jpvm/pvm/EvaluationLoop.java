@@ -132,18 +132,8 @@ public class EvaluationLoop {
     exit_loop:
     for (; ; ) {
       // evaluation loop
-      is.takeGIL();
-      assert PVM.getThreadState().getIs().getCurrentHolder() == Thread.currentThread();
       main_loop:
       while (iterator.hasNext()) {
-        if (is.isDropGILRequest()) {
-          // release global interpreter lock
-          is.dropGIL();
-          // require  global interpreter lock
-          is.takeGIL();
-          assert PVM.getThreadState().getIs().getCurrentHolder() == Thread.currentThread();
-        }
-        assert PVM.getThreadState().getIs().getCurrentHolder() == Thread.currentThread();
         Instruction ins = iterator.next();
         assert PVM.getThreadState().getIs().getCurrentHolder() == Thread.currentThread();
         try {

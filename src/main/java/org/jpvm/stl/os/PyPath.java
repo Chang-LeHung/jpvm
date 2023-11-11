@@ -1,7 +1,5 @@
 package org.jpvm.stl.os;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
@@ -9,6 +7,9 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
 import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class PyPath extends PyModuleObject {
 
@@ -43,12 +44,9 @@ public class PyPath extends PyModuleObject {
   public PyObject isfile(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       InterpreterState is = PVM.getThreadState().getIs();
-      is.dropGIL();
       if (Paths.get(args.get(0).toString()).toFile().isFile()) {
-        is.takeGIL();
         return BuiltIn.True;
       } else {
-        is.takeGIL();
         return BuiltIn.False;
       }
     }

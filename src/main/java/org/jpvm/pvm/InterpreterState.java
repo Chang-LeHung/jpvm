@@ -9,7 +9,6 @@ public class InterpreterState {
    * modules have been imported
    */
   private final PyDictObject modules;
-  private final GILRuntimeState gil;
   private final PyListObject searchPath;
   /**
    * the builtins module
@@ -19,7 +18,6 @@ public class InterpreterState {
 
   public InterpreterState(long interval) {
     modules = new PyDictObject();
-    gil = new GILRuntimeState(interval);
     searchPath = new PyListObject();
   }
 
@@ -66,42 +64,6 @@ public class InterpreterState {
 
   public void setMaxRecursionDepth(int maxRecursionDepth) {
     this.maxRecursionDepth = maxRecursionDepth;
-  }
-
-  public void takeGIL() {
-    gil.takeGIL();
-  }
-
-  public void dropGIL() {
-    gil.dropGIL();
-  }
-
-  public long getGILInterval() {
-    return gil.getInterval();
-  }
-
-  public void setGILInterval(long interval) {
-    gil.setInterval(interval);
-  }
-
-  public boolean isLocked() {
-    return gil.isLocked();
-  }
-
-  public long getSwitchNumber() {
-    return gil.getSwitchNumber();
-  }
-
-  public void setSwitchNumber(long switchNumber) {
-    gil.setSwitchNumber(switchNumber);
-  }
-
-  public Thread getCurrentHolder() {
-    return gil.getCurrentHolder();
-  }
-
-  public boolean isDropGILRequest() {
-    return gil.isDropGILRequest();
   }
 
   public void registerModule(PyUnicodeObject name, PyModuleObject module) throws PyException {

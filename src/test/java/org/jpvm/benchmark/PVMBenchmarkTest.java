@@ -14,9 +14,23 @@ import org.openjdk.jmh.annotations.*;
 @Fork(1)
 public class PVMBenchmarkTest {
 
-  @Benchmark
-  public void testFib() throws PyException, IOException {
-    String filename = "src/test/resources/benchmark/__pycache__/fib.cpython-38.pyc";
+  //  @Benchmark
+  //  public void testFib() throws PyException, IOException {
+  //    String filename = "src/test/resources/benchmark/__pycache__/fib.cpython-38.pyc";
+  //    PVM pvm = new PVM(filename);
+  //    pvm.run();
+  //  }
+
+  //  @Test
+  //  public void testMatrixMultiply() throws PyException, IOException {
+  //    String filename = "src/test/resources/benchmark/__pycache__/matrix.cpython-38.pyc";
+  //    PVM pvm = new PVM(filename);
+  //    pvm.run();
+  //  }
+
+  //  @Test
+  public void testMatrixMultiplyConcurrent() throws PyException, IOException {
+    String filename = "src/test/resources/benchmark/__pycache__/conmatrix.cpython-38.pyc";
     PVM pvm = new PVM(filename);
     pvm.run();
   }

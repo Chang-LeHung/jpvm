@@ -6,39 +6,43 @@ import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
-public class PyFunctionObject extends PyObject
-        implements TypeDescriptorGet {
+public class PyFunctionObject extends PyObject implements TypeDescriptorGet {
 
   public static PyObject type = new PyFunctionType();
   public static PyDictObject zero = new PyDictObject();
-  /**
-   * type of {@link PyCodeObject}
-   */
+  /** type of {@link PyCodeObject} */
   private PyObject funcCode;
+
   private PyObject funcGlobals;
+  /** {@link PyTupleObject} of {@link PyCellObject} */
   private PyObject funcClosure;
+
   private PyObject funcLocals;
-  /**
-   * NULL or type of {@link PyTupleObject}
-   */
+  /** NULL or type of {@link PyTupleObject} */
   private PyObject funcDefaults;
-  /**
-   * NULL or type of {@link PyDictObject}
-   */
+  /** NULL or type of {@link PyDictObject} */
   private PyObject funcKwDefaults;
   /**
-   * only exits if the 1st element of {@link PyCodeObject#getCoConsts()}
-   * is {@link PyUnicodeObject} and doc is that.
-   * see cpython(3.8.16) funcobject.c:57
+   * only exits if the 1st element of {@link PyCodeObject#getCoConsts()} is {@link PyUnicodeObject}
+   * and doc is that. see cpython(3.8.16) funcobject.c:57
    */
   private PyObject funcDoc;
+
   private PyObject funcName;
   private PyObject funcDict;
   private PyObject funcQualName;
   private PyObject funcModule;
   private PyObject annotation;
 
-  public PyFunctionObject(PyCodeObject funcCode, PyObject funcGlobals, PyObject funcDefaults, PyObject funcKwDefaults, PyObject funcDoc, PyObject funcName, PyObject funcDict, PyObject funcQualName) {
+  public PyFunctionObject(
+      PyCodeObject funcCode,
+      PyObject funcGlobals,
+      PyObject funcDefaults,
+      PyObject funcKwDefaults,
+      PyObject funcDoc,
+      PyObject funcName,
+      PyObject funcDict,
+      PyObject funcQualName) {
     this.funcCode = funcCode;
     this.funcGlobals = funcGlobals;
     this.funcLocals = new PyDictObject();
@@ -51,28 +55,21 @@ public class PyFunctionObject extends PyObject
     int cellSize = (funcCode).freeVarsSize();
     if (cellSize != 0) {
       funcClosure = new PyTupleObject(cellSize);
-      for (int i = 0; i < cellSize; i++)
-        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
-    }
-    else
-      funcClosure = PyTupleObject.zero;
+      for (int i = 0; i < cellSize; i++) ((PyTupleObject) funcClosure).set(i, new PyCellObject());
+    } else funcClosure = PyTupleObject.zero;
   }
 
-  public PyFunctionObject(PyCodeObject code, PyDictObject globals,
-                          PyUnicodeObject funcQualName) {
+  public PyFunctionObject(PyCodeObject code, PyDictObject globals, PyUnicodeObject funcQualName) {
     funcCode = code;
     funcGlobals = globals;
     this.funcQualName = funcQualName;
     this.funcName = code.getCoName();
     funcDict = new PyDictObject();
-    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    int cellSize = ((PyCodeObject) funcCode).freeVarsSize();
     if (cellSize != 0) {
       funcClosure = new PyTupleObject(cellSize);
-      for (int i = 0; i < cellSize; i++)
-        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
-    }
-    else
-      funcClosure = PyTupleObject.zero;
+      for (int i = 0; i < cellSize; i++) ((PyTupleObject) funcClosure).set(i, new PyCellObject());
+    } else funcClosure = PyTupleObject.zero;
   }
 
   public PyFunctionObject(PyCodeObject code, PyDictObject globals) {
@@ -81,19 +78,15 @@ public class PyFunctionObject extends PyObject
     funcGlobals = globals;
     this.funcName = code.getCoName();
     funcDict = new PyDictObject();
-    int cellSize = ((PyCodeObject)funcCode).freeVarsSize();
+    int cellSize = ((PyCodeObject) funcCode).freeVarsSize();
     if (cellSize != 0) {
       funcClosure = new PyTupleObject(cellSize);
-      for (int i = 0; i < cellSize; i++)
-        ((PyTupleObject)funcClosure).set(i, new PyCellObject());
-    }
-    else
-      funcClosure = PyTupleObject.zero;
+      for (int i = 0; i < cellSize; i++) ((PyTupleObject) funcClosure).set(i, new PyCellObject());
+    } else funcClosure = PyTupleObject.zero;
   }
 
   public static PyBoolObject check(PyObject o) {
-    if (type == o)
-      return BuiltIn.True;
+    if (type == o) return BuiltIn.True;
     return BuiltIn.False;
   }
 
@@ -130,8 +123,7 @@ public class PyFunctionObject extends PyObject
   }
 
   public PyObject getFuncDefaults() {
-    if (funcDefaults == null)
-      funcDefaults = PyTupleObject.getTupleBySize(0);
+    if (funcDefaults == null) funcDefaults = PyTupleObject.getTupleBySize(0);
     return funcDefaults;
   }
 
@@ -140,8 +132,7 @@ public class PyFunctionObject extends PyObject
   }
 
   public PyObject getFuncKwDefaults() {
-    if (funcKwDefaults == null)
-      return zero;
+    if (funcKwDefaults == null) return zero;
     return funcKwDefaults;
   }
 
@@ -207,10 +198,7 @@ public class PyFunctionObject extends PyObject
 
   @Override
   public String toString() {
-    return "PyFunctionObject{" +
-        "funcName=" + funcName +
-        ", funcQualName=" + funcQualName +
-        '}';
+    return "PyFunctionObject{" + "funcName=" + funcName + ", funcQualName=" + funcQualName + '}';
   }
 
   public PyObject getFuncClosure() {
@@ -230,11 +218,11 @@ public class PyFunctionObject extends PyObject
   }
 
   public int getFreeVarsSize() {
-    return ((PyCodeObject)funcCode).freeVarsSize();
+    return ((PyCodeObject) funcCode).freeVarsSize();
   }
 
   @Override
   public PyObject descrGet(PyObject obj, PyObject cls) throws PyNotImplemented {
-    return new PyMethodObject(obj, this, ((PyUnicodeObject)funcName).getData());
+    return new PyMethodObject(obj, this, ((PyUnicodeObject) funcName).getData());
   }
 }

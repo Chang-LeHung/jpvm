@@ -91,7 +91,7 @@ public class PyRangeObject extends PyObject implements TypeIterable {
     public static PyObject type = new PyRangeItrType();
 
     @Override
-    public PyObject next() throws PyException {
+    public synchronized PyObject next() throws PyException {
       if (hasNext()) {
         PyLongObject ret = new PyLongObject(cur);
         cur += step;

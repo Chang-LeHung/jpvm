@@ -24,7 +24,7 @@ public class PyDictObject extends PyObject
     this.map = new HashMap<>();
   }
 
-  public PyObject put(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject put(PyObject key, PyObject val) throws PyException {
     try {
       return map.put(key, val);
     } catch (ConcurrentModificationException e) {
@@ -33,11 +33,11 @@ public class PyDictObject extends PyObject
     }
   }
 
-  public PyObject add(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject add(PyObject key, PyObject val) throws PyException {
     return put(key, val);
   }
 
-  public void remove(PyObject key) {
+  public synchronized void remove(PyObject key) {
     map.remove(key);
   }
 
@@ -49,7 +49,7 @@ public class PyDictObject extends PyObject
     return map.getOrDefault(key, val);
   }
 
-  public void addAll(PyDictObject dict) {
+  public synchronized void addAll(PyDictObject dict) {
     if (dict != null) map.putAll(dict.getMap());
   }
 
@@ -139,7 +139,7 @@ public class PyDictObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject remove = map.remove(args.get(0));
       if (remove == null) return BuiltIn.None;
@@ -150,13 +150,13 @@ public class PyDictObject extends PyObject
   }
 
   @PyClassMethod
-  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     map.clear();
     return BuiltIn.None;
   }
 
   @PyClassMethod
-  public PyObject update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyObject update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyDictObject o) {
@@ -164,7 +164,8 @@ public class PyDictObject extends PyObject
         return BuiltIn.None;
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, "dict update method only require one PyDictObject object");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.Exception, "dict update method only require one PyDictObject object");
     return null;
   }
 
@@ -193,7 +194,8 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject mpAssSubscript(PyObject key, PyObject val) throws PyKeyError, PyNotImplemented {
+  public synchronized PyObject mpAssSubscript(PyObject key, PyObject val)
+      throws PyKeyError, PyNotImplemented {
     if (null == val) map.remove(key);
     else map.put(key, val);
     return BuiltIn.None;
@@ -205,12 +207,12 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyException {
+  public synchronized PyObject sqConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqConcat(o);
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyException {
+  public synchronized PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 
@@ -220,7 +222,7 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
+  public synchronized PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
     return PySequenceMethods.super.sqAssItem(key, val);
   }
 
@@ -231,12 +233,12 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqInplaceConcat(PyObject o) throws PyException {
+  public synchronized PyObject sqInplaceConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceConcat(o);
   }
 
   @Override
-  public PyObject sqInplaceRepeat(PyObject o) throws PyException {
+  public synchronized PyObject sqInplaceRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceRepeat(o);
   }
 

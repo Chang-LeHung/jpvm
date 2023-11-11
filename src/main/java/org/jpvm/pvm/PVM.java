@@ -132,10 +132,7 @@ public class PVM {
     interpreterState.setBuiltins(builtins);
     Yaml yaml = new Yaml();
     var map = yaml.loadAs(this.getClass().getResourceAsStream("/jpvm-config.yml"), Map.class);
-    Object o = map.get("vm-interval");
-    if (o instanceof Integer) {
-      interpreterState.setGILInterval((Integer) o);
-    }
+    Object o;
     o = map.get("max-recursive-depth");
     if (o instanceof Integer) {
       interpreterState.setMaxRecursionDepth((Integer) o);
@@ -153,10 +150,8 @@ public class PVM {
     ts.setMainThread(true);
     ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);
-    ts.getIs().takeGIL();
     PyObject object = loop.pyEvalFrame();
     if (object == null) PyErrorUtils.printExceptionInformation();
-    ts.getIs().dropGIL();
     PyThreadObject.type.tss.remove();
     state = PVM_STATE.FINISHED;
   }

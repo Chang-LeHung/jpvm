@@ -20,8 +20,6 @@ public class PyModuleMain extends PyModuleObject {
       PyObject object = args.get(0);
       if (object instanceof PyLongObject o) {
         try {
-          InterpreterState is = PVM.getThreadState().getIs();
-          is.dropGIL();
           TimeUnit.SECONDS.sleep(o.getData());
           return BuiltIn.None;
         } catch (InterruptedException ignore) {

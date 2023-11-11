@@ -1,21 +1,17 @@
 package org.jpvm.stl.shutil;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.PVM;
 import org.jpvm.python.BuiltIn;
 
-public class PyModuleMain extends PyModuleObject {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
-  public PyModuleMain(PyUnicodeObject moduleName) {
-    super(moduleName);
-  }
+public class PyModuleMain extends PyModuleObject {
 
   public void copyFile(Path source, Path destination) throws IOException {
     Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
@@ -48,26 +44,15 @@ public class PyModuleMain extends PyModuleObject {
     if (args.size() != 2) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "copytree() takes two arguments");
     }
-    InterpreterState is = PVM.getThreadState().getIs();
-    is.dropGIL();
     Path source = Paths.get(args.get(0).toString());
-    if (!Files.isDirectory(source)) {
-      is.takeGIL();
+    if (!Files.isDirectory(source))
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "Directory " + source + " not found");
-    }
     Path destination = Paths.get(args.get(1).toString());
-    if (!Files.isDirectory(destination)) {
-      is.takeGIL();
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.FileNotFoundError, "Directory " + destination + " not found");
-    }
     try {
       copyDirectory(source, destination);
     } catch (IOException e) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
-    } finally {
-      is.takeGIL();
     }
     return BuiltIn.None;
   }
@@ -77,12 +62,9 @@ public class PyModuleMain extends PyModuleObject {
     if (args.size() != 2) {
       throw new RuntimeException("copytree() takes two arguments");
     }
-    InterpreterState is = PVM.getThreadState().getIs();
     Path source = Paths.get(args.get(0).toString());
     Path destination = Paths.get(args.get(1).toString());
-    is.dropGIL();
     if (!Files.exists(source)) {
-      is.takeGIL();
       return PyErrorUtils.pyErrorFormat(
           PyErrorUtils.FileNotFoundError, "File " + source + " not found");
     }
@@ -93,9 +75,11 @@ public class PyModuleMain extends PyModuleObject {
       copyFile(source, destination);
     } catch (IOException e) {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
-    } finally {
-      is.takeGIL();
     }
-    return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, "copyfile error occurred");
+    return BuiltIn.None;
+  }
+
+  public PyModuleMain(PyUnicodeObject moduleName) {
+    super(moduleName);
   }
 }

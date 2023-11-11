@@ -32,7 +32,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
     return data;
   }
 
-  public void setData(byte[] data) {
+  public synchronized void setData(byte[] data) {
     this.data = data;
   }
 
@@ -138,12 +138,12 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
   }
 
   @Override
-  public PyObject sqConcat(PyObject o) throws PyException {
+  public synchronized PyObject sqConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqConcat(o);
   }
 
   @Override
-  public PyObject sqRepeat(PyObject o) throws PyException {
+  public synchronized PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 
