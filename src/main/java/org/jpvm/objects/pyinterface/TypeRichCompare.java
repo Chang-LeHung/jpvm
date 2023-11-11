@@ -1,6 +1,6 @@
 package org.jpvm.objects.pyinterface;
 
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.PyBoolObject;
 import org.jpvm.objects.PyObject;
 

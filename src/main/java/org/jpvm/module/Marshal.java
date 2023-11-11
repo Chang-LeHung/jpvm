@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;

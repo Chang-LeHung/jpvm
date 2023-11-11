@@ -1,6 +1,6 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.vm.Abstract;
 

@@ -1,6 +1,6 @@
 package org.jpvm.excptions;
 
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.types.*;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;

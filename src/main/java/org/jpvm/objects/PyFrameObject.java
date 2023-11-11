@@ -3,7 +3,7 @@ package org.jpvm.objects;
 import java.util.Arrays;
 import java.util.Stack;
 import org.jpvm.bytecode.ByteCodeBuffer;
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.TryBlockHandler;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;

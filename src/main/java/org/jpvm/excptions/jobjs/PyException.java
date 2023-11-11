@@ -1,4 +1,4 @@
-package org.jpvm.excptions.objs;
+package org.jpvm.excptions.jobjs;
 
 import org.jpvm.objects.PyUnicodeObject;
 

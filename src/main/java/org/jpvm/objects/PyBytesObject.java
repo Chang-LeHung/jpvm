@@ -2,8 +2,8 @@ package org.jpvm.objects;
 
 import java.util.Arrays;
 import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.objs.PyException;
-import org.jpvm.excptions.objs.PyNotImplemented;
+import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.types.PyBytesType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;

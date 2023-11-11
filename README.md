@@ -37,7 +37,7 @@ After executing the above command, a subdirectory named `__pycache__` will be cr
 containing a file named `fib.cpython-38.pyc`. Use the following Java program to execute this Python program:
 
 ```java
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.vm.JPVM;
 
 import java.io.IOException;

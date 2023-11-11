@@ -1,6 +1,6 @@
 package org.jpvm.pycParser;
 
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;

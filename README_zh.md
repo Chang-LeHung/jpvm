@@ -36,7 +36,7 @@ python -m compileall fib.py
 程序执行这个 python 程序：
 
 ```java
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.vm.JPVMM;
 
 import java.io.IOException;

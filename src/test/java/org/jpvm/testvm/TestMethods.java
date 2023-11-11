@@ -1,7 +1,7 @@
 package org.jpvm.testvm;
 
 import java.io.*;
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.vm.EvaluationLoop;

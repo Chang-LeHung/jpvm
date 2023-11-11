@@ -1,7 +1,7 @@
 package org.jpvm.testvm;
 
 import java.io.IOException;
-import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;

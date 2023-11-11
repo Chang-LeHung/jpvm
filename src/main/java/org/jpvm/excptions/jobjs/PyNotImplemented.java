@@ -1,4 +1,4 @@
-package org.jpvm.excptions.objs;
+package org.jpvm.excptions.jobjs;
 
 
 public class PyNotImplemented extends PyException {
