@@ -62,16 +62,14 @@ In the above example, we defined a function called `fib`. We can directly call t
 possible to pass parameters using the function name and Java native objects:
 
 ```java
-public void testCall(){
-		String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
-		try{
-		JPVM pvm=new JPVM(filename);
-		pvm.run();
-		System.out.println(JPVM.call("fib",10));
-		}catch(PyException|IOException e){
-		throw new RuntimeException(e);
-		}
-		}
+String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
+try{
+    JPVM pvm=new JPVM(filename);
+    pvm.run();
+    System.out.println(JPVM.call("fib",10));
+}catch(PyException|IOException e){
+    throw new RuntimeException(e);
+}
 ```
 
 # Download & Usage
