@@ -3,7 +3,7 @@ package org.jpvm.vm;
 import java.io.IOException;
 import org.jpvm.errors.PyException;
 
-/** jpvm boot from this class */
+/** jpvm boots from this class */
 public class PyMain {
 
   public static void main(String[] args) throws PyException, IOException {
