@@ -38,6 +38,7 @@ containing a file named `fib.cpython-38.pyc`. Use the following Java program to 
 
 ```java
 import org.jpvm.errors.PyException;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.pvm.PVM;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class Example {
 	public static void main(String[] args) {
 		String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
 		try {
-			new PVM(filename).run();
+			new JPVM(filename).run();
 		} catch (PyException | IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -62,15 +63,15 @@ possible to pass parameters using the function name and Java native objects:
 
 ```java
   public void testCall(){
-    String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
-    try{
-      PVM pvm = new PVM(filename);
-      pvm.run();
-      System.out.println(pvm.call("fib",10));
-    }catch(PyException | IOException e){
-      throw new RuntimeException(e);
-    }
-  }
+		String filename="src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
+		try{
+		PVM JPVM=new PVM(filename);
+		JPVM.run();
+		System.out.println(JPVM.call("fib",10));
+		}catch(PyException|IOException e){
+		throw new RuntimeException(e);
+		}
+		}
 
 ```
 

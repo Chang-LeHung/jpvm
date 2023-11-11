@@ -8,9 +8,9 @@ public class PyMain {
 
   public static void main(String[] args) throws PyException, IOException {
     if (args.length == 1) {
-      PVM pvm = new PVM(args[0]);
-      pvm.run();
-      pvm.exit();
+      JPVM JPVM = new JPVM(args[0]);
+      JPVM.run();
+      JPVM.exit();
       return;
     }
     System.err.println("Please input a pyc filename");

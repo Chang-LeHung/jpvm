@@ -8,7 +8,7 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyGeneratorType;
 import org.jpvm.pvm.EvaluationLoop;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
@@ -83,11 +83,11 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
         evalLoop.getFrame().setTop(1, BuiltIn.None);
       }
     }
-    PyFrameObject cf = PVM.getThreadState().getCurrentFrame();
+    PyFrameObject cf = JPVM.getThreadState().getCurrentFrame();
     PyFrameObject f = evalLoop.getFrame();
-    PVM.getThreadState().setCurrentFrame(f);
+    JPVM.getThreadState().setCurrentFrame(f);
     PyObject res = evalLoop.pyEvalFrame();
-    PVM.getThreadState().setCurrentFrame(cf);
+    JPVM.getThreadState().setCurrentFrame(cf);
     if (!evalLoop.getIterator().hasNext()) return BuiltIn.PyExcStopIteration;
     else return res;
   }

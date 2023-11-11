@@ -19,7 +19,7 @@ import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.pvm.Abstract;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.pvm.ThreadState;
 
 public class BuiltIn {
@@ -293,7 +293,7 @@ public class BuiltIn {
       bases.set(i - 2, args.get(i));
     }
     PyDictObject locals = new PyDictObject();
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     Abstract.abstractCall(function, null, null, null, ts.getCurrentFrame(), locals);
     args = new PyTupleObject(3);
     args.set(0, name);
@@ -328,20 +328,24 @@ public class BuiltIn {
   }
 
   public static PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if(args.size() == 1){
+    if (args.size() == 1) {
       String path = args.get(0).toString();
       return new PyFileOpenObject(path);
-    }else if(args.size() == 2){
+    } else if (args.size() == 2) {
       String path = args.get(0).toString();
       String mode = args.get(1).toString();
-      if(mode.equals("r") || mode.equals("w") || mode.equals("rw") || mode.equals("a") || mode.equals("rb") || mode.equals("wb")){
+      if (mode.equals("r")
+          || mode.equals("w")
+          || mode.equals("rw")
+          || mode.equals("a")
+          || mode.equals("rb")
+          || mode.equals("wb")) {
         return new PyFileOpenObject(path, mode);
-      }else{
+      } else {
         PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "not support file mode");
       }
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "the num of attributes error");
     return null;
   }
-
 }

@@ -39,8 +39,8 @@ matrix1 = generate_matrix(16, 800)
 matrix2 = generate_matrix(800, 10000)
 
 import time
+
 start = time.time()
 result = matrix_multiply(matrix1, matrix2)
 end = time.time()
 print(end - start)
-

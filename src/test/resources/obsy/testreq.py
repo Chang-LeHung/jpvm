@@ -4,7 +4,6 @@ from url import urlopen, urlretrieve, urlparse
 ur = urlopen("https://www.baidu.com")
 print(ur)
 
-
 # urlretrieve("https://www.baidu.com", "src/test/resources/obsy/test.txt");
 
 
@@ -16,5 +15,3 @@ print(o)
 # print(o.path)
 # print(o.query)
 # print(o.fragment)
-
-

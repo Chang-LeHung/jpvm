@@ -14,11 +14,9 @@ public class PyFrameObject extends PyObject {
   private final PyCodeObject code;
   /** value stack */
   private final PyObject[] stack;
-
-  private int used;
-
   private final PyObject[] localPlus;
   private final ByteCodeBuffer byteCodeBuffer;
+  private int used;
   private PyDictObject builtins;
   private PyDictObject globals;
   private PyDictObject locals;
@@ -28,7 +26,7 @@ public class PyFrameObject extends PyObject {
   private PyFrameObject back;
 
   private PyFunctionObject func;
-  private PyObject[] cells;
+  private final PyObject[] cells;
 
   private Stack<TryBlockHandler> tryBlockHandlerStack;
 

@@ -1,17 +1,19 @@
 package org.jpvm.stl.shutil;
 
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.python.BuiltIn;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-
 public class PyModuleMain extends PyModuleObject {
+
+  public PyModuleMain(PyUnicodeObject moduleName) {
+    super(moduleName);
+  }
 
   public void copyFile(Path source, Path destination) throws IOException {
     Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
@@ -77,9 +79,5 @@ public class PyModuleMain extends PyModuleObject {
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError, e.getMessage());
     }
     return BuiltIn.None;
-  }
-
-  public PyModuleMain(PyUnicodeObject moduleName) {
-    super(moduleName);
   }
 }

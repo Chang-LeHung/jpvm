@@ -2,7 +2,7 @@ package org.jpvm.testvm;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -12,19 +12,19 @@ public class TestImport {
   @Test
   public void testImport() throws PyException, IOException {
     String filename = "src/test/resources/obsy/__pycache__/test04.cpython-38.pyc";
-    new PVM(filename).run();
+    new JPVM(filename).run();
   }
 
   @Test
   public void testImport02() throws PyException, IOException {
     String filename = "src/test/resources/obsy/__pycache__/test05.cpython-38.pyc";
-    new PVM(filename).run();
+    new JPVM(filename).run();
   }
 
   @Test
   public void testImport03() throws PyException, IOException {
     String filename = "src/test/resources/obsy/__pycache__/test07.cpython-38.pyc";
-    new PVM(filename).run();
+    new JPVM(filename).run();
   }
 
   @Test
@@ -40,6 +40,6 @@ public class TestImport {
   @Test
   public void testreq() throws PyException, IOException {
     String filename = "src/test/resources/obsy/__pycache__/testreq.cpython-38.pyc";
-    new PVM(filename).run();
+    new JPVM(filename).run();
   }
 }

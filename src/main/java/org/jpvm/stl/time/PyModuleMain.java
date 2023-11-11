@@ -6,7 +6,7 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyModuleMain extends PyModuleObject {
@@ -23,19 +23,13 @@ public class PyModuleMain extends PyModuleObject {
           TimeUnit.SECONDS.sleep(o.getData());
           return BuiltIn.None;
         } catch (InterruptedException ignore) {
-        } finally {
-          InterpreterState is = PVM.getThreadState().getIs();
-          is.takeGIL();
         }
       } else if (object instanceof PyFloatObject o) {
-        InterpreterState is = PVM.getThreadState().getIs();
+        InterpreterState is = JPVM.getThreadState().getIs();
         try {
-          is.dropGIL();
           long l = (long) (o.getData() * 1000);
           TimeUnit.MILLISECONDS.sleep(l);
         } catch (InterruptedException ignore) {
-        }finally{
-          is.takeGIL();
         }
         return BuiltIn.None;
       }

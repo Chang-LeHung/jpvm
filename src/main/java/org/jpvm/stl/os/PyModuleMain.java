@@ -1,17 +1,16 @@
 package org.jpvm.stl.os;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.PVM;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import org.jpvm.pvm.JPVM;
 
 public class PyModuleMain extends PyModuleObject {
 
@@ -30,7 +29,7 @@ public class PyModuleMain extends PyModuleObject {
       path = Path.of(".");
     }
     if (path != null) {
-      InterpreterState is = PVM.getThreadState().getIs();
+      InterpreterState is = JPVM.getThreadState().getIs();
       try (Stream<Path> list = Files.list(path)) {
         PyListObject res = new PyListObject();
         list.forEach(x -> res.append(new PyUnicodeObject(x.getFileName().toString())));

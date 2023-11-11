@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.junit.Test;
 
 public class TestPvm {
@@ -34,7 +34,7 @@ public class TestPvm {
   public void testPVM() {
     String filename = "src/test/resources/pys/__pycache__/add.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -44,7 +44,7 @@ public class TestPvm {
   public void testStringConcat() {
     String filename = "src/test/resources/syntax/__pycache__/test07.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -68,7 +68,7 @@ public class TestPvm {
   public void testStr() {
     String filename = "src/test/resources/pys/__pycache__/str_test.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -78,7 +78,7 @@ public class TestPvm {
   public void testStr02() {
     String filename = "src/test/resources/syntax/__pycache__/test05.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -88,7 +88,7 @@ public class TestPvm {
   public void test03() {
     String filename = "src/test/resources/obsy/__pycache__/test03.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }

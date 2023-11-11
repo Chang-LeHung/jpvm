@@ -2,7 +2,7 @@ package org.jpvm.testvm;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.junit.Test;
 
 public class TestMagicFunc {
@@ -11,7 +11,7 @@ public class TestMagicFunc {
   public void testMagicFunc() {
     String filename = "src/test/resources/testpy/__pycache__/testMagicFunc.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -21,7 +21,7 @@ public class TestMagicFunc {
   public void testMagicFunc1() {
     String filename = "src/test/resources/testpy/__pycache__/testOtherMagic.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }

@@ -6,7 +6,7 @@ import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.pvm.ThreadState;
 
 public class PyErrorUtils {
@@ -34,7 +34,7 @@ public class PyErrorUtils {
       throws PyException {
     // create an instance of the exception
     PyPythonException call = type.call(msg);
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     call.setContext((PyPythonException) ts.getExceptionInfo().getCurExcValue());
     ts.setCurExcType(type);
     ts.setCurExcValue(call);
@@ -42,13 +42,13 @@ public class PyErrorUtils {
   }
 
   public static PyTraceBackObject getTraceback() {
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     PyFrameObject currentFrame = ts.getCurrentFrame();
     return new PyTraceBackObject(currentFrame);
   }
 
   public static void cleanThreadException() {
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     ts.setCurExcTrace(null);
     ts.setCurExcValue(null);
     ts.setCurExcType(null);
@@ -56,7 +56,7 @@ public class PyErrorUtils {
 
   public static void printExceptionInformation() {
     System.err.print("\033[31m");
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     PyObject curExcType = ts.getCurExcType();
     if (curExcType != null) {
       var curExcValue = (PyPythonException) ts.getCurExcValue();
@@ -97,14 +97,14 @@ public class PyErrorUtils {
   }
 
   public static void restoreExceptionState(PyObject type, PyObject val, PyObject tb) {
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     ts.setCurExcType(type);
     ts.setCurExcValue(val);
     ts.setCurExcTrace(tb);
   }
 
   public static void pyTraceBackHere() {
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     PyTraceBackObject tb = getTraceback();
     tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
@@ -112,7 +112,7 @@ public class PyErrorUtils {
   }
 
   public static boolean raiseException(PyObject exc, PyObject cause) throws PyException {
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     if (exc == null) {
       ExceptionInfo exceptionInfo = ts.getExceptionInfo();
       ts.setCurExcValue(exceptionInfo.getCurExcValue());

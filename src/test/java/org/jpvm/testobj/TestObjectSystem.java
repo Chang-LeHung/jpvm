@@ -5,7 +5,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class TestObjectSystem {
   public void testClass01() {
     String filename = "src/test/resources/obsy/__pycache__/test01.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -33,7 +33,7 @@ public class TestObjectSystem {
   public void testClass02() {
     String filename = "src/test/resources/obsy/__pycache__/test02.cpython-38.pyc";
     try {
-      new PVM(filename).run();
+      new JPVM(filename).run();
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -43,9 +43,9 @@ public class TestObjectSystem {
   public void testCall() {
     String filename = "src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
     try {
-      PVM pvm = new PVM(filename);
-      pvm.run();
-      System.out.println(pvm.call("fib", 10));
+      JPVM JPVM = new JPVM(filename);
+      JPVM.run();
+      System.out.println(JPVM.call("fib", 10));
       PyListObject list = new PyListObject();
       var type = (PyTypeType) list.getType();
       System.out.println(type.getMro());

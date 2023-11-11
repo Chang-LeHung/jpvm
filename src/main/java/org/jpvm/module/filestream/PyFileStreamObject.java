@@ -12,7 +12,7 @@ import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyFileStreamObject extends PyObject {
@@ -77,7 +77,7 @@ public class PyFileStreamObject extends PyObject {
   }
 
   public void writeBytes(byte[] bytes) throws IOException {
-    InterpreterState is = PVM.getThreadState().getIs();
+    InterpreterState is = JPVM.getThreadState().getIs();
 
     if (file != null) {
       file.write(bytes);
@@ -116,7 +116,7 @@ public class PyFileStreamObject extends PyObject {
   }
 
   public void flush() {
-    InterpreterState is = PVM.getThreadState().getIs();
+    InterpreterState is = JPVM.getThreadState().getIs();
     if (stdout) {
       System.out.flush();
     } else {

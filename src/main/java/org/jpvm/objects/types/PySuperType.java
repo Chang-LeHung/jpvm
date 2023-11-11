@@ -2,7 +2,7 @@ package org.jpvm.objects.types;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 
 public class PySuperType extends PyTypeType {
   public PySuperType(Class<?> clazz) {
@@ -17,7 +17,7 @@ public class PySuperType extends PyTypeType {
   @Override
   public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
-      PyFrameObject currentFrame = PVM.getThreadState().getCurrentFrame();
+      PyFrameObject currentFrame = JPVM.getThreadState().getCurrentFrame();
       self = currentFrame.getLocal(0);
       PyTypeType tp = (PyTypeType) self.getType();
       return new PySuperObject(self, tp.getMro().get(1));

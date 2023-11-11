@@ -61,7 +61,7 @@ public class EvaluationLoop {
   public static void evalModule(PyCodeObject codeObject, PyDictObject namespace)
       throws PyException {
     PyFrameObject frameObject =
-        new PyFrameObject(codeObject, PVM.getThreadState().getBuiltins(), namespace, namespace);
+        new PyFrameObject(codeObject, JPVM.getThreadState().getBuiltins(), namespace, namespace);
     new EvaluationLoop(frameObject).pyEvalFrame();
   }
 
@@ -128,27 +128,26 @@ public class EvaluationLoop {
 
   public PyObject pyEvalFrame() throws PyException {
 
-    InterpreterState is = PVM.getThreadState().getIs();
+    InterpreterState is = JPVM.getThreadState().getIs();
     exit_loop:
     for (; ; ) {
       // evaluation loop
       main_loop:
       while (iterator.hasNext()) {
         Instruction ins = iterator.next();
-        assert PVM.getThreadState().getIs().getCurrentHolder() == Thread.currentThread();
         try {
           switch (ins.getOpname()) {
             case IMPORT_NAME -> {
               frame.pop();
               frame.pop();
               PyObject name = coNames.get(ins.getOparg());
-              PyObject module = PVM.getThreadState().getIs().getModule((PyUnicodeObject) name);
+              PyObject module = JPVM.getThreadState().getIs().getModule((PyUnicodeObject) name);
               if (module != null) {
                 frame.push(module);
                 continue;
               }
               String moduleName = ((PyUnicodeObject) name).getData();
-              PyListObject searchPath = PVM.getThreadState().getIs().getSearchPath();
+              PyListObject searchPath = JPVM.getThreadState().getIs().getSearchPath();
               boolean found = false;
               for (int i = 0; i < searchPath.size(); i++) {
                 var path = ((PyUnicodeObject) searchPath.get(i)).getData();
@@ -165,7 +164,7 @@ public class EvaluationLoop {
                         PyModuleObject newModule = new PyModuleObject((PyUnicodeObject) name);
                         evalModule(code, newModule.getDict());
                         frame.push(newModule);
-                        PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, newModule);
+                        JPVM.getThreadState().getIs().addModule((PyUnicodeObject) name, newModule);
                         found = true;
                         break;
                       } catch (IOException ignore) {
@@ -178,7 +177,7 @@ public class EvaluationLoop {
                       Utils.loadClass(path + "." + moduleName, (PyUnicodeObject) name);
                   if (res != null) {
                     found = true;
-                    PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
+                    JPVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
                     frame.push(res);
                     break;
                   }
@@ -187,7 +186,7 @@ public class EvaluationLoop {
                           path + "." + moduleName + ".PyModuleMain", (PyUnicodeObject) name);
                   if (res != null) {
                     found = true;
-                    PVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
+                    JPVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
                     frame.push(res);
                     break;
                   }
@@ -766,7 +765,7 @@ public class EvaluationLoop {
               TryBlockHandler blockHandler = frame.popTryBlockHandler();
               assert blockHandler.getLevel() + 3 <= frame.getStackSize();
               assert blockHandler.getHandler() + 4 >= frame.getStackSize();
-              ThreadState ts = PVM.getThreadState();
+              ThreadState ts = JPVM.getThreadState();
               ExceptionInfo exceptionInfo = ts.getExceptionInfo();
               exceptionInfo.setCurExcType(frame.pop());
               exceptionInfo.setCurExcValue(frame.pop());
@@ -899,7 +898,7 @@ public class EvaluationLoop {
                 true);
           }
         } catch (PyException e) {
-          ThreadState ts = PVM.getThreadState();
+          ThreadState ts = JPVM.getThreadState();
           // print helping information to locate exception point
           if (ts.getCurExcType() == null) {
             System.err.println("Internal error: " + e.getMessage());
@@ -917,7 +916,7 @@ public class EvaluationLoop {
         PyErrorUtils.pyTraceBackHere();
       } else breakFromEND_FINALLY = false;
       while (frame.getTryBlockSize() > 0) {
-        ThreadState ts = PVM.getThreadState();
+        ThreadState ts = JPVM.getThreadState();
         TryBlockHandler blockHandler = frame.popTryBlockHandler();
         if (blockHandler.getType() == TryBlockHandler.EXCEPT_HANDLER) {
           assert frame.getStackSize() >= blockHandler.getLevel() + 3;

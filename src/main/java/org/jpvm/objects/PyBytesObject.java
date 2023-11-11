@@ -14,7 +14,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
 
   public static PyObject type = new PyBytesType();
   private byte[] data;
-  private int size;
+  private final int size;
   private PyLongObject hashCode;
   private boolean hashDone;
 

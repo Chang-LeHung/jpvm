@@ -14,7 +14,7 @@ import org.jpvm.python.BuiltIn;
 import org.jpvm.stl.threading.PyThreadObject;
 import org.yaml.snakeyaml.Yaml;
 
-public class PVM {
+public class JPVM {
 
   /** thread state of each thread */
   public static ThreadLocal<ThreadState> tss = new ThreadLocal<>();
@@ -29,18 +29,20 @@ public class PVM {
 
   /** filename of the py file to be executed. */
   private final String filename;
+
   private final PyDictObject builtins;
   private PVM_STATE state;
   /** code of the py file to be executed. */
   private PyCodeObject code;
   /** global and local variables of the py file to be executed. */
   private PyDictObject globals;
+
   private PyDictObject locals;
   private PyModuleObject rootModule;
   private PyFrameObject rootFrame;
   private EvaluationLoop loop;
 
-  public PVM(String filename) throws PyException, IOException {
+  public JPVM(String filename) throws PyException, IOException {
     this.filename = filename;
     state = PVM_STATE.UNINITIALIZED;
     loadCode();
@@ -65,8 +67,8 @@ public class PVM {
     return res;
   }
 
-  public static PVM create(String filename) throws PyException, IOException {
-    return new PVM(filename);
+  public static JPVM create(String filename) throws PyException, IOException {
+    return new JPVM(filename);
   }
 
   public static void addModule(PyUnicodeObject name, PyModuleObject module) {
@@ -99,21 +101,21 @@ public class PVM {
     registerInterpreterState();
 
     // register the module
-    PVM.getThreadState()
+    JPVM.getThreadState()
         .getIs()
         .addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true), rootModule);
     // add stl path to search path all stl are under org/jpvm/stl
-    PVM.getThreadState()
+    JPVM.getThreadState()
         .getIs()
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvm/stl", true));
-    PVM.getThreadState()
+    JPVM.getThreadState()
         .getIs()
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt", true));
 
     Path path = Paths.get(filename);
     String base = path.toAbsolutePath().getParent().toString();
     code.setParentDir(path.toAbsolutePath().getParent().getParent().toString());
-    PVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
+    JPVM.getThreadState().getIs().addSearchPath(new PyUnicodeObject(base + "/__pycache__"));
 
     // set CodeObject filename
     Path basedir = path.toAbsolutePath().getParent().getParent();
@@ -146,7 +148,7 @@ public class PVM {
   public void run() throws PyException {
     state = PVM_STATE.RUNNING;
     rootFrame = new PyFrameObject(code, builtins, globals, locals);
-    ThreadState ts = PVM.getThreadState();
+    ThreadState ts = JPVM.getThreadState();
     ts.setMainThread(true);
     ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);

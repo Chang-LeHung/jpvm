@@ -6,7 +6,7 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.pvm.EvaluationLoop;
-import org.jpvm.pvm.PVM;
+import org.jpvm.pvm.JPVM;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
@@ -28,8 +28,8 @@ public class TestDict {
   public void testItemsKeysValues() throws IOException {
     String filename = "src/test/resources/syntax/__pycache__/test16.cpython-38.pyc";
     try {
-      PVM pvm = new PVM(filename);
-      pvm.run();
+      JPVM JPVM = new JPVM(filename);
+      JPVM.run();
     } catch (PyException e) {
       throw new RuntimeException(e);
     }

@@ -461,15 +461,15 @@ public class Abstract {
 
         if (((PyCodeObject) (func.getFuncCode())).isGenerator()) return new PyGeneratorObject(f);
         EvaluationLoop eval = new EvaluationLoop(f);
-        PVM.getThreadState().increaseRecursionDepth();
-        ThreadState ts = PVM.getThreadState();
+        JPVM.getThreadState().increaseRecursionDepth();
+        ThreadState ts = JPVM.getThreadState();
         // store current frame
         PyFrameObject cf = ts.getCurrentFrame();
         ts.setCurrentFrame(f);
         if (ts.isOverFlow())
           PyErrorUtils.pyErrorFormat(PyErrorUtils.StackOverflowError, "recursion depth exceeded");
         PyObject res = eval.pyEvalFrame();
-        PVM.getThreadState().decreaseRecursionDepth();
+        JPVM.getThreadState().decreaseRecursionDepth();
         // restore current frame
         ts.setCurrentFrame(cf);
         return res;
