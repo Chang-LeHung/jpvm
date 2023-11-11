@@ -38,7 +38,7 @@ containing a file named `fib.cpython-38.pyc`. Use the following Java program to 
 
 ```java
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.JPVMM;
+import org.jpvm.vm.JPVMM;
 
 import java.io.IOException;
 

@@ -15,7 +15,7 @@ import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
-import org.jpvm.pvm.Abstract;
+import org.jpvm.vm.Abstract;
 import org.jpvm.python.BuiltIn;
 
 public class PyListObject extends PyObject
@@ -392,7 +392,8 @@ public class PyListObject extends PyObject
   }
 
   @PyClassMethod
-  public synchronized PyListObject extend(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public synchronized PyListObject extend(PyTupleObject args, PyDictObject kwArgs)
+      throws PyException {
     if (args.size() == 1) {
       PyObject o = args.get(0);
       if (o instanceof PyListObject list) {

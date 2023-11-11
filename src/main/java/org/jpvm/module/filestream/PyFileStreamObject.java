@@ -11,8 +11,8 @@ import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.InterpreterState;
+import org.jpvm.vm.JPVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyFileStreamObject extends PyObject {

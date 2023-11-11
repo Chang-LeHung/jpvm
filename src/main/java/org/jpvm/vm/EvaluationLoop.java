@@ -1,4 +1,4 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import static org.jpvm.objects.PyObject.compareOpMap;
 

@@ -6,8 +6,8 @@ import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.InterpreterState;
+import org.jpvm.vm.JPVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyPath extends PyModuleObject {

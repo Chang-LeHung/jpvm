@@ -5,7 +5,7 @@ import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.JPVM;
 import org.junit.Assert;
 import org.junit.Test;
 

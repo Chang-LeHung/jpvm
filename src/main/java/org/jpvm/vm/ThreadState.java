@@ -1,4 +1,4 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import org.jpvm.excptions.ExceptionInfo;
 import org.jpvm.excptions.PyPythonException;

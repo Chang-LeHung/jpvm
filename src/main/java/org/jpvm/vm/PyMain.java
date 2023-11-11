@@ -1,4 +1,4 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;

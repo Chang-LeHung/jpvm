@@ -2,7 +2,7 @@ package org.jpvm.testvm;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.JPVM;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;

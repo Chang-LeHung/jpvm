@@ -7,8 +7,8 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyGeneratorType;
-import org.jpvm.pvm.EvaluationLoop;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.EvaluationLoop;
+import org.jpvm.vm.JPVM;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 

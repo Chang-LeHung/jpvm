@@ -1,4 +1,4 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +33,16 @@ public class MRO {
     var res = new ArrayList<PyObject>();
     while (true) {
       PyObject head = null;
-      var types = bases.stream()
-          .filter(x->(!x.isEmpty()))
-          .collect(Collectors.toCollection(ArrayList::new));
-      if (types.isEmpty())
-        return res;
+      var types =
+          bases.stream()
+              .filter(x -> (!x.isEmpty()))
+              .collect(Collectors.toCollection(ArrayList::new));
+      if (types.isEmpty()) return res;
       boolean flag = false;
       for (List<PyObject> ts : types) {
         head = ts.get(0);
         PyObject h = head;
-        if (types.stream().map(x->x.subList(1,x.size()))
-            .allMatch(x->(!x.contains(h)))) {
+        if (types.stream().map(x -> x.subList(1, x.size())).allMatch(x -> (!x.contains(h)))) {
           flag = true;
           break;
         }
@@ -52,10 +51,10 @@ public class MRO {
         throw new RuntimeException("MRO error: can not find a correct method resolution order");
       res.add(head);
       PyObject finalHead = head;
-      types.forEach(x-> {
-        if (x.get(0) == finalHead)
-          x.remove(0);
-      });
+      types.forEach(
+          x -> {
+            if (x.get(0) == finalHead) x.remove(0);
+          });
     }
   }
 }

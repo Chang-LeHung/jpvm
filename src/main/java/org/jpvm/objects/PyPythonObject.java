@@ -5,7 +5,7 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
-import org.jpvm.pvm.Abstract;
+import org.jpvm.vm.Abstract;
 
 /** used in python code to represent a python object */
 public class PyPythonObject extends PyObject implements PyNumberMethods {

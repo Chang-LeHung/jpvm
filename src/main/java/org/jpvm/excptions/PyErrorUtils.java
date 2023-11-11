@@ -6,8 +6,8 @@ import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.pvm.JPVM;
-import org.jpvm.pvm.ThreadState;
+import org.jpvm.vm.JPVM;
+import org.jpvm.vm.ThreadState;
 
 public class PyErrorUtils {
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyMethodType;
-import org.jpvm.pvm.Abstract;
+import org.jpvm.vm.Abstract;
 
 public class PyMethodObject extends PyObject {
 

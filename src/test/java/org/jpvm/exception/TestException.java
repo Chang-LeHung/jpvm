@@ -2,7 +2,7 @@ package org.jpvm.exception;
 
 import java.io.IOException;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.JPVM;
 import org.junit.Test;
 
 public class TestException {

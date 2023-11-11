@@ -2,7 +2,7 @@ package org.jpvm.objects.types;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
-import org.jpvm.pvm.Abstract;
+import org.jpvm.vm.Abstract;
 
 /** used in python code to represent a python type */
 public class PyPythonType extends PyTypeType {

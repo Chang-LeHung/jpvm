@@ -9,8 +9,8 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.pvm.InterpreterState;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.InterpreterState;
+import org.jpvm.vm.JPVM;
 
 public class PyModuleMain extends PyModuleObject {
 

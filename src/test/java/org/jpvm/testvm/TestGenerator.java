@@ -8,7 +8,7 @@ import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
-import org.jpvm.pvm.EvaluationLoop;
+import org.jpvm.vm.EvaluationLoop;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
@@ -26,7 +26,6 @@ public class TestGenerator {
     EvaluationLoop evaluationLoop = new EvaluationLoop(object);
     return evaluationLoop.pyEvalFrame();
   }
-
 
   @Test
   public void testCodeObject() throws IOException, PyException {
@@ -56,7 +55,7 @@ public class TestGenerator {
   }
 
   @Test
-  public void testGeneratorSend(){
+  public void testGeneratorSend() {
     String filename = "src/test/resources/testgen/__pycache__/test02.cpython-38.pyc";
     try {
       test(filename);
@@ -66,7 +65,7 @@ public class TestGenerator {
   }
 
   @Test
-  public void testGeneratorFrom(){
+  public void testGeneratorFrom() {
     String filename = "src/test/resources/testgen/__pycache__/test03.cpython-38.pyc";
     try {
       test(filename);
@@ -76,7 +75,7 @@ public class TestGenerator {
   }
 
   @Test
-  public void testGeneratorSendFrom(){
+  public void testGeneratorSendFrom() {
     String filename = "src/test/resources/testgen/__pycache__/test04.cpython-38.pyc";
     try {
       test(filename);
@@ -86,7 +85,7 @@ public class TestGenerator {
   }
 
   @Test
-  public void testList(){
+  public void testList() {
     String filename = "src/test/resources/syntax/__pycache__/test19.cpython-38.pyc";
     try {
       test(filename);
@@ -96,7 +95,7 @@ public class TestGenerator {
   }
 
   @Test
-  public void testL(){
+  public void testL() {
     String filename = "src/test/resources/testgen/__pycache__/test05.cpython-38.pyc";
     try {
       test(filename);

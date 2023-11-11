@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
-import org.jpvm.pvm.EvaluationLoop;
+import org.jpvm.vm.EvaluationLoop;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;

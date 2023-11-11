@@ -1,4 +1,4 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;

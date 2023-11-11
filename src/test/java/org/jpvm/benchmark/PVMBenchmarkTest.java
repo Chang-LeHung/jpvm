@@ -3,7 +3,7 @@ package org.jpvm.benchmark;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.JPVM;
 import org.openjdk.jmh.annotations.*;
 
 @BenchmarkMode(Mode.AverageTime)

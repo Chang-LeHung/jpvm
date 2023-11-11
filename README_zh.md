@@ -37,7 +37,7 @@ python -m compileall fib.py
 
 ```java
 import org.jpvm.errors.PyException;
-import org.jpvm.pvm.JPVMM;
+import org.jpvm.vm.JPVMM;
 
 import java.io.IOException;
 

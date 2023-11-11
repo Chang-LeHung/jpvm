@@ -12,7 +12,7 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDescriptorGet;
 import org.jpvm.objects.pyinterface.TypeDescriptorSet;
 import org.jpvm.objects.pyinterface.TypeIterable;
-import org.jpvm.pvm.MRO;
+import org.jpvm.vm.MRO;
 import org.jpvm.python.BuiltIn;
 
 /** all subclass must override method getType {@link org.jpvm.objects.pyinterface.TypeCheck} */

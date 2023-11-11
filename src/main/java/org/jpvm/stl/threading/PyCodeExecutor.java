@@ -3,7 +3,7 @@ package org.jpvm.stl.threading;
 import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
-import org.jpvm.pvm.*;
+import org.jpvm.vm.*;
 
 public class PyCodeExecutor implements Runnable {
 

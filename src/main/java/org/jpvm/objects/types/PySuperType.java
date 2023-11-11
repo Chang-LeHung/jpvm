@@ -2,7 +2,7 @@ package org.jpvm.objects.types;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
-import org.jpvm.pvm.JPVM;
+import org.jpvm.vm.JPVM;
 
 public class PySuperType extends PyTypeType {
   public PySuperType(Class<?> clazz) {

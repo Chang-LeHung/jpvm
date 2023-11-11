@@ -1,19 +1,17 @@
-package org.jpvm.pvm;
+package org.jpvm.vm;
 
 import org.jpvm.errors.PyException;
 import org.jpvm.objects.*;
 
 public class InterpreterState {
 
-  /**
-   * modules have been imported
-   */
+  /** modules have been imported */
   private final PyDictObject modules;
+
   private final PyListObject searchPath;
-  /**
-   * the builtins module
-   */
+  /** the builtins module */
   private PyDictObject builtins;
+
   private int maxRecursionDepth = 100;
 
   public InterpreterState(long interval) {
@@ -35,11 +33,11 @@ public class InterpreterState {
     return searchPath;
   }
 
-  public void addSearchPath(PyUnicodeObject path){
+  public void addSearchPath(PyUnicodeObject path) {
     searchPath.append(path);
   }
 
-  public void addModule(PyUnicodeObject name, PyModuleObject module){
+  public void addModule(PyUnicodeObject name, PyModuleObject module) {
     try {
       modules.put(name, module);
     } catch (PyException ignored) {
