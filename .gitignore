@@ -39,3 +39,4 @@ build/
 *test_example*
 *test_resources*
 arthas-output/
+*.pyc
