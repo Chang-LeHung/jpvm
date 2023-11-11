@@ -342,10 +342,10 @@ public class BuiltIn {
           || mode.equals("wb")) {
         return new PyFileOpenObject(path, mode);
       } else {
-        PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "not support file mode");
+        return PyErrorUtils.pyErrorFormat(
+            PyErrorUtils.NotImplementedError, "not support file mode");
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "the num of attributes error");
-    return null;
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "the num of attributes error");
   }
 }
