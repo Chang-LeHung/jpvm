@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.pycParser.PyCodeObject;
 

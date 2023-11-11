@@ -36,21 +36,21 @@ python -m compileall fib.py
 程序执行这个 python 程序：
 
 ```java
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.vm.JPVMM;
 
 import java.io.IOException;
 
 public class Example {
 
-	public static void main(String[] args) {
-		String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
-		try {
-			new JPVM(filename).run();
-		} catch (PyException | IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static void main(String[] args) {
+    String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
+    try {
+      new JPVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
 ```
 

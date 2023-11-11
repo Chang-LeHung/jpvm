@@ -1,7 +1,8 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.*;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyNotImplemented;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -59,7 +60,8 @@ public class PyTupleObject extends PyObject
       }
       return res;
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "getTupleFromIterator require TypeIterable or Iterator");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "getTupleFromIterator require TypeIterable or Iterator");
     return null;
   }
 
@@ -68,8 +70,10 @@ public class PyTupleObject extends PyObject
   }
 
   public PyObject get(int idx) throws PyException {
-    if (idx >= obItem.length){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, "idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
+    if (idx >= obItem.length) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.KeyError,
+          "idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
       return null;
     }
     return obItem[idx];
@@ -280,7 +284,7 @@ public class PyTupleObject extends PyObject
   public PyObject sqItem(PyObject o) throws PyException {
     if (o instanceof PyLongObject) {
       Long n = NumberHelper.transformPyObject2Long(o);
-      if (n == null){
+      if (n == null) {
         PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
         return null;
       }
@@ -310,7 +314,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(-1);
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyTupleObject method index only require one argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "PyTupleObject method index only require one argument");
     return null;
   }
 
@@ -325,7 +330,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(count);
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyTupleObject method count only require one argument");
+    PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "PyTupleObject method count only require one argument");
     return null;
   }
 

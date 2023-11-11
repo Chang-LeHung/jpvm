@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyNotImplemented;
+import org.jpvm.excptions.objs.PyTypeNotMatch;
 import org.jpvm.objects.types.PyBoolType;
 import org.jpvm.protocols.PyNumberMethods;
 

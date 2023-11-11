@@ -1,6 +1,6 @@
 package org.jpvm.internal;
 
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFunctionObject;
 import org.jpvm.objects.PyObject;

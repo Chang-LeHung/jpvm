@@ -1,16 +1,17 @@
 package org.jpvm.objects;
 
 import java.util.Arrays;
-import org.jpvm.errors.*;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyNotImplemented;
 import org.jpvm.objects.types.PyBytesType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
-public class PyBytesObject extends PyObject implements PyNumberMethods,
-    PySequenceMethods, PyMappingMethods {
+public class PyBytesObject extends PyObject
+    implements PyNumberMethods, PySequenceMethods, PyMappingMethods {
 
   public static PyObject type = new PyBytesType();
   private byte[] data;
@@ -93,19 +94,16 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
       return null;
     }
-    if (null == o)
-      return BuiltIn.False;
+    if (null == o) return BuiltIn.False;
     if (o instanceof PyBytesObject bytes) {
-      if (Arrays.equals(data, bytes.data))
-        return BuiltIn.True;
+      if (Arrays.equals(data, bytes.data)) return BuiltIn.True;
     }
     return BuiltIn.False;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (null == o)
-      return false;
+    if (null == o) return false;
     if (o instanceof PyBytesObject bytes) {
       return Arrays.equals(data, bytes.data);
     }
@@ -159,8 +157,7 @@ public class PyBytesObject extends PyObject implements PyNumberMethods,
 
   @Override
   public PyObject bool() throws PyException {
-    if (size == 0)
-      return BuiltIn.False;
+    if (size == 0) return BuiltIn.False;
     return BuiltIn.True;
   }
 }

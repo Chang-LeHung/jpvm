@@ -1,4 +1,4 @@
-package org.jpvm.errors;
+package org.jpvm.excptions.objs;
 
 public class PyMissMethod extends PyException {
   public PyMissMethod(String message) {

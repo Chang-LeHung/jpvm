@@ -2,7 +2,7 @@ package org.jpvm.testvm;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.module.Disassembler;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.PyDictObject;

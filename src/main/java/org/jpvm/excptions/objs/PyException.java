@@ -1,4 +1,4 @@
-package org.jpvm.errors;
+package org.jpvm.excptions.objs;
 
 import org.jpvm.objects.PyUnicodeObject;
 

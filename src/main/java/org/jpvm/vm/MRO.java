@@ -3,7 +3,7 @@ package org.jpvm.vm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;

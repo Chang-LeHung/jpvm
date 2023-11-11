@@ -1,6 +1,6 @@
 package org.jpvm.stl.threading;
 
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;

@@ -1,6 +1,6 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.excptions.objs.PyNotImplemented;
 import org.jpvm.objects.pyinterface.TypeDescriptorGet;
 import org.jpvm.objects.types.PyFunctionType;
 import org.jpvm.pycParser.PyCodeObject;

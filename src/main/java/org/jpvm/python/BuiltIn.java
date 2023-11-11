@@ -2,9 +2,9 @@ package org.jpvm.python;
 
 import java.io.IOException;
 import java.util.Scanner;
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyTypeError;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyTypeError;
+import org.jpvm.excptions.objs.PyTypeNotMatch;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.module.filestream.PyFileOpenObject;
 import org.jpvm.module.filestream.PyFileStreamObject;

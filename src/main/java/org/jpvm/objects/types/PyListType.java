@@ -1,7 +1,7 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyTypeNotMatch;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyTypeNotMatch;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyObject;

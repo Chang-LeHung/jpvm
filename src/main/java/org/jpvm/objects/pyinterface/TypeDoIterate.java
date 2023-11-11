@@ -1,7 +1,7 @@
 package org.jpvm.objects.pyinterface;
 
-import org.jpvm.errors.PyException;
-import org.jpvm.errors.PyNotImplemented;
+import org.jpvm.excptions.objs.PyException;
+import org.jpvm.excptions.objs.PyNotImplemented;
 import org.jpvm.objects.PyObject;
 import org.jpvm.python.BuiltIn;
 

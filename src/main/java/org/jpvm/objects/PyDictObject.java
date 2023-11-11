@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
 import java.util.*;
-import org.jpvm.errors.*;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.objs.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;

@@ -1,6 +1,6 @@
 package org.jpvm.objects;
 
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyPythonType;
 import org.jpvm.objects.types.PyTypeType;

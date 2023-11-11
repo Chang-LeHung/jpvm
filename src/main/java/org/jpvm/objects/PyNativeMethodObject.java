@@ -2,7 +2,7 @@ package org.jpvm.objects;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.jpvm.errors.PyException;
+import org.jpvm.excptions.objs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyNativeMethodType;
 
