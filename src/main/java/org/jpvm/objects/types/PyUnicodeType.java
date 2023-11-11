@@ -13,7 +13,7 @@ public class PyUnicodeType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       return PyUnicodeObject.getOrCreateFromInternStringPool("", true);
     } else if (args.size() == 1) {

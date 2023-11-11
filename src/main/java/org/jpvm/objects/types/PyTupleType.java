@@ -15,7 +15,7 @@ public class PyTupleType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) return PyTupleObject.zero;
     if (args.size() == 1) {
       if (args.get(0) instanceof TypeDoIterate itr) {

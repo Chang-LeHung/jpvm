@@ -194,7 +194,7 @@ public class PyTypeType extends PyObject {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject name = args.get(0);
       String res = "<class '" + getType().getTypeName() + "' >";

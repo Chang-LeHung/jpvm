@@ -13,7 +13,7 @@ public class PySetType extends PyTypeType {
 
   /** code like `set()` or `set(listobject)` will call this method */
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       return new PySetObject();
     } else {

@@ -317,7 +317,7 @@ public class EvaluationLoop {
                 if (res == null) break main_loop;
                 frame.push(res);
               } else if (method instanceof PyTypeType type) {
-                PyObject res = type.call(null, args, null);
+                PyObject res = type.call(args, null);
                 if (res == null) break main_loop;
                 frame.push(res);
               } else

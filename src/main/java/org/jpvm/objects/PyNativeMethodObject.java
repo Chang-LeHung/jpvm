@@ -20,9 +20,14 @@ public class PyNativeMethodObject extends PyObject {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyObject self = args.get(0);
+    PyTupleObject newArgs = new PyTupleObject(args.size() - 1);
+    for (int i = 1; i < args.size(); i++) {
+      newArgs.set(i - 1, args.get(i));
+    }
     try {
-      return (PyObject) method.invoke(self, args, kwArgs);
+      return (PyObject) method.invoke(self, newArgs, kwArgs);
     } catch (IllegalAccessException | InvocationTargetException e) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
       return null;

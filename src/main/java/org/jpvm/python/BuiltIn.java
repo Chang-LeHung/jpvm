@@ -299,7 +299,7 @@ public class BuiltIn {
     args.set(0, name);
     args.set(1, bases);
     args.set(2, locals);
-    return PyTypeType.type.call(null, args, kwArgs);
+    return PyTypeType.type.call(args, kwArgs);
   }
 
   public static PyObject input(PyTupleObject args, PyDictObject kwArgs)

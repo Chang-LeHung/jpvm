@@ -13,8 +13,7 @@ public interface TypeCall {
    *
    * @return {@link PyObject}
    */
-  default PyObject call(PyObject self, PyTupleObject args,
-                        PyDictObject kwArgs) throws PyException {
+  default PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     throw new PyNotImplemented("TypeCall call not implemented");
   }
 }

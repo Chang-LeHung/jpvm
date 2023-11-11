@@ -352,11 +352,16 @@ public class Abstract {
       PyDictObject locals)
       throws PyException {
     if (callable instanceof PyNativeMethodObject nativeMethodObject) {
-      return (nativeMethodObject.call(self, args, kwArgs));
+      PyTupleObject newArgs = new PyTupleObject(args.size() + 1);
+      newArgs.set(0, self);
+      for (int i = 0; i < args.size(); i++) {
+        newArgs.set(i + 1, args.get(i));
+      }
+      return (nativeMethodObject.call(newArgs, kwArgs));
     } else if (callable instanceof PyTypeType t) {
-      return t.call(self, args, kwArgs);
+      return t.call(args, kwArgs);
     } else if (callable instanceof PyMethodObject) {
-      return callable.call(self, args, kwArgs);
+      return callable.call(args, kwArgs);
     } else {
       if (callable instanceof PyFunctionObject func) {
         if (kwArgs == null) kwArgs = new PyDictObject();

@@ -36,7 +36,7 @@ public class PyListType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return getListFromIterable(args, kwArgs);
   }
 }

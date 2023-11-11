@@ -12,7 +12,7 @@ public class PyRangeType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (!(object instanceof PyLongObject o))

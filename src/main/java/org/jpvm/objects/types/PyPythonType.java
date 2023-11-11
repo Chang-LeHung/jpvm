@@ -28,7 +28,7 @@ public class PyPythonType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyPythonObject res = new PyPythonObject();
     res.setType(this);
     PyUnicodeObject __init__ = PyUnicodeObject.getOrCreateFromInternStringPool("__init__", true);

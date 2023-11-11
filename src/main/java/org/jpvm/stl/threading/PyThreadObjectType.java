@@ -18,7 +18,7 @@ public class PyThreadObjectType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (kwArgs != null) {
       PyObject target = kwArgs.get(new PyUnicodeObject("target"));
       PyObject name = kwArgs.get(new PyUnicodeObject("name"));

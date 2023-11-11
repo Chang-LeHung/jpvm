@@ -15,7 +15,8 @@ public class PySuperType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyObject self;
     if (args.size() == 0) {
       PyFrameObject currentFrame = JPVM.getThreadState().getCurrentFrame();
       self = currentFrame.getLocal(0);

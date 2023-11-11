@@ -15,7 +15,7 @@ public class PyPythonBaseExceptionType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyPythonException res;
     if (args.size() == 0) res = new PyPythonException(this, new PyUnicodeObject(name));
     else res = new PyPythonException(this, (PyUnicodeObject) args.get(0));

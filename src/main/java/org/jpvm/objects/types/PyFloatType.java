@@ -13,7 +13,7 @@ public class PyFloatType extends PyTypeType {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       return new PyFloatObject(0);
     } else if (args.size() == 1) {

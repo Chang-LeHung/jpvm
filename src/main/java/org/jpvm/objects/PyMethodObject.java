@@ -66,7 +66,8 @@ public class PyMethodObject extends PyObject {
   }
 
   @Override
-  public PyObject call(PyObject self, PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyObject self;
     try {
       if (method != null) {
         if (null != this.self) return (PyObject) method.invoke(this.self, args, kwArgs);
