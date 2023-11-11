@@ -5,8 +5,6 @@ import org.jpvm.errors.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.vm.InterpreterState;
-import org.jpvm.vm.JPVM;
 import org.jpvm.python.BuiltIn;
 
 public class PyModuleMain extends PyModuleObject {
@@ -25,7 +23,6 @@ public class PyModuleMain extends PyModuleObject {
         } catch (InterruptedException ignore) {
         }
       } else if (object instanceof PyFloatObject o) {
-        InterpreterState is = JPVM.getThreadState().getIs();
         try {
           long l = (long) (o.getData() * 1000);
           TimeUnit.MILLISECONDS.sleep(l);
