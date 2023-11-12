@@ -2,8 +2,8 @@ package org.jpvm.objects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.*;
@@ -239,7 +239,7 @@ public class PyObject
     PyObject res = dict.get(key);
     if (res != null) return res;
     PyObject attr = getAttrInternal(key);
-    dict.put(key, attr);
+    if (attr != null) dict.put(key, attr);
     return attr;
   }
 

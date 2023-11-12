@@ -1,6 +1,8 @@
 package org.jpvm.objects;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.jobjs.*;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -13,6 +15,8 @@ import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
 
+import javax.swing.*;
+
 public class PyDictObject extends PyObject
     implements PyMappingMethods, PySequenceMethods, TypeIterable {
 
@@ -21,10 +25,12 @@ public class PyDictObject extends PyObject
   private final Map<PyObject, PyObject> map;
 
   public PyDictObject() {
-    this.map = new HashMap<>();
+    this.map = new ConcurrentHashMap<>();
   }
 
-  public synchronized PyObject put(PyObject key, PyObject val) throws PyException {
+  public PyObject put(PyObject key, PyObject val) throws PyException {
+    assert key != null;
+    assert val != null;
     try {
       return map.put(key, val);
     } catch (ConcurrentModificationException e) {
