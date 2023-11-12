@@ -577,11 +577,11 @@ public class PyListObject extends PyObject
     }
 
     @Override
-    public synchronized PyObject next() {
+    public synchronized PyObject next() throws PyException {
       if (idx < obItem.size()) {
         return obItem.get(idx++);
       }
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

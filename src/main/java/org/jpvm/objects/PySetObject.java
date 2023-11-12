@@ -390,9 +390,9 @@ public class PySetObject extends PyObject
     }
 
     @Override
-    public PyObject next() {
+    public PyObject next() throws PyException {
       if (iterator.hasNext()) return iterator.next();
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

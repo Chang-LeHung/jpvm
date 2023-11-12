@@ -32,7 +32,7 @@ public class BuiltIn {
   public static PySetObject FROZENSET = new PySetObject(true);
 
   /** define jpython internal exceptions */
-  public static PyObject PyExcStopIteration = new PyExcStopIteration();
+  public static PyObject StopIteration = PyErrorUtils.StopIteration;
 
   public static PyObject notImplemented = new PyObject();
   public static PyDictObject dict;
@@ -154,11 +154,14 @@ public class BuiltIn {
     }
     TypeDoIterate iterator = args.getIterator();
     PyObject o;
-    o = iterator.next();
-    while (o != BuiltIn.PyExcStopIteration) {
-      stream.writeString(o.str().getData());
-      if (iterator.hasNext()) stream.writeString(" ");
-      o = iterator.next();
+    for (; ; ) {
+      try {
+        o = iterator.next();
+        stream.writeString(o.str().getData());
+        if (iterator.hasNext()) stream.writeString(" ");
+      } catch (PyException ignore) {
+        break;
+      }
     }
     stream.writeString(uni.getData());
     stream.flush();

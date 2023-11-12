@@ -77,7 +77,7 @@ public class Marshal {
     return switch (type) {
       case TYPE.TYPE_NULL -> BuiltIn.NULL;
       case TYPE.TYPE_NONE -> BuiltIn.None;
-      case TYPE.TYPE_STOPITER -> BuiltIn.PyExcStopIteration;
+      case TYPE.TYPE_STOPITER -> BuiltIn.StopIteration;
       case TYPE.TYPE_ELLIPSIS -> BuiltIn.ELLIPSIS;
       case TYPE.TYPE_FALSE -> BuiltIn.False;
       case TYPE.TYPE_TRUE -> BuiltIn.True;

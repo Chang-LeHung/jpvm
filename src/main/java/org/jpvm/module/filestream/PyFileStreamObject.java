@@ -13,7 +13,6 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.vm.InterpreterState;
 import org.jpvm.vm.JPVM;
-import org.jpvm.python.BuiltIn;
 
 public class PyFileStreamObject extends PyObject {
 
@@ -96,8 +95,10 @@ public class PyFileStreamObject extends PyObject {
     TypeDoIterate itr = o.getIterator();
     try {
       for (; ; ) {
-        PyObject next = itr.next();
-        if (next == BuiltIn.PyExcStopIteration) {
+        PyObject next;
+        try {
+          next = itr.next();
+        } catch (PyException ignore) {
           break;
         }
         if (next instanceof PyUnicodeObject uni) {

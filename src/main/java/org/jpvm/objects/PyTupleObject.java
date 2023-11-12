@@ -378,7 +378,7 @@ public class PyTupleObject extends PyObject
     @Override
     public PyObject next() throws PyException {
       if (idx < obItem.length) return obItem[idx++];
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

@@ -88,7 +88,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
     JPVM.getThreadState().setCurrentFrame(f);
     PyObject res = evalLoop.pyEvalFrame();
     JPVM.getThreadState().setCurrentFrame(cf);
-    if (!evalLoop.getIterator().hasNext()) return BuiltIn.PyExcStopIteration;
+    if (!evalLoop.getIterator().hasNext())
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     else return res;
   }
 

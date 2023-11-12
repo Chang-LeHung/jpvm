@@ -345,7 +345,7 @@ public class PyDictObject extends PyObject
       @Override
       public PyObject next() throws PyException {
         if (iterator.hasNext()) return iterator.next();
-        return BuiltIn.PyExcStopIteration;
+        return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
       }
 
       @Override
@@ -463,7 +463,7 @@ public class PyDictObject extends PyObject
       @Override
       public PyObject next() throws PyException {
         if (iterator.hasNext()) return iterator.next();
-        return BuiltIn.PyExcStopIteration;
+        return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
       }
 
       @Override
@@ -640,7 +640,7 @@ public class PyDictObject extends PyObject
           object.set(1, n.getValue());
           return object;
         }
-        return BuiltIn.PyExcStopIteration;
+        return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
       }
 
       @Override
@@ -659,9 +659,9 @@ public class PyDictObject extends PyObject
     }
 
     @Override
-    public PyObject next() {
+    public PyObject next() throws PyException {
       if (iterator.hasNext()) return iterator.next();
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

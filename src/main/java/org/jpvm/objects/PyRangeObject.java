@@ -1,5 +1,6 @@
 package org.jpvm.objects;
 
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
@@ -97,7 +98,7 @@ public class PyRangeObject extends PyObject implements TypeIterable {
         cur += step;
         return ret;
       }
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

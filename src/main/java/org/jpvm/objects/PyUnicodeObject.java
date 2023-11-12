@@ -492,7 +492,7 @@ public class PyUnicodeObject extends PyObject
     @Override
     public PyObject next() throws PyException {
       if (idx < size()) return new PyUnicodeObject(s.substring(idx, ++idx));
-      return BuiltIn.PyExcStopIteration;
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override

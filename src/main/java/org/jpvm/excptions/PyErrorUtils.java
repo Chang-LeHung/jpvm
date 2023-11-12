@@ -30,6 +30,7 @@ public class PyErrorUtils {
   public static PyImportErrorType ImportError = new PyImportErrorType();
   public static PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
   public static PyFileNotFoundErrorType FileNotFoundError = new PyFileNotFoundErrorType();
+  public static PyStopIterationType StopIteration = new PyStopIterationType();
 
   public static PyObject pyErrorFormat(PyBaseExceptionType type, String msg) throws PyException {
     // create an instance of the exception

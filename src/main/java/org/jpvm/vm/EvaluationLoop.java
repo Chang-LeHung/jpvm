@@ -9,10 +9,10 @@ import java.util.Iterator;
 import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.bytecode.Instruction;
 import org.jpvm.bytecode.OpMap;
+import org.jpvm.excptions.*;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNameError;
 import org.jpvm.excptions.jobjs.PyTypeNotMatch;
-import org.jpvm.excptions.*;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -441,12 +441,17 @@ public class EvaluationLoop {
             case FOR_ITER -> {
               PyObject top = frame.top();
               if (top instanceof TypeDoIterate itr) {
-                PyObject next = itr.next();
-                if (next != BuiltIn.PyExcStopIteration) {
+                PyObject next;
+                try {
+                  next = itr.next();
                   frame.push(next);
-                } else {
+                } catch (PyException ignore) {
                   frame.pop();
                   byteCodeBuffer.increase(ins.getOparg());
+                  ThreadState ts = JPVM.getThreadState();
+                  if (ts.getCurExcType() == PyErrorUtils.StopIteration) {
+                    PyErrorUtils.cleanThreadException();
+                  }
                 }
               } else {
                 PyErrorUtils.pyErrorFormat(
@@ -883,10 +888,13 @@ public class EvaluationLoop {
               PyObject top = frame.pop();
               PyObject gen = frame.top();
               if (gen instanceof PyGeneratorObject g) {
-                PyObject res = g.start(top);
-                if (res == BuiltIn.PyExcStopIteration) continue;
-                byteCodeBuffer.decrease(Instruction.sizeofByteCode);
-                result = res;
+                try {
+                  PyObject res = g.start(top);
+                  byteCodeBuffer.decrease(Instruction.sizeofByteCode);
+                  result = res;
+                } catch (PyException ignore) {
+                  continue;
+                }
                 break exit_loop;
               } else
                 PyErrorUtils.pyErrorFormat(
