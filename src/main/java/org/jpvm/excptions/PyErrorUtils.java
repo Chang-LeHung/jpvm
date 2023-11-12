@@ -5,6 +5,7 @@ import org.jpvm.excptions.types.*;
 import org.jpvm.objects.PyFrameObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.JPVM;
 import org.jpvm.vm.ThreadState;
@@ -32,7 +33,9 @@ public class PyErrorUtils {
 
   public static PyObject pyErrorFormat(PyBaseExceptionType type, String msg) throws PyException {
     // create an instance of the exception
-    PyPythonException call = type.call(msg);
+    PyTupleObject args = new PyTupleObject(1);
+    args.set(0, new PyUnicodeObject(msg));
+    PyPythonException call = (PyPythonException) type.call(args, null);
     ThreadState ts = JPVM.getThreadState();
     call.setContext((PyPythonException) ts.getExceptionInfo().getCurExcValue());
     ts.setCurExcType(type);
