@@ -110,7 +110,8 @@ public class TestGenerator {
   public void test06() {
     String filename = "src/test/resources/testgen/__pycache__/test06.cpython-38.pyc";
     try {
-      test(filename);
+      JPVM jpvm = new JPVM(filename);
+      jpvm.run();
     } catch (IOException | PyException e) {
       e.printStackTrace();
     }
