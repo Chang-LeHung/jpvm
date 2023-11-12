@@ -177,6 +177,12 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
       }
     }
 
+    if (op == Operator.PyCmp_IS) {
+      return BuiltIn.False;
+    } else if (op == Operator.PyCmp_IS_NOT) {
+      return BuiltIn.True;
+    }
+
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "PyLongObject not support operator " + op);
     return null;
   }
