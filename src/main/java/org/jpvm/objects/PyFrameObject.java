@@ -3,8 +3,8 @@ package org.jpvm.objects;
 import java.util.Arrays;
 import java.util.Stack;
 import org.jpvm.bytecode.ByteCodeBuffer;
-import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.TryBlockHandler;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.types.PyFrameType;
 import org.jpvm.pycParser.PyCodeObject;
 
@@ -14,6 +14,7 @@ public class PyFrameObject extends PyObject {
   private final PyCodeObject code;
   /** value stack */
   private final PyObject[] stack;
+
   private final PyObject[] localPlus;
   private final ByteCodeBuffer byteCodeBuffer;
   private int used;
@@ -237,14 +238,19 @@ public class PyFrameObject extends PyObject {
     return stack[used - 1];
   }
 
+  /** `used` represent minimum available idx to use */
   public PyObject top(int delta) {
     assert used >= delta && delta >= 1;
     return stack[used - delta];
   }
 
   public void setTop(int delta, PyObject o) {
-    assert used >= delta && delta >= 1;
+    assert delta >= 1;
     stack[used - delta] = o;
+  }
+
+  public void setTop(PyObject o) {
+    stack[used - 1] = o;
   }
 
   public boolean hasArgs() {

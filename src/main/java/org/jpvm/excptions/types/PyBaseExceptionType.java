@@ -22,10 +22,13 @@ public class PyBaseExceptionType extends PyTypeType {
     return res;
   }
 
-  public PyPythonException call(String message) throws PyException {
-    if (message == null) message = "";
-    return new PyPythonException(this, new PyUnicodeObject(message));
+  public PyObject call(String msg) throws PyException {
+    PyUnicodeObject message = new PyUnicodeObject(msg);
+    PyTupleObject args = new PyTupleObject(1);
+    args.set(0, message);
+    return call(args, null);
   }
+
 
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {

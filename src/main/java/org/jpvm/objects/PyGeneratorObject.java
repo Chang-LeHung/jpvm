@@ -77,10 +77,10 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
       // push a dummy PyObject or sent value into stack
       // if generator runToYield = true
       if (newVal) {
-        evalLoop.getFrame().setTop(1, yieldValue);
+        evalLoop.getFrame().push(yieldValue);
         newVal = false;
       } else {
-        evalLoop.getFrame().setTop(1, BuiltIn.None);
+        evalLoop.getFrame().push(BuiltIn.None);
       }
     }
     PyFrameObject cf = JPVM.getThreadState().getCurrentFrame();
@@ -108,9 +108,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
       newVal = true;
       return __next__();
     }
-    PyErrorUtils.pyErrorFormat(
+    return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.Exception, "TypeError: send() takes exactly one argument");
-    return null;
   }
 
   @Override
@@ -134,5 +133,15 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
       newVal = true;
     }
     return next();
+  }
+
+  @Override
+  public PyUnicodeObject repr() {
+    return new PyUnicodeObject(toString());
+  }
+
+  @Override
+  public PyUnicodeObject str() {
+    return repr();
   }
 }

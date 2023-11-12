@@ -12,6 +12,7 @@ import org.jpvm.vm.EvaluationLoop;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.pycParser.PycReader;
 import org.jpvm.python.BuiltIn;
+import org.jpvm.vm.JPVM;
 import org.junit.Test;
 
 public class TestGenerator {
@@ -58,7 +59,8 @@ public class TestGenerator {
   public void testGeneratorSend() {
     String filename = "src/test/resources/testgen/__pycache__/test02.cpython-38.pyc";
     try {
-      test(filename);
+      JPVM jpvm = new JPVM(filename);
+      jpvm.run();
     } catch (IOException | PyException e) {
       e.printStackTrace();
     }
@@ -97,6 +99,16 @@ public class TestGenerator {
   @Test
   public void testL() {
     String filename = "src/test/resources/testgen/__pycache__/test05.cpython-38.pyc";
+    try {
+      test(filename);
+    } catch (IOException | PyException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void test06() {
+    String filename = "src/test/resources/testgen/__pycache__/test06.cpython-38.pyc";
     try {
       test(filename);
     } catch (IOException | PyException e) {

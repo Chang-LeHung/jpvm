@@ -8,10 +8,10 @@ def counter():
             i += 1
 
 
-def test():
-    for i in range(10):
-        yield i
-
+# def test():
+#     for i in range(10):
+#         yield i
+#
 
 def call():
     # 创建生成器

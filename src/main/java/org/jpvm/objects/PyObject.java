@@ -57,6 +57,7 @@ public class PyObject
     compareOpMap[PyCmp_IS_NOT] = Operator.PyCmp_IS_NOT;
     compareOpMap[PyCmp_EXC_MATCH] = Operator.PyCmp_EXC_MATCH;
     compareOpMap[PyCmp_BAD] = Operator.PyCmp_BAD;
+    registerBaseObjectType();
   }
 
   protected PyDictObject dict;

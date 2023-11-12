@@ -4,7 +4,8 @@ def generator1():
 
 def generator2():
     yield from generator1()
-    yield 'Done'
+    res = yield 'Done'
+    print(res)
 
 
 f = generator2()

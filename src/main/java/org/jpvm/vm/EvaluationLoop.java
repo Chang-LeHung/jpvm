@@ -454,9 +454,9 @@ public class EvaluationLoop {
               }
             }
             case GET_ITER -> {
-              PyObject pop = frame.pop();
+              PyObject pop = frame.top();
               if (pop instanceof TypeIterable itr) {
-                frame.push((PyObject) itr.getIterator());
+                frame.setTop(1, (PyObject) itr.getIterator());
               } else
                 PyErrorUtils.pyErrorFormat(
                     PyErrorUtils.TypeError, pop.repr() + " is not a iterable object");
@@ -852,7 +852,7 @@ public class EvaluationLoop {
             }
             case NOP -> {}
             case YIELD_VALUE -> {
-              PyObject res = frame.top();
+              PyObject res = frame.pop();
               if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0) {
                 if (res != null) {
                   result = res;
@@ -883,7 +883,6 @@ public class EvaluationLoop {
               PyObject top = frame.pop();
               PyObject gen = frame.top();
               if (gen instanceof PyGeneratorObject g) {
-                frame.increaseStackPointer(1);
                 PyObject res = g.start(top);
                 if (res == BuiltIn.PyExcStopIteration) continue;
                 byteCodeBuffer.decrease(Instruction.sizeofByteCode);
