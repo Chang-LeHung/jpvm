@@ -72,6 +72,7 @@ public class BuiltIn {
       addType("ImportError", PyErrorUtils.ImportError);
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
       addType("StackOverflowError", PyErrorUtils.StackOverflowError);
+      addType("StopIteration", PyErrorUtils.StopIteration);
       addType("IndexError", PyErrorUtils.IndexError);
       addType("FileNotFoundError", PyErrorUtils.FileNotFoundError);
     } catch (PyException ignore) {

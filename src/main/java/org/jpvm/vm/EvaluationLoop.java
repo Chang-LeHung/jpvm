@@ -950,7 +950,7 @@ public class EvaluationLoop {
           frame.push(exceptionInfo.getCurExcValue());
           frame.push(exceptionInfo.getCurExcType());
           PyObject curExcTrace = ts.getCurExcTrace();
-          var curExcValue = (PyPythonException) ts.getCurExcValue();
+          var curExcValue = (PyExceptionContext) ts.getCurExcValue();
           PyObject curExcType = ts.getCurExcType();
           PyErrorUtils.cleanThreadException();
           exceptionInfo = new ExceptionInfo();

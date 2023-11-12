@@ -4,16 +4,15 @@ import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.types.PyTypeType;
 
-public class PyPythonException extends PyObject {
+public class PyExceptionContext extends PyObject {
 
   private final PyObject type;
   private final PyUnicodeObject exceptionInformation;
-  private PyPythonException context;
+  private PyExceptionContext context;
   /** {@link PyTraceBackObject} */
   private PyTraceBackObject traceBack;
 
-
-  public PyPythonException(PyTypeType type, PyUnicodeObject exceptionInformation) {
+  public PyExceptionContext(PyTypeType type, PyUnicodeObject exceptionInformation) {
     this.type = type;
     this.exceptionInformation = exceptionInformation;
   }
@@ -47,11 +46,11 @@ public class PyPythonException extends PyObject {
     return new PyUnicodeObject(name.getData() + "(" + exceptionInformation.repr() + ")");
   }
 
-  public PyPythonException getContext() {
+  public PyExceptionContext getContext() {
     return context;
   }
 
-  public void setContext(PyPythonException context) {
+  public void setContext(PyExceptionContext context) {
     this.context = context;
   }
 
@@ -62,5 +61,4 @@ public class PyPythonException extends PyObject {
   public void setTraceBack(PyTraceBackObject traceBack) {
     this.traceBack = traceBack;
   }
-
 }

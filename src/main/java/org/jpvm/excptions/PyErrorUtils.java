@@ -36,9 +36,9 @@ public class PyErrorUtils {
     // create an instance of the exception
     PyTupleObject args = new PyTupleObject(1);
     args.set(0, new PyUnicodeObject(msg));
-    PyPythonException call = (PyPythonException) type.call(args, null);
+    PyExceptionContext call = type.call(args, null);
     ThreadState ts = JPVM.getThreadState();
-    call.setContext((PyPythonException) ts.getExceptionInfo().getCurExcValue());
+    call.setContext((PyExceptionContext) ts.getExceptionInfo().getCurExcValue());
     ts.setCurExcType(type);
     ts.setCurExcValue(call);
     throw new PyException(msg);
@@ -62,7 +62,7 @@ public class PyErrorUtils {
     ThreadState ts = JPVM.getThreadState();
     PyObject curExcType = ts.getCurExcType();
     if (curExcType != null) {
-      var curExcValue = (PyPythonException) ts.getCurExcValue();
+      var curExcValue = (PyExceptionContext) ts.getCurExcValue();
       System.err.print("Traceback (most recent call last):\n");
       recursivePrintExceptionInformation(curExcValue);
     }
@@ -70,9 +70,9 @@ public class PyErrorUtils {
     System.err.flush();
   }
 
-  private static boolean recursivePrintExceptionInformation(PyPythonException excValue) {
+  private static boolean recursivePrintExceptionInformation(PyExceptionContext excValue) {
     if (excValue != null) {
-      PyPythonException context = excValue.getContext();
+      PyExceptionContext context = excValue.getContext();
       boolean p = recursivePrintExceptionInformation(context);
       if (p)
         System.err.println(
@@ -111,7 +111,7 @@ public class PyErrorUtils {
     PyTraceBackObject tb = getTraceback();
     tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
-    ((PyPythonException) ts.getCurExcValue()).setTraceBack(tb);
+    ((PyExceptionContext) ts.getCurExcValue()).setTraceBack(tb);
   }
 
   public static boolean raiseException(PyObject exc, PyObject cause) throws PyException {
@@ -124,7 +124,7 @@ public class PyErrorUtils {
       return true;
     }
     PyBaseExceptionType type = null;
-    if (exc instanceof PyPythonException pyExc) {
+    if (exc instanceof PyExceptionContext pyExc) {
       type = (PyBaseExceptionType) pyExc.getType();
     } else if (exc instanceof PyBaseExceptionType excType) {
       type = excType;
@@ -132,8 +132,8 @@ public class PyErrorUtils {
     }
     ts.setCurExcType(type);
     ts.setCurExcValue(exc);
-    assert exc instanceof PyPythonException;
-    ts.setCurExcTrace(((PyPythonException) exc).getTraceBack());
+    assert exc instanceof PyExceptionContext;
+    ts.setCurExcTrace(((PyExceptionContext) exc).getTraceBack());
     return false;
   }
 }

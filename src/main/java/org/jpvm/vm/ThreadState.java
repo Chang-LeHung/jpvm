@@ -1,7 +1,7 @@
 package org.jpvm.vm;
 
 import org.jpvm.excptions.ExceptionInfo;
-import org.jpvm.excptions.PyPythonException;
+import org.jpvm.excptions.PyExceptionContext;
 import org.jpvm.excptions.PyTraceBackObject;
 import org.jpvm.excptions.types.PyBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
@@ -19,7 +19,7 @@ public class ThreadState {
 
   /** {@link PyBaseExceptionType} */
   private PyObject curExcType;
-  /** {@link PyPythonException} */
+  /** {@link PyExceptionContext} */
   private PyObject curExcValue;
   /** {@link PyTraceBackObject} */
   private PyObject curExcTrace;

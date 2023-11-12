@@ -1,6 +1,7 @@
 package org.jpvm.excptions.types;
 
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.PyExceptionContext;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
@@ -14,7 +15,7 @@ public class PyAssertionErrorType extends PyExceptionType {
   }
 
   @Override
-  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyExceptionContext call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return super.call(args, kwArgs);
   }
 }

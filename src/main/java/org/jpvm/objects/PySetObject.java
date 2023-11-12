@@ -1,9 +1,7 @@
 package org.jpvm.objects;
 
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.excptions.jobjs.PyTypeNotMatch;
@@ -28,7 +26,7 @@ public class PySetObject extends PyObject
   private boolean isFrozen;
 
   public PySetObject() {
-    this.set = new HashSet<>();
+    this.set = Collections.synchronizedSet(new HashSet<>());
   }
 
   public PySetObject(boolean isFrozen) {

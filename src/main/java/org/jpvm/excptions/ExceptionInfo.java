@@ -7,7 +7,7 @@ public class ExceptionInfo {
 
   /** {@link PyBaseExceptionType} */
   private PyObject curExcType;
-  /** {@link PyPythonException} */
+  /** {@link PyExceptionContext} */
   private PyObject curExcValue;
   /** {@link PyTraceBackObject} */
   private PyObject curExcTrace;
