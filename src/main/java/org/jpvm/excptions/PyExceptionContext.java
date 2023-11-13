@@ -6,14 +6,13 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyExceptionContext extends PyObject {
 
-  private final PyObject type;
   private final PyUnicodeObject exceptionInformation;
   private PyExceptionContext context;
   /** {@link PyTraceBackObject} */
   private PyTraceBackObject traceBack;
 
   public PyExceptionContext(PyTypeType type, PyUnicodeObject exceptionInformation) {
-    this.type = type;
+    this.objType = type;
     this.exceptionInformation = exceptionInformation;
   }
 
@@ -23,12 +22,12 @@ public class PyExceptionContext extends PyObject {
 
   @Override
   public PyObject getType() {
-    return type;
+    return objType;
   }
 
   @Override
   public PyUnicodeObject getTypeName() {
-    return type.getTypeName();
+    return objType.getTypeName();
   }
 
   @Override
