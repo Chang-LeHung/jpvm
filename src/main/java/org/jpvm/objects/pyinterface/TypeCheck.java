@@ -1,7 +1,7 @@
 package org.jpvm.objects.pyinterface;
 
-
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.types.PyTypeType;
 
 public interface TypeCheck {
 
@@ -10,4 +10,5 @@ public interface TypeCheck {
    */
   PyObject getType();
 
+  default void setType(PyTypeType type) {}
 }

@@ -177,10 +177,6 @@ public class PyFunctionObject extends PyObject implements TypeDescriptorGet {
     return type;
   }
 
-  public static void setType(PyObject type) {
-    PyFunctionObject.type = type;
-  }
-
   @Override
   public PyUnicodeObject getTypeName() {
     return type.getTypeName();

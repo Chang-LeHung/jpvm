@@ -10,24 +10,23 @@ import org.jpvm.vm.Abstract;
 /** used in python code to represent a python object */
 public class PyPythonObject extends PyObject implements PyNumberMethods {
 
-  private PyTypeType type;
-
   public PyPythonObject() {
     dict = new PyDictObject();
   }
 
   @Override
   public PyObject getType() {
-    return type;
+    return objType;
   }
 
+  @Override
   public void setType(PyTypeType type) {
-    this.type = type;
+    objType = type;
   }
 
   @Override
   public PyUnicodeObject getTypeName() {
-    return type.getTypeName();
+    return objType.getTypeName();
   }
 
   @Override
@@ -163,7 +162,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject abs() throws PyException {
-    var t = (PyPythonType) type;
+    var t = (PyPythonType) objType;
     PyObject res =
         t.callPythonCode(
             PyUnicodeObject.getOrCreateFromInternStringPool("__abs__", true),
@@ -231,7 +230,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public String toString() {
-    return "PyPythonObject{" + "type=" + type + '}';
+    return "PyPythonObject{" + "type=" + objType + '}';
   }
 
   @Override

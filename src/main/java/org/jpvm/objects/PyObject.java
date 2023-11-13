@@ -61,6 +61,9 @@ public class PyObject
   }
 
   protected PyDictObject dict;
+  /** used to represent the type of PyObject instance */
+  protected PyTypeType objType;
+
   protected PyLongObject hashCode;
   protected boolean hashDone;
 

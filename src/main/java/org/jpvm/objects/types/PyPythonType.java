@@ -23,6 +23,16 @@ public class PyPythonType extends PyTypeType {
   }
 
   @Override
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
+  }
+
+  @Override
+  public PyObject getType() {
+    return type;
+  }
+
+  @Override
   public String toString() {
     return "PyPythonType:" + name;
   }
