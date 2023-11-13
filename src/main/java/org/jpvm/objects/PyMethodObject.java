@@ -2,8 +2,8 @@ package org.jpvm.objects;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.types.PyMethodType;
 import org.jpvm.vm.Abstract;
 
@@ -49,7 +49,8 @@ public class PyMethodObject extends PyObject {
 
   @Override
   public PyUnicodeObject str() {
-    return new PyUnicodeObject(toString());
+    String builder = "<PyMethodObject " + method.getName() + " >";
+    return new PyUnicodeObject(builder);
   }
 
   @Override
