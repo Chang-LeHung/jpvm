@@ -43,7 +43,7 @@ public class PyTypeType extends PyObject {
   public static PyObject type = new PyTypeType(PyObject.class);
 
   protected List<PyObject> mro;
-  protected PyTupleObject _mro;
+  protected PyListObject _mro;
   protected List<PyObject> bases;
   @PyClassAttribute protected PyTupleObject __bases__;
 
@@ -103,14 +103,14 @@ public class PyTypeType extends PyObject {
   }
 
   /** lazy loading */
-  public synchronized PyTupleObject getMro() throws PyException {
+  public synchronized PyListObject getMro() throws PyException {
     if (!typeReady) {
       if (_mro != null) return _mro;
       typeReady = true;
       mro = MRO.mro(this);
-      PyTupleObject object = new PyTupleObject(mro.size());
-      for (int i = 0; i < mro.size(); i++) {
-        object.set(i, mro.get(i));
+      PyListObject object = new PyListObject();
+      for (PyObject pyObject : mro) {
+        object.add(pyObject);
       }
       _mro = object;
       return object;
@@ -151,7 +151,7 @@ public class PyTypeType extends PyObject {
     return object;
   }
 
-  public void set_mro(PyTupleObject _mro) {
+  public void set_mro(PyListObject _mro) {
     this._mro = _mro;
   }
 
@@ -228,7 +228,7 @@ public class PyTypeType extends PyObject {
   @Override
   protected PyObject lookUpType(PyObject key) throws PyException {
     PyObject res;
-    PyTupleObject mro = getMro();
+    PyListObject mro = getMro();
     for (int i = 0; i < mro.size(); i++) {
       PyObject object = mro.get(i);
       if (object != PyTypeType.type && object != this) {

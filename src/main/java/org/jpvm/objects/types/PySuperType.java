@@ -27,7 +27,7 @@ public class PySuperType extends PyTypeType {
       self = args.get(1);
       PyTypeType start = (PyTypeType) args.get(0);
       PyTypeType tp = (PyTypeType) self.getType();
-      PyTupleObject tpMro = tp.getMro();
+      PyListObject tpMro = tp.getMro();
       for (int i = 0; i < tpMro.size(); i++) {
         if (tpMro.get(i) == start && i + 1 < tpMro.size()) {
           return new PySuperObject(self, tpMro.get(i + 1));

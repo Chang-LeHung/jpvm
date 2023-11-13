@@ -33,7 +33,7 @@ public class PyBaseExceptionType extends PyTypeType {
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     switch (op) {
       case PyCmp_EXC_MATCH -> {
-        PyTupleObject typeMro = getMro();
+        PyListObject typeMro = getMro();
         for (int i = 0; i < typeMro.size(); i++) {
           if (typeMro.get(i) == o) return BuiltIn.True;
         }

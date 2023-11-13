@@ -2,10 +2,7 @@ package org.jpvm.excptions;
 
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.types.*;
-import org.jpvm.objects.PyFrameObject;
-import org.jpvm.objects.PyObject;
-import org.jpvm.objects.PyTupleObject;
-import org.jpvm.objects.PyUnicodeObject;
+import org.jpvm.objects.*;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.JPVM;
 import org.jpvm.vm.ThreadState;
@@ -89,7 +86,7 @@ public class PyErrorUtils {
   public static boolean isExceptionClass(PyObject object) {
     if (object instanceof PyTypeType type) {
       try {
-        PyTupleObject mro = type.getMro();
+        PyListObject mro = type.getMro();
         for (int i = 0; i < mro.size(); i++) {
           if (mro.get(i) == PyErrorUtils.BaseException) return true;
         }

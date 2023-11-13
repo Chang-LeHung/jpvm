@@ -170,7 +170,7 @@ public class PyObject
   protected PyObject lookUpType(PyObject key) throws PyException {
     PyTypeType t = (PyTypeType) getType();
     PyObject res;
-    PyTupleObject mro = t.getMro();
+    PyListObject mro = t.getMro();
     for (int i = 0; i < mro.size(); i++) {
       PyObject object = mro.get(i);
       if (object != PyTypeType.type) {
