@@ -11,18 +11,18 @@ public class PyErrorUtils {
 
   public static final PyBaseExceptionType BaseException = new PyBaseExceptionType();
 
-  public static final PyBaseExceptionType Exception = new PyExceptionType();
-  public static final PyBaseExceptionType AssertionError = new PyAssertionErrorType();
-  public static final PyBaseExceptionType AttributeError = new PyAttributeErrorType();
-  public static final PyBaseExceptionType KeyError = new PyKeyErrorType();
-  public static final PyBaseExceptionType NameError = new PyNameErrorType();
-  public static final PyBaseExceptionType NotImplementedError = new PyNotImplementedErrorType();
-  public static final PyBaseExceptionType RuntimeError = new PyRuntimeErrorType();
-  public static final PyBaseExceptionType TypeError = new PyTypeErrorType();
-  public static final PyBaseExceptionType ValueError = new PyValueErrorType();
-  public static final PyBaseExceptionType ZeroDivisionError = new PyZeroDivisionErrorType();
+  public static final PyExceptionType Exception = new PyExceptionType();
+  public static final PyAssertionErrorType AssertionError = new PyAssertionErrorType();
+  public static final PyAttributeErrorType AttributeError = new PyAttributeErrorType();
+  public static final PyKeyErrorType KeyError = new PyKeyErrorType();
+  public static final PyNameErrorType NameError = new PyNameErrorType();
+  public static final PyNotImplementedErrorType NotImplementedError = new PyNotImplementedErrorType();
+  public static final PyRuntimeErrorType RuntimeError = new PyRuntimeErrorType();
+  public static final PyTypeErrorType TypeError = new PyTypeErrorType();
+  public static final PyValueErrorType ValueError = new PyValueErrorType();
+  public static final PyZeroDivisionErrorType ZeroDivisionError = new PyZeroDivisionErrorType();
 
-  public static final PyBaseExceptionType StackOverflowError = new PyStackOverflowType();
+  public static final PyStackOverflowType StackOverflowError = new PyStackOverflowType();
 
   public static final PyImportErrorType ImportError = new PyImportErrorType();
   public static final PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
