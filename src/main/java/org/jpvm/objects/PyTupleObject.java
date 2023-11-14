@@ -17,7 +17,7 @@ import org.jpvm.python.BuiltIn;
 public class PyTupleObject extends PyObject
     implements TypeIterable, PySequenceMethods, PyNumberMethods {
 
-  public static PyObject type = new PyTupleType();
+  public static final PyObject type = new PyTupleType();
 
   public static PyTupleObject zero = new PyTupleObject(0);
 
@@ -368,7 +368,7 @@ public class PyTupleObject extends PyObject
   }
 
   public class PyTupleItrObject extends PyObject implements TypeDoIterate {
-    public static PyObject type = new PyTupleItrType();
+    public static final PyObject type = new PyTupleItrType();
     private int idx;
 
     public PyTupleItrObject() {

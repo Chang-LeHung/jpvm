@@ -40,7 +40,7 @@ public class PyTypeType extends PyObject {
   public static int Py_TPFLAGS_BASE_EXC_SUBCLASS = (1 << 30);
   public static int Py_TPFLAGS_TYPE_SUBCLASS = (1 << 31);
 
-  public static PyObject type = new PyTypeType(PyObject.class);
+  public static final PyObject type = new PyTypeType(PyObject.class);
 
   protected List<PyObject> mro;
   protected PyListObject _mro;

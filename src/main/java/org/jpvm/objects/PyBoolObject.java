@@ -8,7 +8,7 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolObject extends PyObject implements PyNumberMethods {
 
-  public static PyObject type = new PyBoolType();
+  public static final PyObject type = new PyBoolType();
 
   private boolean bool;
 
@@ -30,8 +30,7 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public String toString() {
-    if (bool)
-      return "True";
+    if (bool) return "True";
     return "False";
   }
 
@@ -55,22 +54,19 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject and(PyObject o) {
-    if (!(o instanceof PyBoolObject))
-      return new PyBoolObject(false);
+    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
     return new PyBoolObject(bool && ((PyBoolObject) o).bool);
   }
 
   @Override
   public PyObject xor(PyObject o) {
-    if (!(o instanceof PyBoolObject))
-      return new PyBoolObject(false);
+    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
     return new PyBoolObject(bool != ((PyBoolObject) o).bool);
   }
 
   @Override
   public PyObject or(PyObject o) {
-    if (!(o instanceof PyBoolObject))
-      return new PyBoolObject(false);
+    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
     return new PyBoolObject(bool || ((PyBoolObject) o).bool);
   }
 
@@ -78,8 +74,7 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
   public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (obj instanceof PyBoolObject)
-      return bool == ((PyBoolObject) obj).bool;
+    if (obj instanceof PyBoolObject) return bool == ((PyBoolObject) obj).bool;
     return false;
   }
 

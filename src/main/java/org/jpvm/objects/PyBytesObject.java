@@ -13,7 +13,7 @@ import org.jpvm.python.BuiltIn;
 public class PyBytesObject extends PyObject
     implements PyNumberMethods, PySequenceMethods, PyMappingMethods {
 
-  public static PyObject type = new PyBytesType();
+  public static final PyObject type = new PyBytesType();
   private byte[] data;
   private final int size;
   private PyLongObject hashCode;

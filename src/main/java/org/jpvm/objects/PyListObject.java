@@ -23,7 +23,7 @@ import org.jpvm.python.BuiltIn;
 public class PyListObject extends PyObject
     implements TypeIterable, PySequenceMethods, PyMappingMethods {
 
-  public static PyObject type = new PyListType();
+  public static final PyObject type = new PyListType();
 
   private final List<PyObject> obItem;
 
@@ -569,7 +569,7 @@ public class PyListObject extends PyObject
 
   public class PyListItrObject extends PyObject implements TypeDoIterate {
 
-    public static PyObject type = new PyListItrType();
+    public static final PyObject type = new PyListItrType();
     private int idx;
 
     public PyListItrObject() {

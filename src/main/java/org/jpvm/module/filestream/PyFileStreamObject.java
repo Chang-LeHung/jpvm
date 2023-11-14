@@ -16,7 +16,7 @@ import org.jpvm.vm.JPVM;
 
 public class PyFileStreamObject extends PyObject {
 
-  public static PyObject type = new PyFileStreamType();
+  public static final PyObject type = new PyFileStreamType();
 
   private RandomAccessFile file;
   private String encoding = "utf-8";

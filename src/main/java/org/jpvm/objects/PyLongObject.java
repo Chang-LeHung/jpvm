@@ -10,7 +10,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyLongObject extends PyObject implements PyNumberMethods {
 
-  public static PyObject type = new PyLongType();
+  public static final PyObject type = new PyLongType();
 
   public static PyLongObject[] miniPool = new PyLongObject[256 + 5];
 

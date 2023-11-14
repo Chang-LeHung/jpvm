@@ -9,7 +9,7 @@ import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.types.PyTraceBackType;
 
 public class PyTraceBackObject extends PyObject {
-  public static PyObject type = new PyTraceBackType(PyTraceBackObject.class);
+  public static final PyObject type = new PyTraceBackType(PyTraceBackObject.class);
   private final PyFrameObject frame;
   private final int lineNo;
 

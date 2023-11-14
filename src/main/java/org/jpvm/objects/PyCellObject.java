@@ -4,9 +4,9 @@ import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyCellType;
 
-public class PyCellObject extends PyObject{
+public class PyCellObject extends PyObject {
 
-  public static PyObject type = new PyCellType();
+  public static final PyObject type = new PyCellType();
 
   private PyObject ref;
 
@@ -14,8 +14,7 @@ public class PyCellObject extends PyObject{
     this.ref = ref;
   }
 
-  public PyCellObject() {
-  }
+  public PyCellObject() {}
 
   public PyObject getRef() {
     return ref;
@@ -54,7 +53,8 @@ public class PyCellObject extends PyObject{
         default -> throw new PyException("Invalid operator: " + op);
       };
     } else {
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "Invalid operand type: " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "Invalid operand type: " + o.getTypeName());
       return null;
     }
   }

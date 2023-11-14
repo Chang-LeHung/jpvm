@@ -5,7 +5,7 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PySuperType;
 
 public class PySuperObject extends PyObject {
-  public static PyObject type = new PySuperType();
+  public static final PyObject type = new PySuperType();
 
   private final PyObject self;
   private final PyObject cls;

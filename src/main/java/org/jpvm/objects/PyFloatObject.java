@@ -8,7 +8,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyFloatObject extends PyObject implements PyNumberMethods {
 
-  public static PyObject type = new PyFloatType();
+  public static final PyObject type = new PyFloatType();
 
   private double data;
 
@@ -84,8 +84,9 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject add(PyObject o) throws PyException {
-    if (!(o instanceof PyNumberMethods)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply + on float and " + o.getTypeName());
+    if (!(o instanceof PyNumberMethods)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can not apply + on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
@@ -93,7 +94,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
       PyErrorUtils.pyErrorFormat(
-              PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data + ((PyFloatObject) object).getData());
@@ -102,14 +103,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject sub(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods))
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply - on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can not apply - on float and " + o.getTypeName());
     assert o instanceof PyNumberMethods;
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
       PyErrorUtils.pyErrorFormat(
-              PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data - ((PyFloatObject) object).getData());
@@ -118,14 +120,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject mul(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods))
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply * on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can not apply * on float and " + o.getTypeName());
     assert o instanceof PyNumberMethods;
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
       PyErrorUtils.pyErrorFormat(
-              PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data * ((PyFloatObject) object).getData());
@@ -133,8 +136,9 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject mod(PyObject o) throws PyException {
-    if (!(o instanceof PyNumberMethods)){
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can not apply % on float and " + o.getTypeName());
+    if (!(o instanceof PyNumberMethods)) {
+      PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can not apply % on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
@@ -142,7 +146,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
       PyErrorUtils.pyErrorFormat(
-              PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data % ((PyFloatObject) object).getData());

@@ -8,7 +8,7 @@ import org.jpvm.objects.types.PyNativeMethodType;
 
 public class PyNativeMethodObject extends PyObject {
 
-  public static PyObject type = new PyNativeMethodType();
+  public static final PyObject type = new PyNativeMethodType();
 
   private final Method method;
 

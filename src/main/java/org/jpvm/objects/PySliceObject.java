@@ -11,7 +11,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PySliceObject extends PyObject {
 
-  public static PyObject type = new PySliceType();
+  public static final PyObject type = new PySliceType();
 
   private final PyObject start;
   private final PyObject end;
@@ -35,7 +35,8 @@ public class PySliceObject extends PyObject {
 
   @Override
   public PyUnicodeObject str() {
-    return new PyUnicodeObject(String.format("slice(%s, %s, %s,)", start.repr(), end.repr(), step.repr()));
+    return new PyUnicodeObject(
+        String.format("slice(%s, %s, %s,)", start.repr(), end.repr(), step.repr()));
   }
 
   @Override
@@ -49,8 +50,7 @@ public class PySliceObject extends PyObject {
       if (!(o instanceof PySliceObject slice)) {
         return BuiltIn.False;
       }
-      if (start == slice.start && end == slice.end && step == slice.step)
-        return BuiltIn.True;
+      if (start == slice.start && end == slice.end && step == slice.step) return BuiltIn.True;
       return BuiltIn.False;
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
@@ -75,8 +75,7 @@ public class PySliceObject extends PyObject {
   }
 
   public PyListObject unpacked(PyObject o) {
-    if (!((o instanceof TypeIterable) || o instanceof TypeDoIterate))
-      return null;
+    if (!((o instanceof TypeIterable) || o instanceof TypeDoIterate)) return null;
     TypeDoIterate it;
     if (o instanceof TypeIterable iter) {
       try {
@@ -84,41 +83,32 @@ public class PySliceObject extends PyObject {
       } catch (PyNotImplemented e) {
         return null;
       }
-    }
-    else
-      it = (TypeDoIterate) o;
+    } else it = (TypeDoIterate) o;
     int b, e, s;
     Long l;
-    if (start == BuiltIn.None)
-      b = 0;
+    if (start == BuiltIn.None) b = 0;
     else {
       l = NumberHelper.transformPyObject2Long(start);
       assert l != null;
       b = l.intValue();
     }
-    if (end == BuiltIn.None)
-      e = it.size();
+    if (end == BuiltIn.None) e = it.size();
     else {
       l = NumberHelper.transformPyObject2Long(end);
       assert l != null;
       e = l.intValue();
     }
 
-    if (step == BuiltIn.None)
-      s = 1;
+    if (step == BuiltIn.None) s = 1;
     else {
       l = NumberHelper.transformPyObject2Long(step);
       assert l != null;
       s = l.intValue();
     }
-    if (s == 0)
-      return null;
-    if (e > it.size())
-      e = it.size();
-    if (e < -it.size())
-      return null;
-    if (b < -it.size())
-      return null;
+    if (s == 0) return null;
+    if (e > it.size()) e = it.size();
+    if (e < -it.size()) return null;
+    if (b < -it.size()) return null;
     PyListObject list = new PyListObject();
     int mod = it.size() + 1;
     if (s < 0) {

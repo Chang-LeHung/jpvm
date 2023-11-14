@@ -10,7 +10,7 @@ import org.jpvm.pycParser.PyCodeObject;
 
 public class PyFrameObject extends PyObject {
 
-  public static PyObject type = new PyFrameType();
+  public static final PyObject type = new PyFrameType();
   private final PyCodeObject code;
   /** value stack */
   private final PyObject[] stack;
