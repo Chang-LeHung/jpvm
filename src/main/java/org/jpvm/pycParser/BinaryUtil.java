@@ -12,7 +12,7 @@ public class BinaryUtil {
     var bytes = new byte[4];
     var size = stream.read(bytes);
     assert size == 4;
-    // 指定数据存储方式为小端方式
+    // use litten-endian storage for ints
     return ByteBuffer.wrap(bytes).order(LITTLE_ENDIAN).getInt();
   }
 }
