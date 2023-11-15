@@ -1,7 +1,6 @@
 package org.jpvm.exceptions.types;
 
 import org.jpvm.exceptions.PyErrorUtils;
-import org.jpvm.exceptions.PyExceptionContext;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
 import org.jpvm.objects.*;
@@ -11,7 +10,7 @@ import org.jpvm.python.BuiltIn;
 public class PyBaseExceptionType extends PyTypeType {
 
   public PyBaseExceptionType() {
-    super(PyExceptionContext.class);
+    super(PyExceptionObject.class);
     name = "BaseException";
   }
 
