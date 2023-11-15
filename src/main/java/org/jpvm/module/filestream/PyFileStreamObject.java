@@ -11,12 +11,13 @@ import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.InterpreterState;
 import org.jpvm.vm.JPVM;
 
 public class PyFileStreamObject extends PyObject {
 
-  public static final PyObject type = new PyFileStreamType();
+  public static final PyTypeType type = new PyFileStreamType();
 
   private RandomAccessFile file;
   private String encoding = "utf-8";

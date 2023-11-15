@@ -3,10 +3,11 @@ package org.jpvm.objects;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyCellType;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PyCellObject extends PyObject {
 
-  public static final PyObject type = new PyCellType();
+  public static final PyTypeType type = new PyCellType();
 
   private PyObject ref;
 

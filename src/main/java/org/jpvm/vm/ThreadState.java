@@ -1,8 +1,8 @@
 package org.jpvm.vm;
 
 import org.jpvm.excptions.ExceptionInfo;
-import org.jpvm.excptions.PyExceptionContext;
 import org.jpvm.excptions.PyTraceBackObject;
+import org.jpvm.excptions.pyobjs.PyExceptionObject;
 import org.jpvm.excptions.types.PyBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
@@ -14,15 +14,16 @@ public class ThreadState {
   private InterpreterState is;
   private int recursionDepth;
 
-  /** point to stack top exception, exception being handled currently. */
+  /** point to stack top exception, exception being handled. */
   private ExceptionInfo exceptionInfo;
 
   /** {@link PyBaseExceptionType} */
-  private PyObject curExcType;
-  /** {@link PyExceptionContext} */
-  private PyObject curExcValue;
+  private PyBaseExceptionType curExcType;
+
   /** {@link PyTraceBackObject} */
-  private PyObject curExcTrace;
+  private PyExceptionObject curExcValue;
+
+  private PyTraceBackObject curExcTrace;
 
   private PyDictObject builtins;
 
@@ -79,32 +80,21 @@ public class ThreadState {
     this.currentFrame = currentFrame;
   }
 
-  public PyObject getCurExcType() {
+  public PyBaseExceptionType getCurExcType() {
     return curExcType;
   }
 
-  public void setCurExcType(PyObject curExcType) {
-    this.curExcType = curExcType;
-  }
-
-  public PyObject getCurExcValue() {
-    return curExcValue;
-  }
-
-  public void setCurExcValue(PyObject curExcValue) {
-    this.curExcValue = curExcValue;
-  }
-
-  public PyObject getCurExcTrace() {
+  public PyTraceBackObject getCurExcTrace() {
     return curExcTrace;
   }
 
-  public void setCurExcTrace(PyObject curExcTrace) {
+  public void setCurExcTrace(PyTraceBackObject curExcTrace) {
     this.curExcTrace = curExcTrace;
   }
 
   public ExceptionInfo getExceptionInfo() {
-    if (exceptionInfo == null) exceptionInfo = new ExceptionInfo();
+    if (exceptionInfo == null)
+      exceptionInfo = new ExceptionInfo();
     return exceptionInfo;
   }
 
@@ -118,5 +108,17 @@ public class ThreadState {
 
   public void setMainThread(boolean mainThread) {
     isMainThread = mainThread;
+  }
+
+  public void setCurExcType(PyBaseExceptionType curExcType) {
+    this.curExcType = curExcType;
+  }
+
+  public PyExceptionObject getCurExcValue() {
+    return curExcValue;
+  }
+
+  public void setCurExcValue(PyExceptionObject curExcValue) {
+    this.curExcValue = curExcValue;
   }
 }

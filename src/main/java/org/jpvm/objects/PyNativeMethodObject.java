@@ -5,10 +5,11 @@ import java.lang.reflect.Method;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyNativeMethodType;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PyNativeMethodObject extends PyObject {
 
-  public static final PyObject type = new PyNativeMethodType();
+  public static final PyTypeType type = new PyNativeMethodType();
 
   private final Method method;
 

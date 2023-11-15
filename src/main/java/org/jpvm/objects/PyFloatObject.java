@@ -3,12 +3,13 @@ package org.jpvm.objects;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PyFloatType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.python.BuiltIn;
 
 public class PyFloatObject extends PyObject implements PyNumberMethods {
 
-  public static final PyObject type = new PyFloatType();
+  public static final PyTypeType type = new PyFloatType();
 
   private double data;
 

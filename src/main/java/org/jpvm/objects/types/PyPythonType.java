@@ -6,7 +6,7 @@ import org.jpvm.vm.Abstract;
 
 /** used in python code to represent a python type */
 public class PyPythonType extends PyTypeType {
-  public static final PyObject type = PyTypeType.type;
+  public static final PyTypeType type = PyTypeType.type;
 
   public PyPythonType() {
     super(PyPythonObject.class);

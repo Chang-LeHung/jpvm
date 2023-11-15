@@ -36,7 +36,7 @@ public class PyObject
         PyTypeMethods {
 
   public static Operator[] compareOpMap;
-  public static PyObject type;
+  public static PyTypeType type;
   /** base class name of all classes in python */
   public static PyUnicodeObject name;
   /** parameterTypes of callable methods */
@@ -244,6 +244,11 @@ public class PyObject
     PyObject attr = getAttrInternal(key);
     if (attr != null) dict.put(key, attr);
     return attr;
+  }
+
+  @Override
+  public void setType(PyTypeType type) {
+    objType = type;
   }
 
   @Override

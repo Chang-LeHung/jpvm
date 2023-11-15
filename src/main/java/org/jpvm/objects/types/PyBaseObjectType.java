@@ -5,7 +5,7 @@ import org.jpvm.objects.PyObject;
 
 public class PyBaseObjectType extends PyTypeType {
 
-  public static final PyObject type = PyTypeType.type;
+  public static final PyTypeType type = PyTypeType.type;
 
   public PyBaseObjectType() {
     super(PyObject.class);

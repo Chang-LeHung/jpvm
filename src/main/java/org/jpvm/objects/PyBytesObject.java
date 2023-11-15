@@ -5,6 +5,7 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.types.PyBytesType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
@@ -13,7 +14,7 @@ import org.jpvm.python.BuiltIn;
 public class PyBytesObject extends PyObject
     implements PyNumberMethods, PySequenceMethods, PyMappingMethods {
 
-  public static final PyObject type = new PyBytesType();
+  public static final PyTypeType type = new PyBytesType();
   private byte[] data;
   private final int size;
   private PyLongObject hashCode;

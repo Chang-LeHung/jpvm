@@ -1,8 +1,9 @@
 package org.jpvm.excptions.types;
 
+import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.PyExceptionContext;
 import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.excptions.pyobjs.PyExceptionObject;
 import org.jpvm.objects.*;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
@@ -15,11 +16,17 @@ public class PyBaseExceptionType extends PyTypeType {
   }
 
   @Override
-  public PyExceptionContext call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    PyExceptionContext res;
-    if (args.size() == 0) res = new PyExceptionContext(this, new PyUnicodeObject(name));
-    else res = new PyExceptionContext(this, (PyUnicodeObject) args.get(0));
-    return res;
+  public PyExceptionObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    PyExceptionObject val;
+    if (args.size() == 0) val = new PyExceptionObject(new PyUnicodeObject(name));
+    else val = new PyExceptionObject((PyUnicodeObject) args.get(0));
+    val.setType(PyBaseExceptionType.type);
+    return val;
+  }
+
+  public PyUnicodeObject extractPyUnicodeObjectFromArgs(PyTupleObject args) throws PyException {
+    if (args.size() == 0) return new PyUnicodeObject(name);
+    return (PyUnicodeObject) args.get(0);
   }
 
   public PyObject call(String msg) throws PyException {

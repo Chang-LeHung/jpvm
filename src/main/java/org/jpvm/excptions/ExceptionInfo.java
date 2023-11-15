@@ -1,46 +1,65 @@
 package org.jpvm.excptions;
 
+import org.jpvm.excptions.pyobjs.PyExceptionObject;
 import org.jpvm.excptions.types.PyBaseExceptionType;
+import org.jpvm.excptions.types.PyExceptionType;
 import org.jpvm.objects.PyObject;
+import org.jpvm.python.BuiltIn;
 
 public class ExceptionInfo {
 
   /** {@link PyBaseExceptionType} */
-  private PyObject curExcType;
-  /** {@link PyExceptionContext} */
-  private PyObject curExcValue;
+  private PyBaseExceptionType excType;
+  /** {@link PyExceptionObject} */
+  private PyExceptionObject excValue;
   /** {@link PyTraceBackObject} */
-  private PyObject curExcTrace;
+  private PyTraceBackObject excTrace;
 
-  public ExceptionInfo(PyObject curExcType, PyObject curExcValue, PyObject curExcTrace) {
-    this.curExcType = curExcType;
-    this.curExcValue = curExcValue;
-    this.curExcTrace = curExcTrace;
+  private ExceptionInfo previous;
+
+  public ExceptionInfo(
+      PyBaseExceptionType excType,
+      PyExceptionObject excValue,
+      ExceptionInfo previous,
+      PyTraceBackObject excTrace) {
+    this.excType = excType;
+    this.excValue = excValue;
+    this.previous = previous;
+    this.excTrace = excTrace;
   }
 
   public ExceptionInfo() {}
 
-  public PyObject getCurExcType() {
-    return curExcType;
+  public PyBaseExceptionType getExcType() {
+    return excType;
   }
 
-  public void setCurExcType(PyObject curExcType) {
-    this.curExcType = curExcType;
+  public void setExcType(PyObject excType) {
+    if (excType != null && excType != BuiltIn.None) this.excType = (PyExceptionType) excType;
   }
 
-  public PyObject getCurExcValue() {
-    return curExcValue;
+  public ExceptionInfo getPrevious() {
+    return previous;
   }
 
-  public void setCurExcValue(PyObject curExcValue) {
-    this.curExcValue = curExcValue;
+  public void setPrevious(ExceptionInfo previous) {
+    this.previous = previous;
   }
 
-  public PyObject getCurExcTrace() {
-    return curExcTrace;
+  public PyTraceBackObject getExcTrace() {
+    return excTrace;
   }
 
-  public void setCurExcTrace(PyObject curExcTrace) {
-    this.curExcTrace = curExcTrace;
+  public PyExceptionObject getExcValue() {
+
+    return excValue;
+  }
+
+  public void setExcValue(PyExceptionObject excValue) {
+    this.excValue = excValue;
+  }
+
+  public void setExcTrace(PyTraceBackObject excTrace) {
+    this.excTrace = excTrace;
   }
 }

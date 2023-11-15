@@ -5,12 +5,13 @@ import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyLongType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.python.BuiltIn;
 
 public class PyLongObject extends PyObject implements PyNumberMethods {
 
-  public static final PyObject type = new PyLongType();
+  public static final PyTypeType type = new PyLongType();
 
   public static PyLongObject[] miniPool = new PyLongObject[256 + 5];
 

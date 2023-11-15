@@ -5,11 +5,12 @@ import java.lang.reflect.Method;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.types.PyMethodType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.Abstract;
 
 public class PyMethodObject extends PyObject {
 
-  public static final PyObject type = new PyMethodType();
+  public static final PyTypeType type = new PyMethodType();
   private final String methodName;
   private PyObject self;
   private Method method;

@@ -13,6 +13,9 @@ import org.jpvm.excptions.*;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNameError;
 import org.jpvm.excptions.jobjs.PyTypeNotMatch;
+import org.jpvm.excptions.pyobjs.PyExceptionObject;
+import org.jpvm.excptions.types.PyBaseExceptionType;
+import org.jpvm.excptions.types.PyExceptionType;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -128,7 +131,6 @@ public class EvaluationLoop {
 
   public PyObject pyEvalFrame() throws PyException {
 
-    InterpreterState is = JPVM.getThreadState().getIs();
     exit_loop:
     for (; ; ) {
       // evaluation loop
@@ -752,14 +754,12 @@ public class EvaluationLoop {
             }
             case END_FINALLY -> {
               PyObject type = frame.pop();
-              if (type == null) {
-                continue;
-              } else if (type instanceof PyLongObject l) {
+              if (type instanceof PyLongObject l) {
                 byteCodeBuffer.reset((int) l.getData());
               } else if (PyErrorUtils.isExceptionClass(type)) {
-                PyObject val = frame.pop();
-                PyObject tb = frame.pop();
-                PyErrorUtils.restoreExceptionState(type, val, tb);
+                var val = (PyExceptionObject) frame.pop();
+                var tb = (PyTraceBackObject) frame.pop();
+                PyErrorUtils.restoreExceptionState((PyExceptionType) type, val, tb);
                 breakFromEND_FINALLY = true;
                 break main_loop;
               }
@@ -772,9 +772,9 @@ public class EvaluationLoop {
               assert blockHandler.getHandler() + 4 >= frame.getStackSize();
               ThreadState ts = JPVM.getThreadState();
               ExceptionInfo exceptionInfo = ts.getExceptionInfo();
-              exceptionInfo.setCurExcType(frame.pop());
-              exceptionInfo.setCurExcValue(frame.pop());
-              exceptionInfo.setCurExcTrace(frame.pop());
+              exceptionInfo.setExcType(frame.pop());
+              exceptionInfo.setExcValue((PyExceptionObject) frame.pop());
+              exceptionInfo.setExcTrace((PyTraceBackObject) frame.pop());
             }
             case POP_JUMP_IF_FALSE -> {
               PyObject pop = frame.pop();
@@ -932,9 +932,9 @@ public class EvaluationLoop {
             frame.pop();
           }
           ExceptionInfo exceptionInfo = ts.getExceptionInfo();
-          exceptionInfo.setCurExcType(frame.pop());
-          exceptionInfo.setCurExcValue(frame.pop());
-          exceptionInfo.setCurExcTrace(frame.pop());
+          exceptionInfo.setExcType(frame.pop());
+          exceptionInfo.setExcValue((PyExceptionObject) frame.pop());
+          exceptionInfo.setExcTrace((PyTraceBackObject) frame.pop());
         }
         // resume stack state
         while (blockHandler.getLevel() < frame.getStackSize()) frame.pop();
@@ -946,17 +946,18 @@ public class EvaluationLoop {
           ExceptionInfo exceptionInfo = ts.getExceptionInfo();
           frame.pushTryBlockHandler(
               new TryBlockHandler(TryBlockHandler.EXCEPT_HANDLER, -1, frame.getStackSize()));
-          frame.push(exceptionInfo.getCurExcTrace());
-          frame.push(exceptionInfo.getCurExcValue());
-          frame.push(exceptionInfo.getCurExcType());
-          PyObject curExcTrace = ts.getCurExcTrace();
-          var curExcValue = (PyExceptionContext) ts.getCurExcValue();
-          PyObject curExcType = ts.getCurExcType();
+          frame.push(exceptionInfo.getExcTrace());
+          frame.push(exceptionInfo.getExcValue());
+          PyBaseExceptionType excType = exceptionInfo.getExcType();
+          frame.push(excType);
+          var curExcTrace = ts.getCurExcTrace();
+          var curExcValue = ts.getCurExcValue();
+          var curExcType = ts.getCurExcType();
           PyErrorUtils.cleanThreadException();
-          exceptionInfo = new ExceptionInfo();
-          exceptionInfo.setCurExcTrace(curExcTrace);
-          exceptionInfo.setCurExcValue(curExcValue);
-          exceptionInfo.setCurExcType(curExcType);
+          if (curExcTrace != null) curExcValue.setTraceback(curExcTrace);
+          exceptionInfo.setExcTrace(curExcTrace);
+          exceptionInfo.setExcValue(curExcValue);
+          exceptionInfo.setExcType(curExcType);
           ts.setExceptionInfo(exceptionInfo);
           frame.push(curExcTrace);
           frame.push(curExcValue);
@@ -988,7 +989,7 @@ public class EvaluationLoop {
     v = globals.get(name);
     if (null == v) {
       v = builtins.get(name);
-      if (v == null) {
+      if (null == v) {
         error = new PyNameError("can not find variable " + name.repr());
       } else {
         frame.push(v);

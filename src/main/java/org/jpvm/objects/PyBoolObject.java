@@ -4,11 +4,12 @@ import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.excptions.jobjs.PyTypeNotMatch;
 import org.jpvm.objects.types.PyBoolType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolObject extends PyObject implements PyNumberMethods {
 
-  public static final PyObject type = new PyBoolType();
+  public static final PyTypeType type = new PyBoolType();
 
   private boolean bool;
 

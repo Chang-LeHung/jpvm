@@ -1,6 +1,7 @@
 package org.jpvm.excptions;
 
 import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.excptions.pyobjs.PyExceptionObject;
 import org.jpvm.excptions.types.*;
 import org.jpvm.objects.*;
 import org.jpvm.objects.types.PyTypeType;
@@ -10,20 +11,18 @@ import org.jpvm.vm.ThreadState;
 public class PyErrorUtils {
 
   public static final PyBaseExceptionType BaseException = new PyBaseExceptionType();
-
   public static final PyExceptionType Exception = new PyExceptionType();
   public static final PyAssertionErrorType AssertionError = new PyAssertionErrorType();
   public static final PyAttributeErrorType AttributeError = new PyAttributeErrorType();
   public static final PyKeyErrorType KeyError = new PyKeyErrorType();
   public static final PyNameErrorType NameError = new PyNameErrorType();
-  public static final PyNotImplementedErrorType NotImplementedError = new PyNotImplementedErrorType();
+  public static final PyNotImplementedErrorType NotImplementedError =
+      new PyNotImplementedErrorType();
   public static final PyRuntimeErrorType RuntimeError = new PyRuntimeErrorType();
   public static final PyTypeErrorType TypeError = new PyTypeErrorType();
   public static final PyValueErrorType ValueError = new PyValueErrorType();
   public static final PyZeroDivisionErrorType ZeroDivisionError = new PyZeroDivisionErrorType();
-
   public static final PyStackOverflowType StackOverflowError = new PyStackOverflowType();
-
   public static final PyImportErrorType ImportError = new PyImportErrorType();
   public static final PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
   public static final PyFileNotFoundErrorType FileNotFoundError = new PyFileNotFoundErrorType();
@@ -33,11 +32,12 @@ public class PyErrorUtils {
     // create an instance of the exception
     PyTupleObject args = new PyTupleObject(1);
     args.set(0, new PyUnicodeObject(msg));
-    PyExceptionContext call = type.call(args, null);
+    PyExceptionObject value = type.call(args, null);
     ThreadState ts = JPVM.getThreadState();
-    call.setContext((PyExceptionContext) ts.getExceptionInfo().getCurExcValue());
+    PyExceptionObject curExcValue = ts.getExceptionInfo().getExcValue();
+    value.setContext(curExcValue);
+    ts.setCurExcValue(value);
     ts.setCurExcType(type);
-    ts.setCurExcValue(call);
     throw new PyException(msg);
   }
 
@@ -59,25 +59,24 @@ public class PyErrorUtils {
     ThreadState ts = JPVM.getThreadState();
     PyObject curExcType = ts.getCurExcType();
     if (curExcType != null) {
-      var curExcValue = (PyExceptionContext) ts.getCurExcValue();
       System.err.print("Traceback (most recent call last):\n");
-      recursivePrintExceptionInformation(curExcValue);
+      recursivePrintExceptionInformation(ts.getCurExcValue());
     }
     System.err.print("\033[0m");
     System.err.flush();
   }
 
-  private static boolean recursivePrintExceptionInformation(PyExceptionContext excValue) {
-    if (excValue != null) {
-      PyExceptionContext context = excValue.getContext();
+  private static boolean recursivePrintExceptionInformation(PyExceptionObject value) {
+    if (value != null) {
+      PyExceptionObject context = value.getContext();
       boolean p = recursivePrintExceptionInformation(context);
       if (p)
         System.err.println(
             "\nDuring handling of the above exception, another exception occurred:\n");
-      System.err.print(excValue.getTraceBack().repr());
-      System.err.print(excValue.getType().getTypeName());
+      System.err.print(value.getTraceback().repr());
+      System.err.print(value.getTypeName());
       System.err.print(": ");
-      System.err.println(excValue.getExceptionInformation());
+      System.err.println(value.getErrorMsg());
       return true;
     }
     return false;
@@ -96,7 +95,8 @@ public class PyErrorUtils {
     return false;
   }
 
-  public static void restoreExceptionState(PyObject type, PyObject val, PyObject tb) {
+  public static void restoreExceptionState(
+      PyExceptionType type, PyExceptionObject val, PyTraceBackObject tb) {
     ThreadState ts = JPVM.getThreadState();
     ts.setCurExcType(type);
     ts.setCurExcValue(val);
@@ -108,16 +108,17 @@ public class PyErrorUtils {
     PyTraceBackObject tb = getTraceback();
     tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
-    ((PyExceptionContext) ts.getCurExcValue()).setTraceBack(tb);
+    ts.getExceptionInfo().setExcTrace(tb);
+    ts.getCurExcValue().setTraceback(tb);
   }
 
   public static boolean raiseException(PyObject exc, PyObject cause) throws PyException {
     ThreadState ts = JPVM.getThreadState();
     if (exc == null) {
       ExceptionInfo exceptionInfo = ts.getExceptionInfo();
-      ts.setCurExcValue(exceptionInfo.getCurExcValue());
-      ts.setCurExcType(exceptionInfo.getCurExcType());
-      ts.setCurExcTrace(exceptionInfo.getCurExcTrace());
+      ts.setCurExcValue(exceptionInfo.getExcValue());
+      ts.setCurExcType(exceptionInfo.getExcType());
+      ts.setCurExcTrace(exceptionInfo.getExcTrace());
       return true;
     }
     PyBaseExceptionType type = null;
@@ -128,9 +129,8 @@ public class PyErrorUtils {
       exc = excType.call("");
     }
     ts.setCurExcType(type);
-    ts.setCurExcValue(exc);
-    assert exc instanceof PyExceptionContext;
-    ts.setCurExcTrace(((PyExceptionContext) exc).getTraceBack());
+    ts.setCurExcValue((PyExceptionObject) exc);
+    ts.setCurExcTrace(ts.getExceptionInfo().getExcTrace());
     return false;
   }
 }

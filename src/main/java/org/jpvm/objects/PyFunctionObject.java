@@ -3,12 +3,13 @@ package org.jpvm.objects;
 import org.jpvm.excptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.pyinterface.TypeDescriptorGet;
 import org.jpvm.objects.types.PyFunctionType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
 public class PyFunctionObject extends PyObject implements TypeDescriptorGet {
 
-  public static final PyObject type = new PyFunctionType();
+  public static final PyTypeType type = new PyFunctionType();
   public static PyDictObject zero = new PyDictObject();
   /** type of {@link PyCodeObject} */
   private PyObject funcCode;

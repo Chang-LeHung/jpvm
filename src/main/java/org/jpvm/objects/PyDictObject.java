@@ -20,7 +20,7 @@ import javax.swing.*;
 public class PyDictObject extends PyObject
     implements PyMappingMethods, PySequenceMethods, TypeIterable {
 
-  public static final PyObject type = new PyDictType();
+  public static final PyTypeType type = new PyDictType();
 
   private final Map<PyObject, PyObject> map;
 
@@ -283,7 +283,7 @@ public class PyDictObject extends PyObject
   public static class PyDictValuesObject extends PyObject
       implements TypeIterable, PySequenceMethods {
 
-    public static final PyObject type = new PyDictValuesType();
+    public static final PyTypeType type = new PyDictValuesType();
     private final Collection<PyObject> values;
 
     public PyDictValuesObject(Map<PyObject, PyObject> map) {
@@ -341,7 +341,7 @@ public class PyDictObject extends PyObject
 
     public class PyDictValuesItrObject extends PyObject implements TypeDoIterate {
 
-      public static final PyObject type = new PyDictValuesItrType();
+      public static final PyTypeType type = new PyDictValuesItrType();
       Iterator<PyObject> iterator;
 
       public PyDictValuesItrObject() {
@@ -372,7 +372,7 @@ public class PyDictObject extends PyObject
   public static class PyDictKeysObject extends PyObject
       implements PyNumberMethods, PySequenceMethods, TypeIterable {
 
-    public static final PyObject type = new PyDictKeysType();
+    public static final PyTypeType type = new PyDictKeysType();
     private final Set<PyObject> set;
 
     public PyDictKeysObject(Map<PyObject, PyObject> map) {
@@ -459,7 +459,7 @@ public class PyDictObject extends PyObject
     }
 
     private class PyDictKeysItrObject extends PyObject implements TypeDoIterate {
-      public static final PyObject type = new PyDictKeysItrType();
+      public static final PyTypeType type = new PyDictKeysItrType();
       Iterator<PyObject> iterator;
 
       public PyDictKeysItrObject() {
@@ -488,7 +488,7 @@ public class PyDictObject extends PyObject
 
   public static class PyDictItemsObject extends PyObject
       implements TypeIterable, PyNumberMethods, PySequenceMethods {
-    public static final PyObject type = new PyDictItemsType();
+    public static final PyTypeType type = new PyDictItemsType();
 
     private final Map<PyObject, PyObject> map;
 
@@ -657,7 +657,7 @@ public class PyDictObject extends PyObject
   }
 
   public class PyDictItrObject extends PyObject implements TypeDoIterate {
-    public static final PyObject type = new PyDictItrType();
+    public static final PyTypeType type = new PyDictItrType();
     Iterator<PyObject> iterator;
 
     public PyDictItrObject() {

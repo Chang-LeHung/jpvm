@@ -1,10 +1,11 @@
 package org.jpvm.objects;
 
 import org.jpvm.objects.types.PyNoneType;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PyNoneObject extends PyObject {
 
-  public static final PyObject type = new PyNoneType();
+  public static final PyTypeType type = new PyNoneType();
 
   public static PyBoolObject check(PyObject o) {
     return new PyBoolObject(o == type);

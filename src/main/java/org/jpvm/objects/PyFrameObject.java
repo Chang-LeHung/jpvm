@@ -6,11 +6,12 @@ import org.jpvm.bytecode.ByteCodeBuffer;
 import org.jpvm.excptions.TryBlockHandler;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.types.PyFrameType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.pycParser.PyCodeObject;
 
 public class PyFrameObject extends PyObject {
 
-  public static final PyObject type = new PyFrameType();
+  public static final PyTypeType type = new PyFrameType();
   private final PyCodeObject code;
   /** value stack */
   private final PyObject[] stack;

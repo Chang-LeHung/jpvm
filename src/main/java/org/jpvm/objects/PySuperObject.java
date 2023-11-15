@@ -3,9 +3,10 @@ package org.jpvm.objects;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.objects.types.PySuperType;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PySuperObject extends PyObject {
-  public static final PyObject type = new PySuperType();
+  public static final PyTypeType type = new PySuperType();
 
   private final PyObject self;
   private final PyObject cls;

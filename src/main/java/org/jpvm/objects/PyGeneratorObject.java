@@ -7,6 +7,7 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyGeneratorType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.EvaluationLoop;
 import org.jpvm.vm.JPVM;
 import org.jpvm.pycParser.PyCodeObject;
@@ -14,7 +15,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIterable {
 
-  public static final PyObject type = new PyGeneratorType();
+  public static final PyTypeType type = new PyGeneratorType();
 
   /**
    * frame object {@link PyFrameObject} backing of this generator, which is runtime environment of

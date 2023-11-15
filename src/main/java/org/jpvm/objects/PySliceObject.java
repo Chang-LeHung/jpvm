@@ -7,11 +7,12 @@ import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PySliceType;
+import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.python.BuiltIn;
 
 public class PySliceObject extends PyObject {
 
-  public static final PyObject type = new PySliceType();
+  public static final PyTypeType type = new PySliceType();
 
   private final PyObject start;
   private final PyObject end;

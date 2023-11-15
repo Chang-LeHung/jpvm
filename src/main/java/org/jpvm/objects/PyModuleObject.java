@@ -2,10 +2,11 @@ package org.jpvm.objects;
 
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.objects.types.PyModuleType;
+import org.jpvm.objects.types.PyTypeType;
 
 public class PyModuleObject extends PyObject {
 
-  public static final PyObject type = new PyModuleType();
+  public static final PyTypeType type = new PyModuleType();
 
   /** The module name. */
   private PyUnicodeObject moduleName;

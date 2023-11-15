@@ -11,7 +11,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyRangeObject extends PyObject implements TypeIterable {
 
-  public static final PyObject type = new PyRangeType();
+  public static final PyTypeType type = new PyRangeType();
   private final int start;
   private final int end;
   private final int step;
@@ -89,7 +89,7 @@ public class PyRangeObject extends PyObject implements TypeIterable {
 
   private class PyRangeItrObject extends PyObject implements TypeDoIterate {
 
-    public static final PyObject type = new PyRangeItrType();
+    public static final PyTypeType type = new PyRangeItrType();
 
     @Override
     public synchronized PyObject next() throws PyException {
