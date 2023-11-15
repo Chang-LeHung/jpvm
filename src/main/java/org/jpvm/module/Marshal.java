@@ -234,11 +234,11 @@ public class Marshal {
       RREF(floatObject);
       return floatObject;
     }
-    throw new RuntimeException("jpython can not convert " + size + "bytes into a PyFloat");
+    throw new RuntimeException("JPVM can not convert " + size + "bytes into a PyFloat");
   }
 
   private PyObject loadLong(ByteBuffer buffer) {
-    throw new RuntimeException("jpython do not support big int like cpython");
+    throw new RuntimeException("JPVM do not support big int like cpython");
   }
 
   private PyLongObject loadInt64(ByteBuffer buffer) {
