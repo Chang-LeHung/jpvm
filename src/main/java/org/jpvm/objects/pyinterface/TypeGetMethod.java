@@ -1,7 +1,7 @@
 package org.jpvm.objects.pyinterface;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyMissMethod;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyMissMethod;
 import org.jpvm.objects.PyMethodObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyUnicodeObject;

@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyNotImplemented;
-import org.jpvm.excptions.jobjs.PyTypeNotMatch;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyNotImplemented;
+import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
 import org.jpvm.objects.types.PyBoolType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;

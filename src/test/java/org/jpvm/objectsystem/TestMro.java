@@ -1,6 +1,6 @@
 package org.jpvm.objectsystem;
 
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.vm.JPVM;
 import org.junit.Test;
 

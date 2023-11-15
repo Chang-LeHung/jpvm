@@ -2,10 +2,10 @@ package org.jpvm.objects;
 
 import java.util.*;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyNotImplemented;
-import org.jpvm.excptions.jobjs.PyTypeNotMatch;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyNotImplemented;
+import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;

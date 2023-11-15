@@ -2,8 +2,8 @@ package org.jpvm.objects;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.*;

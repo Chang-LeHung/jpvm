@@ -2,10 +2,10 @@ package org.jpvm.python;
 
 import java.io.IOException;
 import java.util.Scanner;
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyTypeError;
-import org.jpvm.excptions.jobjs.PyTypeNotMatch;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyTypeError;
+import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.module.filestream.PyFileOpenObject;
 import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;

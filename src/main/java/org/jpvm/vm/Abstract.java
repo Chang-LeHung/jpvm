@@ -2,8 +2,8 @@ package org.jpvm.vm;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;

@@ -2,7 +2,7 @@ package org.jpvm.benchmark;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.vm.JPVM;
 import org.openjdk.jmh.annotations.*;
 

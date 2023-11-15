@@ -1,6 +1,6 @@
 package org.jpvm.objects;
 
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.junit.Test;
 
 public class PyComplexObjectTest {

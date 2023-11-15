@@ -1,6 +1,6 @@
 package org.jpvm.internal;
 
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyLongObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.protocols.PyNumberMethods;

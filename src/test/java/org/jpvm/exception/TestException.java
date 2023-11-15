@@ -1,7 +1,7 @@
 package org.jpvm.exception;
 
 import java.io.IOException;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.vm.JPVM;
 import org.junit.Test;
 

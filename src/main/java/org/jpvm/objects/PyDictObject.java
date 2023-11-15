@@ -3,8 +3,8 @@ package org.jpvm.objects;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.jobjs.*;
+import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -14,8 +14,6 @@ import org.jpvm.protocols.PyMappingMethods;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.protocols.PySequenceMethods;
 import org.jpvm.python.BuiltIn;
-
-import javax.swing.*;
 
 public class PyDictObject extends PyObject
     implements PyMappingMethods, PySequenceMethods, TypeIterable {

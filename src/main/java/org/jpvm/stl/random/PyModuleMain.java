@@ -1,7 +1,7 @@
 package org.jpvm.stl.random;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.python.BuiltIn;

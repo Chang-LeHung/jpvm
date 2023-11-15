@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyNotImplemented;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyNotImplemented;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;

@@ -1,12 +1,11 @@
 package org.jpvm.vm;
 
-import org.jpvm.excptions.ExceptionInfo;
-import org.jpvm.excptions.PyTraceBackObject;
-import org.jpvm.excptions.pyobjs.PyExceptionObject;
-import org.jpvm.excptions.types.PyBaseExceptionType;
+import org.jpvm.exceptions.ExceptionInfo;
+import org.jpvm.exceptions.PyTraceBackObject;
+import org.jpvm.exceptions.pyobjs.PyExceptionObject;
+import org.jpvm.exceptions.types.PyBaseExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
-import org.jpvm.objects.PyObject;
 
 public class ThreadState {
 

@@ -1,6 +1,6 @@
 package org.jpvm.vm;
 
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 
 public class InterpreterState {

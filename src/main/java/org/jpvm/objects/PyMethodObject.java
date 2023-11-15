@@ -2,8 +2,8 @@ package org.jpvm.objects;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import org.jpvm.excptions.PyErrorUtils;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.types.PyMethodType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.vm.Abstract;

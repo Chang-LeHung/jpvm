@@ -1,7 +1,7 @@
 package org.jpvm.vm;
 
 import java.io.IOException;
-import org.jpvm.excptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyException;
 
 /** jpvm boots from this class */
 public class PyMain {

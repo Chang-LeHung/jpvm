@@ -1,7 +1,7 @@
 package org.jpvm.objects.types;
 
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.jobjs.PyTypeNotMatch;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;

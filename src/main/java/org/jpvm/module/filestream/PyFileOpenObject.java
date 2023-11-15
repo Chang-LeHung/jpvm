@@ -3,8 +3,8 @@ package org.jpvm.module.filestream;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.jpvm.excptions.jobjs.PyException;
-import org.jpvm.excptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 
