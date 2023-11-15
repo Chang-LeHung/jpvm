@@ -12,6 +12,7 @@ public class PyValueErrorType extends PyExceptionType {
   public PyValueErrorType() {
     name = "ValueError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyValueErrorObject.class;
   }
 
   @Override

@@ -13,6 +13,7 @@ public class PyAssertionErrorType extends PyExceptionType {
   public PyAssertionErrorType() {
     name = "AssertionError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyAssertionErrorObject.class;
   }
 
   @Override

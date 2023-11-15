@@ -12,6 +12,7 @@ public class PyRuntimeErrorType extends PyExceptionType {
   public PyRuntimeErrorType() {
     name = "RuntimeError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyRuntimeErrorObject.class;
   }
 
   @Override

@@ -13,6 +13,7 @@ public class PyStopIterationType extends PyExceptionType {
   public PyStopIterationType() {
     name = "StopIteration";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyStopIterationObject.class;
   }
 
   @Override

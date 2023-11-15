@@ -12,6 +12,7 @@ public class PyTypeErrorType extends PyExceptionType {
   public PyTypeErrorType() {
     name = "TypeError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyTypeErrorObject.class;
   }
 
 

@@ -12,6 +12,7 @@ public class PyAttributeErrorType extends PyExceptionType {
 
   public PyAttributeErrorType() {
     name = "AttributeError";
+    this.clazz = PyAttributeErrorObject.class;
     addBase(0, PyErrorUtils.Exception);
   }
 

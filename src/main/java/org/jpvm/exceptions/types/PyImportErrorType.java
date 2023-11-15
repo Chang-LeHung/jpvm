@@ -13,6 +13,7 @@ public class PyImportErrorType extends PyExceptionType {
   public PyImportErrorType() {
     name = "ImportError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyImportErrorObject.class;
   }
 
 

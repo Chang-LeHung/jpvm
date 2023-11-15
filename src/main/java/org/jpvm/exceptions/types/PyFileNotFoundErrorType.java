@@ -13,6 +13,7 @@ public class PyFileNotFoundErrorType extends PyExceptionType {
   public PyFileNotFoundErrorType() {
     name = "FileNotFoundError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyFileNotFoundErrorObject.class;
   }
 
   @Override

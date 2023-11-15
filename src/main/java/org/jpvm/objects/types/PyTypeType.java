@@ -3,6 +3,7 @@ package org.jpvm.objects.types;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyUnsupportedOperator;
@@ -61,7 +62,7 @@ public class PyTypeType extends PyObject {
     name = "type";
     // use List just to avoid ExceptionInInitializerError
     mro = new ArrayList<>();
-    bases = new ArrayList<>();
+    bases = new LinkedList<>();
     if (PyObject.type != null) bases.add(PyObject.type); // add base object to bases
   }
 

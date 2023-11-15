@@ -12,6 +12,7 @@ public class PyZeroDivisionErrorType extends PyExceptionType {
   public PyZeroDivisionErrorType() {
     name = "ZeroDivisionError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyZeroDivisionErrorObject.class;
   }
 
   @Override

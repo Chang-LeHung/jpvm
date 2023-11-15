@@ -13,6 +13,7 @@ public class PyNameErrorType extends PyExceptionType {
   public PyNameErrorType() {
     name = "NameError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyNameErrorObject.class;
   }
 
   @Override

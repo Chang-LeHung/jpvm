@@ -3,6 +3,7 @@ package org.jpvm.exceptions.types;
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
+import org.jpvm.exceptions.pyobjs.PyFileNotFoundErrorObject;
 import org.jpvm.exceptions.pyobjs.PyNotImplementedErrorObject;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
@@ -13,6 +14,7 @@ public class PyNotImplementedErrorType extends PyExceptionType {
   public PyNotImplementedErrorType() {
     name = "NotImplementedError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyFileNotFoundErrorObject.class;
   }
 
   @Override

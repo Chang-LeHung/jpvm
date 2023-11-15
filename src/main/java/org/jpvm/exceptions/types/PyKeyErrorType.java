@@ -13,6 +13,7 @@ public class PyKeyErrorType extends PyExceptionType {
   public PyKeyErrorType() {
     name = "KeyError";
     addBase(0, PyErrorUtils.Exception);
+    this.clazz = PyKeyErrorObject.class;
   }
 
   @Override
