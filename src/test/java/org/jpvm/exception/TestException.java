@@ -129,4 +129,28 @@ public class TestException {
       throw new RuntimeException(e);
     }
   }
+
+  public void run(String file) {
+    try {
+      JPVM JPVM = new JPVM(file);
+      JPVM.run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Test
+  public void testRaiseException() {
+    run("src/test/resources/exception/__pycache__/demo12.cpython-38.pyc");
+  }
+
+  @Test
+  public void testRaiseExceptionInstance() {
+    run("src/test/resources/exception/__pycache__/demo13.cpython-38.pyc");
+  }
+
+  @Test
+  public void testRaise() {
+    run("src/test/resources/exception/__pycache__/demo14.cpython-38.pyc");
+  }
 }
