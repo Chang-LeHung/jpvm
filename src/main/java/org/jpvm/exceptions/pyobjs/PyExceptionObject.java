@@ -66,7 +66,7 @@ public class PyExceptionObject extends PyObject {
   }
 
   @Override
-  public synchronized PyUnicodeObject getTypeName() {
+  public PyUnicodeObject getTypeName() {
     return objType.getTypeName();
   }
 }
