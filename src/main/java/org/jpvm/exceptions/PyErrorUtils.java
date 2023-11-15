@@ -122,11 +122,11 @@ public class PyErrorUtils {
       return true;
     }
     PyBaseExceptionType type = null;
-    if (exc instanceof PyExceptionContext pyExc) {
-      type = (PyBaseExceptionType) pyExc.getType();
-    } else if (exc instanceof PyBaseExceptionType excType) {
+    if (exc instanceof PyBaseExceptionType excType) {
       type = excType;
       exc = excType.call("");
+    }else {
+      type = (PyBaseExceptionType) exc.getType();
     }
     ts.setCurExcType(type);
     ts.setCurExcValue((PyExceptionObject) exc);
