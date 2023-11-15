@@ -19,28 +19,6 @@ import org.jpvm.python.BuiltIn;
 /** all subclass must override method getType {@link org.jpvm.objects.pyinterface.TypeCheck} */
 public class PyTypeType extends PyObject {
 
-  /* Objects behave like an unbound method */
-  public static int Py_TPFLAGS_METHOD_DESCRIPTOR = (1 << 17);
-
-  /* Objects support type attribute cache */
-
-  public static int Py_TPFLAGS_HAVE_VERSION_TAG = (1 << 18);
-
-  public static int Py_TPFLAGS_VALID_VERSION_TAG = (1 << 19);
-
-  /* Type is abstract and cannot be instantiated */
-  public static int Py_TPFLAGS_IS_ABSTRACT = (1 << 20);
-
-  /* These flags are used to determine if a type is a subclass. */
-  public static int Py_TPFLAGS_LONG_SUBCLASS = (1 << 24);
-  public static int Py_TPFLAGS_LIST_SUBCLASS = (1 << 25);
-  public static int Py_TPFLAGS_TUPLE_SUBCLASS = (1 << 26);
-  public static int Py_TPFLAGS_BYTES_SUBCLASS = (1 << 27);
-  public static int Py_TPFLAGS_UNICODE_SUBCLASS = (1 << 28);
-  public static int Py_TPFLAGS_DICT_SUBCLASS = (1 << 29);
-  public static int Py_TPFLAGS_BASE_EXC_SUBCLASS = (1 << 30);
-  public static int Py_TPFLAGS_TYPE_SUBCLASS = (1 << 31);
-
   public static final PyTypeType type = new PyTypeType(PyObject.class);
 
   protected List<PyObject> mro;
