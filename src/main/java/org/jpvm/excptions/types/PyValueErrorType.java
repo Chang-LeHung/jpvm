@@ -3,7 +3,6 @@ package org.jpvm.excptions.types;
 import org.jpvm.excptions.PyErrorUtils;
 import org.jpvm.excptions.jobjs.PyException;
 import org.jpvm.excptions.pyobjs.PyExceptionObject;
-import org.jpvm.excptions.pyobjs.PyTypeErrorObject;
 import org.jpvm.excptions.pyobjs.PyValueErrorObject;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;

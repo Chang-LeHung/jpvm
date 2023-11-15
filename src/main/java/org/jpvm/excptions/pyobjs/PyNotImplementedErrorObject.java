@@ -3,11 +3,11 @@ package org.jpvm.excptions.pyobjs;
 import org.jpvm.objects.PyUnicodeObject;
 
 public class PyNotImplementedErrorObject extends PyExceptionObject {
-	public PyNotImplementedErrorObject(PyUnicodeObject errorMsg) {
-		super(errorMsg);
-	}
+  public PyNotImplementedErrorObject(PyUnicodeObject errorMsg) {
+    super(errorMsg);
+  }
 
-	public PyNotImplementedErrorObject(String errorMsg) {
-		super(errorMsg);
-	}
+  public PyNotImplementedErrorObject(String errorMsg) {
+    super(errorMsg);
+  }
 }

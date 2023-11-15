@@ -106,7 +106,7 @@ public class PyErrorUtils {
   public static void pyTraceBackHere() {
     ThreadState ts = JPVM.getThreadState();
     PyTraceBackObject tb = getTraceback();
-    tb.setNext((PyTraceBackObject) ts.getCurExcTrace());
+    tb.setNext(ts.getCurExcTrace());
     ts.setCurExcTrace(tb);
     ts.getExceptionInfo().setExcTrace(tb);
     ts.getCurExcValue().setTraceback(tb);

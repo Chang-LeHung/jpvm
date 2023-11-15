@@ -50,6 +50,10 @@ public class ExceptionInfo {
     return excTrace;
   }
 
+  public void setExcTrace(PyTraceBackObject excTrace) {
+    this.excTrace = excTrace;
+  }
+
   public PyExceptionObject getExcValue() {
 
     return excValue;
@@ -57,9 +61,5 @@ public class ExceptionInfo {
 
   public void setExcValue(PyExceptionObject excValue) {
     this.excValue = excValue;
-  }
-
-  public void setExcTrace(PyTraceBackObject excTrace) {
-    this.excTrace = excTrace;
   }
 }
