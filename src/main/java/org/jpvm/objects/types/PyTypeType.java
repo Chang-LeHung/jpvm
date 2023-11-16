@@ -44,6 +44,10 @@ public class PyTypeType extends PyObject {
     if (PyObject.type != null) bases.add(PyObject.type); // add base object to bases
   }
 
+  public static PyTypeType getInstance() {
+    return type;
+  }
+
   public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) throws PyException {
     for (int i = 0; i < bases.size(); i++) {
       if (bases.get(i) == PyObject.type) return bases;
