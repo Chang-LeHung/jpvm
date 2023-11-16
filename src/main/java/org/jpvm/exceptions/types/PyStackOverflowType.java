@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyStackOverflowType extends PyExceptionType {
+public class PyStackOverflowType extends PyCommonExceptionType {
 
-  public PyStackOverflowType() {
+  private PyStackOverflowType() {
+    super(PyStackOverflowErrorObject.class);
     name = "StackOverflow";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyStackOverflowErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static  final PyStackOverflowType instance = new PyStackOverflowType();
+  }
+
+  public static PyStackOverflowType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

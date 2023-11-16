@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyStopIterationType extends PyExceptionType {
+public class PyStopIterationType extends PyCommonExceptionType {
 
-  public PyStopIterationType() {
+  private PyStopIterationType() {
+    super(PyStopIterationObject.class);
     name = "StopIteration";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyStopIterationObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static PyStopIterationType instance = new PyStopIterationType();
+  }
+
+  public static PyStopIterationType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

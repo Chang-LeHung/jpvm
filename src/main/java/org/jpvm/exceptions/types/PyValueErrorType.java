@@ -8,11 +8,19 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyValueErrorType extends PyExceptionType {
-  public PyValueErrorType() {
+public class PyValueErrorType extends PyCommonExceptionType {
+  private PyValueErrorType() {
+    super(PyValueErrorObject.class);
     name = "ValueError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyValueErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyValueErrorType instance = new PyValueErrorType();
+  }
+  public static PyValueErrorType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyAssertionErrorType extends PyExceptionType {
+public class PyAssertionErrorType extends PyCommonExceptionType {
 
-  public PyAssertionErrorType() {
+  private PyAssertionErrorType() {
+    super(PyAssertionErrorObject.class);
     name = "AssertionError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyAssertionErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyAssertionErrorType self = new PyAssertionErrorType();
+  }
+
+  public static PyAssertionErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

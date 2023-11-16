@@ -15,6 +15,7 @@ import org.jpvm.exceptions.jobjs.PyNameError;
 import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
 import org.jpvm.exceptions.types.PyBaseExceptionType;
+import org.jpvm.exceptions.types.PyCommonExceptionType;
 import org.jpvm.exceptions.types.PyExceptionType;
 import org.jpvm.module.Marshal;
 import org.jpvm.objects.*;
@@ -759,7 +760,7 @@ public class EvaluationLoop {
               } else if (PyErrorUtils.isExceptionClass(type)) {
                 var val = (PyExceptionObject) frame.pop();
                 var tb = (PyTraceBackObject) frame.pop();
-                PyErrorUtils.restoreExceptionState((PyExceptionType) type, val, tb);
+                PyErrorUtils.restoreExceptionState((PyCommonExceptionType) type, val, tb);
                 breakFromEND_FINALLY = true;
                 break main_loop;
               }
@@ -948,7 +949,7 @@ public class EvaluationLoop {
               new TryBlockHandler(TryBlockHandler.EXCEPT_HANDLER, -1, frame.getStackSize()));
           frame.push(exceptionInfo.getExcTrace());
           frame.push(exceptionInfo.getExcValue());
-          PyBaseExceptionType excType = exceptionInfo.getExcType();
+          var excType = exceptionInfo.getExcType();
           frame.push(excType);
           var curExcTrace = ts.getCurExcTrace();
           var curExcValue = ts.getCurExcValue();

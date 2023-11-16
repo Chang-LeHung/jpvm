@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyKeyErrorType extends PyExceptionType {
+public class PyKeyErrorType extends PyCommonExceptionType {
 
-  public PyKeyErrorType() {
+  private PyKeyErrorType() {
+    super(PyKeyErrorObject.class);
     name = "KeyError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyKeyErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyKeyErrorType self = new PyKeyErrorType();
+  }
+
+  public static PyKeyErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

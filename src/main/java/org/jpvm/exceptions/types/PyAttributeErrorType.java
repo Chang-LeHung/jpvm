@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyAttributeErrorType extends PyExceptionType {
+public class PyAttributeErrorType extends PyCommonExceptionType {
 
-  public PyAttributeErrorType() {
+  private PyAttributeErrorType() {
+    super(PyAttributeErrorType.class);
     name = "AttributeError";
-    this.clazz = PyAttributeErrorObject.class;
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
+  }
+
+  public static final class SelfHolder {
+    public static final PyAttributeErrorType self = new PyAttributeErrorType();
+  }
+
+  public static  PyAttributeErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

@@ -10,25 +10,27 @@ import org.jpvm.vm.ThreadState;
 
 public class PyErrorUtils {
 
-  public static final PyBaseExceptionType BaseException = new PyBaseExceptionType();
-  public static final PyExceptionType Exception = new PyExceptionType();
-  public static final PyAssertionErrorType AssertionError = new PyAssertionErrorType();
-  public static final PyAttributeErrorType AttributeError = new PyAttributeErrorType();
-  public static final PyKeyErrorType KeyError = new PyKeyErrorType();
-  public static final PyNameErrorType NameError = new PyNameErrorType();
+  public static final PyBaseExceptionType BaseException = PyBaseExceptionType.getInstance();
+  public static final PyExceptionType Exception = PyExceptionType.getInstance();
+  public static final PyAssertionErrorType AssertionError = PyAssertionErrorType.getInstance();
+  public static final PyAttributeErrorType AttributeError = PyAttributeErrorType.getInstance();
+  public static final PyKeyErrorType KeyError = PyKeyErrorType.getInstance();
+  public static final PyNameErrorType NameError = PyNameErrorType.getInstance();
   public static final PyNotImplementedErrorType NotImplementedError =
-      new PyNotImplementedErrorType();
-  public static final PyRuntimeErrorType RuntimeError = new PyRuntimeErrorType();
-  public static final PyTypeErrorType TypeError = new PyTypeErrorType();
-  public static final PyValueErrorType ValueError = new PyValueErrorType();
+      PyNotImplementedErrorType.getInstance();
+  public static final PyRuntimeErrorType RuntimeError = PyRuntimeErrorType.getInstance();
+  public static final PyTypeErrorType TypeError = PyTypeErrorType.getInstance();
+  public static final PyValueErrorType ValueError = PyValueErrorType.getInstance();
   public static final PyZeroDivisionErrorType ZeroDivisionError = new PyZeroDivisionErrorType();
-  public static final PyStackOverflowType StackOverflowError = new PyStackOverflowType();
+  public static final PyStackOverflowType StackOverflowError = PyStackOverflowType.getInstance();
   public static final PyImportErrorType ImportError = new PyImportErrorType();
-  public static final PyIndexOutOfBoundErrorType IndexError = new PyIndexOutOfBoundErrorType();
-  public static final PyFileNotFoundErrorType FileNotFoundError = new PyFileNotFoundErrorType();
-  public static final PyStopIterationType StopIteration = new PyStopIterationType();
+  public static final PyIndexOutOfBoundErrorType IndexError =
+      PyIndexOutOfBoundErrorType.getInstance();
+  public static final PyFileNotFoundErrorType FileNotFoundError =
+      PyFileNotFoundErrorType.getInstance();
+  public static final PyStopIterationType StopIteration = PyStopIterationType.getInstance();
 
-  public static PyObject pyErrorFormat(PyBaseExceptionType type, String msg) throws PyException {
+  public static PyObject pyErrorFormat(PyCommonExceptionType type, String msg) throws PyException {
     // create an instance of the exception
     PyTupleObject args = new PyTupleObject(1);
     args.set(0, new PyUnicodeObject(msg));
@@ -96,7 +98,7 @@ public class PyErrorUtils {
   }
 
   public static void restoreExceptionState(
-      PyExceptionType type, PyExceptionObject val, PyTraceBackObject tb) {
+      PyCommonExceptionType type, PyExceptionObject val, PyTraceBackObject tb) {
     ThreadState ts = JPVM.getThreadState();
     ts.setCurExcType(type);
     ts.setCurExcValue(val);
@@ -121,12 +123,12 @@ public class PyErrorUtils {
       ts.setCurExcTrace(exceptionInfo.getExcTrace());
       return true;
     }
-    PyBaseExceptionType type = null;
-    if (exc instanceof PyBaseExceptionType excType) {
+    PyCommonExceptionType type = null;
+    if (exc instanceof PyCommonExceptionType excType) {
       type = excType;
       exc = excType.call("");
-    }else {
-      type = (PyBaseExceptionType) exc.getType();
+    } else {
+      type = (PyCommonExceptionType) exc.getType();
     }
     ts.setCurExcType(type);
     ts.setCurExcValue((PyExceptionObject) exc);

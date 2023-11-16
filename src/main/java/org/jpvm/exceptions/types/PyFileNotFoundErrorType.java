@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyFileNotFoundErrorType extends PyExceptionType {
+public class PyFileNotFoundErrorType extends PyCommonExceptionType {
 
-  public PyFileNotFoundErrorType() {
+  private PyFileNotFoundErrorType() {
+    super(PyFileNotFoundErrorObject.class);
     name = "FileNotFoundError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyFileNotFoundErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final  PyFileNotFoundErrorType instance = new PyFileNotFoundErrorType();
+  }
+
+  public static PyFileNotFoundErrorType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

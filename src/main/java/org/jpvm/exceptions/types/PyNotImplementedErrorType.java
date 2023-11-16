@@ -3,18 +3,26 @@ package org.jpvm.exceptions.types;
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
-import org.jpvm.exceptions.pyobjs.PyFileNotFoundErrorObject;
 import org.jpvm.exceptions.pyobjs.PyNotImplementedErrorObject;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyNotImplementedErrorType extends PyExceptionType {
+public class PyNotImplementedErrorType extends PyCommonExceptionType {
 
-  public PyNotImplementedErrorType() {
+  private PyNotImplementedErrorType() {
+    super(PyNotImplementedErrorObject.class);
     name = "NotImplementedError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyFileNotFoundErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyNotImplementedErrorType self = new PyNotImplementedErrorType();
+  }
+
+  public static PyNotImplementedErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

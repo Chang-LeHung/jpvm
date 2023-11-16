@@ -2,14 +2,15 @@ package org.jpvm.exceptions;
 
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
 import org.jpvm.exceptions.types.PyBaseExceptionType;
+import org.jpvm.exceptions.types.PyCommonExceptionType;
 import org.jpvm.exceptions.types.PyExceptionType;
 import org.jpvm.objects.PyObject;
 import org.jpvm.python.BuiltIn;
 
 public class ExceptionInfo {
 
-  /** {@link PyBaseExceptionType} */
-  private PyBaseExceptionType excType;
+  /** {@link PyCommonExceptionType} */
+  private PyCommonExceptionType excType;
   /** {@link PyExceptionObject} */
   private PyExceptionObject excValue;
   /** {@link PyTraceBackObject} */
@@ -30,12 +31,12 @@ public class ExceptionInfo {
 
   public ExceptionInfo() {}
 
-  public PyBaseExceptionType getExcType() {
+  public PyCommonExceptionType getExcType() {
     return excType;
   }
 
   public void setExcType(PyObject excType) {
-    if (excType != null && excType != BuiltIn.None) this.excType = (PyExceptionType) excType;
+    if (excType != null && excType != BuiltIn.None) this.excType = (PyCommonExceptionType) excType;
   }
 
   public ExceptionInfo getPrevious() {

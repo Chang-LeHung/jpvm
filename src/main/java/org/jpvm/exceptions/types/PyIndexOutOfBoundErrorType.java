@@ -8,11 +8,20 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyIndexOutOfBoundErrorType extends PyExceptionType {
-  public PyIndexOutOfBoundErrorType() {
+public class PyIndexOutOfBoundErrorType extends PyCommonExceptionType {
+  private PyIndexOutOfBoundErrorType() {
+    super(PyIndexOutOfBoundErrorObject.class);
     name = "IndexError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz =  PyIndexOutOfBoundErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyIndexOutOfBoundErrorType self = new PyIndexOutOfBoundErrorType();
+  }
+
+  public static PyIndexOutOfBoundErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

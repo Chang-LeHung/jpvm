@@ -3,7 +3,7 @@ package org.jpvm.vm;
 import org.jpvm.exceptions.ExceptionInfo;
 import org.jpvm.exceptions.PyTraceBackObject;
 import org.jpvm.exceptions.pyobjs.PyExceptionObject;
-import org.jpvm.exceptions.types.PyBaseExceptionType;
+import org.jpvm.exceptions.types.PyCommonExceptionType;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyFrameObject;
 
@@ -16,8 +16,8 @@ public class ThreadState {
   /** point to stack top exception, exception being handled. */
   private ExceptionInfo exceptionInfo;
 
-  /** {@link PyBaseExceptionType} */
-  private PyBaseExceptionType curExcType;
+  /** {@link PyCommonExceptionType} */
+  private PyCommonExceptionType curExcType;
 
   /** {@link PyTraceBackObject} */
   private PyExceptionObject curExcValue;
@@ -79,7 +79,7 @@ public class ThreadState {
     this.currentFrame = currentFrame;
   }
 
-  public PyBaseExceptionType getCurExcType() {
+  public PyCommonExceptionType getCurExcType() {
     return curExcType;
   }
 
@@ -109,7 +109,7 @@ public class ThreadState {
     isMainThread = mainThread;
   }
 
-  public void setCurExcType(PyBaseExceptionType curExcType) {
+  public void setCurExcType(PyCommonExceptionType curExcType) {
     this.curExcType = curExcType;
   }
 

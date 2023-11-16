@@ -8,11 +8,20 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyRuntimeErrorType extends PyExceptionType {
-  public PyRuntimeErrorType() {
+public class PyRuntimeErrorType extends PyCommonExceptionType {
+  private PyRuntimeErrorType() {
+    super(PyRuntimeErrorObject.class);
     name = "RuntimeError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyRuntimeErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyRuntimeErrorType instance = new PyRuntimeErrorType();
+  }
+
+  public static PyRuntimeErrorType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

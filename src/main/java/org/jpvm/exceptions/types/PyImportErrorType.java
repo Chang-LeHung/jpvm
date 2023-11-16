@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyImportErrorType extends PyExceptionType {
+public class PyImportErrorType extends PyCommonExceptionType {
 
   public PyImportErrorType() {
+    super(PyImportErrorType.class);
     name = "ImportError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyImportErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static final PyImportErrorType self = new PyImportErrorType();
+  }
+
+  public static PyImportErrorType getInstance() {
+    return SelfHolder.self;
   }
 
 

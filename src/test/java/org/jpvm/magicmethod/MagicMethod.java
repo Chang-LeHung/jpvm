@@ -17,4 +17,9 @@ public class MagicMethod {
   public void testStrRepr() throws PyException, IOException {
     run("src/test/resources/magicmethod/__pycache__/str_repr.cpython-38.pyc");
   }
+
+  @Test
+  public void testMro() throws PyException, IOException {
+    run("src/test/resources/magicmethod/__pycache__/mro.cpython-38.pyc");
+  }
 }

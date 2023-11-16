@@ -8,11 +8,20 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyZeroDivisionErrorType extends PyExceptionType {
+public class PyZeroDivisionErrorType extends PyCommonExceptionType {
   public PyZeroDivisionErrorType() {
+    super(PyZeroDivisionErrorObject.class);
     name = "ZeroDivisionError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyZeroDivisionErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static PyZeroDivisionErrorType instance = new PyZeroDivisionErrorType();
+  }
+
+  public static PyZeroDivisionErrorType getInstance() {
+    return SelfHolder.instance;
   }
 
   @Override

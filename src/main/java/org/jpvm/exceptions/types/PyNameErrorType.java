@@ -8,12 +8,21 @@ import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
-public class PyNameErrorType extends PyExceptionType {
+public class PyNameErrorType extends PyCommonExceptionType {
 
-  public PyNameErrorType() {
+  private PyNameErrorType() {
+    super(PyNameErrorObject.class);
     name = "NameError";
+    addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
-    this.clazz = PyNameErrorObject.class;
+  }
+
+  public static final class SelfHolder {
+    public static PyNameErrorType self = new PyNameErrorType();
+  }
+
+  public static PyNameErrorType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override
