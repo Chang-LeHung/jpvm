@@ -100,11 +100,8 @@ public class PyObject
   }
 
   @Override
-  public synchronized PyUnicodeObject getTypeName() {
-    if (name == null) {
-      name = new PyUnicodeObject("object");
-    }
-    return name;
+  public PyUnicodeObject getTypeName() {
+    return type.getTypeName();
   }
 
   @Override
