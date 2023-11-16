@@ -65,7 +65,7 @@ public class PyTypeType extends PyObject {
     bases.add(base);
   }
 
-  public synchronized void addBase(int idx, PyObject base) {
+  public void addBase(int idx, PyObject base) {
     for (PyObject basis : bases) {
       if (basis == base) return;
     }
