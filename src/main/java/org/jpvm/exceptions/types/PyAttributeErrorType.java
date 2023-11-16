@@ -23,9 +23,4 @@ public class PyAttributeErrorType extends PyExceptionType {
     ret.setType(this);
     return ret;
   }
-
-  @Override
-  public String toString() {
-    return "AttributeError";
-  }
 }

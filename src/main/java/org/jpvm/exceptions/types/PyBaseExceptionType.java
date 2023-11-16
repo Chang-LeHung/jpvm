@@ -57,4 +57,9 @@ public class PyBaseExceptionType extends PyTypeType {
     return (PyBoolObject)
         PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "Unsupported Operator " + op);
   }
+
+  @Override
+  public String toString() {
+    return repr().getData();
+  }
 }
