@@ -11,7 +11,7 @@ import org.jpvm.pycParser.PyCodeObject;
 
 public class PyFrameObject extends PyObject {
 
-  public static final PyTypeType type = new PyFrameType();
+  public static final PyTypeType type = PyFrameType.getInstance();
   private final PyCodeObject code;
   /** value stack */
   private final PyObject[] stack;

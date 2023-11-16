@@ -9,7 +9,7 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyNativeMethodObject extends PyObject {
 
-  public static final PyTypeType type = new PyNativeMethodType();
+  public static final PyTypeType type = PyNativeMethodType.getInstance();
 
   private final Method method;
 

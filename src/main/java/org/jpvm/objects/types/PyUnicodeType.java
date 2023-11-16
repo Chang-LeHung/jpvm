@@ -7,9 +7,17 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
 public class PyUnicodeType extends PyTypeType {
-  public PyUnicodeType() {
+  private PyUnicodeType() {
     super(PyUnicodeObject.class);
     name = "str";
+  }
+
+  public static final class SelfHolder {
+    public static final PyUnicodeType self = new PyUnicodeType();
+  }
+
+  public static PyUnicodeType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

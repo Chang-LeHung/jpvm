@@ -6,7 +6,7 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyModuleObject extends PyObject {
 
-  public static final PyTypeType type = new PyModuleType();
+  public static final PyTypeType type = PyModuleType.getInstance();
 
   /** The module name. */
   private PyUnicodeObject moduleName;

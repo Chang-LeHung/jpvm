@@ -9,7 +9,7 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolObject extends PyObject implements PyNumberMethods {
 
-  public static final PyTypeType type = new PyBoolType();
+  public static final PyTypeType type = PyBoolType.getInstance();
 
   private boolean bool;
 

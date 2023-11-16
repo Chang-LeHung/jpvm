@@ -12,7 +12,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PySliceObject extends PyObject {
 
-  public static final PyTypeType type = new PySliceType();
+  public static final PyTypeType type = PySliceType.getInstance();
 
   private final PyObject start;
   private final PyObject end;

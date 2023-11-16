@@ -6,10 +6,18 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyFloatType extends PyTypeType {
 
-  public PyFloatType() {
+  private PyFloatType() {
     super(PyFloatObject.class);
     name = "float";
     mro.add(PyLongObject.type);
+  }
+
+  public static final class SelfHolder {
+    public static final PyFloatType self = new PyFloatType();
+  }
+
+  public static PyFloatType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

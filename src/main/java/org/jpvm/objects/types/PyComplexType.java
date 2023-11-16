@@ -4,10 +4,16 @@ import org.jpvm.objects.PyComplexObject;
 
 public class PyComplexType extends PyTypeType {
 
-  public PyComplexType() {
+  private PyComplexType() {
     super(PyComplexObject.class);
     name = "complex";
-    //    mro.add(PyLongObject.type);
-    //    mro.add(PyFloatObject.type);
+  }
+
+  public static final class SelfHolder {
+    public static final PyComplexType self = new PyComplexType();
+  }
+
+  public static PyComplexType getInstance() {
+    return SelfHolder.self;
   }
 }

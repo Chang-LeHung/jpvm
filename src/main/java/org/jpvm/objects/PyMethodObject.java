@@ -10,7 +10,7 @@ import org.jpvm.vm.Abstract;
 
 public class PyMethodObject extends PyObject {
 
-  public static final PyTypeType type = new PyMethodType();
+  public static final PyTypeType type = PyMethodType.getInstance();
   private final String methodName;
   private PyObject self;
   private Method method;

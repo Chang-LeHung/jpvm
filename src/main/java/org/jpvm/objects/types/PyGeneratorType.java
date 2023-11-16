@@ -4,8 +4,16 @@ import org.jpvm.objects.PyGeneratorObject;
 
 public class PyGeneratorType extends PyTypeType {
 
-  public PyGeneratorType() {
+  private PyGeneratorType() {
     super(PyGeneratorObject.class);
     name = "generator";
+  }
+
+  public static final class SelfHolder {
+    public static final PyGeneratorType self = new PyGeneratorType();
+  }
+
+  public static PyGeneratorType getInstance() {
+    return SelfHolder.self;
   }
 }

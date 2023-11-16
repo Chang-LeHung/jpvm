@@ -11,9 +11,17 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 
 public class PyListType extends PyTypeType {
-  public PyListType() {
+  private PyListType() {
     super(PyListObject.class);
     name = "list";
+  }
+
+  public static final class SelfHolder {
+    public static final PyListType self = new PyListType();
+  }
+
+  public static PyListType getInstance() {
+    return SelfHolder.self;
   }
 
   public static PyListObject getListFromIterable(PyTupleObject args, PyDictObject kwArgs)

@@ -19,7 +19,7 @@ import org.jpvm.python.BuiltIn;
 public class PySetObject extends PyObject
     implements TypeIterable, PyNumberMethods, PySequenceMethods {
 
-  public static final PyTypeType type = new PySetType();
+  public static final PyTypeType type = PySetType.getInstance();
 
   private final Set<PyObject> set;
 

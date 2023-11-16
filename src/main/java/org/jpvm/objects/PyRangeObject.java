@@ -10,7 +10,7 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyRangeObject extends PyObject implements TypeIterable {
 
-  public static final PyTypeType type = new PyRangeType();
+  public static final PyTypeType type = PyRangeType.getInstance();
   private final int start;
   private final int end;
   private final int step;

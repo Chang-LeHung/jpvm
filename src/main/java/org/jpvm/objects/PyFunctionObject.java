@@ -9,7 +9,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyFunctionObject extends PyObject implements TypeDescriptorGet {
 
-  public static final PyTypeType type = new PyFunctionType();
+  public static final PyTypeType type = PyFunctionType.getInstance();
   public static PyDictObject zero = new PyDictObject();
   /** type of {@link PyCodeObject} */
   private PyObject funcCode;

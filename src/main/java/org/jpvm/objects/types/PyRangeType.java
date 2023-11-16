@@ -6,9 +6,17 @@ import org.jpvm.objects.*;
 
 public class PyRangeType extends PyTypeType {
 
-  public PyRangeType() {
+  private PyRangeType() {
     super(PyRangeObject.class);
     name = "range";
+  }
+
+  public static final class SelfHolder {
+    public static final PyRangeType self = new PyRangeType();
+  }
+
+  public static PyRangeType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

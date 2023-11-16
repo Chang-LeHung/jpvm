@@ -15,7 +15,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIterable {
 
-  public static final PyTypeType type = new PyGeneratorType();
+  public static final PyTypeType type = PyGeneratorType.getInstance();
 
   /**
    * frame object {@link PyFrameObject} backing of this generator, which is runtime environment of

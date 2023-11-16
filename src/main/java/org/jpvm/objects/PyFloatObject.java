@@ -9,7 +9,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyFloatObject extends PyObject implements PyNumberMethods {
 
-  public static final PyTypeType type = new PyFloatType();
+  public static final PyTypeType type = PyFloatType.getInstance();
 
   private double data;
 

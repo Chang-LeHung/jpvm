@@ -9,9 +9,17 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyLongType extends PyTypeType {
 
-  public PyLongType() {
+  private PyLongType() {
     super(PyLongObject.class);
     name = "int";
+  }
+
+  public static final class SelfHolder {
+    public static final PyLongType self = new PyLongType();
+  }
+
+  public static PyLongType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

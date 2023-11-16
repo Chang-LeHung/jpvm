@@ -5,13 +5,21 @@ import org.jpvm.objects.*;
 import org.jpvm.vm.JPVM;
 
 public class PySuperType extends PyTypeType {
-  public PySuperType(Class<?> clazz) {
+  private PySuperType(Class<?> clazz) {
     super(clazz);
   }
 
-  public PySuperType() {
-    this(null);
+  private PySuperType() {
+    this(PySuperObject.class);
     name = "class_super";
+  }
+
+  public static final class SelfHolder {
+    public static final PySuperType self = new PySuperType();
+  }
+
+  public static PySuperType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

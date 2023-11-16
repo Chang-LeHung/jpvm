@@ -22,7 +22,7 @@ import org.jpvm.python.BuiltIn;
 public class PyUnicodeObject extends PyObject
     implements PyNumberMethods, PySequenceMethods, PyMappingMethods, TypeIterable {
 
-  public static final PyTypeType type = new PyUnicodeType();
+  public static final PyTypeType type = PyUnicodeType.getInstance();
 
   public static Map<String, PyUnicodeObject> internStr = new HashMap<>();
   private final String s;

@@ -7,9 +7,17 @@ import org.jpvm.objects.PyTupleObject;
 
 public class PyDictType extends PyTypeType {
 
-  public PyDictType() {
+  private PyDictType() {
     super(PyDictObject.class);
     name = "dict";
+  }
+
+  public static final class SelfHolder {
+    public static PyDictType self = new PyDictType();
+  }
+
+  public static PyDictType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

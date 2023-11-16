@@ -7,7 +7,7 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyCellObject extends PyObject {
 
-  public static final PyTypeType type = new PyCellType();
+  public static final PyTypeType type = PyCellType.getInstance();
 
   private PyObject ref;
 

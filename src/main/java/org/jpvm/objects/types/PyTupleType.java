@@ -9,9 +9,17 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 
 public class PyTupleType extends PyTypeType {
-  public PyTupleType() {
+  private PyTupleType() {
     super(PyTupleObject.class);
     name = "tuple";
+  }
+
+  public static final class SelfHolder {
+    public static final PyTupleType self = new PyTupleType();
+  }
+
+  public static PyTupleType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

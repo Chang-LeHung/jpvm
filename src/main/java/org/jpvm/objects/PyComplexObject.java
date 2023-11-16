@@ -9,7 +9,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyComplexObject extends PyObject implements PyNumberMethods {
 
-  public static final PyTypeType type = new PyComplexType();
+  public static final PyTypeType type = PyComplexType.getInstance();
   private PyFloatObject real;
   private PyFloatObject image;
 

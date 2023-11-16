@@ -2,7 +2,6 @@ package org.jpvm.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.*;
 import org.jpvm.objects.annotation.PyClassMethod;
@@ -18,7 +17,7 @@ import org.jpvm.python.BuiltIn;
 public class PyDictObject extends PyObject
     implements PyMappingMethods, PySequenceMethods, TypeIterable {
 
-  public static final PyTypeType type = new PyDictType();
+  public static final PyTypeType type = PyDictType.getInstance();
 
   private final Map<PyObject, PyObject> map;
 
@@ -264,24 +263,40 @@ public class PyDictObject extends PyObject
   }
 
   public static class PyDictItrType extends PyTypeType {
-    public PyDictItrType() {
+    private PyDictItrType() {
       super(PyDictItrObject.class);
       name = "dict_key_iterator";
+    }
+
+    public static final class SelfHolder {
+      public static final PyDictItrType self = new PyDictItrType();
+    }
+
+    public static PyDictItrType getInstance() {
+      return SelfHolder.self;
     }
   }
 
   public static class PyDictValuesType extends PyTypeType {
 
-    public PyDictValuesType() {
+    private PyDictValuesType() {
       super(PyDictValuesObject.class);
       name = "dict_values";
+    }
+
+    public static final class SelfHolder {
+      public static final PyDictValuesType self = new PyDictValuesType();
+    }
+
+    public static PyDictValuesType getInstance() {
+      return SelfHolder.self;
     }
   }
 
   public static class PyDictValuesObject extends PyObject
       implements TypeIterable, PySequenceMethods {
 
-    public static final PyTypeType type = new PyDictValuesType();
+    public static final PyTypeType type = PyDictValuesType.getInstance();
     private final Collection<PyObject> values;
 
     public PyDictValuesObject(Map<PyObject, PyObject> map) {
@@ -331,15 +346,23 @@ public class PyDictObject extends PyObject
     }
 
     public static class PyDictValuesItrType extends PyTypeType {
-      public PyDictValuesItrType() {
+      private PyDictValuesItrType() {
         super(PyDictValuesItrObject.class);
         name = "dict_value_iterator";
+      }
+
+      public static final class SelfHolder {
+        public static final PyDictValuesItrType self = new PyDictValuesItrType();
+      }
+
+      public static PyDictValuesItrType getInstance() {
+        return SelfHolder.self;
       }
     }
 
     public class PyDictValuesItrObject extends PyObject implements TypeDoIterate {
 
-      public static final PyTypeType type = new PyDictValuesItrType();
+      public static final PyTypeType type = PyDictValuesItrType.getInstance();
       Iterator<PyObject> iterator;
 
       public PyDictValuesItrObject() {
@@ -361,16 +384,24 @@ public class PyDictObject extends PyObject
 
   public static class PyDictKeysType extends PyTypeType {
 
-    public PyDictKeysType() {
+    private PyDictKeysType() {
       super(PyDictKeysObject.class);
       this.name = "dict_keys";
+    }
+
+    public static final class SelfHolder {
+      public static final PyDictKeysType self = new PyDictKeysType();
+    }
+
+    public static PyDictKeysType getInstance() {
+      return SelfHolder.self;
     }
   }
 
   public static class PyDictKeysObject extends PyObject
       implements PyNumberMethods, PySequenceMethods, TypeIterable {
 
-    public static final PyTypeType type = new PyDictKeysType();
+    public static final PyTypeType type = PyDictKeysType.getInstance();
     private final Set<PyObject> set;
 
     public PyDictKeysObject(Map<PyObject, PyObject> map) {
@@ -457,7 +488,7 @@ public class PyDictObject extends PyObject
     }
 
     private class PyDictKeysItrObject extends PyObject implements TypeDoIterate {
-      public static final PyTypeType type = new PyDictKeysItrType();
+      public static final PyTypeType type = PyDictKeysType.getInstance();
       Iterator<PyObject> iterator;
 
       public PyDictKeysItrObject() {
@@ -478,15 +509,23 @@ public class PyDictObject extends PyObject
   }
 
   public static class PyDictItemsType extends PyTypeType {
-    public PyDictItemsType() {
+    private PyDictItemsType() {
       super(PyDictItemsObject.class);
       name = "dict_items";
+    }
+
+    public static final class SelfHolder {
+      public static final PyDictItemsType self = new PyDictItemsType();
+    }
+
+    public static PyDictItemsType getInstance() {
+      return SelfHolder.self;
     }
   }
 
   public static class PyDictItemsObject extends PyObject
       implements TypeIterable, PyNumberMethods, PySequenceMethods {
-    public static final PyTypeType type = new PyDictItemsType();
+    public static final PyTypeType type = PyDictItemsType.getInstance();
 
     private final Map<PyObject, PyObject> map;
 
@@ -611,14 +650,22 @@ public class PyDictObject extends PyObject
     }
 
     public static class PyDictItemsItrType extends PyTypeType {
-      public PyDictItemsItrType() {
+      private PyDictItemsItrType() {
         super(PyDictItemsItrObject.class);
         name = "dict_items";
+      }
+
+      public static final class SelfHolder {
+        public static final PyDictItemsItrType self = new PyDictItemsItrType();
+      }
+
+      public static PyDictItemsItrType getInstance() {
+        return SelfHolder.self;
       }
     }
 
     public class PyDictItemsItrObject extends PyObject implements TypeDoIterate {
-      private final PyObject type = new PyDictItemsItrType();
+      private final PyObject type = PyDictItemsItrType.getInstance();
       private final Iterator<Map.Entry<PyObject, PyObject>> iterator;
 
       public PyDictItemsItrObject() {
@@ -655,7 +702,7 @@ public class PyDictObject extends PyObject
   }
 
   public class PyDictItrObject extends PyObject implements TypeDoIterate {
-    public static final PyTypeType type = new PyDictItrType();
+    public static final PyTypeType type = PyDictItrType.getInstance();
     Iterator<PyObject> iterator;
 
     public PyDictItrObject() {

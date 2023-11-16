@@ -6,9 +6,17 @@ import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 
 public class PySetType extends PyTypeType {
-  public PySetType() {
+  private PySetType() {
     super(PySetObject.class);
     name = "set";
+  }
+
+  public static final class SelfHolder {
+    public static final PySetType self = new PySetType();
+  }
+
+  public static PySetType getInstance() {
+    return SelfHolder.self;
   }
 
   /** code like `set()` or `set(listobject)` will call this method */

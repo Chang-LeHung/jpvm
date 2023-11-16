@@ -9,9 +9,17 @@ import org.jpvm.protocols.PyNumberMethods;
 
 public class PyBoolType extends PyTypeType {
 
-  public PyBoolType() {
+  private PyBoolType() {
     super(PyBoolObject.class);
     name = "bool";
+  }
+
+  public static final class SelfHolder {
+    public static final PyBoolType self = new PyBoolType();
+  }
+
+  public static PyBoolType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override
