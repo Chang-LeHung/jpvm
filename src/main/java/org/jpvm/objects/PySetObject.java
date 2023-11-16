@@ -28,9 +28,23 @@ public class PySetObject extends PyObject
     this.set = Collections.synchronizedSet(new HashSet<>());
   }
 
-  public PySetObject(boolean isFrozen) {
+  private PySetObject(PyBoolObject o) {
     this();
-    this.isFrozen = isFrozen;
+    this.isFrozen = o.isTrue();
+  }
+
+  public PySetObject(boolean isFrozen) throws PyException {
+    this();
+    if (isFrozen) throw new PyException("please use BuiltIn.FROZENSET directly");
+    this.isFrozen = false;
+  }
+
+  public static final class SelfHolder {
+    public static final PySetObject self = new PySetObject(BuiltIn.True);
+  }
+
+  public static PySetObject getFrozenSet() {
+   return SelfHolder.self;
   }
 
   @Override

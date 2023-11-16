@@ -29,7 +29,7 @@ public class BuiltIn {
   public static PyNoneObject None = PyNoneObject.getInstance();
   public static PyNoneObject NULL = PyNoneObject.getInstance();
   public static PyObject ELLIPSIS = new PyObject();
-  public static PySetObject FROZENSET = new PySetObject(true);
+  public static PySetObject FROZENSET = PySetObject.getFrozenSet();
 
   /** define jpython internal exceptions */
   public static PyObject StopIteration = PyErrorUtils.StopIteration;
