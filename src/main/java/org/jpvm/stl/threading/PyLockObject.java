@@ -9,7 +9,7 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.python.BuiltIn;
 
 public class PyLockObject extends PyObject {
-  public static PyLockObjectType type = new PyLockObjectType(PyLockObject.class);
+  public static PyLockObjectType type = PyLockObjectType.getInstance();
 
   private final ReentrantLock lock;
 

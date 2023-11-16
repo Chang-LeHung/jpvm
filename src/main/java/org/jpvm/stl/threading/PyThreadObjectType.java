@@ -11,10 +11,18 @@ public class PyThreadObjectType extends PyTypeType {
 
   private int threadNum;
 
-  public PyThreadObjectType(Class<?> clazz) {
+  private PyThreadObjectType(Class<?> clazz) {
     super(clazz);
     threadNum = 0;
     name = "Thread";
+  }
+
+  public static final class SelfHolder {
+    public static final PyThreadObjectType self = new PyThreadObjectType(PyThreadObject.class);
+  }
+
+  public static PyThreadObjectType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

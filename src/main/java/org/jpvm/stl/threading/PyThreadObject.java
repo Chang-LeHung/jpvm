@@ -8,7 +8,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyThreadObject extends PyObject {
 
-  public static PyThreadObjectType type = new PyThreadObjectType(PyThreadObject.class);
+  public static PyThreadObjectType type = PyThreadObjectType.getInstance();
   private final PyTupleObject args;
   private final PyUnicodeObject name;
   private final PyFunctionObject target;

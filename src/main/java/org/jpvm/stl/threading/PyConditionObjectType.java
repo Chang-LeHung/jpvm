@@ -7,8 +7,16 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;
 
 public class PyConditionObjectType extends PyTypeType {
-  public PyConditionObjectType(Class<?> clazz) {
+  private PyConditionObjectType(Class<?> clazz) {
     super(clazz);
+  }
+
+  public static final class SelfHolder {
+    public static final PyConditionObjectType self = new PyConditionObjectType(PyConditionObject.class);
+  }
+
+  public static PyConditionObjectType getInstance() {
+    return SelfHolder.self;
   }
 
   @Override

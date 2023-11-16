@@ -11,7 +11,7 @@ import org.jpvm.python.BuiltIn;
 
 public class PyConditionObject extends PyObject {
 
-  public static PyConditionObjectType type = new PyConditionObjectType(PyConditionObject.class);
+  public static PyConditionObjectType type = PyConditionObjectType.getInstance();
   private final ReentrantLock lock;
   private final Condition condition;
 
