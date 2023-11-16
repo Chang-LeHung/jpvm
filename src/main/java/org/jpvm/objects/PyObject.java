@@ -86,7 +86,7 @@ public class PyObject
 
   @Override
   public String toString() {
-    return "<PyObject>";
+    return repr().toString();
   }
 
   @Override
