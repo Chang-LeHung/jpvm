@@ -1,5 +1,6 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
 import org.jpvm.objects.PyDictObject;
@@ -32,7 +33,8 @@ public class PyListType extends PyTypeType {
       } else throw new PyTypeNotMatch("list() require an Iterable object");
       return result;
     }
-    throw new PyException("list() only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "list() only require one argument");
+    return null;
   }
 
   @Override
