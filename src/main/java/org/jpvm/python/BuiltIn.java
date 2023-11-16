@@ -26,8 +26,8 @@ public class BuiltIn {
 
   public static PyBoolObject True = PyBoolObject.getTrue();
   public static PyBoolObject False = PyBoolObject.getFalse();
-  public static PyNoneObject None = new PyNoneObject();
-  public static PyNoneObject NULL = new PyNoneObject();
+  public static PyNoneObject None = PyNoneObject.getInstance();
+  public static PyNoneObject NULL = PyNoneObject.getInstance();
   public static PyObject ELLIPSIS = new PyObject();
   public static PySetObject FROZENSET = new PySetObject(true);
 

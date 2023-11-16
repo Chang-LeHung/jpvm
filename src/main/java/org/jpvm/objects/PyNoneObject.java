@@ -12,6 +12,16 @@ public class PyNoneObject extends PyObject {
     return o == type ? BuiltIn.True : BuiltIn.False;
   }
 
+  private PyNoneObject() {}
+
+  public static class SelfHolder {
+    public static final PyNoneObject self = new PyNoneObject();
+  }
+
+  public static PyNoneObject getInstance() {
+    return SelfHolder.self;
+  }
+
   @Override
   public String toString() {
     return "None";
