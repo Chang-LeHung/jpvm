@@ -113,8 +113,20 @@ public class PyObject
   }
 
   @Override
+  @PyClassMethod
+  public PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
+    return str();
+  }
+
+  @Override
   public PyUnicodeObject repr() {
     return getTypeName();
+  }
+
+  @Override
+  @PyClassMethod
+  public PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
+    return repr();
   }
 
   @Override
