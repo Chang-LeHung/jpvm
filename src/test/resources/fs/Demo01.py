@@ -22,6 +22,6 @@ if __name__ == "__main__":
     current_directory = "."  # 当前目录
     all_files_in_current_directory = get_all_files_in_directory(current_directory)
 
-    # 打印所有文件路径
-    for file_path in all_files_in_current_directory:
-        print(file_path)
+    # for file_path in all_files_in_current_directory:
+    #     print(file_path)
+    print(f"size of files is {len(all_files_in_current_directory)}")
