@@ -9,7 +9,7 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.PyUnicodeObject;
 
 public class PyZeroDivisionErrorType extends PyCommonExceptionType {
-  public PyZeroDivisionErrorType() {
+  private PyZeroDivisionErrorType() {
     super(PyZeroDivisionErrorObject.class);
     name = "ZeroDivisionError";
     addBase(0, PyErrorUtils.BaseException);

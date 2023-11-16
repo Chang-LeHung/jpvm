@@ -21,7 +21,7 @@ public class PyErrorUtils {
   public static final PyRuntimeErrorType RuntimeError = PyRuntimeErrorType.getInstance();
   public static final PyTypeErrorType TypeError = PyTypeErrorType.getInstance();
   public static final PyValueErrorType ValueError = PyValueErrorType.getInstance();
-  public static final PyZeroDivisionErrorType ZeroDivisionError = new PyZeroDivisionErrorType();
+  public static final PyZeroDivisionErrorType ZeroDivisionError = PyZeroDivisionErrorType.getInstance();
   public static final PyStackOverflowType StackOverflowError = PyStackOverflowType.getInstance();
   public static final PyImportErrorType ImportError = new PyImportErrorType();
   public static final PyIndexOutOfBoundErrorType IndexError =
