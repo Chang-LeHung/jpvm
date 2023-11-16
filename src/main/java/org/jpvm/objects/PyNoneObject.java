@@ -2,13 +2,14 @@ package org.jpvm.objects;
 
 import org.jpvm.objects.types.PyNoneType;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.python.BuiltIn;
 
 public class PyNoneObject extends PyObject {
 
   public static final PyTypeType type = PyNoneType.getInstance();
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    return o == type ? BuiltIn.True : BuiltIn.False;
   }
 
   @Override

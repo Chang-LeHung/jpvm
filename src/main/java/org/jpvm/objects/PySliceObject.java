@@ -1,8 +1,8 @@
 package org.jpvm.objects;
 
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyNotImplemented;
-import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.internal.NumberHelper;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -60,7 +60,7 @@ public class PySliceObject extends PyObject {
 
   @Override
   public PyBoolObject isHashable() {
-    return new PyBoolObject(true);
+    return BuiltIn.True;
   }
 
   public PyObject getStart() {

@@ -1,11 +1,10 @@
 package org.jpvm.objects;
 
 import java.util.*;
-
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyNotImplemented;
 import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
-import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
@@ -369,7 +368,7 @@ public class PySetObject extends PyObject
 
   @Override
   public PyObject sqContain(PyObject o) throws PyNotImplemented, PyTypeNotMatch {
-    return new PyBoolObject(set.contains(o));
+    return set.contains(o) ? BuiltIn.True : BuiltIn.False;
   }
 
   public static class PySetItrType extends PyTypeType implements TypeName {

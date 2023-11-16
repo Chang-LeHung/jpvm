@@ -13,8 +13,25 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   private boolean bool;
 
-  public PyBoolObject(boolean bool) {
+  private PyBoolObject(boolean bool) {
     this.bool = bool;
+  }
+
+  public static final class SelfHolder {
+    public static final PyBoolObject True = new PyBoolObject(true);
+    public static final PyBoolObject False = new PyBoolObject(false);
+  }
+
+  public static PyBoolObject getInstance() {
+    return SelfHolder.True;
+  }
+
+  public static PyBoolObject getTrue() {
+    return SelfHolder.True;
+  }
+
+  public static PyBoolObject getFalse() {
+    return SelfHolder.False;
   }
 
   public static PyBoolObject check(PyObject o) {

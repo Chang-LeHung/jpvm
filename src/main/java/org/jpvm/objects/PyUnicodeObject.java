@@ -39,7 +39,8 @@ public class PyUnicodeObject extends PyObject
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    if (o == type) return BuiltIn.True;
+    return BuiltIn.False;
   }
 
   public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
@@ -462,7 +463,7 @@ public class PyUnicodeObject extends PyObject
   @Override
   public PyObject sqContain(PyObject o) throws PyException {
     if (o instanceof PyUnicodeObject u) {
-      return new PyBoolObject(s.contains(u.getData()));
+      return s.contains(u.getData()) ? BuiltIn.True : BuiltIn.False;
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sqContain: parameter o require type str");
     return null;

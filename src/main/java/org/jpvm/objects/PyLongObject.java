@@ -1,7 +1,7 @@
 package org.jpvm.objects;
 
-import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.types.PyLongType;
@@ -30,7 +30,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    return o == type ? BuiltIn.True : BuiltIn.False;
   }
 
   public static PyLongObject getLongObject(long num) {
@@ -268,7 +268,7 @@ public class PyLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject bool() {
-    return new PyBoolObject(data != 0);
+    return data != 0 ? BuiltIn.True : BuiltIn.False;
   }
 
   @Override

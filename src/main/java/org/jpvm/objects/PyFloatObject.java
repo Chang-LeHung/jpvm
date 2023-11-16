@@ -1,7 +1,7 @@
 package org.jpvm.objects;
 
-import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.types.PyFloatType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
@@ -22,7 +22,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    return o == type ? BuiltIn.True : BuiltIn.False;
   }
 
   public double getData() {
@@ -197,7 +197,7 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject bool() {
-    return new PyBoolObject(data != 0);
+    return data != 0 ? BuiltIn.True : BuiltIn.False;
   }
 
   @Override

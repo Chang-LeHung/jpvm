@@ -24,8 +24,8 @@ import org.jpvm.vm.ThreadState;
 
 public class BuiltIn {
 
-  public static PyBoolObject True = new PyBoolObject(true);
-  public static PyBoolObject False = new PyBoolObject(false);
+  public static PyBoolObject True = PyBoolObject.getTrue();
+  public static PyBoolObject False = PyBoolObject.getFalse();
   public static PyNoneObject None = new PyNoneObject();
   public static PyNoneObject NULL = new PyNoneObject();
   public static PyObject ELLIPSIS = new PyObject();
