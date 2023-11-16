@@ -34,7 +34,6 @@ public class BuiltIn {
   /** define jpython internal exceptions */
   public static PyObject StopIteration = PyErrorUtils.StopIteration;
 
-  public static PyObject notImplemented = new PyObject();
   public static PyDictObject dict;
   public static Class<?>[] parameterTypes =
       new Class<?>[] {PyTupleObject.class, PyDictObject.class};
@@ -189,8 +188,6 @@ public class BuiltIn {
         PyObject result = new PyLongObject(0);
         while (iterator.hasNext()) {
           result = Abstract.add(result, iterator.next());
-          if (result == BuiltIn.notImplemented)
-            throw new PyTypeError("can apply sum on " + o.repr());
         }
         return result;
       }
