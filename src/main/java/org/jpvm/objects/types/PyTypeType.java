@@ -288,10 +288,4 @@ public class PyTypeType extends PyObject {
     }
     return null;
   }
-
-  @Override
-  @PyClassMethod
-  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    return call(args, kwArgs);
-  }
 }
