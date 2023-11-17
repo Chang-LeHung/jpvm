@@ -1,5 +1,6 @@
 package org.jpvm.protocols;
 
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
@@ -11,7 +12,7 @@ public interface PyTypeMethods {
     return BuiltIn.None;
   }
 
-  default PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+  default PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return BuiltIn.None;
   }
 }

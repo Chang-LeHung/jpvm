@@ -241,7 +241,7 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   @PyClassMethod
-  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return super.__new__(args, kwArgs);
   }
 }

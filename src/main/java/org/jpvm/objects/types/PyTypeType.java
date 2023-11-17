@@ -184,7 +184,9 @@ public class PyTypeType extends PyObject {
       String res = "<class '" + getType().getTypeName() + "' >";
       return new PyUnicodeObject(res);
     }
-    if (args.size() < 3) return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, getTypeName() + " require at least 3 arguments");
+    if (args.size() < 3)
+      return PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, getTypeName() + " require at least 3 arguments");
     PyObject name = args.get(0);
     PyObject bases = args.get(1);
     PyObject dict = args.get(2);
@@ -285,5 +287,11 @@ public class PyTypeType extends PyObject {
       return descr;
     }
     return null;
+  }
+
+  @Override
+  @PyClassMethod
+  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return call(args, kwArgs);
   }
 }

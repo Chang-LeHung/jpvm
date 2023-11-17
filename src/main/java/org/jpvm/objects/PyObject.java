@@ -295,7 +295,7 @@ public class PyObject
 
   @Override
   @PyClassMethod
-  public synchronized PyObject __new__(PyTupleObject args, PyDictObject kwArgs) {
+  public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     return PyTypeMethods.super.__new__(args, kwArgs);
   }
 }
