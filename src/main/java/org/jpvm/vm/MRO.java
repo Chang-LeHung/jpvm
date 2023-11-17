@@ -2,7 +2,10 @@ package org.jpvm.vm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
@@ -23,13 +26,14 @@ public class MRO {
           linBases.add(mro);
         }
       }
-      res.addAll(merge(linBases));
+      res.addAll(Objects.requireNonNull(merge(linBases)));
       return res;
     }
-    throw new PyException("only a class can call mro");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "only a class can call mro");
+    return null;
   }
 
-  public static List<PyObject> merge(List<List<PyObject>> bases) {
+  public static List<PyObject> merge(List<List<PyObject>> bases) throws PyException {
     var res = new ArrayList<PyObject>();
     while (true) {
       PyObject head = null;
@@ -47,8 +51,11 @@ public class MRO {
           break;
         }
       }
-      if (!flag)
-        throw new RuntimeException("MRO error: can not find a correct method resolution order");
+      if (!flag) {
+        PyErrorUtils.pyErrorFormat(
+            PyErrorUtils.RuntimeError, "MRO error: can not find a correct method resolution order");
+        return null;
+      }
       res.add(head);
       PyObject finalHead = head;
       types.forEach(
