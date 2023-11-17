@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyUnsupportedOperator;
 import org.jpvm.objects.*;
@@ -179,7 +181,6 @@ public class PyTypeType extends PyObject {
   @Override
   public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
-      PyObject name = args.get(0);
       String res = "<class '" + getType().getTypeName() + "' >";
       return new PyUnicodeObject(res);
     }
@@ -204,7 +205,7 @@ public class PyTypeType extends PyObject {
       for (int i = 0; i < base.size(); i++) bs.add(base.get(i));
       return res;
     }
-    throw new PyException(
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
         "type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
   }
 
