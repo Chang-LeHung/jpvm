@@ -52,11 +52,11 @@ public class PyTypeType extends PyObject {
 
   public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) throws PyException {
     for (int i = 0; i < bases.size(); i++) {
-      if (bases.get(i) == PyObject.type) return bases;
+      if (bases.get(i) == PyBaseObjectType.getInstance()) return bases;
     }
     PyTupleObject res = new PyTupleObject(bases.size() + 1);
     for (int i = 0; i < bases.size(); i++) res.set(i, bases.get(i));
-    res.set(bases.size(), PyObject.type);
+    res.set(bases.size(), PyBaseObjectType.getInstance());
     return res;
   }
 
@@ -184,7 +184,7 @@ public class PyTypeType extends PyObject {
       String res = "<class '" + getType().getTypeName() + "' >";
       return new PyUnicodeObject(res);
     }
-    if (args.size() < 3) throw new PyException(getTypeName() + " require at least 3 arguments");
+    if (args.size() < 3) return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, getTypeName() + " require at least 3 arguments");
     PyObject name = args.get(0);
     PyObject bases = args.get(1);
     PyObject dict = args.get(2);
@@ -199,6 +199,7 @@ public class PyTypeType extends PyObject {
         && dict instanceof PyDictObject d) {
       PyTupleObject base = PyTupleObject.getTupleFromIterator(bases);
       PyPythonType res = new PyPythonType(n, null, d);
+      assert base != null;
       base = ensureBaseObjectTypeInBases(base);
       List<PyObject> bs = res.getBases();
       bs.clear(); // clean bs see `public PyTypeType(Class<?> clazz)`
