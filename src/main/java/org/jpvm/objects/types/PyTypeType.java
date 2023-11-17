@@ -205,7 +205,8 @@ public class PyTypeType extends PyObject {
       for (int i = 0; i < base.size(); i++) bs.add(base.get(i));
       return res;
     }
-    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError,
         "type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
   }
 
