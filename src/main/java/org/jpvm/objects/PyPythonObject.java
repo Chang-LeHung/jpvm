@@ -3,7 +3,6 @@ package org.jpvm.objects;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyPythonType;
-import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyNumberMethods;
 import org.jpvm.vm.Abstract;
 
@@ -17,11 +16,6 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject getType() {
     return objType;
-  }
-
-  @Override
-  public void setType(PyTypeType type) {
-    objType = type;
   }
 
   @Override
