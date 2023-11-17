@@ -13,6 +13,7 @@ import org.jpvm.objects.*;
 import org.jpvm.objects.pyinterface.TypeDoIterate;
 import org.jpvm.objects.pyinterface.TypeIterable;
 import org.jpvm.objects.pyinterface.TypeRichCompare;
+import org.jpvm.objects.types.PyBaseObjectType;
 import org.jpvm.objects.types.PyListType;
 import org.jpvm.objects.types.PyTypeType;
 import org.jpvm.protocols.PyMappingMethods;
@@ -288,7 +289,16 @@ public class BuiltIn {
           PyErrorUtils.TypeError, "buildClass function require at least 2 arguments");
     PyObject function = args.get(0);
     PyObject name = args.get(1);
-    PyTupleObject bases = new PyTupleObject(args.size() - 2);
+    boolean containObject = false;
+    for (int i = 2; i < args.size(); i++)
+      if (args.get(i) == PyBaseObjectType.getInstance()) containObject = true;
+    PyTupleObject bases;
+    if (containObject) bases = new PyTupleObject(args.size() - 2);
+    else {
+      // ensure object is the top base class of this class
+      bases = new PyTupleObject(args.size() - 1);
+      bases.set(args.size() - 2, PyBaseObjectType.getInstance());
+    }
     for (int i = 2; i < args.size(); i++) {
       bases.set(i - 2, args.get(i));
     }
