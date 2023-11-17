@@ -36,11 +36,11 @@ public class PyDictObject extends PyObject
     }
   }
 
-  public synchronized PyObject add(PyObject key, PyObject val) throws PyException {
+  public PyObject add(PyObject key, PyObject val) throws PyException {
     return put(key, val);
   }
 
-  public synchronized void remove(PyObject key) {
+  public void remove(PyObject key) {
     map.remove(key);
   }
 
@@ -52,7 +52,7 @@ public class PyDictObject extends PyObject
     return map.getOrDefault(key, val);
   }
 
-  public synchronized void addAll(PyDictObject dict) {
+  public void addAll(PyDictObject dict) {
     if (dict != null) map.putAll(dict.getMap());
   }
 
@@ -142,7 +142,7 @@ public class PyDictObject extends PyObject
   }
 
   @PyClassMethod
-  public synchronized PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject pop(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject remove = map.remove(args.get(0));
       if (remove == null) return BuiltIn.None;
@@ -153,13 +153,13 @@ public class PyDictObject extends PyObject
   }
 
   @PyClassMethod
-  public synchronized PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject clear(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     map.clear();
     return BuiltIn.None;
   }
 
   @PyClassMethod
-  public synchronized PyObject update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+  public PyObject update(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyDictObject o) {
@@ -197,8 +197,7 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public synchronized PyObject mpAssSubscript(PyObject key, PyObject val)
-      throws PyKeyError, PyNotImplemented {
+  public PyObject mpAssSubscript(PyObject key, PyObject val) throws PyKeyError, PyNotImplemented {
     if (null == val) map.remove(key);
     else map.put(key, val);
     return BuiltIn.None;
@@ -210,12 +209,12 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public synchronized PyObject sqConcat(PyObject o) throws PyException {
+  public PyObject sqConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqConcat(o);
   }
 
   @Override
-  public synchronized PyObject sqRepeat(PyObject o) throws PyException {
+  public PyObject sqRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqRepeat(o);
   }
 
@@ -225,7 +224,7 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public synchronized PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
+  public PyObject sqAssItem(PyObject key, PyObject val) throws PyException {
     return PySequenceMethods.super.sqAssItem(key, val);
   }
 
@@ -236,12 +235,12 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public synchronized PyObject sqInplaceConcat(PyObject o) throws PyException {
+  public PyObject sqInplaceConcat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceConcat(o);
   }
 
   @Override
-  public synchronized PyObject sqInplaceRepeat(PyObject o) throws PyException {
+  public PyObject sqInplaceRepeat(PyObject o) throws PyException {
     return PySequenceMethods.super.sqInplaceRepeat(o);
   }
 
