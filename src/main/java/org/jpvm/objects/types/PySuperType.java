@@ -1,5 +1,6 @@
 package org.jpvm.objects.types;
 
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.vm.JPVM;
@@ -15,7 +16,7 @@ public class PySuperType extends PyTypeType {
   }
 
   public static final class SelfHolder {
-    public static final PySuperType self = new PySuperType();
+    public static final PySuperType self = new PySuperType(PySuperObject.class);
   }
 
   public static PySuperType getInstance() {
@@ -30,7 +31,6 @@ public class PySuperType extends PyTypeType {
       self = currentFrame.getLocal(0);
       PyTypeType tp = (PyTypeType) self.getType();
       return new PySuperObject(self, tp.getMro().get(1));
-      //      return tp.getMro().get(1);
     } else if (args.size() == 2) {
       self = args.get(1);
       PyTypeType start = (PyTypeType) args.get(0);
@@ -39,11 +39,11 @@ public class PySuperType extends PyTypeType {
       for (int i = 0; i < tpMro.size(); i++) {
         if (tpMro.get(i) == start && i + 1 < tpMro.size()) {
           return new PySuperObject(self, tpMro.get(i + 1));
-          //          return tpMro.get(i + 1);
         }
       }
-      throw new PyException("can not find a proper super class");
+      return PyErrorUtils.pyErrorFormat(
+          PyErrorUtils.TypeError, "can not find a proper super class");
     }
-    throw new PyException("super() takes at most 2 arguments");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "super() takes at most 2 arguments");
   }
 }
