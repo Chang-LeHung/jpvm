@@ -305,7 +305,7 @@ public class BuiltIn {
   public static PyObject input(PyTupleObject args, PyDictObject kwArgs)
       throws PyException, IOException {
     PyObject std;
-    PyObject out = None;
+    PyObject out;
     if (args.size() < 2) {
       if (args.size() == 1) {
         std = Sys.stdout;
