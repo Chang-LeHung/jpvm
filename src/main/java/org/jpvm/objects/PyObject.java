@@ -289,13 +289,13 @@ public class PyObject
 
   @Override
   @PyClassMethod
-  public synchronized PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
-    return PyTypeMethods.super.__init__(args, kwArgs);
+  public PyObject __init__(PyTupleObject args, PyDictObject kwArgs) {
+    return BuiltIn.None;
   }
 
   @Override
   @PyClassMethod
   public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    return PyTypeMethods.super.__new__(args, kwArgs);
+    return this;
   }
 }
