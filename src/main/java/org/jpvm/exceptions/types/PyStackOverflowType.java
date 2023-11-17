@@ -12,14 +12,14 @@ public class PyStackOverflowType extends PyCommonExceptionType {
 
   private PyStackOverflowType() {
     super(PyStackOverflowErrorObject.class);
-//    name = "StackOverflow";
+    //    name = "StackOverflow";
     name = "RecursionError";
     addBase(0, PyErrorUtils.BaseException);
     addBase(0, PyErrorUtils.Exception);
   }
 
   public static final class SelfHolder {
-    public static  final PyStackOverflowType instance = new PyStackOverflowType();
+    public static final PyStackOverflowType instance = new PyStackOverflowType();
   }
 
   public static PyStackOverflowType getInstance() {
