@@ -76,12 +76,12 @@ public class PyObject
 
   public static synchronized void registerBaseObjectType() {
     if (type == null) {
-      type = new PyBaseObjectType();
+      type = PyBaseObjectType.getInstance();
     }
   }
 
   public static synchronized void initBaseObject() {
-    if (type == null) type = new PyBaseObjectType();
+    if (type == null) type = PyBaseObjectType.getInstance();
   }
 
   @Override
