@@ -208,8 +208,7 @@ public class BuiltIn {
         return map.mpLength(null);
       }
     }
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sum only require one iterable argument");
-    return null;
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "sum only require one iterable argument");
   }
 
   public static PyObject sorted(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -277,9 +276,8 @@ public class BuiltIn {
         return iterator.next();
       }
     }
-    PyErrorUtils.pyErrorFormat(
+    return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, "next function require only 1 argument that is an iterator");
-    return null;
   }
 
   public static PyObject __build_class__(PyTupleObject args, PyDictObject kwArgs)
@@ -325,7 +323,7 @@ public class BuiltIn {
       out = PyUnicodeObject.getOrCreateFromInternStringPool(str, false);
       return out;
     }
-    throw new PyException("input function require at most 1 argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "input function require at most 1 argument");
   }
 
   public static PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
