@@ -3,7 +3,6 @@ package org.jpvm.python;
 import java.io.IOException;
 import java.util.Scanner;
 import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.exceptions.jobjs.PyTypeError;
 import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.module.filestream.PyFileOpenObject;
@@ -32,7 +31,7 @@ public class BuiltIn {
   public static PyObject ELLIPSIS = new PyObject();
   public static PySetObject FROZENSET = PySetObject.getFrozenSet();
 
-  /** define jpython internal exceptions */
+  /** define JPVM internal exceptions */
   public static PyObject StopIteration = PyErrorUtils.StopIteration;
 
   public static PyDictObject dict;

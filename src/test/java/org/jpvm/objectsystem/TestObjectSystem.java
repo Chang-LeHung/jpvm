@@ -1,2 +1,3 @@
-package org.jpvm.objectsystem;public class TestObjectSystem {
-}
+package org.jpvm.objectsystem;
+
+public class TestObjectSystem {}
