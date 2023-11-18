@@ -1,8 +1,12 @@
 package org.jpvm.objects.pyinterface;
 
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyBoolObject;
+import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
+import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.annotation.PyClassMethod;
 
 public interface TypeRichCompare {
 
@@ -34,5 +38,59 @@ public interface TypeRichCompare {
     PyCmp_IS_NOT,
     PyCmp_EXC_MATCH,
     PyCmp_BAD
+  }
+
+  @PyClassMethod
+  default PyObject __lt__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_LT);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __lt__ only require 1 argument", this));
+  }
+
+  @PyClassMethod
+  default PyObject __le__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_LE);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __le__ only require 1 argument", this));
+  }
+
+  @PyClassMethod
+  default PyObject __eq__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_EQ);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __eq__ only require 1 argument", this));
+  }
+
+  @PyClassMethod
+  default PyObject __ne__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_NE);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __ne__ only require 1 argument", this));
+  }
+
+  @PyClassMethod
+  default PyObject __gt__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_GT);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __gt__ only require 1 argument", this));
+  }
+
+  @PyClassMethod
+  default PyObject __ge__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) {
+      richCompare(args.get(0), Operator.Py_GE);
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, String.format("%s __ge__ only require 1 argument", this));
   }
 }
