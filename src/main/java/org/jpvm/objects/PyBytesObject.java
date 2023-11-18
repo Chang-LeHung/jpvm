@@ -127,6 +127,16 @@ public class PyBytesObject extends PyObject
   }
 
   @Override
+  public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__add__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__mul__(args, kwArgs);
+  }
+
+  @Override
   public PyObject mod(PyObject o) throws PyException {
     return PyNumberMethods.super.mod(o);
   }
@@ -134,6 +144,11 @@ public class PyBytesObject extends PyObject
   @Override
   public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(data.length);
+  }
+
+  @Override
+  public PyObject __len__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__len__(args, kwArgs);
   }
 
   @Override
@@ -152,6 +167,21 @@ public class PyBytesObject extends PyObject
   }
 
   @Override
+  public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__getitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __setitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__setitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __delitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__delitem__(args, kwArgs);
+  }
+
+  @Override
   public PyObject sqContain(PyObject o) throws PyException {
     return PySequenceMethods.super.sqContain(o);
   }
@@ -160,5 +190,20 @@ public class PyBytesObject extends PyObject
   public PyObject bool() throws PyException {
     if (size == 0) return BuiltIn.False;
     return BuiltIn.True;
+  }
+
+  @Override
+  public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__iadd__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__imul__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return super.call(args, kwArgs);
   }
 }

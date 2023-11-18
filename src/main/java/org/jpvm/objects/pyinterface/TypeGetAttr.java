@@ -18,12 +18,4 @@ public interface TypeGetAttr {
   default PyObject getAttr(PyObject key) throws PyException {
     throw new PyNotImplemented("TypeGetAttr getAttr not implemented");
   }
-
-  @PyClassMethod
-  default PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 1) {
-      return getAttr(args.get(0));
-    }
-    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, String.format("%s __getitem__ if and only if require 1 argument", this));
-  }
 }

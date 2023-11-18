@@ -286,6 +286,11 @@ public class PySetObject extends PyObject
   }
 
   @Override
+  public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__add__(args, kwArgs);
+  }
+
+  @Override
   public PyObject sub(PyObject o) throws PyException {
     if (o instanceof PySetObject s) {
       PySetObject ret = new PySetObject();
@@ -295,6 +300,11 @@ public class PySetObject extends PyObject
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
     return null;
+  }
+
+  @Override
+  public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__mul__(args, kwArgs);
   }
 
   @Override
@@ -335,6 +345,16 @@ public class PySetObject extends PyObject
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "set sub function require type set");
     return null;
+  }
+
+  @Override
+  public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__iadd__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__imul__(args, kwArgs);
   }
 
   @Override

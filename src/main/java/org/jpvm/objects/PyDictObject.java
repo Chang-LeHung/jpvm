@@ -191,9 +191,19 @@ public class PyDictObject extends PyObject
   }
 
   @Override
+  public PyObject __len__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyMappingMethods.super.__len__(args, kwArgs);
+  }
+
+  @Override
   public PyObject mpSubscript(PyObject o)
       throws PyIndexOutOfBound, PyKeyError, PyTypeNotMatch, PyNotImplemented {
     return map.getOrDefault(o, BuiltIn.None);
+  }
+
+  @Override
+  public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyMappingMethods.super.__getitem__(args, kwArgs);
   }
 
   @Override
@@ -201,6 +211,16 @@ public class PyDictObject extends PyObject
     if (null == val) map.remove(key);
     else map.put(key, val);
     return BuiltIn.None;
+  }
+
+  @Override
+  public PyObject __setitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyMappingMethods.super.__setitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __delitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyMappingMethods.super.__delitem__(args, kwArgs);
   }
 
   @Override
@@ -259,6 +279,11 @@ public class PyDictObject extends PyObject
 
   public PyObject values() {
     return new PyDictValuesObject(map);
+  }
+
+  @Override
+  public PyBoolObject isHashable() {
+    return BuiltIn.False;
   }
 
   public static class PyDictItrType extends PyTypeType {
@@ -439,10 +464,20 @@ public class PyDictObject extends PyObject
       return new PyUnicodeObject(toString());
     }
 
+    @Override
+    public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__add__(args, kwArgs);
+    }
+
     /** not implemented in the current version */
     @Override
     public PyObject sub(PyObject o) throws PyException {
       return PyNumberMethods.super.sub(o);
+    }
+
+    @Override
+    public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__mul__(args, kwArgs);
     }
 
     /** not implemented in the current version */
@@ -461,6 +496,16 @@ public class PyDictObject extends PyObject
     @Override
     public PyObject or(PyObject o) throws PyException {
       return PyNumberMethods.super.or(o);
+    }
+
+    @Override
+    public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__iadd__(args, kwArgs);
+    }
+
+    @Override
+    public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__imul__(args, kwArgs);
     }
 
     @Override
@@ -576,6 +621,11 @@ public class PyDictObject extends PyObject
     }
 
     @Override
+    public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__add__(args, kwArgs);
+    }
+
+    @Override
     public PyObject sub(PyObject o) throws PyException {
       if (o instanceof PyDictItemsObject item) {
         PyDictItemsObject ret = new PyDictItemsObject(new HashMap<>());
@@ -587,6 +637,11 @@ public class PyDictObject extends PyObject
       }
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
       return null;
+    }
+
+    @Override
+    public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__mul__(args, kwArgs);
     }
 
     @Override
@@ -635,6 +690,16 @@ public class PyDictObject extends PyObject
       }
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require type PyDictItemsObject");
       return null;
+    }
+
+    @Override
+    public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__iadd__(args, kwArgs);
+    }
+
+    @Override
+    public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+      return PyNumberMethods.super.__imul__(args, kwArgs);
     }
 
     @Override

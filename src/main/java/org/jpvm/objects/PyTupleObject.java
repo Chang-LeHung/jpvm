@@ -149,6 +149,11 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
+  public PyObject __hash__(PyTupleObject args, PyDictObject kwArgs) {
+    return super.__hash__(args, kwArgs);
+  }
+
+  @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (!(o instanceof PyTupleObject tuple)) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "can only support PyTupleObject");
@@ -358,6 +363,48 @@ public class PyTupleObject extends PyObject
   @Override
   public PyUnicodeObject repr() {
     return str();
+  }
+
+  @Override
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return super.call(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __call__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return super.__call__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    if (args.size() == 1) return sqItem(args.get(0));
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError, "__getitem__ takes exactly one argument");
+  }
+
+  @Override
+  public PyObject __setitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__setitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__add__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__mul__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__iadd__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__imul__(args, kwArgs);
   }
 
   public static class PyTupleItrType extends PyTypeType {

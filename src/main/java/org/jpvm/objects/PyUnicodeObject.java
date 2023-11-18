@@ -412,6 +412,31 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
+  public PyObject __add__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__add__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __mul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__mul__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__getitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __setitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__setitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __delitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__delitem__(args, kwArgs);
+  }
+
+  @Override
   public PyObject mod(PyObject o) throws PyException {
     if (o instanceof PyTupleObject tuple) {
       Object[] objects = new Object[tuple.size()];
@@ -434,8 +459,23 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
+  public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__iadd__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PyNumberMethods.super.__imul__(args, kwArgs);
+  }
+
+  @Override
   public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(s.length());
+  }
+
+  @Override
+  public PyObject __len__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__len__(args, kwArgs);
   }
 
   @Override

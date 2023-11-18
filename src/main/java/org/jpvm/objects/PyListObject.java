@@ -255,6 +255,11 @@ public class PyListObject extends PyObject
   }
 
   @Override
+  public PyObject __len__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__len__(args, kwArgs);
+  }
+
+  @Override
   public synchronized PyObject sqConcat(PyObject o) throws PyException {
     if (!(o instanceof PyListObject l)) {
       PyErrorUtils.pyErrorFormat(
@@ -305,6 +310,11 @@ public class PyListObject extends PyObject
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "require PyNumberMethods type");
     return null;
+  }
+
+  @Override
+  public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__getitem__(args, kwArgs);
   }
 
   @Override
@@ -369,6 +379,16 @@ public class PyListObject extends PyObject
     }
     set(n.intValue(), val);
     return BuiltIn.None;
+  }
+
+  @Override
+  public PyObject __setitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__setitem__(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __delitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return PySequenceMethods.super.__delitem__(args, kwArgs);
   }
 
   @Override
