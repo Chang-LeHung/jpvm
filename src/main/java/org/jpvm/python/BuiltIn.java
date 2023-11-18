@@ -2,9 +2,9 @@ package org.jpvm.python;
 
 import java.io.IOException;
 import java.util.Scanner;
+import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.exceptions.jobjs.PyTypeNotMatch;
-import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.module.filestream.PyFileOpenObject;
 import org.jpvm.module.filestream.PyFileStreamObject;
 import org.jpvm.module.sys.Sys;
@@ -31,7 +31,6 @@ public class BuiltIn {
   public static PyObject ELLIPSIS = new PyObject();
   public static PySetObject FROZENSET = PySetObject.getFrozenSet();
 
-  /** define JPVM internal exceptions */
   public static PyObject StopIteration = PyErrorUtils.StopIteration;
 
   public static PyDictObject dict;
@@ -49,6 +48,7 @@ public class BuiltIn {
       addType("complex", PyComplexObject.type);
       addType("str", PyUnicodeObject.type);
       addType("type", PyTypeType.type);
+      PyTypeType.type.setCreator(PyTypeType.type);
       addType("dict", PyDictObject.type);
       addType("bool", PyBoolObject.type);
       addType("tuple", PyTupleObject.type);
@@ -71,6 +71,7 @@ public class BuiltIn {
       addType("ImportError", PyErrorUtils.ImportError);
       addType("ZeroDivisionError", PyErrorUtils.ZeroDivisionError);
       addType("StackOverflowError", PyErrorUtils.StackOverflowError);
+      addType("RecursionError", PyErrorUtils.StackOverflowError);
       addType("StopIteration", PyErrorUtils.StopIteration);
       addType("IndexError", PyErrorUtils.IndexError);
       addType("FileNotFoundError", PyErrorUtils.FileNotFoundError);
@@ -292,8 +293,9 @@ public class BuiltIn {
     for (int i = 2; i < args.size(); i++)
       if (args.get(i) == PyBaseObjectType.getInstance()) containObject = true;
     PyTupleObject bases;
-    if (containObject) bases = new PyTupleObject(args.size() - 2);
-    else {
+    if (containObject) {
+      bases = new PyTupleObject(args.size() - 2);
+    } else {
       // ensure object is the top base class of this class
       bases = new PyTupleObject(args.size() - 1);
       bases.set(args.size() - 2, PyBaseObjectType.getInstance());
@@ -308,7 +310,27 @@ public class BuiltIn {
     args.set(0, name);
     args.set(1, bases);
     args.set(2, locals);
-    return PyTypeType.type.call(args, kwArgs);
+    if (kwArgs != null) {
+      PyObject type =
+          kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("metaclass", true));
+      if (type instanceof PyTypeType metaclass) {
+        if (metaclass.isSubTypeOf(PyTypeType.getInstance())) {
+          return metaclass.call(args, null);
+        } else {
+          return PyErrorUtils.pyErrorFormat(
+              PyErrorUtils.TypeError,
+              String.format("metaclass must be the type or its subclass, not '%s'", type.repr()));
+        }
+      }
+    }
+    for (int i = 0; i < bases.size(); i++) {
+      if (bases.get(i) instanceof PyTypeType creator) {
+        return creator.getCreator().call(args, kwArgs);
+      }
+    }
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.TypeError,
+        String.format("can not create a class with name %s bases(%s)", name, bases));
   }
 
   public static PyObject input(PyTupleObject args, PyDictObject kwArgs)

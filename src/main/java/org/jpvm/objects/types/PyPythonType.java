@@ -2,7 +2,6 @@ package org.jpvm.objects.types;
 
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
-import org.jpvm.vm.Abstract;
 
 /** used in python code to represent a python type */
 public class PyPythonType extends PyTypeType {
@@ -48,14 +47,4 @@ public class PyPythonType extends PyTypeType {
     return res;
   }
 
-  public PyObject callPythonCode(
-      PyUnicodeObject name, PyObject self, PyTupleObject args, PyDictObject kwArgs)
-      throws PyException {
-    PyObject function = getAttr(name);
-    args = Utils.packSelfAsTuple(self, args);
-    if (function != null) {
-      return Abstract.abstractCall(function, null, args, kwArgs);
-    }
-    return null;
-  }
 }

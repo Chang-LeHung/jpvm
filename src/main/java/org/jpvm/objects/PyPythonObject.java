@@ -25,12 +25,13 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyUnicodeObject str() {
-    return super.str();
+    return repr();
   }
 
   @Override
   public PyUnicodeObject repr() {
-    return super.repr();
+    return new PyUnicodeObject(
+        String.format("<%s object at 0x%x>", objType.getName(), System.identityHashCode(this)));
   }
 
   @Override

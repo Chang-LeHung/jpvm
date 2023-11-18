@@ -3,7 +3,6 @@ package org.jpvm.objects;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.objects.types.PyNativeMethodType;
 import org.jpvm.objects.types.PyTypeType;
 
@@ -30,8 +29,13 @@ public class PyNativeMethodObject extends PyObject {
     try {
       return (PyObject) method.invoke(self, newArgs, kwArgs);
     } catch (IllegalAccessException | InvocationTargetException e) {
-      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
-      return null;
+      if (e.getCause() instanceof PyException) {
+        throw (PyException) e.getCause();
+      } else {
+        System.out.println("All content below just for debugging");
+        e.printStackTrace();
+      }
+      throw new PyException(e.getCause().getMessage());
     }
   }
 
