@@ -254,7 +254,7 @@ public class PyTupleObject extends PyObject
   }
 
   @Override
-  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+  public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(obItem.length);
   }
 

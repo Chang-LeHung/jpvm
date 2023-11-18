@@ -250,7 +250,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject sqLength(PyObject o) {
+  public PyObject sqLength() {
     return new PyLongObject(size());
   }
 

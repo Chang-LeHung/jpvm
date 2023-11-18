@@ -496,7 +496,7 @@ public class Abstract {
     if (o instanceof PyNumberMethods num) {
       return (PyBoolObject) num.bool();
     } else if (o instanceof PySequenceMethods seq) {
-      return isTrue(seq.sqLength(null));
+      return isTrue(seq.sqLength());
     } else if (o instanceof PyMappingMethods map) {
       return isTrue(map.mpLength());
     }

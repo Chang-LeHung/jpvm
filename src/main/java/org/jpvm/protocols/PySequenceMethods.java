@@ -7,7 +7,7 @@ import org.jpvm.objects.PyObject;
 public interface PySequenceMethods {
 
   /** implementation of corresponding cpython sq_length */
-  default PyObject sqLength(PyObject o) throws PyException {
+  default PyObject sqLength() throws PyException {
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "sqLength not implemented");
   }
 

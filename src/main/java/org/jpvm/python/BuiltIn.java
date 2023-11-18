@@ -204,7 +204,7 @@ public class BuiltIn {
         TypeDoIterate iterator = itr.getIterator();
         return new PyLongObject(iterator.size());
       } else if (o instanceof PySequenceMethods seq) {
-        return seq.sqLength(null);
+        return seq.sqLength();
       } else if (o instanceof PyMappingMethods map) {
         return map.mpLength();
       }

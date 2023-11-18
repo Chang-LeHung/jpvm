@@ -44,7 +44,7 @@ public class PySetObject extends PyObject
   }
 
   public static PySetObject getFrozenSet() {
-   return SelfHolder.self;
+    return SelfHolder.self;
   }
 
   @Override
@@ -376,7 +376,7 @@ public class PySetObject extends PyObject
   }
 
   @Override
-  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+  public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(set.size());
   }
 

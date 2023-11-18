@@ -204,7 +204,7 @@ public class PyDictObject extends PyObject
   }
 
   @Override
-  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+  public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(map.size());
   }
 
@@ -335,7 +335,7 @@ public class PyDictObject extends PyObject
     }
 
     @Override
-    public PyObject sqLength(PyObject o) throws PyNotImplemented {
+    public PyObject sqLength() throws PyNotImplemented {
       return new PyLongObject(values.size());
     }
 
@@ -464,7 +464,7 @@ public class PyDictObject extends PyObject
     }
 
     @Override
-    public PyObject sqLength(PyObject o) throws PyNotImplemented {
+    public PyObject sqLength() throws PyNotImplemented {
       return new PyLongObject(set.size());
     }
 
@@ -638,7 +638,7 @@ public class PyDictObject extends PyObject
     }
 
     @Override
-    public PyObject sqLength(PyObject o) throws PyNotImplemented {
+    public PyObject sqLength() throws PyNotImplemented {
       return new PyLongObject(map.size());
     }
 

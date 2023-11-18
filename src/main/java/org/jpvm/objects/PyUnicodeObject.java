@@ -434,7 +434,7 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyObject sqLength(PyObject o) throws PyNotImplemented {
+  public PyObject sqLength() throws PyNotImplemented {
     return new PyLongObject(s.length());
   }
 
