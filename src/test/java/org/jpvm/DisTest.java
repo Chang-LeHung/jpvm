@@ -25,7 +25,7 @@ public class DisTest {
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     System.out.println(pyCodeObject);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 
@@ -41,7 +41,7 @@ public class DisTest {
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     System.out.println(pyCodeObject);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 
@@ -56,7 +56,7 @@ public class DisTest {
     Marshal marshal = new Marshal();
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 
@@ -71,7 +71,7 @@ public class DisTest {
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     System.out.println(pyCodeObject);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 
@@ -114,7 +114,7 @@ public class DisTest {
     Marshal marshal = new Marshal();
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 }

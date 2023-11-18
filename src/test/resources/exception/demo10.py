@@ -3,4 +3,7 @@ def fib():
 
 
 if __name__ == '__main__':
-    fib()
+    try:
+        fib()
+    except RecursionError:
+        print("RecursionError occurred")
