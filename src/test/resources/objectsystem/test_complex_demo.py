@@ -1,48 +1,46 @@
 import time
 
 
-class PluginMeta(type):
+class MetaClass(type):
 
     def __new__(cls, name, bases, dct):
-        print("In PluginMeta")
-        # if name != 'BasePlugin' and 'process' not in dct:
-        #     raise TypeError('subclass {} should implement process method'.format(name))
+        print("In MetaClass")
         return super().__new__(cls, name, bases, dct)
 
 
-class BasePlugin(metaclass=PluginMeta):
+class A(metaclass=MetaClass):
 
-    def __init__(self, interval):
-        self.interval = interval
+    def __init__(self, arg):
+        self.arg = arg
 
     def serve_forever(self):
         while True:
-            self.process()
-            time.sleep(self.interval)
+            self.method()
+            time.sleep(self.arg)
 
 
-class BarPlugin(BasePlugin):
+class B(A):
 
-    def process(self):
-        print('bar processing')
-
-
-bar = BarPlugin(interval=5)
+    def method(self):
+        print('bar methoding')
 
 
-class FooPlugin(BasePlugin):
-
-    def process(self):
-        print('foo processing')
+bar = B(arg=5)
 
 
-foo = FooPlugin(interval=5)
+class C(A):
+
+    def method(self):
+        print('foo methoding')
 
 
-class FaultPlugin(BasePlugin):
+foo = C(arg=5)
+
+
+class D(A):
 
     def run(self):
         print('xxxx')
 
 
-fault = FaultPlugin(interval=5)
+fault = D(arg=5)
