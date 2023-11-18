@@ -22,7 +22,7 @@ public class TestCodeObject {
     PyCodeObject pyCodeObject = marshal.loadCodeObject(bytes);
     System.out.println(pyCodeObject);
     Disassembler disassembler = new Disassembler(pyCodeObject);
-    disassembler.dis();
+//    disassembler.dis();
     stream.close();
   }
 }
