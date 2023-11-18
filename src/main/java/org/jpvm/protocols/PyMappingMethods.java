@@ -8,20 +8,19 @@ public interface PyMappingMethods {
 
   /** implementation of corresponding cpython mp_length */
   default PyObject mpLength(PyObject o) throws PyException {
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "mpLength is not implemented");
-    return null;
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError, "mpLength is not implemented");
   }
 
   /** implementation of corresponding cpython mp_subscript */
   default PyObject mpSubscript(PyObject o) throws PyException {
-    PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError, "mpSubscript is not implemented");
-    return null;
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError, "mpSubscript is not implemented");
   }
 
   /** implementation of corresponding cpython mp_ass_subscript */
   default PyObject mpAssSubscript(PyObject key, PyObject val) throws PyException {
-    PyErrorUtils.pyErrorFormat(
+    return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.NotImplementedError, "mpAssSubscript is not implemented");
-    return null;
   }
 }
