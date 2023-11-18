@@ -206,7 +206,7 @@ public class BuiltIn {
       } else if (o instanceof PySequenceMethods seq) {
         return seq.sqLength(null);
       } else if (o instanceof PyMappingMethods map) {
-        return map.mpLength(null);
+        return map.mpLength();
       }
     }
     return PyErrorUtils.pyErrorFormat(

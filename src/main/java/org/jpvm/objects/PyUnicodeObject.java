@@ -386,7 +386,7 @@ public class PyUnicodeObject extends PyObject
   }
 
   @Override
-  public PyObject mpLength(PyObject o) {
+  public PyObject mpLength() {
     return new PyLongObject(s.length());
   }
 

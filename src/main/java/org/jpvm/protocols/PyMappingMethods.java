@@ -7,7 +7,7 @@ import org.jpvm.objects.PyObject;
 public interface PyMappingMethods {
 
   /** implementation of corresponding cpython mp_length */
-  default PyObject mpLength(PyObject o) throws PyException {
+  default PyObject mpLength() throws PyException {
     return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.NotImplementedError, "mpLength is not implemented");
   }

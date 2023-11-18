@@ -498,7 +498,7 @@ public class Abstract {
     } else if (o instanceof PySequenceMethods seq) {
       return isTrue(seq.sqLength(null));
     } else if (o instanceof PyMappingMethods map) {
-      return isTrue(map.mpLength(null));
+      return isTrue(map.mpLength());
     }
     PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, o.repr() + "can not be seen as a bool object");

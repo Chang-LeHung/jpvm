@@ -117,7 +117,7 @@ public class PyBytesObject extends PyObject
   }
 
   @Override
-  public PyObject mpLength(PyObject o) throws PyNotImplemented {
+  public PyObject mpLength() throws PyNotImplemented {
     return new PyLongObject(data.length);
   }
 

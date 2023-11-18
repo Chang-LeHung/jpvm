@@ -168,7 +168,7 @@ public class PyListObject extends PyObject
   }
 
   @Override
-  public PyObject mpLength(PyObject o) {
+  public PyObject mpLength() {
     return new PyLongObject(size());
   }
 
