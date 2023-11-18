@@ -121,12 +121,6 @@ public class PyObject
   }
 
   @Override
-  @PyClassMethod
-  public PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
-    return repr();
-  }
-
-  @Override
   public PyLongObject hash() {
     return new PyLongObject(0);
   }

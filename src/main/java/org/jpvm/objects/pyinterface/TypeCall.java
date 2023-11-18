@@ -5,6 +5,7 @@ import org.jpvm.exceptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.annotation.PyClassMethod;
 
 public interface TypeCall {
 
@@ -15,5 +16,10 @@ public interface TypeCall {
    */
   default PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     throw new PyNotImplemented("TypeCall call not implemented");
+  }
+
+  @PyClassMethod
+  default PyObject __call__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return call(args, kwArgs);
   }
 }

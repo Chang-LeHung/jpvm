@@ -9,7 +9,8 @@ public interface TypeStr {
 
   PyUnicodeObject str();
 
-
   @PyClassMethod
-  PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs);
+  default PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
+    return str();
+  }
 }

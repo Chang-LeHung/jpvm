@@ -15,6 +15,8 @@ public interface TypeRepr {
   PyUnicodeObject repr();
 
   @PyClassMethod
-  PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs);
+  default PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
+    return repr();
+  }
 
 }
