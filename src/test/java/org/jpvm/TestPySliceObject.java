@@ -1,5 +1,6 @@
 package org.jpvm;
 
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyListObject;
 import org.jpvm.objects.PyLongObject;
 import org.jpvm.objects.PySliceObject;
@@ -9,7 +10,7 @@ import org.junit.Test;
 public class TestPySliceObject {
 
   @Test
-  public void test01() {
+  public void test01() throws PyException {
     var start = PyLongObject.getLongObject(5);
     var end = PyLongObject.getLongObject(1);
     var step = PyLongObject.getLongObject(-2);
@@ -20,7 +21,7 @@ public class TestPySliceObject {
   }
 
   @Test
-  public void test02() {
+  public void test02() throws PyException {
     var start = PyLongObject.getLongObject(5);
     var end = PyLongObject.getLongObject(1);
     var step = PyLongObject.getLongObject(-1);
