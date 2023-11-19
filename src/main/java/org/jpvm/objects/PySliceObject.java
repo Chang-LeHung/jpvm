@@ -75,7 +75,7 @@ public class PySliceObject extends PyObject {
     return step;
   }
 
-  public PyListObject unpacked(PyObject o) {
+  public PyListObject unpacked(PyObject o) throws PyException {
     if (!((o instanceof TypeIterable) || o instanceof TypeDoIterate)) return null;
     TypeDoIterate it;
     if (o instanceof TypeIterable iter) {
