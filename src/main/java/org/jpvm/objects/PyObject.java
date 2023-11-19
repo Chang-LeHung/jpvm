@@ -192,6 +192,9 @@ public class PyObject
     if (dict != null) object = dict.get(key);
     var name = (PyUnicodeObject) key;
     if (object == null) {
+      if (descr instanceof PyFunctionObject func) {
+        return func.descrGet(this, getType());
+      }
       object = Utils.loadFiled(this, name);
     }
     if (object == null) {
@@ -214,25 +217,7 @@ public class PyObject
       } catch (NoSuchFieldException | IllegalAccessException ignore) {
       }
     }
-    if (object == null) {
-      try {
-        Method method =
-            this.getClass().getSuperclass().getMethod(name.getData(), PyObject.parameterTypes);
-        if (method.isAnnotationPresent(PyClassMethod.class))
-          object = new PyMethodObject(this, method, name.getData());
-      } catch (NoSuchMethodException ignore) {
-      }
-    }
-    // PyFunctionObject take priority over PyMethodObject
-    if (descr instanceof PyFunctionObject func && object instanceof PyMethodObject) {
-      return func;
-    }
-    if (object != null) return object;
-    if (descr != null) {
-      if (descr instanceof TypeDescriptorGet get) return get.descrGet(this, getType());
-      return descr;
-    }
-    return null;
+    return object;
   }
 
   @Override
