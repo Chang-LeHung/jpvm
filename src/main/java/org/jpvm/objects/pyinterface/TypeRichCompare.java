@@ -25,21 +25,6 @@ public interface TypeRichCompare {
 
   PyBoolObject richCompare(PyObject o, Operator op) throws PyException;
 
-  enum Operator {
-    Py_EQ,
-    Py_NE,
-    Py_GT,
-    Py_GE,
-    Py_LE,
-    Py_LT,
-    PyCmp_IN,
-    PyCmp_NOT_IN,
-    PyCmp_IS,
-    PyCmp_IS_NOT,
-    PyCmp_EXC_MATCH,
-    PyCmp_BAD
-  }
-
   @PyClassMethod
   default PyObject __lt__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
@@ -92,5 +77,20 @@ public interface TypeRichCompare {
     }
     return PyErrorUtils.pyErrorFormat(
         PyErrorUtils.TypeError, String.format("%s __ge__ only require 1 argument", this));
+  }
+
+  enum Operator {
+    Py_EQ,
+    Py_NE,
+    Py_GT,
+    Py_GE,
+    Py_LE,
+    Py_LT,
+    PyCmp_IN,
+    PyCmp_NOT_IN,
+    PyCmp_IS,
+    PyCmp_IS_NOT,
+    PyCmp_EXC_MATCH,
+    PyCmp_BAD
   }
 }

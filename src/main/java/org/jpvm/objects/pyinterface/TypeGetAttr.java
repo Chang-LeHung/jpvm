@@ -2,11 +2,7 @@ package org.jpvm.objects.pyinterface;
 
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.exceptions.jobjs.PyNotImplemented;
-import org.jpvm.objects.PyDictObject;
 import org.jpvm.objects.PyObject;
-import org.jpvm.objects.PyTupleObject;
-import org.jpvm.objects.annotation.PyClassMethod;
 
 public interface TypeGetAttr {
 
@@ -16,6 +12,7 @@ public interface TypeGetAttr {
    * @return {@link PyObject}
    */
   default PyObject getAttr(PyObject key) throws PyException {
-    throw new PyNotImplemented("TypeGetAttr getAttr not implemented");
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError, "TypeGetAttr getAttr not implemented");
   }
 }

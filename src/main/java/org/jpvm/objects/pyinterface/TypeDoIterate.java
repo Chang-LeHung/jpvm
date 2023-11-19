@@ -2,7 +2,6 @@ package org.jpvm.objects.pyinterface;
 
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.exceptions.jobjs.PyNotImplemented;
 import org.jpvm.objects.PyObject;
 
 public interface TypeDoIterate {
@@ -12,7 +11,8 @@ public interface TypeDoIterate {
   }
 
   default PyObject get(int idx) throws PyException {
-    throw new PyNotImplemented("TypeDoIterate get not implemented");
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError, "TypeDoIterate get not implemented");
   }
 
   default int size() {

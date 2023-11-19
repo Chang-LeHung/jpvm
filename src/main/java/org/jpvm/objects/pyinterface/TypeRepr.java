@@ -18,5 +18,4 @@ public interface TypeRepr {
   default PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
     return repr();
   }
-
 }

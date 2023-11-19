@@ -1,6 +1,7 @@
 package org.jpvm.objects.pyinterface;
 
-import org.jpvm.exceptions.jobjs.PyNotImplemented;
+import org.jpvm.exceptions.PyErrorUtils;
+import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.PyObject;
 
 public interface TypeInit {
@@ -10,7 +11,8 @@ public interface TypeInit {
    *
    * @return {@link PyObject}
    */
-  default PyObject init() throws PyNotImplemented {
-    throw new PyNotImplemented("TypeInit init not implemented");
+  default PyObject init() throws PyException {
+    return PyErrorUtils.pyErrorFormat(
+        PyErrorUtils.NotImplementedError, "TypeInit init not implemented");
   }
 }

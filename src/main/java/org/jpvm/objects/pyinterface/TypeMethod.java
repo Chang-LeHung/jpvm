@@ -7,7 +7,8 @@ public interface TypeMethod {
 
   /**
    * @param methodName name of method will be executed
-   * @return {@link PyMethodObject} if not contain methodName return {@link org.jpvm.internal.Global#notImplemented}
+   * @return {@link PyMethodObject} if not contain methodName return {@link
+   *     org.jpvm.internal.Global#notImplemented}
    */
   PyMethodObject getMethod(PyUnicodeObject methodName);
 }
