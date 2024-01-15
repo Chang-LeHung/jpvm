@@ -1,0 +1,56 @@
+magic number = 0xa0d0d55
+bit filed = 0
+time = Sat May 13 00:59:12 2023
+file size = 58
+code
+   argcount 0
+   nlocals 0
+   stacksize 2
+   flags 0040 0x40
+   code b'6400640184005a00650083005a01650265018301010064025300'
+  2           0 LOAD_CONST               0 (<code object add at 0x105140a80, file "/Users/huchang/IdeaProjects/jpvm/src/test/resources/pys/add.py", line 2>)
+              2 LOAD_CONST               1 ('add')
+              4 MAKE_FUNCTION            0
+              6 STORE_NAME               0 (add)
+
+  5           8 LOAD_NAME                0 (add)
+             10 CALL_FUNCTION            0
+             12 STORE_NAME               1 (data)
+
+  6          14 LOAD_NAME                2 (print)
+             16 LOAD_NAME                1 (data)
+             18 CALL_FUNCTION            1
+             20 POP_TOP
+             22 LOAD_CONST               2 (None)
+             24 RETURN_VALUE
+   consts
+      code
+         argcount 2
+         nlocals 2
+         stacksize 2
+         flags 0043 0x43
+         code b'7c007c0117005300'
+  3           0 LOAD_FAST                0 (a)
+              2 LOAD_FAST                1 (b)
+              4 BINARY_ADD
+              6 RETURN_VALUE
+         consts
+            None
+         names ()
+         varnames ('a', 'b')
+         freevars ()
+         cellvars ()
+         filename '/Users/huchang/IdeaProjects/jpvm/src/test/resources/pys/add.py'
+         name 'add'
+         firstlineno 2
+         lnotab b'0001'
+      'add'
+      None
+   names ('add', 'data', 'print')
+   varnames ()
+   freevars ()
+   cellvars ()
+   filename '/Users/huchang/IdeaProjects/jpvm/src/test/resources/pys/add.py'
+   name '<module>'
+   firstlineno 2
+   lnotab b'08030601'
