@@ -35,7 +35,7 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
   }
 
   public static PyBoolObject check(PyObject o) {
-    return new PyBoolObject(o == type);
+    return o == type ? getTrue() : getFalse();
   }
 
   public boolean isBool() {
@@ -72,20 +72,20 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject and(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
-    return new PyBoolObject(bool && ((PyBoolObject) o).bool);
+    if (!(o instanceof PyBoolObject)) return getFalse();
+    return bool && ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
   public PyObject xor(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
-    return new PyBoolObject(bool != ((PyBoolObject) o).bool);
+    if (!(o instanceof PyBoolObject)) return getFalse();
+    return bool != ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
   public PyObject or(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return new PyBoolObject(false);
-    return new PyBoolObject(bool || ((PyBoolObject) o).bool);
+    if (!(o instanceof PyBoolObject)) return getFalse();
+    return bool || ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
