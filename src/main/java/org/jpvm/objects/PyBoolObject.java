@@ -11,7 +11,7 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   public static final PyTypeType type = PyBoolType.getInstance();
 
-  private boolean bool;
+  private final boolean bool;
 
   private PyBoolObject(boolean bool) {
     this.bool = bool;
@@ -40,10 +40,6 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   public boolean isBool() {
     return bool;
-  }
-
-  public void setBool(boolean bool) {
-    this.bool = bool;
   }
 
   @Override
