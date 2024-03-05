@@ -1,0 +1,4 @@
+写入内容1写入内容2hello a.txt
+write testwrite testwrite testwrite test
+123456789
+a.txt over

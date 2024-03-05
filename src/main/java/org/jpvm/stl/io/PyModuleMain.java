@@ -25,20 +25,7 @@ public class PyModuleMain extends PyModuleObject{
     }
 
     @PyClassAttribute public PyObject test;
-    //@PyClassAttribute public String path;
 
-    //根据这个测试，可以使用字典作为返回值，测试字典位于args元组的[0]位置
-    @PyClassMethod
-    public PyObject test(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("test()<<<<<<<<<<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen test=(PyOpen) pyio.get(2);
-        test.test();
-        System.out.println("test.path="+test.path);
-
-        System.out.println("test()>>>>>>>>>>>>>>");
-        return pyio;
-    }
     @PyClassMethod//new
     public PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         //注意不能传入元组，参数填写为([地址],[读取模式])，此时args为tuple类型
@@ -54,30 +41,44 @@ public class PyModuleMain extends PyModuleObject{
         pyOpen.path=temp.get(0).toString();
         pyOpen.mode=temp.get(1).toString();
         switch (pyOpen.mode) {
-            case "r":
-                pyOpen.pyFileReader= new PyFileReader(pyOpen.path);
+            case "r"://只读，文件指针在开头
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
                 break;
-            case "w":
+            case "w"://只用于写入，若文件已存在则覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
                 break;
-            case "a":
+            case "a"://用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
                 break;
             case "x":
                 break;
-            case "rb":
+            case "rb"://以二进制格式打开文件用于只读，文件指针在开头
                 break;
-            case "wb":
+            case "wb"://以二进制格式打开文件用于写入，若文件已存在则覆盖，不存在则创建
                 break;
-            case "ab":
+            case "ab"://以二进制格式打开文件用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
                 break;
-            case "r+":
+            case "r+"://用于读写，文件指针在开头
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.path, "rw");
+                    randomAccessFile.seek(0);
+                    pyOpen.pyFileReader=new PyFileReader(randomAccessFile.getFD());
+                    pyOpen.pyFileWriter=new PyFileWriter(randomAccessFile.getFD());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
-            case "w+":
+            case "w+"://用于读写，若文件已存在则覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
                 break;
-            case "a+":
+            case "a+"://用于读写，文件指针在末尾,若文件存在不覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
                 break;
             case "rb+":
                 break;
-            case "wb+":
+            case "wb+"://
                 break;
             case "ab+":
                 break;
@@ -105,6 +106,13 @@ public class PyModuleMain extends PyModuleObject{
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         System.out.println("path="+pyOpen.path);
         pyOpen.path="";
+        if(pyOpen.pyFileWriter!=null) {
+            try {
+                pyOpen.pyFileWriter.bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         System.out.println("close()>>>>>");
         return pyio;
     }
@@ -147,7 +155,7 @@ public class PyModuleMain extends PyModuleObject{
         return isReadable;
     }
     @PyClassMethod//new
-    public PyObject readLine(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    public PyObject readline(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         System.out.println("readline()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
@@ -174,7 +182,7 @@ public class PyModuleMain extends PyModuleObject{
         return pyio;
     }
     @PyClassMethod//new
-    public PyObject readLines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    public PyObject readlines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         System.out.println("readline()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
@@ -217,44 +225,6 @@ public class PyModuleMain extends PyModuleObject{
     public PyObject read(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         System.out.println("read()<<<<<<<<<<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
-        System.out.println("read读取文件为"+pyio.get(0));
-        System.out.println("read读取方式为"+pyio.get(1));
-        //读取文件内容
-        FileReader fr=null;
-        BufferedReader br=null;
-        String path=pyio.get(0).toString();
-        String path2 = "D:\\APP\\bishe\\jpvm\\"+pyio.get(0);
-        //
-        System.out.println("test<<<<<<<<<<<<<<");
-        try {
-            PyFileReader test = new PyFileReader(path);
-            String line = test.bufferedReader.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = test.bufferedReader.readLine();
-            }
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-        System.out.println("test>>>>>>>>>>>>>>>");
-        //
-        try{
-            fr=new FileReader(path);
-            br=new BufferedReader(fr);
-            String line=br.readLine();
-            while(line!=null){
-                System.out.println(line);
-                line=br.readLine();
-            }
-        }catch(IOException ioe){
-            ioe.getStackTrace();
-        }
-        try{
-            br.close();
-            fr.close();
-        }catch (IOException ioe){
-            ioe.getStackTrace();
-        }
         System.out.println("read()>>>>>>>>>>>>>>");
         return pyio;
     }
@@ -262,29 +232,44 @@ public class PyModuleMain extends PyModuleObject{
 
     @PyClassMethod
     public PyObject write(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        System.out.println("write()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
-        System.out.println("write读取文件为"+pyio.get(0));
-        System.out.println("write读取方式为"+pyio.get(1));
-        String beWrite=args.get(1).toString();
-        System.out.println("要写入的内容为"+beWrite);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyUnicodeObject pyUnicodeObject=(PyUnicodeObject) args.get(1);
+        System.out.println("write读取文件为"+pyOpen.path);
+        System.out.println("write读取方式为"+pyOpen.mode);
+        System.out.println("要写入的内容为: "+pyUnicodeObject);
         //写文件
-        FileWriter fw=null;
-        BufferedWriter bw=null;
-        try{//当FileWriter第二个参数为TRUE时使用附加方式写入，否则覆盖原内容
-            fw=new FileWriter("D:\\APP\\bishe\\jpvm\\"+pyio.get(0),true);
-            bw=new BufferedWriter(fw);
-            bw.write(beWrite);
+        String line=pyUnicodeObject.toString();
+        System.out.println(line);
+        try {
+            pyOpen.pyFileWriter.bufferedWriter.write(line);
+            pyOpen.pyFileWriter.bufferedWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+            //PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,"write: I/O Error");
+        }
 
-        }catch (IOException ioe){
-            ioe.getStackTrace();
+        System.out.println("write()>>>>>");
+        return pyio;
+    }
+    @PyClassMethod
+    public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException{
+        System.out.println("writelines()<<<<<");
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyListObject pyListObject=(PyListObject) args.get(1);
+        System.out.println("pyListObject="+pyListObject.toString());
+        try {
+            for(int i=0;i<pyListObject.size();i++) {
+                pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
+                pyOpen.pyFileWriter.bufferedWriter.newLine();
+                pyOpen.pyFileWriter.bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        try{
-            bw.flush();
-            bw.close();
-            fw.close();
-        }catch (IOException ioe){
-            ioe.getStackTrace();
-        }
+        System.out.println("writelines()>>>>>");
         return pyio;
     }
 
