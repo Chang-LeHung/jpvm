@@ -58,6 +58,7 @@ public class PyModuleMain extends PyModuleObject{
                 int data;
                 char temp2;
                 try {
+
                     FileInputStream fis = new FileInputStream(pyOpen.path);
                     InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
                     BufferedReader bufferedReader=new BufferedReader(isr);
@@ -137,7 +138,11 @@ public class PyModuleMain extends PyModuleObject{
         PyTupleObject pyio=(PyTupleObject)args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         PyBoolObject isClosed = PyBoolObject.getInstance();
-        isClosed.setBool(Objects.equals(pyOpen.path, ""));
+        if(Objects.equals(pyOpen.path, "")) {
+            isClosed=PyBoolObject.getTrue();
+        }else{
+            isClosed=PyBoolObject.getFalse();
+        }
         System.out.println("isClosed为"+isClosed.isTrue());
         if(isClosed.isTrue()){
             System.out.println("文件关闭成功");
@@ -154,13 +159,13 @@ public class PyModuleMain extends PyModuleObject{
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         PyBoolObject isReadable = PyBoolObject.getInstance();
         if(Objects.equals(pyOpen.path, "")){
-            isReadable.setBool(false);
-        }else{isReadable.setBool(true);}
+            isReadable=PyBoolObject.getFalse();
+        }else{isReadable=PyBoolObject.getTrue();}
         if (isReadable.isTrue()){
             try {
                 if(pyOpen.pyFileReader.fileReader.ready()){
-                    isReadable.setBool(true);
-                }else {isReadable.setBool(false);}
+                    isReadable=PyBoolObject.getTrue();
+                }else {isReadable=PyBoolObject.getFalse();}
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
