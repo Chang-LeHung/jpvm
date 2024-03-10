@@ -50,28 +50,17 @@ public class PyModuleMain extends PyModuleObject{
             case "a"://用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
                 pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
                 break;
-            case "x"://排他性创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
+            case "x":
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);//排他性创建
                 break;
             case "rb"://以二进制格式打开文件用于只读，文件指针在开头
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
-                int data;
-                char temp2;
-                try {
-                    FileInputStream fis = new FileInputStream(pyOpen.path);
-                    InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-                    BufferedReader bufferedReader=new BufferedReader(isr);
-                    while ((data = bufferedReader.read()) != -1) {
-                        temp2=(char) data;
-                        System.out.println("字符为："+temp2+"data为："+data);
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.path,"b");
                 break;
             case "wb"://以二进制格式打开文件用于写入，若文件已存在则覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,"b");
                 break;
             case "ab"://以二进制格式打开文件用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,"b",true);
                 break;
             case "r+"://用于读写，文件指针在开头
                 try {
@@ -88,14 +77,41 @@ public class PyModuleMain extends PyModuleObject{
                 pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
                 break;
             case "a+"://用于读写，文件指针在末尾,若文件存在不覆盖，不存在则创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.path, "rw");
+                    randomAccessFile.seek(randomAccessFile.length());
+                    pyOpen.pyFileWriter=new PyFileWriter(randomAccessFile.getFD(),true);
+                    pyOpen.pyFileReader=new PyFileReader(randomAccessFile.getFD());
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
-            case "rb+":
+            case "rb+"://二进制格式打开用于读写，文件指针在开头
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.path, "rw");
+                    randomAccessFile.seek(0);
+                    pyOpen.pyFileReader=new PyFileReader(randomAccessFile.getFD(),"b");
+                    pyOpen.pyFileWriter=new PyFileWriter(randomAccessFile.getFD(),"b");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
-            case "wb+"://
+            case "wb+"://二进制格式打开用于读写，若文件已存在则覆盖，不存在则创建
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,"b");
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.path,"b");
                 break;
-            case "ab+":
+            case "ab+"://二进制格式打开用于读写，文件指针在末尾,若文件存在不覆盖，不存在则创建
+                 try {
+                     RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.path, "rw");
+                     randomAccessFile.seek(randomAccessFile.length());
+                     pyOpen.pyFileWriter=new PyFileWriter(randomAccessFile.getFD(),"b",true);
+                     pyOpen.pyFileReader=new PyFileReader(randomAccessFile.getFD(),"b");
+                 } catch (IOException e) {
+                     throw new RuntimeException(e);
+                 }
+                //pyFileWriter=new PyFileWriter(pyOpen.path,"b",true);
+                //pyOpen.pyFileReader=new PyFileReader(pyOpen.path,"b");
                 break;
             default:
                 System.out.println("open读写模式错误");
@@ -137,7 +153,11 @@ public class PyModuleMain extends PyModuleObject{
         PyTupleObject pyio=(PyTupleObject)args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         PyBoolObject isClosed = PyBoolObject.getInstance();
-        isClosed.setBool(Objects.equals(pyOpen.path, ""));
+        if(Objects.equals(pyOpen.path, "")) {
+            isClosed=PyBoolObject.getTrue();
+        }else{
+            isClosed=PyBoolObject.getFalse();
+        }
         System.out.println("isClosed为"+isClosed.isTrue());
         if(isClosed.isTrue()){
             System.out.println("文件关闭成功");
@@ -154,13 +174,13 @@ public class PyModuleMain extends PyModuleObject{
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         PyBoolObject isReadable = PyBoolObject.getInstance();
         if(Objects.equals(pyOpen.path, "")){
-            isReadable.setBool(false);
-        }else{isReadable.setBool(true);}
+            isReadable=PyBoolObject.getFalse();
+        }else{isReadable=PyBoolObject.getTrue();}
         if (isReadable.isTrue()){
             try {
                 if(pyOpen.pyFileReader.fileReader.ready()){
-                    isReadable.setBool(true);
-                }else {isReadable.setBool(false);}
+                    isReadable=PyBoolObject.getTrue();
+                }else {isReadable=PyBoolObject.getFalse();}
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -174,66 +194,167 @@ public class PyModuleMain extends PyModuleObject{
         System.out.println("readline()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyFileReader pyFileReader = pyOpen.pyFileReader;
-        if (args.size()!=1){
-            //此时传入的第二个参数为读取的字符数
-            PyLongObject size= (PyLongObject) args.get(1);
-            try {
-                char[] buffer=new char[(int) size.getData()];
-                pyFileReader.bufferedReader.read(buffer,0, (int) size.getData());
-                System.out.println(buffer);
-            } catch (IOException e) {
-                e.getStackTrace();
+        PyUnicodeObject pyUnicodeObject = new PyUnicodeObject("");
+        if(pyOpen.mode.contains("b")){//二进制
+            if (args.size() != 1) {
+                //此时传入的第二个参数为读取的字符数
+                PyLongObject size = (PyLongObject) args.get(1);
+                try {
+                    char[] buffer = new char[(int) size.getData()];
+                    int i=0,data;
+                    while(i<size.getData()) {
+                        data=pyOpen.pyFileReader.bufferedReader.read();
+                        if(data==-1){break;}
+                        buffer[i]=(char)data;
+                        i++;
+                    }
+                    pyUnicodeObject=new PyUnicodeObject(buffer.toString());
+                    System.out.println(buffer.toString());
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            } else {//读取一行
+                try {
+                    String string = "";
+                    int data;
+                    do{
+                        data=pyOpen.pyFileReader.bufferedReader.read();
+                        if(data==-1){break;}
+                        else if (data==10) {
+                            string=string+(char)data;
+                            break;
+                        }
+                        string=string+(char)data;
+                    }while(data!=-1&&data!=10);//Windows系统中，换行符通常表示为\r\n，对应的ASCII码分别是13和10。
+                    pyUnicodeObject=new PyUnicodeObject(string);
+                    System.out.println(string);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
             }
-        }else {
-            try {
-                String line = pyFileReader.bufferedReader.readLine();
-                System.out.println(line);
-            } catch (IOException e) {
-                e.getStackTrace();
+        }
+        else {//非二进制
+            if (args.size() != 1) {
+                //此时传入的第二个参数为读取的字符数
+                PyLongObject size = (PyLongObject) args.get(1);
+                try {
+                    char[] buffer = new char[(int) size.getData()];
+                    pyOpen.pyFileReader.bufferedReader.read(buffer, 0, (int) size.getData());
+                    pyUnicodeObject=new PyUnicodeObject(buffer.toString());
+                    System.out.println(buffer);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            } else {//读取一行
+                try {
+                    String line = pyOpen.pyFileReader.bufferedReader.readLine();
+                    pyUnicodeObject=new PyUnicodeObject(line);
+                    System.out.println(line);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
             }
         }
         System.out.println("readline()>>>>>");
-        return pyio;
+        return pyUnicodeObject;
     }
     @PyClassMethod//new
     public PyObject readlines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("readline()<<<<<");
+        System.out.println("readlines()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyFileReader pyFileReader = pyOpen.pyFileReader;
+        //PyFileReader pyFileReader = pyOpen.pyFileReader;
         //readLines返回一个行列表
         PyListObject pyListObject=new PyListObject();
-
-        if (args.size()!=1){
-            //此时传入的第二个参数为读取的行数
-            PyLongObject temp= (PyLongObject) args.get(1);
-            int size= (int) temp.getData();
-            try {
-                for(int i=0;i<size;i++){
-                    PyString pyString = new PyString();
-                    pyString.string = pyFileReader.bufferedReader.readLine();
-                    if(pyString.string==null){break;}
-                    pyListObject.add(pyString);
+        if(pyOpen.mode.contains("b")) {//二进制
+            if (args.size() != 1) {
+                //此时传入的第二个参数为读取的行数
+                PyLongObject temp = (PyLongObject) args.get(1);
+                int size = (int) temp.getData();
+                try {
+                    StringBuilder string = new StringBuilder();
+                    int data,i=0;
+                    do{
+                        data=pyOpen.pyFileReader.bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {//Windows系统中，换行符通常表示为\r\n，对应的ASCII码分别是13和10。
+                            i++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string = new StringBuilder();
+                            continue;
+                        }
+                        string.append((char) data);
+                    }while(data!=-1&&i<size);
+                } catch (IOException e) {
+                    e.getStackTrace();
                 }
-            } catch (IOException e) {
-                e.getStackTrace();
+            } else {//读取所有行
+                try {
+                    StringBuilder string = new StringBuilder();
+                    int data;
+                    do{
+                        data=pyOpen.pyFileReader.bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {//Windows系统中，换行符通常表示为\r\n，对应的ASCII码分别是13和10。
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string= new StringBuilder();
+                            continue;
+                        }
+                        string.append((char) data);
+                    }while(data!=-1);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
             }
-        }else {//读取所有行
-            try {
-                do {
-                    PyString pyString = new PyString();
-                    pyString.string = pyFileReader.bufferedReader.readLine();
-                    if(pyString.string==null){break;}
-                    pyListObject.add(pyString);
+        }else{//非二进制
+            if (args.size() != 1) {
+                //此时传入的第二个参数为读取的行数
+                PyLongObject temp = (PyLongObject) args.get(1);
+                int size = (int) temp.getData();
+                try {
+                    String s;
+                    for (int i = 0; i < size; i++) {
+                        if ((s = pyOpen.pyFileReader.bufferedReader.readLine()) != null) {
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+                            pyListObject.add(pyUnicodeObject);
+                        } else {
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    e.getStackTrace();
                 }
-                while(true);
-            } catch (IOException e) {
-                e.getStackTrace();
+            } else {//读取所有行
+                try {
+                    String s;
+                    do {
+                        if ((s = pyOpen.pyFileReader.bufferedReader.readLine()) != null) {
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+                            pyListObject.add(pyUnicodeObject);
+                        } else {
+                            break;
+                        }
+                    }
+                    while (true);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
             }
         }
         System.out.println("pyListObject="+pyListObject);
-        System.out.println("readline()>>>>>");
+        System.out.println("readlines()>>>>>");
         return pyListObject;
     }
     @PyClassMethod//废弃
@@ -245,7 +366,7 @@ public class PyModuleMain extends PyModuleObject{
     }
 
 
-    @PyClassMethod
+    @PyClassMethod//没有该函数
     public PyObject write(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         System.out.println("write()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
@@ -269,23 +390,35 @@ public class PyModuleMain extends PyModuleObject{
         return pyio;
     }
     @PyClassMethod
-    public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException{
+    public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         System.out.println("writelines()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyListObject pyListObject=(PyListObject) args.get(1);
-        System.out.println("pyListObject="+pyListObject.toString());
-        try {
-            for(int i=0;i<pyListObject.size();i++) {
-                pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
-                pyOpen.pyFileWriter.bufferedWriter.newLine();
-                pyOpen.pyFileWriter.bufferedWriter.flush();
+        PyTupleObject pyio = (PyTupleObject) args.get(0);
+        PyOpen pyOpen = (PyOpen) pyio.get(0);
+        PyListObject pyListObject = (PyListObject) args.get(1);
+        System.out.println("pyListObject=" + pyListObject.toString());
+        if (pyOpen.mode.contains("b")) {//二进制
+            try {
+                for (int i = 0; i < pyListObject.size(); i++) {
+                    pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
+                    pyOpen.pyFileWriter.bufferedWriter.flush();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }else{//非二进制
+            try {
+                System.out.println("pyListObject.size()="+pyListObject.size());
+                for (int i = 0; i < pyListObject.size(); i++) {
+                    pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
+                    System.out.println("pyListObject.get(i).toString()="+pyListObject.get(i).toString());
+                    pyOpen.pyFileWriter.bufferedWriter.newLine();
+                    pyOpen.pyFileWriter.bufferedWriter.flush();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         System.out.println("writelines()>>>>>");
         return pyio;
     }
-
 }
