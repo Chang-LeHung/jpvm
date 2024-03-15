@@ -37,21 +37,21 @@ After executing the above command, a subdirectory named `__pycache__` will be cr
 containing a file named `fib.cpython-38.pyc`. Use the following Java program to execute this Python program:
 
 ```java
-import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.vm.JPVM;
-
-import java.io.IOException;
 
 public class Example {
+
   public static void main(String[] args) {
-    String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
+    String filename = "src/test/resources/obsy/__pycache__/test06.cpython-38.pyc";
     try {
-      new JPVM(filename).run();
+      JPVM pvm = new JPVM(filename);
+      pvm.run();
+      System.out.println(pvm.call("fib", 10));
     } catch (PyException | IOException e) {
       throw new RuntimeException(e);
     }
   }
 }
+
 ```
 
 # Method call
