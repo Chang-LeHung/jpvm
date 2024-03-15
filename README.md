@@ -43,15 +43,14 @@ import org.jpvm.vm.JPVM;
 import java.io.IOException;
 
 public class Example {
-
-	public static void main(String[] args) {
-		String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
-		try {
-			new JPVM(filename).run();
-		} catch (PyException | IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static void main(String[] args) {
+    String filename = "src/test/resources/syntax/__pycache__/fib.cpython-38.pyc";
+    try {
+      new JPVM(filename).run();
+    } catch (PyException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
 ```
 
