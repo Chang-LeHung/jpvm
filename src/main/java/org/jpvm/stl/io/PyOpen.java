@@ -5,6 +5,7 @@ import org.jpvm.objects.annotation.PyClassAttribute;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.RandomAccessFile;
 import java.lang.String;
 public class PyOpen extends PyObject {
     @PyClassAttribute
@@ -12,6 +13,7 @@ public class PyOpen extends PyObject {
     public String mode;
     public PyFileReader pyFileReader;
     public PyFileWriter pyFileWriter;
+    public RandomAccessFile randomAccessFile;
     public PyOpen(){}
     public void print(){
         System.out.println("path="+path);
