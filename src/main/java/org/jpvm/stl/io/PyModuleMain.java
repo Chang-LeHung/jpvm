@@ -16,7 +16,6 @@ import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyTupleType;
 import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.protocols.PyNumberMethods;
 
 
 public class PyModuleMain extends PyModuleObject{
