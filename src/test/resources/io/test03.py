@@ -11,6 +11,17 @@ if temp==["test\n",'999\n','888\n','777']:pass
 else:print("w writelines readall error")
 #print("readlinesall",temp)
 io.close(fr)
+fw=io.open("test03.txt", 'w')
+ww="test"
+io.write(fw,ww)
+io.close(fw)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test"]:pass
+else:print("w write readall error")
+#print("readlinesall",temp)
+io.close(fr)
+
 
 #a模式
 fw=io.open("test03.txt", 'w')
@@ -27,6 +38,16 @@ if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666']:pass
 else:print("a writelines readall error")
 #print("readlinesall",temp)
 io.close(fr)
+fa=io.open("test03.txt", 'a')
+ww="test"
+io.write(fa,ww)
+io.close(fa)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666test']:pass
+else:print("a write readall error")
+#print("readlinesall",temp)
+io.close(fr)
 
 #wb模式
 fw=io.open("test03.txt", 'wb')
@@ -37,6 +58,16 @@ fr=io.open("test03.txt", 'r')
 temp=io.readlines(fr)
 if temp==["test\n",'999\n','888\n','666']:pass
 else:print("wb writelines readall error")
+#print("readlinesall",temp)
+io.close(fr)
+fw=io.open("test03.txt", 'wb')
+ww="test"
+io.write(fw,ww)
+io.close(fw)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test"]:pass
+else:print("wb write readall error")
 #print("readlinesall",temp)
 io.close(fr)
 
@@ -56,6 +87,7 @@ else:print("ab writelines readall error")
 #print("readlinesall",temp)
 io.close(fr)
 
+
 #w+模式
 fw=io.open("test03.txt", 'w+')
 ww=["test\n", '','999','\n','888\n','555']
@@ -65,6 +97,16 @@ fr=io.open("test03.txt", 'r')
 temp=io.readlines(fr)
 if temp==["test\n",'999\n','888\n','555']:pass
 else:print("w+ writelines readall error")
+#print("readlinesall",temp)
+io.close(fr)
+fw=io.open("test03.txt", 'w+')
+ww="test"
+io.write(fw,ww)
+io.close(fw)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test"]:pass
+else:print("w+ write readall error")
 #print("readlinesall",temp)
 io.close(fr)
 
@@ -83,6 +125,16 @@ if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666']:pass
 else:print("a+ writelines readall error")
 #print("readlinesall",temp)
 io.close(fr)
+fa=io.open("test03.txt", 'a+')
+ww="test"
+io.write(fa,ww)
+io.close(fa)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666test']:pass
+else:print("a+ write readall error")
+#print("readlinesall",temp)
+io.close(fr)
 
 #Wb+模式
 fw=io.open("test03.txt", 'wb+')
@@ -93,6 +145,16 @@ fr=io.open("test03.txt", 'r')
 temp=io.readlines(fr)
 if temp==["test\n",'999\n','888\n','444']:pass
 else:print("wb+ writelines readall error")
+#print("readlinesall",temp)
+io.close(fr)
+fw=io.open("test03.txt", 'wb+')
+ww="test"
+io.write(fw,ww)
+io.close(fw)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test"]:pass
+else:print("wb+ write readall error")
 #print("readlinesall",temp)
 io.close(fr)
 
@@ -109,5 +171,15 @@ fr=io.open("test03.txt", 'r')
 temp=io.readlines(fr)
 if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666']:pass
 else:print("ab+ writelines readall error")
+#print("readlinesall",temp)
+io.close(fr)
+fa=io.open("test03.txt", 'ab+')
+ww="test"
+io.write(fa,ww)
+io.close(fa)
+fr=io.open("test03.txt", 'r')
+temp=io.readlines(fr)
+if temp==["test\n", '999\n','888\n',"test\n",'999\n','888\n','666test']:pass
+else:print("ab+ write readall error")
 #print("readlinesall",temp)
 io.close(fr)

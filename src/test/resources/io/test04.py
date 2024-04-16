@@ -35,6 +35,16 @@ if temp==["abc456789"]:pass
 else:print("r+ RW error")
 #print("readlines",temp)
 io.close(fr)
+fr=io.open("test04.txt", 'r+')
+ww="123"
+io.write(fr,ww)
+io.close(fr)
+fr=io.open("test04.txt", 'r')
+temp=io.readlines(fr)
+if temp==["123456789"]:pass
+else:print("r+ write error")
+#print("readlines",temp)
+io.close(fr)
 
 #"w+":覆盖原文件
 fw=io.open("test04.txt", 'w')
@@ -136,6 +146,15 @@ fr=io.open("test04.txt", 'r')
 temp=io.readlines(fr)
 if temp==["abc456789"]:pass
 else:print("rb+ RW error")
+#print("readlines",temp)
+io.close(fr)
+fr=io.open("test04.txt", 'rb+')
+ww="123"
+io.write(fr,ww)
+fr=io.open("test04.txt", 'r')
+temp=io.readlines(fr)
+if temp==["123456789"]:pass
+else:print("rb+ write error")
 #print("readlines",temp)
 io.close(fr)
 

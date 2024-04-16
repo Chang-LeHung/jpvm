@@ -207,11 +207,18 @@ public class PyModuleMain extends PyModuleObject{
         //System.out.println("open()>>>>>>>>>>>>>>");
         return pyio;
     }
-    @PyClassMethod//未实现
+    @PyClassMethod
     public PyObject fileno(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
-        return args;
+        String s=null;
+        try {
+            s = pyOpen.randomAccessFile.getFD().toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+        return pyUnicodeObject;
     }
     @PyClassMethod
     public PyObject close(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -562,7 +569,7 @@ public class PyModuleMain extends PyModuleObject{
         //System.out.println("seek()>>>>>>>>>>>>>>");
         return pyio;
     }
-    @PyClassMethod//如果流支持随机访问则返回True，当seekable返回false时，则seek(),tell()和truncate()将引发OSError
+    @PyClassMethod//如果流支持随机访问则返回True，当seekable返回false时，则seek(),tell()和truncate()不支持
     public PyObject seekable(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         //System.out.println("seekable()<<<<<<<<<<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
@@ -617,28 +624,48 @@ public class PyModuleMain extends PyModuleObject{
         //System.out.println("truncate()>>>>>>>>>>>>>>");
         return pyio;
     }
-    @PyClassMethod//没有该函数
+    @PyClassMethod
     public PyObject write(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("write()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyUnicodeObject pyUnicodeObject=(PyUnicodeObject) args.get(1);
-        System.out.println("write读取文件为"+pyOpen.path);
-        System.out.println("write读取方式为"+pyOpen.mode);
-        System.out.println("要写入的内容为: "+pyUnicodeObject);
-        //写文件
-        String line=pyUnicodeObject.toString();
-        System.out.println(line);
-        try {
-            pyOpen.pyFileWriter.bufferedWriter.write(line);
-            pyOpen.pyFileWriter.bufferedWriter.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-            //PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,"write: I/O Error");
+        //System.out.println("writelines()<<<<<");
+        PyTupleObject pyio = (PyTupleObject) args.get(0);
+        PyOpen pyOpen = (PyOpen) pyio.get(0);
+        String s = (String) args.get(1).toString();
+        PyLongObject len= PyLongObject.getLongObject(s.length());
+        //System.out.println("pyListObject=" + pyListObject.toString());
+        if (pyOpen.mode.contains("b")) {//二进制
+            try {
+                long offset=pyOpen.randomAccessFile.getFilePointer();
+                //System.out.println("pyListObject.size()="+pyListObject.size());
+                offset=offset+s.length();
+                //System.out.println("pyListObject.get(i).toString()="+ i + s);
+                pyOpen.randomAccessFile.writeBytes(s);
+                //pyOpen.pyFileWriter.bufferedWriter.write(s);
+                //pyOpen.pyFileWriter.bufferedWriter.flush();
+                pyOpen.randomAccessFile.seek(offset);
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.randomAccessFile.getFD(),pyOpen.mode);
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.randomAccessFile.getFD(),pyOpen.mode);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{//非二进制
+            try {
+                long offset=pyOpen.randomAccessFile.getFilePointer();
+                offset=offset+s.length();
+                //System.out.println("pyListObject.get(i).toString()="+ i + s);
+                pyOpen.randomAccessFile.writeBytes(s);
+                //pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
+                //if(i!=pyListObject.size()-1) {
+                //    pyOpen.pyFileWriter.bufferedWriter.newLine();
+                //}
+                //pyOpen.pyFileWriter.bufferedWriter.flush();
+                pyOpen.randomAccessFile.seek(offset);
+                pyOpen.pyFileReader=new PyFileReader(pyOpen.randomAccessFile.getFD(),pyOpen.mode);
+                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.randomAccessFile.getFD(),pyOpen.mode);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-        System.out.println("write()>>>>>");
-        return pyio;
+        return len;
     }
     @PyClassMethod
     public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
