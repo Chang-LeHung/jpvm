@@ -13,7 +13,7 @@ public class PyFileWriter extends PyObject{
     FileOutputStream fileOutputStream;
     OutputStreamWriter outputStreamWriter;
     public PyFileWriter(){}
-    public PyFileWriter(String path) throws PyException {//非二进制
+    public PyFileWriter(String path) throws PyException {//Non binary
         try {
             fileWriter=new FileWriter(path);
             bufferedWriter=new BufferedWriter(fileWriter);
@@ -22,7 +22,7 @@ public class PyFileWriter extends PyObject{
             //PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,"PyFileWriter: IOException Error");
         }
     }
-    public PyFileWriter(String path,boolean bool) throws PyException {//非二进制
+    public PyFileWriter(String path,boolean bool) throws PyException {//Non binary
         try {
             fileWriter=new FileWriter(path,bool);
             bufferedWriter=new BufferedWriter(fileWriter);
@@ -33,11 +33,11 @@ public class PyFileWriter extends PyObject{
             PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,"PyFileWriter: IOException Error");
         }
     }
-    public PyFileWriter(FileDescriptor fileDescriptor,boolean bool) throws PyException {//非二进制
+    public PyFileWriter(FileDescriptor fileDescriptor,boolean bool) throws PyException {//Non binary
         fileWriter=new FileWriter(fileDescriptor);
         bufferedWriter=new BufferedWriter(fileWriter);
     }
-    public PyFileWriter(FileDescriptor fileDescriptor,String mod,boolean bool) throws PyException {//二进制
+    public PyFileWriter(FileDescriptor fileDescriptor,String mod,boolean bool) throws PyException {//binary
         try {
             fileOutputStream = new FileOutputStream(fileDescriptor);
             outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");

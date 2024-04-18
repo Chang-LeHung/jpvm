@@ -1,20 +1,46 @@
 package org.jpvm.stl.io;
 
 import org.jpvm.objects.PyObject;
-import org.jpvm.objects.annotation.PyClassAttribute;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.RandomAccessFile;
 import java.lang.String;
 public class PyOpen extends PyObject {
-    @PyClassAttribute
-    public String path;
-    public String mode;
-    public PyFileReader pyFileReader;
-    public PyFileWriter pyFileWriter;
-    public RandomAccessFile randomAccessFile;
+    private String path;
+    private String mode;
+    private PyFileReader pyFileReader;
+    private PyFileWriter pyFileWriter;
+    private RandomAccessFile randomAccessFile;
     public PyOpen(){}
+    public void setRandomAccessFile(RandomAccessFile randomAccessFile) {
+        this.randomAccessFile = randomAccessFile;
+    }
+    public RandomAccessFile getRandomAccessFile() {
+        return randomAccessFile;
+    }
+    public void setPyFileReader(PyFileReader pyFileReader) {
+        this.pyFileReader = pyFileReader;
+    }
+    public PyFileReader getPyFileReader() {
+        return pyFileReader;
+    }
+    public void setPyFileWriter(PyFileWriter pyFileWriter) {
+        this.pyFileWriter = pyFileWriter;
+    }
+    public PyFileWriter getPyFileWriter() {
+        return pyFileWriter;
+    }
+    public void pathset(String s){
+        path=s;
+    }
+    public String pathget(){
+        return path;
+    }
+    public void modeset(String s){
+        mode=s;
+    }
+    public String modeget(){
+        return mode;
+    }
     public void print(){
         System.out.println("path="+path);
         System.out.println("mode="+mode);
