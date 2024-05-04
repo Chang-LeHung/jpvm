@@ -8,12 +8,12 @@ io.close(fw)
 #r模式
 fr = io.open("test02.txt", 'r')
 temp=io.readlines(fr,1)
-if temp==['test']:pass
+if temp==['test\n']:pass
 else:print("r readlines readline error")
 #print("readlines1",temp)#['test']
 fr = io.open("test02.txt", 'r')
 temp=io.readlines(fr,7)
-if temp==['test', '999', '', '777', '666']:pass
+if temp==['test\n', '999\n', '\n', '777\n', '666']:pass
 else:print("r readlines overline read error")
 #print("readlines7",temp)#['test', '999', '', '777', '666']
 io.close(fr)
@@ -70,12 +70,12 @@ io.close(frb)
 #r+模式
 frr = io.open("test02.txt", 'r+')
 temp=io.readlines(frr,1)
-if temp==['test']:pass
+if temp==['test\n']:pass
 else:print("r+ readlines readline error")
 #print("readlines1",temp)#['test']
 frr = io.open("test02.txt", 'r+')
 temp=io.readlines(frr,7)
-if temp==['test', '999', '', '777', '666']:pass
+if temp==["test\n",'999\n','\n','777\n','666']:pass
 else:print("r+ readlines overline read error")
 #print("readlines7",temp)#['test', '999', '', '777', '666']
 io.close(frr)

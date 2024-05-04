@@ -463,22 +463,56 @@ public class PyModuleMain extends PyModuleObject{
             //Non-binary
             if (args.size() != 1) {
                 //The second parameter passed in at this time is the number of lines to be read.
+                //PyLongObject temp = (PyLongObject) args.get(1);
+                //int size = (int) temp.getData();
+                //try {
+                //    //BufferedReader.read will read to the end of the file
+                //    //and requires manually setting the file pointer.
+                //    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                //    String s;
+                //    for (int i = 0; i < size; i++) {
+                //        if ((s = pyOpen.getPyFileReader().bufferedReader.readLine()) != null) {
+                //            s += "\n";
+                //            offset=offset+s.length();
+                //            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+                //            pyListObject.add(pyUnicodeObject);
+                //        } else {
+                //            break;
+                //        }
+                //    }
+                //    pyOpen.getRandomAccessFile().seek(offset);
+                //    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                //    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                //The second parameter passed in at this time is the number of lines to be read.
                 PyLongObject temp = (PyLongObject) args.get(1);
                 int size = (int) temp.getData();
                 try {
                     //BufferedReader.read will read to the end of the file
                     //and requires manually setting the file pointer.
                     long offset=pyOpen.getRandomAccessFile().getFilePointer();
-                    String s;
-                    for (int i = 0; i < size; i++) {
-                        if ((s = pyOpen.getPyFileReader().bufferedReader.readLine()) != null) {
-                            offset=offset+s.length();
-                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+                    StringBuilder string = new StringBuilder();
+                    int data,i=0;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
                             pyListObject.add(pyUnicodeObject);
-                        } else {
                             break;
                         }
-                    }
+                        else if (data==10) {
+                            //In the Windows system, the newline character is usually represented by \r\n，
+                            //and its corresponding ASCII codes are 13 and 10.
+                            i++;
+                            offset++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string = new StringBuilder();
+                            continue;
+                        }
+                        string.append((char) data);
+                        offset++;
+                    }while(data!=-1&&i<size);
                     pyOpen.getRandomAccessFile().seek(offset);
                     pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
                     pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
