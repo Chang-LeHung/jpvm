@@ -2,290 +2,737 @@ package org.jpvm.stl.io;
 
 
 import java.io.*;
-import java.lang.Boolean;
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import org.jpvm.objects.PyDictObject;
-import org.jpvm.objects.PyBytesObject;
 import org.jpvm.objects.PyListObject;
-import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassAttribute;
 import org.jpvm.objects.annotation.PyClassMethod;
-import org.jpvm.objects.types.PyTupleType;
-import org.jpvm.objects.types.PyTypeType;
-import org.jpvm.protocols.PyNumberMethods;
 
 
 public class PyModuleMain extends PyModuleObject{
+
     public PyModuleMain(PyUnicodeObject moduleName) {
         super(moduleName);
     }
 
     @PyClassAttribute public PyObject test;
 
-    @PyClassMethod//new
+
+    @PyClassMethod
     public PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        //注意不能传入元组，参数填写为([地址],[读取模式])，此时args为tuple类型
-        //地址和读取模式类型为[str]
-        //System.out.println(args.getType());
-        //System.out.println(args.size());
-        System.out.println("open()<<<<<<<<<<<<<<");
-        //使用PyOpen存储数据
+        // Note that tuples cannot be passed in
+        // the parameters should be filled in as ([address], [read mode]), where args is of tuple type
+        // The address and read mode are of type [str]
+        // Use PyOpen to store data
+
         PyOpen pyOpen=new PyOpen();
         PyTupleObject temp= (PyTupleObject) args;
-        System.out.println("open读取文件为"+temp.get(0));
-        System.out.println("open读取方式为"+temp.get(1));
-        pyOpen.path=temp.get(0).toString();
-        pyOpen.mode=temp.get(1).toString();
-        switch (pyOpen.mode) {
-            case "r"://只读，文件指针在开头
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
-                break;
-            case "w"://只用于写入，若文件已存在则覆盖，不存在则创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
-                break;
-            case "a"://用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
-                break;
-            case "x"://排他性创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
-                break;
-            case "rb"://以二进制格式打开文件用于只读，文件指针在开头
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
-                int data;
-                char temp2;
+        pyOpen.pathset(temp.get(0).toString());
+        pyOpen.modeset(temp.get(1).toString());
+        switch (pyOpen.modeget()) {
+            case "r":
+                //Read-only, file pointer at the beginning, no file created
+                File file = new File(pyOpen.pathget());
+                if (! file.exists()) {
+                    throw new RuntimeException("文件不存在，无法创建新文件");
+                }
                 try {
-                    FileInputStream fis = new FileInputStream(pyOpen.path);
-                    InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-                    BufferedReader bufferedReader=new BufferedReader(isr);
-                    while ((data = bufferedReader.read()) != -1) {
-                        temp2=(char) data;
-                        System.out.println("字符为："+temp2+"data为："+data);
-                    }
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD()));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 break;
-            case "wb"://以二进制格式打开文件用于写入，若文件已存在则覆盖，不存在则创建
-                break;
-            case "ab"://以二进制格式打开文件用于追加，文件指针在末尾，若文件存在不覆盖，不存在则创建
-                break;
-            case "r+"://用于读写，文件指针在开头
-                try {
-                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.path, "rw");
-                    randomAccessFile.seek(0);
-                    pyOpen.pyFileReader=new PyFileReader(randomAccessFile.getFD());
-                    pyOpen.pyFileWriter=new PyFileWriter(randomAccessFile.getFD());
+            case "w":
+                //Write-only, overwrite if file exists, create if file does not exist
+                try{
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().setLength(0);//注意清空原文件内容
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD()));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 break;
-            case "w+"://用于读写，若文件已存在则覆盖，不存在则创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path);
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
+            case "a":
+                //For appending, file pointer at the end
+                // do not overwrite if file exists, create if file does not exist
+                try{
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(pyOpen.getRandomAccessFile().length());
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),true));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
-            case "a+"://用于读写，文件指针在末尾,若文件存在不覆盖，不存在则创建
-                pyOpen.pyFileWriter=new PyFileWriter(pyOpen.path,true);
-                pyOpen.pyFileReader=new PyFileReader(pyOpen.path);
+            case "x":
+                //Exclusive creation, cannot open if file exists, create if file does not exist
+                if (new File(pyOpen.pathget()).exists()) {
+                    throw new RuntimeException("文件已存在，无法创建新文件");
+                }
+                try{
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD()));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "rb":
+                //Open file in binary format, read-only, file pointer at the beginning
+                try {
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),"b"));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "wb":
+                //Open file in binary format, write-only
+                // overwrite if file exists, create if file does not exist
+                try{
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().setLength(0);//注意清空原文件内容
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),"b"));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "ab":
+                //Open file in binary format,  append
+                //file pointer at the end, do not overwrite if file exists, create if file does not exist
+                try{
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(pyOpen.getRandomAccessFile().length());
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),"b",true));
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "r+":
+                //For reading and writing, file pointer at the beginning
+                try {
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "w+":
+                //For reading and writing, overwrite if file exists, create if file does not exist
+                try {
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().setLength(0);//注意清空原文件内容
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD()));
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "a+":
+                //For reading and writing, file pointer at the end
+                // do not overwrite if file exists, create if file does not exist
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.pathget(), "rw");
+                    randomAccessFile.seek(randomAccessFile.length());
+                    pyOpen.setRandomAccessFile(randomAccessFile);
+                    pyOpen.setPyFileWriter(new PyFileWriter(randomAccessFile.getFD(),true));
+                    pyOpen.setPyFileReader(new PyFileReader(randomAccessFile.getFD()));
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case "rb+":
+                //Open in binary format, for reading and writing, file pointer at the beginning
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.pathget(), "rw");
+                    randomAccessFile.seek(0);
+                    pyOpen.setRandomAccessFile(randomAccessFile);
+                    pyOpen.setPyFileReader(new PyFileReader(randomAccessFile.getFD(),"b"));
+                    pyOpen.setPyFileWriter(new PyFileWriter(randomAccessFile.getFD(),"b"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
-            case "wb+"://
+            case "wb+":
+                //Open in binary format, for reading and writing
+                // overwrite if file exists, create if file does not exist
+                try {
+                    pyOpen.setRandomAccessFile(new RandomAccessFile(pyOpen.pathget(), "rw"));
+                    pyOpen.getRandomAccessFile().setLength(0);//clear the original file content
+                    pyOpen.getRandomAccessFile().seek(0);
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),"b"));
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),"b"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case "ab+":
+                //Open in binary format, for reading and writing
+                // file pointer at the end, do not overwrite if file exists, create if file does not exist
+                 try {
+                     RandomAccessFile randomAccessFile = new RandomAccessFile(pyOpen.pathget(), "rw");
+                     randomAccessFile.seek(randomAccessFile.length());
+                     pyOpen.setRandomAccessFile(randomAccessFile);
+                     pyOpen.setPyFileWriter(new PyFileWriter(randomAccessFile.getFD(),"b",true));
+                     pyOpen.setPyFileReader(new PyFileReader(randomAccessFile.getFD(),"b"));
+                 } catch (IOException e) {
+                     throw new RuntimeException(e);
+                 }
                 break;
             default:
-                System.out.println("open读写模式错误");
+                //System.out.println("open() Read-Write Mode Error");
                 break;
         }
-        System.out.println("open录入以下数据");
-        pyOpen.print();
-        //使用Pyio存储PyOpen
+        //Use Pyio to store PyOpen.
         PyTupleObject pyio = new PyTupleObject(1);
         pyio.set(0,pyOpen);
-        System.out.println("open()>>>>>>>>>>>>>>");
         return pyio;
     }
-    @PyClassMethod//未实现
-    public PyObject fileno(PyTupleObject args, PyDictObject kwArgs) throws PyException {
 
-        return args;
-    }
-    @PyClassMethod//new
-    public PyObject close(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("close()<<<<<");
+
+    @PyClassMethod
+    public PyObject fileno(PyTupleObject args, PyDictObject kwArgs) throws PyException {
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
-        System.out.println("path="+pyOpen.path);
-        pyOpen.path="";
-        if(pyOpen.pyFileWriter!=null) {
+        String s=null;
+        try {
+            s = pyOpen.getRandomAccessFile().getFD().toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+        return pyUnicodeObject;
+    }
+    @PyClassMethod
+    public PyObject close(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        pyOpen.pathset("");
+        pyOpen.setPyFileReader(null);
+        pyOpen.setPyFileWriter(null);
+        pyOpen.setRandomAccessFile(null);
+        System.gc();
+        if(pyOpen.getPyFileWriter()!=null) {
             try {
-                pyOpen.pyFileWriter.bufferedWriter.close();
+                pyOpen.getPyFileWriter().bufferedWriter.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println("close()>>>>>");
         return pyio;
     }
-    @PyClassMethod//new
+
+    @PyClassMethod
     public PyObject closed(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("closed()<<<<<");
         PyTupleObject pyio=(PyTupleObject)args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyBoolObject isClosed = PyBoolObject.getInstance();
-        isClosed.setBool(Objects.equals(pyOpen.path, ""));
-        System.out.println("isClosed为"+isClosed.isTrue());
-        if(isClosed.isTrue()){
-            System.out.println("文件关闭成功");
+        PyBoolObject isClosed;
+        if(Objects.equals(pyOpen.pathget(), "")) {
+            isClosed=PyBoolObject.getTrue();
         }else{
-            System.out.println("文件关闭失败");
+            isClosed=PyBoolObject.getFalse();
         }
-        System.out.println("closed()>>>>>");
+        //if(isClosed.isTrue()){
+        //    System.out.println("File closed successfully");
+        //}else{
+        //    System.out.println("File closure failed");
+        //}
         return isClosed;
     }
-    @PyClassMethod//new
+
+    @PyClassMethod
     public PyObject readable(PyTupleObject args, PyDictObject kwArgs) throws PyException{
-        System.out.println("readable()<<<<<");
         PyTupleObject pyio= (PyTupleObject) args.get(0);
         PyOpen pyOpen= (PyOpen) pyio.get(0);
         PyBoolObject isReadable = PyBoolObject.getInstance();
-        if(Objects.equals(pyOpen.path, "")){
-            isReadable.setBool(false);
-        }else{isReadable.setBool(true);}
+        if(Objects.equals(pyOpen.pathget(), "")){
+            isReadable=PyBoolObject.getFalse();
+        }else{isReadable=PyBoolObject.getTrue();}
         if (isReadable.isTrue()){
             try {
-                if(pyOpen.pyFileReader.fileReader.ready()){
-                    isReadable.setBool(true);
-                }else {isReadable.setBool(false);}
+                if(pyOpen.getPyFileReader().fileReader.ready()){
+                    isReadable=PyBoolObject.getTrue();
+                }else {isReadable=PyBoolObject.getFalse();}
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println("isReadable="+isReadable.isTrue());
-        System.out.println("readable()>>>>>");
         return isReadable;
     }
-    @PyClassMethod//new
-    public PyObject readline(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("readline()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyFileReader pyFileReader = pyOpen.pyFileReader;
-        if (args.size()!=1){
-            //此时传入的第二个参数为读取的字符数
-            PyLongObject size= (PyLongObject) args.get(1);
-            try {
-                char[] buffer=new char[(int) size.getData()];
-                pyFileReader.bufferedReader.read(buffer,0, (int) size.getData());
-                System.out.println(buffer);
-            } catch (IOException e) {
-                e.getStackTrace();
-            }
-        }else {
-            try {
-                String line = pyFileReader.bufferedReader.readLine();
-                System.out.println(line);
-            } catch (IOException e) {
-                e.getStackTrace();
-            }
-        }
-        System.out.println("readline()>>>>>");
-        return pyio;
-    }
-    @PyClassMethod//new
-    public PyObject readlines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("readline()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyFileReader pyFileReader = pyOpen.pyFileReader;
-        //readLines返回一个行列表
-        PyListObject pyListObject=new PyListObject();
 
-        if (args.size()!=1){
-            //此时传入的第二个参数为读取的行数
-            PyLongObject temp= (PyLongObject) args.get(1);
-            int size= (int) temp.getData();
-            try {
-                for(int i=0;i<size;i++){
-                    PyString pyString = new PyString();
-                    pyString.string = pyFileReader.bufferedReader.readLine();
-                    if(pyString.string==null){break;}
-                    pyListObject.add(pyString);
+    @PyClassMethod
+    public PyObject readline(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyUnicodeObject pyUnicodeObject = new PyUnicodeObject("");
+        if(pyOpen.modeget().contains("b")){
+            //Binary
+            if (args.size() != 1) {
+                //At this time, the second parameter passed in is the number of characters read.
+                PyLongObject size = (PyLongObject) args.get(1);
+                try {
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    byte[] buffer=new byte[(int) size.getData()];
+                    int i=0;
+                    byte data;
+                    while(i<size.getData()) {
+                        data= (byte) pyOpen.getRandomAccessFile().read();
+                        if(data==-1){break;}
+                        buffer[i]=data;
+                        i++;
+                    }
+                    pyUnicodeObject=new PyUnicodeObject(buffer);
+                    pyOpen.getRandomAccessFile().seek(offset+i);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
                 }
-            } catch (IOException e) {
-                e.getStackTrace();
-            }
-        }else {//读取所有行
-            try {
-                do {
-                    PyString pyString = new PyString();
-                    pyString.string = pyFileReader.bufferedReader.readLine();
-                    if(pyString.string==null){break;}
-                    pyListObject.add(pyString);
+            } else {
+                //Read a line
+                try {
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    String string = "";
+                    int data;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){break;}
+                        else if (data==10) {
+                            string=string+(char)data;
+                            break;
+                        }
+                        string=string+(char)data;
+                    }while(data!=-1&&data!=10);
+                    //In the Windows system, the newline character is usually represented by \r\n，
+                    //and its corresponding ASCII codes are 13 and 10.
+                    pyUnicodeObject=new PyUnicodeObject(string);
+                    pyOpen.getRandomAccessFile().seek(offset+string.length());
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
                 }
-                while(true);
-            } catch (IOException e) {
-                e.getStackTrace();
             }
         }
-        System.out.println("pyListObject="+pyListObject);
-        System.out.println("readline()>>>>>");
+        else {//Non-binary
+            if (args.size() != 1) {
+                //At this time, the second parameter passed in is the number of characters read.
+                PyLongObject size = (PyLongObject) args.get(1);
+                try {
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    byte[] buffer =new byte[(int) size.getData()];
+                    pyOpen.getRandomAccessFile().read(buffer,0,(int) size.getData());
+                    pyOpen.getRandomAccessFile().seek(offset+size.getData());
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyUnicodeObject=new PyUnicodeObject(buffer);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            } else {
+                //Read a line
+                try {
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    String line = pyOpen.getPyFileReader().bufferedReader.readLine();
+                    pyOpen.getRandomAccessFile().seek(offset+line.length());
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyUnicodeObject=new PyUnicodeObject(line);
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            }
+        }
+        return pyUnicodeObject;
+    }
+
+    @PyClassMethod
+    public PyObject readlines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        //readLines returns a list of lines
+        PyListObject pyListObject=new PyListObject();
+        if(pyOpen.modeget().contains("b")) {
+            //Binary
+            if (args.size() != 1) {
+                //The second parameter passed in at this time is the number of lines to be read.
+                PyLongObject temp = (PyLongObject) args.get(1);
+                int size = (int) temp.getData();
+                try {
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    StringBuilder string = new StringBuilder();
+                    int data,i=0;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {
+                            //In the Windows system, the newline character is usually represented by \r\n，
+                            //and its corresponding ASCII codes are 13 and 10.
+                            i++;
+                            offset++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string = new StringBuilder();
+                            continue;
+                        }
+                        string.append((char) data);
+                        offset++;
+                    }while(data!=-1&&i<size);
+                    pyOpen.getRandomAccessFile().seek(offset);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            } else {
+                //Read all lines
+                try {
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    StringBuilder string = new StringBuilder();
+                    int data;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {
+                            //In the Windows system, the newline character is usually represented by \r\n，
+                            //and its corresponding ASCII codes are 13 and 10.
+                            offset++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string= new StringBuilder();
+                            continue;
+                        }
+                        offset++;
+                        string.append((char) data);
+                    }while(data!=-1);
+                    pyOpen.getRandomAccessFile().seek(offset);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            }
+        }else{
+            //Non-binary
+            if (args.size() != 1) {
+                //The second parameter passed in at this time is the number of lines to be read.
+                //PyLongObject temp = (PyLongObject) args.get(1);
+                //int size = (int) temp.getData();
+                //try {
+                //    //BufferedReader.read will read to the end of the file
+                //    //and requires manually setting the file pointer.
+                //    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                //    String s;
+                //    for (int i = 0; i < size; i++) {
+                //        if ((s = pyOpen.getPyFileReader().bufferedReader.readLine()) != null) {
+                //            s += "\n";
+                //            offset=offset+s.length();
+                //            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(s);
+                //            pyListObject.add(pyUnicodeObject);
+                //        } else {
+                //            break;
+                //        }
+                //    }
+                //    pyOpen.getRandomAccessFile().seek(offset);
+                //    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                //    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                //The second parameter passed in at this time is the number of lines to be read.
+                PyLongObject temp = (PyLongObject) args.get(1);
+                int size = (int) temp.getData();
+                try {
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    StringBuilder string = new StringBuilder();
+                    int data,i=0;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {
+                            //In the Windows system, the newline character is usually represented by \r\n，
+                            //and its corresponding ASCII codes are 13 and 10.
+                            i++;
+                            offset++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string = new StringBuilder();
+                            continue;
+                        }
+                        string.append((char) data);
+                        offset++;
+                    }while(data!=-1&&i<size);
+                    pyOpen.getRandomAccessFile().seek(offset);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            } else {
+                //Read all lines
+                try {
+                    //BufferedReader.read will read to the end of the file
+                    //and requires manually setting the file pointer.
+                    long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                    StringBuilder string = new StringBuilder();
+                    int data;
+                    do{
+                        data=pyOpen.getPyFileReader().bufferedReader.read();
+                        if(data==-1){
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            break;
+                        }
+                        else if (data==10) {
+                            //In the Windows system, the newline character is usually represented by \r\n，
+                            //and its corresponding ASCII codes are 13 and 10.
+                            offset++;
+                            string.append((char) data);
+                            PyUnicodeObject pyUnicodeObject = new PyUnicodeObject(string.toString());
+                            pyListObject.add(pyUnicodeObject);
+                            string= new StringBuilder();
+                            continue;
+                        }
+                        offset++;
+                        string.append((char) data);
+                    }while(data!=-1);
+                    pyOpen.getRandomAccessFile().seek(offset);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    e.getStackTrace();
+                }
+            }
+        }
         return pyListObject;
     }
-    @PyClassMethod//废弃
-    public PyObject read(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("read()<<<<<<<<<<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        System.out.println("read()>>>>>>>>>>>>>>");
+
+    @PyClassMethod
+    public PyObject seek(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio = (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyLongObject offset = (PyLongObject) args.get(1);
+        PyLongObject whence = null;
+        if (args.size() == 3) {
+            whence = (PyLongObject) args.get(2);
+            if(whence.getData()==0){}
+            //Calculate from the beginning
+            else if (whence.getData()==1) {
+                //Calculate from the current position
+                try {
+                    long position = pyOpen.getRandomAccessFile().getFilePointer();
+                    position= offset.getData()+position;
+                    pyOpen.getRandomAccessFile().seek(position);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (whence.getData()==2) {
+                //Calculate from the end
+                try {
+                    long position = pyOpen.getRandomAccessFile().length();
+                    position= offset.getData()+position;
+                    pyOpen.getRandomAccessFile().seek(position);
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        if(args.size() == 3){
+            if(whence.getData()==0){
+                //Calculate from the beginning
+                try {
+                    pyOpen.getRandomAccessFile().seek(offset.getData());
+                    pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                    pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else{
+            //Calculate from the beginning
+            try {
+                pyOpen.getRandomAccessFile().seek(offset.getData());
+                long position = pyOpen.getRandomAccessFile().getFilePointer();
+                pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return pyio;
     }
 
+    @PyClassMethod
+    //If the stream supports random access return True.
+    // When seekable is false, seek (), tell () and truncate () are not supported.
+    public PyObject seekable(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyBoolObject isseekable;
+        switch(pyOpen.modeget()){
+            case "r+":
+            case "w+":
+            case "a+":
+            case "rb+":
+            case "wb+":
+            case "ab+":
+                isseekable=PyBoolObject.getTrue();
+                break;
+            default:
+                isseekable=PyBoolObject.getFalse();
+                break;
+        }
+        return isseekable;
+    }
+    @PyClassMethod
+    public PyObject tell(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        try {
+            long position = pyOpen.getRandomAccessFile().getFilePointer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return pyio;
+    }
+    @PyClassMethod
+    public PyObject truncate(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio= (PyTupleObject) args.get(0);
+        PyOpen pyOpen= (PyOpen) pyio.get(0);
+        PyLongObject newSize= (PyLongObject) args.get(1);
+        try {
+            pyOpen.getRandomAccessFile().setLength(newSize.getData());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return pyio;
+    }
 
     @PyClassMethod
     public PyObject write(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-        System.out.println("write()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyUnicodeObject pyUnicodeObject=(PyUnicodeObject) args.get(1);
-        System.out.println("write读取文件为"+pyOpen.path);
-        System.out.println("write读取方式为"+pyOpen.mode);
-        System.out.println("要写入的内容为: "+pyUnicodeObject);
-        //写文件
-        String line=pyUnicodeObject.toString();
-        System.out.println(line);
-        try {
-            pyOpen.pyFileWriter.bufferedWriter.write(line);
-            pyOpen.pyFileWriter.bufferedWriter.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-            //PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,"write: I/O Error");
-        }
-
-        System.out.println("write()>>>>>");
-        return pyio;
-    }
-    @PyClassMethod
-    public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException{
-        System.out.println("writelines()<<<<<");
-        PyTupleObject pyio= (PyTupleObject) args.get(0);
-        PyOpen pyOpen= (PyOpen) pyio.get(0);
-        PyListObject pyListObject=(PyListObject) args.get(1);
-        System.out.println("pyListObject="+pyListObject.toString());
-        try {
-            for(int i=0;i<pyListObject.size();i++) {
-                pyOpen.pyFileWriter.bufferedWriter.write(pyListObject.get(i).toString());
-                pyOpen.pyFileWriter.bufferedWriter.newLine();
-                pyOpen.pyFileWriter.bufferedWriter.flush();
+        PyTupleObject pyio = (PyTupleObject) args.get(0);
+        PyOpen pyOpen = (PyOpen) pyio.get(0);
+        String s = (String) args.get(1).toString();
+        PyLongObject len= PyLongObject.getLongObject(s.length());
+        if (pyOpen.modeget().contains("b")) {
+            //Binary
+            try {
+                long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                offset=offset+s.length();
+                pyOpen.getRandomAccessFile().writeBytes(s);
+                pyOpen.getRandomAccessFile().seek(offset);
+                pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }else{
+            //Non-binary
+            try {
+                long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                offset=offset+s.length();
+                pyOpen.getRandomAccessFile().writeBytes(s);
+                pyOpen.getRandomAccessFile().seek(offset);
+                pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        System.out.println("writelines()>>>>>");
-        return pyio;
+        return len;
     }
 
+    @PyClassMethod
+    public PyObject writelines(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+        PyTupleObject pyio = (PyTupleObject) args.get(0);
+        PyOpen pyOpen = (PyOpen) pyio.get(0);
+        PyListObject pyListObject = (PyListObject) args.get(1);
+        if (pyOpen.modeget().contains("b")) {
+            //Binary
+            try {
+                long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                for (int i = 0; i < pyListObject.size(); i++) {
+                    offset=offset+pyListObject.get(i).toString().length();
+                    String s=pyListObject.get(i).toString();
+                    pyOpen.getRandomAccessFile().writeBytes(s);
+                }
+                pyOpen.getRandomAccessFile().seek(offset);
+                pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            //Non-binary
+            try {
+                long offset=pyOpen.getRandomAccessFile().getFilePointer();
+                for (int i = 0; i < pyListObject.size(); i++) {
+                    offset=offset+pyListObject.get(i).toString().length();
+                    String s=pyListObject.get(i).toString();
+                    pyOpen.getRandomAccessFile().writeBytes(s);
+                }
+                pyOpen.getRandomAccessFile().seek(offset);
+                pyOpen.setPyFileReader(new PyFileReader(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+                pyOpen.setPyFileWriter(new PyFileWriter(pyOpen.getRandomAccessFile().getFD(),pyOpen.modeget()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return pyio;
+    }
 }
