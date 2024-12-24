@@ -326,7 +326,7 @@ public class PyFrameObject extends PyObject {
   }
 
   public TryBlockHandler popTryBlockHandler() {
-    if (tryBlockHandlerStack == null || tryBlockHandlerStack.size() == 0) return null;
+    if (tryBlockHandlerStack == null || tryBlockHandlerStack.isEmpty()) return null;
     return tryBlockHandlerStack.pop();
   }
 
