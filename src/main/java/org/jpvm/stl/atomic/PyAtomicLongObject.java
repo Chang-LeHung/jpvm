@@ -3,10 +3,7 @@ package org.jpvm.stl.atomic;
 import java.util.concurrent.atomic.AtomicLong;
 import org.jpvm.exceptions.PyErrorUtils;
 import org.jpvm.exceptions.jobjs.PyException;
-import org.jpvm.objects.PyDictObject;
-import org.jpvm.objects.PyLongObject;
-import org.jpvm.objects.PyObject;
-import org.jpvm.objects.PyTupleObject;
+import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyTypeType;
 
@@ -25,7 +22,7 @@ public class PyAtomicLongObject extends PyObject {
   }
 
   @PyClassMethod
-  public PyLongObject getValue(PyTupleObject args, PyDictObject kwArgs) {
+  public PyLongObject get(PyTupleObject args, PyDictObject kwArgs) {
     return PyLongObject.getLongObject(value.get());
   }
 
@@ -93,5 +90,15 @@ public class PyAtomicLongObject extends PyObject {
           PyErrorUtils.TypeError, "atomic_div require an int argument");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "atomic_div require 1 argument");
+  }
+
+  @Override
+  public PyObject getType() {
+    return PyAtomicLongType.getInstance();
+  }
+
+  @Override
+  public PyUnicodeObject getTypeName() {
+    return PyAtomicLongType.getInstance().getTypeName();
   }
 }
