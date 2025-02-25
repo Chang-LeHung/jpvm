@@ -25,7 +25,7 @@ public class PyAtomicLongObject extends PyObject {
   }
 
   @PyClassMethod
-  public PyLongObject get(PyTupleObject args, PyDictObject kwArgs) {
+  public PyLongObject getValue(PyTupleObject args, PyDictObject kwArgs) {
     return PyLongObject.getLongObject(value.get());
   }
 
