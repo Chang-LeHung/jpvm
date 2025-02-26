@@ -27,4 +27,9 @@ public class PyVolatileType extends PyTypeType {
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "__new__ require 1 argument");
   }
+
+  @Override
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return __new__(args, kwArgs);
+  }
 }

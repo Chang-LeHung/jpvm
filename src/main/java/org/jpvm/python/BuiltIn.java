@@ -158,7 +158,7 @@ public class BuiltIn {
     for (; ; ) {
       try {
         o = iterator.next();
-        stream.writeString(o.str().getData());
+        stream.writeString(o.__str__(null, null).getData());
         if (iterator.hasNext()) stream.writeString(" ");
       } catch (PyException ignore) {
         break;
