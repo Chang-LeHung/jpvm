@@ -1,15 +1,17 @@
 
-import atomic
 import threading
 import time
 
-val = atomic.AtomicLong(0)
+val = 0
+lock = threading.RLock()
 
 
 def func():
+    global val
     for i in range(10000):
-        val.atomic_add(1)
-
+        lock.acquire()
+        val += 1
+        lock.release()
 
 threads = []
 for i in range(100):
@@ -21,5 +23,5 @@ for t in threads:
 for t in threads:
     t.join()
 end = time.time()
-print(val.get())
+print(val)
 print(end - start)
