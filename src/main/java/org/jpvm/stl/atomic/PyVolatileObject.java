@@ -44,4 +44,14 @@ public class PyVolatileObject extends PyObject {
       return PyBoolObject.getTrue();
     return PyBoolObject.getFalse();
   }
+
+  @Override
+  public PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
+   return value.get().__str__(args, kwArgs);
+  }
+
+  @Override
+  public PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
+    return value.get().__repr__(args, kwArgs);
+  }
 }

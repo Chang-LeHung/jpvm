@@ -101,4 +101,14 @@ public class PyAtomicLongObject extends PyObject {
   public PyUnicodeObject getTypeName() {
     return PyAtomicLongType.getInstance().getTypeName();
   }
+
+  @Override
+  public PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
+   return new PyUnicodeObject(String.valueOf(value.get()));
+  }
+
+  @Override
+  public PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
+    return new PyUnicodeObject(String.valueOf(value.get()));
+  }
 }
