@@ -6,8 +6,9 @@ import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.objects.types.PyTypeType;
+import org.jpvm.protocols.PyNumberMethods;
 
-public class PyAtomicLongObject extends PyObject {
+public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
 
   private final AtomicLong value;
 
@@ -110,5 +111,40 @@ public class PyAtomicLongObject extends PyObject {
   @Override
   public PyUnicodeObject __repr__(PyTupleObject args, PyDictObject kwArgs) {
     return new PyUnicodeObject(String.valueOf(value.get()));
+  }
+
+  @Override
+  public PyObject __iadd__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return atomic_add(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __isub__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return atomic_sub(args, kwArgs);
+  }
+
+  @Override
+  public PyObject __imul__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return atomic_mul(args, kwArgs);
+  }
+
+  @Override
+  public PyObject inplaceFloorDiv(PyObject o) throws PyException {
+    return atomic_div(new PyTupleObject(new PyObject[]{o}), null);
+  }
+
+  @Override
+  public PyObject inplaceAdd(PyObject o) throws PyException {
+    return __iadd__(new PyTupleObject(new PyObject[]{o}), null);
+  }
+
+  @Override
+  public PyObject inplaceSub(PyObject o) throws PyException {
+    return atomic_sub(new PyTupleObject(new PyObject[]{o}), null);
+  }
+
+  @Override
+  public PyObject inplaceMul(PyObject o) throws PyException {
+    return atomic_mul(new PyTupleObject(new PyObject[]{o}), null);
   }
 }

@@ -7,9 +7,9 @@ val = atomic.AtomicLong(0)
 
 
 def func():
+    global val
     for i in range(10000):
-        val.atomic_add(1)
-
+        val += 1
 
 threads = []
 for i in range(100):
