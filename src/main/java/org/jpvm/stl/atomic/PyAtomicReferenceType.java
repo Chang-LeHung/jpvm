@@ -7,15 +7,15 @@ import org.jpvm.objects.PyObject;
 import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;
 
-public class PyVolatileType extends PyTypeType {
+public class PyAtomicReferenceType extends PyTypeType {
 
-  private static final PyVolatileType type = new PyVolatileType(PyVolatileObject.class);
+  private static final PyAtomicReferenceType type = new PyAtomicReferenceType(PyAtomicReferenceObject.class);
 
-  private PyVolatileType(Class<?> clazz) {
+  private PyAtomicReferenceType(Class<?> clazz) {
     super(clazz);
   }
 
-  public static PyVolatileType getInstance() {
+  public static PyAtomicReferenceType getInstance() {
     return type;
   }
 
@@ -23,7 +23,7 @@ public class PyVolatileType extends PyTypeType {
   public PyObject __new__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       var o = args.get(0);
-      return new PyVolatileObject(o);
+      return new PyAtomicReferenceObject(o);
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "__new__ require 1 argument");
   }

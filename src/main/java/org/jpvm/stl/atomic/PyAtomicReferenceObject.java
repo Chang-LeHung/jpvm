@@ -5,22 +5,22 @@ import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 
-public class PyVolatileObject extends PyObject {
+public class PyAtomicReferenceObject extends PyObject {
 
   private final AtomicReference<PyObject> value;
 
-  public PyVolatileObject(PyObject value) {
+  public PyAtomicReferenceObject(PyObject value) {
     this.value = new AtomicReference<>(value);
   }
 
   @Override
   public PyObject getType() {
-    return PyVolatileType.getInstance();
+    return PyAtomicReferenceType.getInstance();
   }
 
   @Override
   public PyUnicodeObject getTypeName() {
-    return PyVolatileType.getInstance().getTypeName();
+    return PyAtomicReferenceType.getInstance().getTypeName();
   }
 
   @PyClassMethod

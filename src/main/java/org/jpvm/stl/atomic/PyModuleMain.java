@@ -7,7 +7,7 @@ import org.jpvm.objects.annotation.PyClassAttribute;
 public class PyModuleMain extends PyModuleObject {
 
   @PyClassAttribute
-  private final PyVolatileType Volatile;
+  private final PyAtomicReferenceType Volatile;
 
   @PyClassAttribute
   private final PyAtomicLongType AtomicLong;
@@ -17,7 +17,7 @@ public class PyModuleMain extends PyModuleObject {
 
   public PyModuleMain(PyUnicodeObject moduleName) {
     super(moduleName);
-    Volatile = PyVolatileType.getInstance();
+    Volatile = PyAtomicReferenceType.getInstance();
     AtomicLong = PyAtomicLongType.getInstance();
     AtomicReference = PyAtomicLongType.getInstance();
   }
