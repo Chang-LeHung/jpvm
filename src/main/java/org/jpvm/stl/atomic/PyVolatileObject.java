@@ -5,7 +5,7 @@ import org.jpvm.exceptions.jobjs.PyException;
 import org.jpvm.objects.*;
 import org.jpvm.objects.annotation.PyClassMethod;
 
-public class PyVolatileObject extends PyLongObject {
+public class PyVolatileObject extends PyObject {
   private volatile PyObject value;
 
   public PyVolatileObject(PyObject value) {
