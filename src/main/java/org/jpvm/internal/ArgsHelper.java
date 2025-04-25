@@ -29,9 +29,7 @@ public class ArgsHelper {
     if (null != defaults) {
       for (int i = 0; i < defaults.size(); ++i) {
         PyObject obj = defaults.get(i);
-        this.args.put(
-            varNames.get(varNames.size() - defaults.size() + i),
-            obj);
+        this.args.put(varNames.get(varNames.size() - defaults.size() + i), obj);
       }
     }
     if (null != kwDefaults) {
