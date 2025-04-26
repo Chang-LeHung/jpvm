@@ -12,7 +12,7 @@ public interface TypeNew {
    * @return {@link PyObject}
    */
   default PyObject allocate(PyObject args, PyObject kwArgs) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeNew allocate not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeNew allocate not implemented");
   }
 }

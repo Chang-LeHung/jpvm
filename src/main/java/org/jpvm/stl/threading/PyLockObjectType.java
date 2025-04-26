@@ -7,21 +7,21 @@ import org.jpvm.objects.PyTupleObject;
 import org.jpvm.objects.types.PyTypeType;
 
 public class PyLockObjectType extends PyTypeType {
-	private PyLockObjectType(Class<?> clazz) {
-		super(clazz);
-		name = "lock";
-	}
+  private PyLockObjectType(Class<?> clazz) {
+    super(clazz);
+    name = "lock";
+  }
 
-	public static final class SelfHolder {
-		public static final  PyLockObjectType instance = new PyLockObjectType(PyLockObject.class);
-	}
+  public static final class SelfHolder {
+    public static final PyLockObjectType instance = new PyLockObjectType(PyLockObject.class);
+  }
 
-	public static PyLockObjectType getInstance() {
-		return SelfHolder.instance;
-	}
+  public static PyLockObjectType getInstance() {
+    return SelfHolder.instance;
+  }
 
-	@Override
-	public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-		return new PyLockObject();
-	}
+  @Override
+  public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
+    return new PyLockObject();
+  }
 }

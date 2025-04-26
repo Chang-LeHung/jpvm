@@ -38,8 +38,8 @@ public class PyThreadObjectType extends PyTypeType {
         return new PyThreadObject((PyTupleObject) funcArgs, (PyUnicodeObject) name, functionObject);
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "Thread at require at least 1 function as argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "Thread at require at least 1 function as argument");
   }
 
   public PyObject current_thread(PyTupleObject args, PyDictObject kwArgs) {

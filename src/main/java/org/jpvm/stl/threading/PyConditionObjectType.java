@@ -12,7 +12,8 @@ public class PyConditionObjectType extends PyTypeType {
   }
 
   public static final class SelfHolder {
-    public static final PyConditionObjectType self = new PyConditionObjectType(PyConditionObject.class);
+    public static final PyConditionObjectType self =
+        new PyConditionObjectType(PyConditionObject.class);
   }
 
   public static PyConditionObjectType getInstance() {

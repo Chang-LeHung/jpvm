@@ -12,12 +12,14 @@ public class NumberHelper {
       PyObject object;
       try {
         object = n.nbInt();
-        if (object instanceof PyLongObject d) return d.getData();
+        if (object instanceof PyLongObject d)
+          return d.getData();
       } catch (PyException ignored) {
       }
       try {
         object = n.index();
-        if (object instanceof PyLongObject d) return d.getData();
+        if (object instanceof PyLongObject d)
+          return d.getData();
       } catch (PyException ignored) {
       }
     }

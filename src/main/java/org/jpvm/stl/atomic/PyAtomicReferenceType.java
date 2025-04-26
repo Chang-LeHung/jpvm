@@ -9,7 +9,8 @@ import org.jpvm.objects.types.PyTypeType;
 
 public class PyAtomicReferenceType extends PyTypeType {
 
-  private static final PyAtomicReferenceType type = new PyAtomicReferenceType(PyAtomicReferenceObject.class);
+  private static final PyAtomicReferenceType type =
+      new PyAtomicReferenceType(PyAtomicReferenceObject.class);
 
   private PyAtomicReferenceType(Class<?> clazz) {
     super(clazz);

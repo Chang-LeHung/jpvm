@@ -13,7 +13,8 @@ import org.jpvm.python.BuiltIn;
 
 public class Utils {
 
-  public static PyTupleObject packSelfAsTuple(PyObject self, PyTupleObject args) throws PyException {
+  public static PyTupleObject packSelfAsTuple(PyObject self, PyTupleObject args)
+      throws PyException {
     PyTupleObject res = new PyTupleObject(args.size() + 1);
     res.set(0, self);
 

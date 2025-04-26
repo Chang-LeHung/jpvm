@@ -7,7 +7,7 @@ import org.jpvm.objects.PyObject;
 public interface TypeGetAttro {
 
   default PyObject getAttro(PyObject key) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeGetAttro getAttro not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeGetAttro getAttro not implemented");
   }
 }

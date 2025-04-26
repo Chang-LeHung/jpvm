@@ -9,11 +9,16 @@ import org.jpvm.objects.annotation.PyClassMethod;
 import org.jpvm.protocols.PyNumberMethods;
 
 public class math extends PyModuleObject {
-  @PyClassAttribute private final PyObject nan;
-  @PyClassAttribute public PyObject PI;
-  @PyClassAttribute public PyObject e;
-  @PyClassAttribute public PyObject pi;
-  @PyClassAttribute public PyObject inf;
+  @PyClassAttribute
+  private final PyObject nan;
+  @PyClassAttribute
+  public PyObject PI;
+  @PyClassAttribute
+  public PyObject e;
+  @PyClassAttribute
+  public PyObject pi;
+  @PyClassAttribute
+  public PyObject inf;
 
   public math(PyUnicodeObject name) {
     super(name);
@@ -53,8 +58,8 @@ public class math extends PyModuleObject {
         return num.abs();
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : fabs() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : fabs() argument must be a number");
     return null;
   }
 
@@ -62,12 +67,13 @@ public class math extends PyModuleObject {
   public PyObject ceil(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
       var value = args.get(0);
-      if (value instanceof PyLongObject object) return object;
+      if (value instanceof PyLongObject object)
+        return object;
       if (value instanceof PyFloatObject floatObject)
         return new PyFloatObject(Math.ceil(floatObject.getData()));
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : ceil() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : ceil() argument must be a number");
     return null;
   }
 
@@ -82,8 +88,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.cos(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : cos() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : cos() argument must be a number");
     return null;
   }
 
@@ -98,8 +104,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.sin(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : sin() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : sin() argument must be a number");
     return null;
   }
 
@@ -114,8 +120,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.tan(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : tan() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : tan() argument must be a number");
     return null;
   }
 
@@ -130,8 +136,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.acos(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : acos() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : acos() argument must be a number");
     return null;
   }
 
@@ -146,8 +152,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.asin(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : asin() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : asin() argument must be a number");
     return null;
   }
 
@@ -162,8 +168,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.atan(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : atan() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : atan() argument must be a number");
     return null;
   }
 
@@ -180,8 +186,8 @@ public class math extends PyModuleObject {
             Math.log(object.getData() + Math.sqrt(object.getData() * object.getData() - 1)));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : acosh() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : acosh() argument must be a number");
     return null;
   }
 
@@ -198,8 +204,8 @@ public class math extends PyModuleObject {
             Math.log(object.getData() + Math.sqrt(object.getData() * object.getData() + 1)));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : asinh() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : asinh() argument must be a number");
     return null;
   }
 
@@ -214,8 +220,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(0.5 * Math.log((1 + object.getData()) / (1 - object.getData())));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : atanh() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : atanh() argument must be a number");
     return null;
   }
 
@@ -237,8 +243,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.atan2(object1.getData(), object2.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : atan() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : atan() argument must be a number");
     return null;
   }
 
@@ -260,8 +266,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.copySign(object1.getData(), object2.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : copysign() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : copysign() argument must be a number");
     return null;
   }
 
@@ -276,8 +282,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.toDegrees(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : degrees() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : degrees() argument must be a number");
     return null;
   }
 
@@ -299,8 +305,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.sqrt(res));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : dist() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : dist() argument must be a number");
     return null;
   }
 
@@ -315,8 +321,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Erf.erf(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : erf() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : erf() argument must be a number");
     return null;
   }
 
@@ -331,8 +337,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Erf.erfc(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : erfc() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : erfc() argument must be a number");
     return null;
   }
 
@@ -347,8 +353,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.exp(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : exp() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : exp() argument must be a number");
     return null;
   }
 
@@ -363,8 +369,8 @@ public class math extends PyModuleObject {
         return new PyFloatObject(Math.exp(object.getData()) - 1);
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : expm1() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : expm1() argument must be a number");
     return null;
   }
 
@@ -379,8 +385,8 @@ public class math extends PyModuleObject {
         return new PyLongObject((long) Math.floor(object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : floor() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : floor() argument must be a number");
     return null;
   }
 
@@ -390,28 +396,24 @@ public class math extends PyModuleObject {
       var x = args.get(0);
       var y = args.get(1);
       if (x instanceof PyLongObject object1 && y instanceof PyLongObject object2) {
-        return new PyFloatObject(
-            object1.getData()
-                - object2.getData() * Math.floor(object1.getData() / object2.getData()));
+        return new PyFloatObject(object1.getData()
+            - object2.getData() * Math.floor(object1.getData() / object2.getData()));
       }
       if (x instanceof PyLongObject object1 && y instanceof PyFloatObject object2) {
-        return new PyFloatObject(
-            object1.getData()
-                - object2.getData() * Math.floor(object1.getData() / object2.getData()));
+        return new PyFloatObject(object1.getData()
+            - object2.getData() * Math.floor(object1.getData() / object2.getData()));
       }
       if (x instanceof PyFloatObject object1 && y instanceof PyLongObject object2) {
-        return new PyFloatObject(
-            object1.getData()
-                - object2.getData() * Math.floor(object1.getData() / object2.getData()));
+        return new PyFloatObject(object1.getData()
+            - object2.getData() * Math.floor(object1.getData() / object2.getData()));
       }
       if (x instanceof PyFloatObject object1 && y instanceof PyFloatObject object2) {
-        return new PyFloatObject(
-            object1.getData()
-                - object2.getData() * Math.floor(object1.getData() / object2.getData()));
+        return new PyFloatObject(object1.getData()
+            - object2.getData() * Math.floor(object1.getData() / object2.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : fmod() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : fmod() argument must be a number");
     return null;
   }
 
@@ -422,13 +424,12 @@ public class math extends PyModuleObject {
       var value2 = args.get(1);
       if (value1 instanceof PyLongObject object1 && value2 instanceof PyLongObject object2) {
         return new PyLongObject(
-            factorial((int) object1.getData())
-                / (factorial((int) object2.getData())
-                    * factorial((int) (object1.getData() - object2.getData()))));
+            factorial((int) object1.getData()) / (factorial((int) object2.getData())
+                * factorial((int) (object1.getData() - object2.getData()))));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : comb() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : comb() argument must be a number");
     return null;
   }
 
@@ -440,8 +441,8 @@ public class math extends PyModuleObject {
         return new PyLongObject(factorial((int) object.getData()));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : factorial() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : factorial() argument must be a number");
     return null;
   }
 
@@ -452,16 +453,15 @@ public class math extends PyModuleObject {
       var value2 = args.get(1);
       if (value1 instanceof PyLongObject object1) {
         if (value2 instanceof PyLongObject object2) {
-          return new PyLongObject(
-              factorial((int) object1.getData())
-                  / factorial((int) (object1.getData() - object2.getData())));
+          return new PyLongObject(factorial((int) object1.getData())
+              / factorial((int) (object1.getData() - object2.getData())));
         } else if (value2 instanceof PyNoneObject) {
           return new PyLongObject(factorial((int) object1.getData()));
         }
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "TypeError : perm() argument must be a number");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "TypeError : perm() argument must be a number");
     return null;
   }
 }

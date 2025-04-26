@@ -26,7 +26,8 @@ public class PyTypeType extends PyObject {
   protected List<PyObject> mro;
   protected PyListObject _mro;
   protected List<PyObject> bases;
-  @PyClassAttribute protected PyTupleObject __bases__;
+  @PyClassAttribute
+  protected PyTupleObject __bases__;
 
   /**
    * used in super to call clazz's method this is the {@code Class} of class object of this class
@@ -37,7 +38,8 @@ public class PyTypeType extends PyObject {
   protected String name;
   private boolean typeReady;
   private PyTypeType creator;
-  @PyClassAttribute private PyTupleObject __mro__;
+  @PyClassAttribute
+  private PyTupleObject __mro__;
 
   public PyTypeType(Class<?> clazz) {
     this.clazz = clazz;
@@ -46,7 +48,8 @@ public class PyTypeType extends PyObject {
     // use List just to avoid ExceptionInInitializerError
     mro = new ArrayList<>();
     bases = new LinkedList<>();
-    if (PyObject.type != null) bases.add(PyObject.type); // add base object to bases
+    if (PyObject.type != null)
+      bases.add(PyObject.type); // add base object to bases
   }
 
   public PyTypeType getCreator() {
@@ -63,10 +66,12 @@ public class PyTypeType extends PyObject {
 
   public static PyTupleObject ensureBaseObjectTypeInBases(PyTupleObject bases) throws PyException {
     for (int i = 0; i < bases.size(); i++) {
-      if (bases.get(i) == PyBaseObjectType.getInstance()) return bases;
+      if (bases.get(i) == PyBaseObjectType.getInstance())
+        return bases;
     }
     PyTupleObject res = new PyTupleObject(bases.size() + 1);
-    for (int i = 0; i < bases.size(); i++) res.set(i, bases.get(i));
+    for (int i = 0; i < bases.size(); i++)
+      res.set(i, bases.get(i));
     res.set(bases.size(), PyBaseObjectType.getInstance());
     return res;
   }
@@ -77,21 +82,24 @@ public class PyTypeType extends PyObject {
 
   public synchronized void addBase(PyObject base) {
     for (PyObject basis : bases) {
-      if (basis == base) return;
+      if (basis == base)
+        return;
     }
     bases.add(base);
   }
 
   public void addBase(int idx, PyObject base) {
     for (PyObject basis : bases) {
-      if (basis == base) return;
+      if (basis == base)
+        return;
     }
     bases.add(idx, base);
   }
 
   /** this object is subtype of r or not */
   public PyBoolObject isSubType(PyObject r) throws PyException {
-    if (!typeReady) getMro();
+    if (!typeReady)
+      getMro();
     if (mro.stream().anyMatch(pyObject -> pyObject == r)) {
       return BuiltIn.True;
     }
@@ -99,14 +107,16 @@ public class PyTypeType extends PyObject {
   }
 
   public boolean isSubTypeOf(PyObject r) throws PyException {
-    if (!typeReady) getMro();
+    if (!typeReady)
+      getMro();
     return mro.stream().anyMatch(pyObject -> pyObject == r);
   }
 
   /** lazy loading */
   public synchronized PyListObject getMro() throws PyException {
     if (!typeReady) {
-      if (_mro != null) return _mro;
+      if (_mro != null)
+        return _mro;
       typeReady = true;
       mro = MRO.mro(this);
       PyListObject object = new PyListObject();
@@ -115,7 +125,8 @@ public class PyTypeType extends PyObject {
       }
       _mro = object;
       return object;
-    } else return _mro;
+    } else
+      return _mro;
   }
 
   public void setMro(List<PyObject> mro) {
@@ -191,8 +202,10 @@ public class PyTypeType extends PyObject {
   @Override
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     if (Operator.Py_EQ == op) {
-      if (this == o) return BuiltIn.True;
-      else return BuiltIn.False;
+      if (this == o)
+        return BuiltIn.True;
+      else
+        return BuiltIn.False;
     }
     throw new PyUnsupportedOperator(getTypeName() + " not support operator " + op);
   }
@@ -200,8 +213,8 @@ public class PyTypeType extends PyObject {
   @Override
   public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() < 3)
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, getTypeName() + " require at least 3 arguments");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          getTypeName() + " require at least 3 arguments");
     PyObject name = args.get(0);
     PyObject bases = args.get(1);
     PyObject dict = args.get(2);
@@ -212,8 +225,7 @@ public class PyTypeType extends PyObject {
       bases = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("bases", true));
     if (dict == null)
       dict = kwArgs.get(PyUnicodeObject.getOrCreateFromInternStringPool("dict", true));
-    if (name instanceof PyUnicodeObject n
-        && bases instanceof TypeIterable
+    if (name instanceof PyUnicodeObject n && bases instanceof TypeIterable
         && dict instanceof PyDictObject d) {
       PyTupleObject base = PyTupleObject.getTupleFromIterator(bases);
       assert base != null;
@@ -229,7 +241,8 @@ public class PyTypeType extends PyObject {
       base = ensureBaseObjectTypeInBases(base);
       List<PyObject> bs = res.getBases();
       bs.clear(); // clean bs see `public PyTypeType(Class<?> clazz)`
-      for (int i = 0; i < base.size(); i++) bs.add(base.get(i));
+      for (int i = 0; i < base.size(); i++)
+        bs.add(base.get(i));
       res.setType(this);
       res.setName(((PyUnicodeObject) name).getData());
       res.setDict((PyDictObject) dict);
@@ -244,8 +257,7 @@ public class PyTypeType extends PyObject {
       res.setCreator(this);
       return res;
     } else {
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError,
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
           "type() requires 3 arguments: name str, tuple or list of base classes, dict of attributes");
     }
   }
@@ -258,7 +270,8 @@ public class PyTypeType extends PyObject {
       PyObject object = mro.get(i);
       if (object != PyTypeType.type && object != this) {
         res = object.getAttr(key);
-        if (res != null) return res;
+        if (res != null)
+          return res;
       }
     }
     return null;
@@ -318,9 +331,11 @@ public class PyTypeType extends PyObject {
     if (descr instanceof PyFunctionObject func && object instanceof PyMethodObject) {
       return func;
     }
-    if (object != null) return object;
+    if (object != null)
+      return object;
     if (descr != null) {
-      if (descr instanceof TypeDescriptorGet get) return get.descrGet(this, getType());
+      if (descr instanceof TypeDescriptorGet get)
+        return get.descrGet(this, getType());
       return descr;
     }
     return null;
@@ -334,9 +349,8 @@ public class PyTypeType extends PyObject {
     this.name = name;
   }
 
-  public PyObject callPythonCode(
-      PyUnicodeObject name, PyObject self, PyTupleObject args, PyDictObject kwArgs)
-      throws PyException {
+  public PyObject callPythonCode(PyUnicodeObject name, PyObject self, PyTupleObject args,
+      PyDictObject kwArgs) throws PyException {
     PyObject function = getAttr(name);
     args = Utils.packSelfAsTuple(self, args);
     if (function != null) {

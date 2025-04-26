@@ -32,8 +32,8 @@ public class PyFrameObject extends PyObject {
 
   private Stack<TryBlockHandler> tryBlockHandlerStack;
 
-  public PyFrameObject(
-      PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyFrameObject back) {
+  public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyDictObject globals,
+      PyFrameObject back) {
     assert code != null;
     this.code = code;
     byteCodeBuffer = new ByteCodeBuffer(code);
@@ -46,12 +46,8 @@ public class PyFrameObject extends PyObject {
     cells = new PyObject[code.freeVarsSize()];
   }
 
-  public PyFrameObject(
-      PyFunctionObject func,
-      PyCodeObject code,
-      PyDictObject builtins,
-      PyDictObject globals,
-      PyFrameObject back) {
+  public PyFrameObject(PyFunctionObject func, PyCodeObject code, PyDictObject builtins,
+      PyDictObject globals, PyFrameObject back) {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -72,12 +68,8 @@ public class PyFrameObject extends PyObject {
     }
   }
 
-  public PyFrameObject(
-      PyCodeObject code,
-      PyDictObject builtins,
-      PyDictObject globals,
-      PyDictObject locals,
-      PyFrameObject back) {
+  public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyDictObject globals,
+      PyDictObject locals, PyFrameObject back) {
     assert code != null;
     this.code = code;
     byteCodeBuffer = new ByteCodeBuffer(code);
@@ -90,14 +82,8 @@ public class PyFrameObject extends PyObject {
     cells = new PyObject[code.freeVarsSize()];
   }
 
-  public PyFrameObject(
-      PyFunctionObject func,
-      PyCodeObject code,
-      PyDictObject builtins,
-      PyDictObject globals,
-      PyDictObject locals,
-      PyFrameObject back)
-      throws PyException {
+  public PyFrameObject(PyFunctionObject func, PyCodeObject code, PyDictObject builtins,
+      PyDictObject globals, PyDictObject locals, PyFrameObject back) throws PyException {
     assert code != null;
     this.func = func;
     this.code = code;
@@ -128,8 +114,8 @@ public class PyFrameObject extends PyObject {
     cells = new PyObject[code.freeVarsSize()];
   }
 
-  public PyFrameObject(
-      PyCodeObject code, PyDictObject builtins, PyDictObject globals, PyDictObject locals) {
+  public PyFrameObject(PyCodeObject code, PyDictObject builtins, PyDictObject globals,
+      PyDictObject locals) {
     this.code = code;
     byteCodeBuffer = new ByteCodeBuffer(code);
     this.builtins = builtins;
@@ -287,18 +273,9 @@ public class PyFrameObject extends PyObject {
 
   @Override
   public String toString() {
-    return "PyFrameObject{"
-        + "stack="
-        + Arrays.toString(stack)
-        + ", localPlus="
-        + Arrays.toString(localPlus)
-        + ", builtins="
-        + builtins
-        + ", globals="
-        + globals
-        + ", locals="
-        + locals
-        + '}';
+    return "PyFrameObject{" + "stack=" + Arrays.toString(stack) + ", localPlus="
+        + Arrays.toString(localPlus) + ", builtins=" + builtins + ", globals=" + globals
+        + ", locals=" + locals + '}';
   }
 
   public ByteCodeBuffer getByteCodeBuffer() {
@@ -314,29 +291,34 @@ public class PyFrameObject extends PyObject {
     int idx = 0;
     while (--size >= 0) {
       addr += data[idx++];
-      if (addr > addrQuery) break;
+      if (addr > addrQuery)
+        break;
       line += data[idx++];
     }
     return line;
   }
 
   public void pushTryBlockHandler(TryBlockHandler handler) {
-    if (tryBlockHandlerStack == null) tryBlockHandlerStack = new Stack<>();
+    if (tryBlockHandlerStack == null)
+      tryBlockHandlerStack = new Stack<>();
     tryBlockHandlerStack.push(handler);
   }
 
   public TryBlockHandler popTryBlockHandler() {
-    if (tryBlockHandlerStack == null || tryBlockHandlerStack.isEmpty()) return null;
+    if (tryBlockHandlerStack == null || tryBlockHandlerStack.isEmpty())
+      return null;
     return tryBlockHandlerStack.pop();
   }
 
   public TryBlockHandler peekTryBlockHandler() {
-    if (tryBlockHandlerStack == null) return null;
+    if (tryBlockHandlerStack == null)
+      return null;
     return tryBlockHandlerStack.peek();
   }
 
   public int getTryBlockSize() {
-    if (tryBlockHandlerStack == null) return 0;
+    if (tryBlockHandlerStack == null)
+      return 0;
     return tryBlockHandlerStack.size();
   }
 

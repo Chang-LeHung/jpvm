@@ -15,8 +15,8 @@ public interface TypeCall {
    * @return {@link PyObject}
    */
   default PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeCall call not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeCall call not implemented");
   }
 
   @PyClassMethod

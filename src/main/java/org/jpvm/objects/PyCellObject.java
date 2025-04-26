@@ -54,8 +54,8 @@ public class PyCellObject extends PyObject {
         default -> throw new PyException("Invalid operator: " + op);
       };
     } else {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "Invalid operand type: " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "Invalid operand type: " + o.getTypeName());
       return null;
     }
   }

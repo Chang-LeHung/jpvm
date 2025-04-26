@@ -130,11 +130,9 @@ public class EvaluationLoop {
 
   public PyObject pyEvalFrame() throws PyException {
 
-    exit_loop:
-    for (; ; ) {
+    exit_loop: for (;;) {
       // evaluation loop
-      main_loop:
-      while (iterator.hasNext()) {
+      main_loop: while (iterator.hasNext()) {
         Instruction ins = iterator.next();
         try {
           switch (ins.getOpname()) {
@@ -155,7 +153,8 @@ public class EvaluationLoop {
                 if (path.endsWith("__pycache__")) {
                   File pyDir = new File(path);
                   File[] files = pyDir.listFiles();
-                  if (files == null) continue;
+                  if (files == null)
+                    continue;
                   for (File file : files) {
                     if (file.getName().startsWith(moduleName) && file.getName().endsWith(".pyc")) {
                       PycReader reader = new PycReader(file.getAbsolutePath());
@@ -182,9 +181,8 @@ public class EvaluationLoop {
                     frame.push(res);
                     break;
                   }
-                  res =
-                      Utils.loadClass(
-                          path + "." + moduleName + ".PyModuleMain", (PyUnicodeObject) name);
+                  res = Utils.loadClass(path + "." + moduleName + ".PyModuleMain",
+                      (PyUnicodeObject) name);
                   if (res != null) {
                     found = true;
                     JPVM.getThreadState().getIs().addModule((PyUnicodeObject) name, res);
@@ -194,8 +192,8 @@ public class EvaluationLoop {
                 }
               }
               if (!found) {
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.ImportError, "can not find a module named " + moduleName);
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.ImportError,
+                    "can not find a module named " + moduleName);
               }
             }
             case IMPORT_FROM -> {
@@ -216,8 +214,7 @@ public class EvaluationLoop {
                 frame.push(res);
                 continue;
               }
-              PyErrorUtils.pyErrorFormat(
-                  PyErrorUtils.ImportError,
+              PyErrorUtils.pyErrorFormat(PyErrorUtils.ImportError,
                   "can not import " + name.repr() + " from " + top.repr());
             }
             case LOAD_CONST -> frame.push(consts.get(ins.getOparg()));
@@ -270,8 +267,7 @@ public class EvaluationLoop {
                 frame.push(object);
                 continue;
               }
-              PyErrorUtils.pyErrorFormat(
-                  PyErrorUtils.AttributeError,
+              PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError,
                   "can not find attribute '" + name.repr() + "' in " + top.repr());
             }
             case STORE_ATTR -> {
@@ -306,8 +302,7 @@ public class EvaluationLoop {
                 frame.push(method);
                 continue;
               }
-              PyErrorUtils.pyErrorFormat(
-                  PyErrorUtils.AttributeError,
+              PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError,
                   "object '" + obj.repr() + "' not have method " + name.repr());
             }
             case CALL_METHOD -> {
@@ -315,22 +310,24 @@ public class EvaluationLoop {
               PyObject method = frame.pop();
               if (method instanceof PyMethodObject) {
                 PyObject res = Abstract.abstractCall(method, null, args, null, frame);
-                if (res == null) break main_loop;
+                if (res == null)
+                  break main_loop;
                 frame.push(res);
               } else if (method instanceof PyTypeType type) {
                 PyObject res = type.call(args, null);
-                if (res == null) break main_loop;
+                if (res == null)
+                  break main_loop;
                 frame.push(res);
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.AttributeError,
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError,
                     "object '" + method.repr() + "' can not be called");
             }
             case CALL_FUNCTION -> {
               PyTupleObject args = getArgs(ins);
               PyObject pop = frame.pop();
               PyObject object = Abstract.abstractCall(pop, null, args, null, frame);
-              if (object == null) break main_loop;
+              if (object == null)
+                break main_loop;
               frame.push(object);
               // other callable object to be implemented
             }
@@ -345,10 +342,12 @@ public class EvaluationLoop {
                 kwArgs.put(tuple.get(i), frame.pop());
               }
               PyTupleObject args = new PyTupleObject(ins.getOparg() - tuple.size());
-              for (int i = args.size() - 1; i >= 0; i--) args.set(i, frame.pop());
+              for (int i = args.size() - 1; i >= 0; i--)
+                args.set(i, frame.pop());
               PyObject callable = frame.pop();
               PyObject object = Abstract.abstractCall(callable, null, args, kwArgs, frame);
-              if (object == null) break main_loop;
+              if (object == null)
+                break main_loop;
               frame.push(object);
               // other callable object to be implemented
             }
@@ -402,8 +401,7 @@ public class EvaluationLoop {
                   continue;
                 }
               }
-              PyErrorUtils.pyErrorFormat(
-                  PyErrorUtils.TypeError,
+              PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
                   top.repr() + " can not be unpacked into " + size + " objects");
             }
             case LIST_APPEND -> {
@@ -455,8 +453,8 @@ public class EvaluationLoop {
                   }
                 }
               } else {
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, "require an iterator on stack top");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    "require an iterator on stack top");
               }
             }
             case GET_ITER -> {
@@ -464,8 +462,8 @@ public class EvaluationLoop {
               if (pop instanceof TypeIterable itr) {
                 frame.setTop(1, (PyObject) itr.getIterator());
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, pop.repr() + " is not a iterable object");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    pop.repr() + " is not a iterable object");
             }
             case BINARY_MULTIPLY -> {
               PyObject right = frame.pop();
@@ -596,31 +594,33 @@ public class EvaluationLoop {
               if (top instanceof PyNumberMethods num) {
                 frame.push(num.pos());
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, top.repr() + " not support operator +");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    top.repr() + " not support operator +");
             }
             case UNARY_NEGATIVE -> {
               PyObject top = frame.pop();
               if (top instanceof PyNumberMethods num) {
                 frame.push(num.neg());
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, top.repr() + " not support operator -");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    top.repr() + " not support operator -");
             }
             case UNARY_INVERT -> {
               PyObject top = frame.pop();
               if (top instanceof PyNumberMethods num) {
                 frame.push(num.invert());
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, top.repr() + " not support operator ~");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    top.repr() + " not support operator ~");
             }
             case UNARY_NOT -> {
               PyObject top = frame.pop();
               assert top != null;
               PyBoolObject res = Abstract.isTrue(top);
-              if (res != null && res.isTrue()) frame.push(BuiltIn.False);
-              else frame.push(BuiltIn.True);
+              if (res != null && res.isTrue())
+                frame.push(BuiltIn.False);
+              else
+                frame.push(BuiltIn.True);
             }
             case BINARY_POWER -> {
               PyObject right = frame.pop();
@@ -778,19 +778,21 @@ public class EvaluationLoop {
             case POP_JUMP_IF_FALSE -> {
               PyObject pop = frame.pop();
               if (pop instanceof PyBoolObject b) {
-                if (b.isFalse()) byteCodeBuffer.reset(ins.getOparg());
+                if (b.isFalse())
+                  byteCodeBuffer.reset(ins.getOparg());
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, "POP_JUMP_IF_FALSE require boo on stack top");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    "POP_JUMP_IF_FALSE require boo on stack top");
             }
             case POP_JUMP_IF_TRUE -> {
               PyObject pop = frame.pop();
               if (pop instanceof PyBoolObject b) {
-                if (b.isTrue()) byteCodeBuffer.reset(ins.getOparg());
+                if (b.isTrue())
+                  byteCodeBuffer.reset(ins.getOparg());
                 continue;
               }
-              PyErrorUtils.pyErrorFormat(
-                  PyErrorUtils.TypeError, "POP_JUMP_IF_FALSE require boo on stack top");
+              PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                  "POP_JUMP_IF_FALSE require boo on stack top");
             }
             case COMPARE_OP -> {
               PyObject right = frame.pop();
@@ -799,16 +801,15 @@ public class EvaluationLoop {
               frame.push(result);
             }
             case LOAD_BUILD_CLASS -> {
-              PyObject res =
-                  builtins.get(
-                      PyUnicodeObject.getOrCreateFromInternStringPool("__build_class__", true));
+              PyObject res = builtins
+                  .get(PyUnicodeObject.getOrCreateFromInternStringPool("__build_class__", true));
               frame.push(res);
             }
             case MAKE_FUNCTION -> {
               PyObject qualname = frame.pop();
               if (!(qualname instanceof PyUnicodeObject)) {
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, "qualname require PyUnicodeObject");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    "qualname require PyUnicodeObject");
                 break;
               }
               PyCodeObject codeObject = (PyCodeObject) frame.pop();
@@ -836,13 +837,17 @@ public class EvaluationLoop {
             }
             case JUMP_IF_FALSE_OR_POP -> {
               PyObject top = frame.top();
-              if (top == BuiltIn.False) byteCodeBuffer.reset(ins.getOparg());
-              else frame.pop();
+              if (top == BuiltIn.False)
+                byteCodeBuffer.reset(ins.getOparg());
+              else
+                frame.pop();
             }
             case JUMP_IF_TRUE_OR_POP -> {
               PyObject top = frame.top();
-              if (top == BuiltIn.True) byteCodeBuffer.reset(ins.getOparg());
-              else frame.pop();
+              if (top == BuiltIn.True)
+                byteCodeBuffer.reset(ins.getOparg());
+              else
+                frame.pop();
             }
             case BUILD_TUPLE -> {
               int size = ins.getOparg();
@@ -854,7 +859,8 @@ public class EvaluationLoop {
               frame.decreaseStackPointer(size);
               frame.push(tuple);
             }
-            case NOP -> {}
+            case NOP -> {
+            }
             case YIELD_VALUE -> {
               PyObject res = frame.pop();
               if ((frame.getCode().getCoFlags() & Marshal.CO_GENERATOR) != 0) {
@@ -867,11 +873,10 @@ public class EvaluationLoop {
               }
               PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "yield value is not supported");
             }
-              /*
-               * GET_YIELD_FROM_ITER If TOS is a generator iterator or
-               * coroutine object it is left as is.
-               * Otherwise, implements TOS = iter(TOS).
-               */
+            /*
+             * GET_YIELD_FROM_ITER If TOS is a generator iterator or coroutine object it is left as
+             * is. Otherwise, implements TOS = iter(TOS).
+             */
             case GET_YIELD_FROM_ITER -> {
               PyObject top = frame.top();
               if (!(top instanceof PyGeneratorObject)) {
@@ -879,8 +884,8 @@ public class EvaluationLoop {
                   frame.setTop(1, (PyObject) iter.getIterator());
                   continue;
                 }
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, "require a generator or coroutine or iterable object");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    "require a generator or coroutine or iterable object");
               }
             }
             case YIELD_FROM -> {
@@ -896,8 +901,8 @@ public class EvaluationLoop {
                 }
                 break exit_loop;
               } else
-                PyErrorUtils.pyErrorFormat(
-                    PyErrorUtils.TypeError, "require a generator or coroutine or iterable object");
+                PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+                    "require a generator or coroutine or iterable object");
             }
             default -> throw new PyException(
                 "not support opcode " + OpMap.instructions.get(ins.getOpcode()) + " currently",
@@ -920,7 +925,8 @@ public class EvaluationLoop {
       // We should save traceback of this function or module
       if (!breakFromEND_FINALLY) {
         PyErrorUtils.pyTraceBackHere();
-      } else breakFromEND_FINALLY = false;
+      } else
+        breakFromEND_FINALLY = false;
       while (frame.getTryBlockSize() > 0) {
         ThreadState ts = JPVM.getThreadState();
         TryBlockHandler blockHandler = frame.popTryBlockHandler();
@@ -936,7 +942,8 @@ public class EvaluationLoop {
           exceptionInfo.setExcTrace((PyTraceBackObject) frame.pop());
         }
         // resume stack state
-        while (blockHandler.getLevel() < frame.getStackSize()) frame.pop();
+        while (blockHandler.getLevel() < frame.getStackSize())
+          frame.pop();
         if (blockHandler.getType() == TryBlockHandler.SETUP_FINALLY) {
           // save current thread exceptionInfo into stack to resume later, such as instruction
           // POP_EXCEPT
@@ -953,7 +960,8 @@ public class EvaluationLoop {
           var curExcValue = ts.getCurExcValue();
           var curExcType = ts.getCurExcType();
           PyErrorUtils.cleanThreadException();
-          if (curExcTrace != null) curExcValue.setTraceback(curExcTrace);
+          if (curExcTrace != null)
+            curExcValue.setTraceback(curExcTrace);
           exceptionInfo.setExcTrace(curExcTrace);
           exceptionInfo.setExcValue(curExcValue);
           exceptionInfo.setExcType(curExcType);
@@ -972,18 +980,12 @@ public class EvaluationLoop {
   }
 
   private String errorMessageTip(Instruction ins) {
-    return "Execution error with op "
-        + ins.getOpname()
-        + " in module "
-        + frame.getCode().getCoName()
-        + ":\n"
-        + ">>>\n"
-        + error.getMessage()
-        + "\n<<<";
+    return "Execution error with op " + ins.getOpname() + " in module "
+        + frame.getCode().getCoName() + ":\n" + ">>>\n" + error.getMessage() + "\n<<<";
   }
 
-  private void loadFromGlobal(
-      PyFrameObject frame, PyDictObject globals, PyDictObject builtins, PyObject name) {
+  private void loadFromGlobal(PyFrameObject frame, PyDictObject globals, PyDictObject builtins,
+      PyObject name) {
     PyObject v;
     v = globals.get(name);
     if (null == v) {

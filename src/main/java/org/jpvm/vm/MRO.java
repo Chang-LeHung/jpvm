@@ -37,11 +37,10 @@ public class MRO {
     var res = new ArrayList<PyObject>();
     while (true) {
       PyObject head = null;
-      var types =
-          bases.stream()
-              .filter(x -> (!x.isEmpty()))
-              .collect(Collectors.toCollection(ArrayList::new));
-      if (types.isEmpty()) return res;
+      var types = bases.stream().filter(x -> (!x.isEmpty()))
+          .collect(Collectors.toCollection(ArrayList::new));
+      if (types.isEmpty())
+        return res;
       boolean flag = false;
       for (List<PyObject> ts : types) {
         head = ts.get(0);
@@ -52,16 +51,16 @@ public class MRO {
         }
       }
       if (!flag) {
-        PyErrorUtils.pyErrorFormat(
-            PyErrorUtils.RuntimeError, "MRO error: can not find a correct method resolution order");
+        PyErrorUtils.pyErrorFormat(PyErrorUtils.RuntimeError,
+            "MRO error: can not find a correct method resolution order");
         return null;
       }
       res.add(head);
       PyObject finalHead = head;
-      types.forEach(
-          x -> {
-            if (x.get(0) == finalHead) x.remove(0);
-          });
+      types.forEach(x -> {
+        if (x.get(0) == finalHead)
+          x.remove(0);
+      });
     }
   }
 }

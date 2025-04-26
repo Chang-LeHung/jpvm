@@ -16,24 +16,9 @@ import org.jpvm.python.BuiltIn;
  * base class of all classes in python. all child classes in python are PyObject. Initialization
  * operations must be executed within the subclass themselves
  */
-public class PyObject
-    implements PyArgs,
-        TypeCheck,
-        TypeName,
-        TypeStr,
-        TypeRepr,
-        TypeHash,
-        TypeRichCompare,
-        TypeInit,
-        TypeCall,
-        PyHashable,
-        TypeGetMethod,
-        TypeNew,
-        TypeGetAttr,
-        TypeGetAttro,
-        TypeSetAttro,
-        TypeSetAttr,
-        PyTypeMethods {
+public class PyObject implements PyArgs, TypeCheck, TypeName, TypeStr, TypeRepr, TypeHash,
+    TypeRichCompare, TypeInit, TypeCall, PyHashable, TypeGetMethod, TypeNew, TypeGetAttr,
+    TypeGetAttro, TypeSetAttro, TypeSetAttr, PyTypeMethods {
 
   public static Operator[] compareOpMap;
   public static PyTypeType type;
@@ -70,7 +55,8 @@ public class PyObject
   public PyObject() {}
 
   public static PyBoolObject check(PyObject o) {
-    if (o == type) return BuiltIn.True;
+    if (o == type)
+      return BuiltIn.True;
     return BuiltIn.False;
   }
 
@@ -81,7 +67,8 @@ public class PyObject
   }
 
   public static synchronized void initBaseObject() {
-    if (type == null) type = PyBaseObjectType.getInstance();
+    if (type == null)
+      type = PyBaseObjectType.getInstance();
   }
 
   @Override
@@ -129,11 +116,13 @@ public class PyObject
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     switch (op) {
       case Py_EQ, PyCmp_IS -> {
-        if (o == this) return BuiltIn.True;
+        if (o == this)
+          return BuiltIn.True;
         return BuiltIn.False;
       }
       case PyCmp_IS_NOT -> {
-        if (o != this) return BuiltIn.True;
+        if (o != this)
+          return BuiltIn.True;
         return BuiltIn.False;
       }
     }
@@ -162,7 +151,8 @@ public class PyObject
   @Override
   public PyObject getMethod(PyUnicodeObject name) throws PyException {
     PyObject function = getAttr(name);
-    if (function instanceof PyMethodObject) return function;
+    if (function instanceof PyMethodObject)
+      return function;
     if (function instanceof PyFunctionObject) {
       return new PyMethodObject(this, (PyFunctionObject) function, name.getData());
     }
@@ -178,7 +168,8 @@ public class PyObject
       PyObject object = mro.get(i);
       if (object != PyTypeType.type) {
         res = object.getAttr(key);
-        if (res != null) return res;
+        if (res != null)
+          return res;
       }
     }
     return null;
@@ -189,7 +180,8 @@ public class PyObject
     if (descr instanceof TypeDescriptorGet get && descr instanceof TypeDescriptorSet)
       return get.descrGet(this, getType());
     PyObject object = null;
-    if (dict != null) object = dict.get(key);
+    if (dict != null)
+      object = dict.get(key);
     var name = (PyUnicodeObject) key;
     if (object == null) {
       if (descr instanceof PyFunctionObject func) {
@@ -228,9 +220,11 @@ public class PyObject
       }
     }
     PyObject res = dict.get(key);
-    if (res != null) return res;
+    if (res != null)
+      return res;
     PyObject attr = getAttrInternal(key);
-    if (attr != null) dict.put(key, attr);
+    if (attr != null)
+      dict.put(key, attr);
     return attr;
   }
 

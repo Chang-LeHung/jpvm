@@ -1,3 +1,4 @@
 package org.jpvm.exceptions.jobjs;
 
-public class PyAssertionError {}
+public class PyAssertionError {
+}

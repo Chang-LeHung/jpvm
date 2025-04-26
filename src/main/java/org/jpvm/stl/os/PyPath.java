@@ -25,18 +25,19 @@ public class PyPath extends PyModuleObject {
       }
       return new PyUnicodeObject(path.normalize().toString());
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "path.join expected more than 0 arguments, got 0");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "path.join expected more than 0 arguments, got 0");
   }
 
   @PyClassMethod
   public PyObject isdir(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 1) {
-      if (Paths.get(args.get(0).toString()).toFile().isDirectory()) return BuiltIn.True;
+      if (Paths.get(args.get(0).toString()).toFile().isDirectory())
+        return BuiltIn.True;
       return BuiltIn.False;
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "isdir requires 1 argument, but got 0");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "isdir requires 1 argument, but got 0");
   }
 
   @PyClassMethod
@@ -49,7 +50,7 @@ public class PyPath extends PyModuleObject {
         return BuiltIn.False;
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "isdir requires 1 argument, but got 0");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "isdir requires 1 argument, but got 0");
   }
 }

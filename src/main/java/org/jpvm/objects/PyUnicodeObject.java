@@ -39,14 +39,17 @@ public class PyUnicodeObject extends PyObject
   }
 
   public static PyBoolObject check(PyObject o) {
-    if (o == type) return BuiltIn.True;
+    if (o == type)
+      return BuiltIn.True;
     return BuiltIn.False;
   }
 
   public static PyUnicodeObject getOrCreateFromInternStringPool(String s, boolean intern) {
-    if (internStr == null) return new PyUnicodeObject(s);
+    if (internStr == null)
+      return new PyUnicodeObject(s);
     if (intern) {
-      if (internStr.containsKey(s)) return internStr.get(s);
+      if (internStr.containsKey(s))
+        return internStr.get(s);
       else {
         PyUnicodeObject object = new PyUnicodeObject(s);
         internStr.put(s, object);
@@ -72,12 +75,13 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyUnicodeObject o) {
-        if (s.startsWith(o.s)) return BuiltIn.True;
+        if (s.startsWith(o.s))
+          return BuiltIn.True;
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "str method startswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "str method startswith require one str argument");
     return null;
   }
 
@@ -86,12 +90,13 @@ public class PyUnicodeObject extends PyObject
     if (args.size() == 1) {
       PyObject object = args.get(0);
       if (object instanceof PyUnicodeObject o) {
-        if (s.endsWith(o.s)) return BuiltIn.True;
+        if (s.endsWith(o.s))
+          return BuiltIn.True;
         return BuiltIn.False;
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "str method endswith require one str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "str method endswith require one str argument");
     return null;
   }
 
@@ -170,8 +175,8 @@ public class PyUnicodeObject extends PyObject
         return new PyUnicodeObject(s.replace(o1.s, o2.s));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "str method replace require two str argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "str method replace require two str argument");
     return null;
   }
 
@@ -207,7 +212,8 @@ public class PyUnicodeObject extends PyObject
   public PyObject isnumeric(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       for (int i = 0; i < s.length(); i++) {
-        if (!Character.isDigit(s.charAt(i))) return BuiltIn.False;
+        if (!Character.isDigit(s.charAt(i)))
+          return BuiltIn.False;
       }
       return BuiltIn.True;
     }
@@ -219,7 +225,8 @@ public class PyUnicodeObject extends PyObject
   public PyObject isalpha(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (args.size() == 0) {
       for (int i = 0; i < s.length(); i++) {
-        if (!Character.isAlphabetic(s.charAt(i))) return BuiltIn.False;
+        if (!Character.isAlphabetic(s.charAt(i)))
+          return BuiltIn.False;
       }
       return BuiltIn.True;
     }
@@ -247,8 +254,10 @@ public class PyUnicodeObject extends PyObject
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof PyUnicodeObject that)) return false;
+    if (this == o)
+      return true;
+    if (!(o instanceof PyUnicodeObject that))
+      return false;
     return Arrays.equals(data, that.data);
   }
 
@@ -285,8 +294,10 @@ public class PyUnicodeObject extends PyObject
   public PyBoolObject richCompare(PyObject o, Operator op) throws PyException {
     switch (op) {
       case Py_EQ -> {
-        if (!(o instanceof PyUnicodeObject d)) return BuiltIn.False;
-        if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType())) return BuiltIn.True;
+        if (!(o instanceof PyUnicodeObject d))
+          return BuiltIn.False;
+        if (new String(data, StandardCharsets.UTF_8).equals(d.toJavaType()))
+          return BuiltIn.True;
         return BuiltIn.False;
       }
       case Py_LT -> {
@@ -492,8 +503,8 @@ public class PyUnicodeObject extends PyObject
     StringBuilder builder = new StringBuilder();
     Long l = NumberHelper.transformPyObject2Long(o);
     if (l == null) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "sqRepeat: parameter o require type PyNumberMethods");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "sqRepeat: parameter o require type PyNumberMethods");
       return null;
     }
     builder.append(String.valueOf(s).repeat(Math.max(0, l.intValue())));
@@ -532,7 +543,8 @@ public class PyUnicodeObject extends PyObject
 
     @Override
     public PyObject next() throws PyException {
-      if (idx < size()) return new PyUnicodeObject(s.substring(idx, ++idx));
+      if (idx < size())
+        return new PyUnicodeObject(s.substring(idx, ++idx));
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 

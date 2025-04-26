@@ -19,6 +19,7 @@ public class PyValueErrorType extends PyCommonExceptionType {
   public static final class SelfHolder {
     public static final PyValueErrorType instance = new PyValueErrorType();
   }
+
   public static PyValueErrorType getInstance() {
     return SelfHolder.instance;
   }

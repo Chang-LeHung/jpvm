@@ -159,12 +159,10 @@ public class PyPythonObject extends PyObject implements PyNumberMethods {
   public PyObject abs() throws PyException {
     var t = (PyPythonType) objType;
     PyObject res =
-        t.callPythonCode(
-            PyUnicodeObject.getOrCreateFromInternStringPool("__abs__", true),
-            this,
-            PyTupleObject.zero,
-            null);
-    if (res != null) return res;
+        t.callPythonCode(PyUnicodeObject.getOrCreateFromInternStringPool("__abs__", true), this,
+            PyTupleObject.zero, null);
+    if (res != null)
+      return res;
     return PyNumberMethods.super.abs();
   }
 

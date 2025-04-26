@@ -28,8 +28,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
   private final EvaluationLoop evalLoop;
   /**
    * qualname {@link PyUnicodeObject} of the generator, which is more accurate than name there are
-   * more qualifier than name, such as module name. You can find more detail in <a
-   * href="https://stackoverflow.com/questions/58108488/what-is-qualname-in-python">qualname</a>
+   * more qualifier than name, such as module name. You can find more detail in
+   * <a href="https://stackoverflow.com/questions/58108488/what-is-qualname-in-python">qualname</a>
    */
   private final PyObject qualname;
   /** name {@link PyUnicodeObject} of the generator */
@@ -73,7 +73,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
   @PyClassMethod
   public PyObject __next__() throws PyException {
     // whether generator started or not
-    if (!runToYield) runToYield = true;
+    if (!runToYield)
+      runToYield = true;
     else {
       // push a dummy PyObject or sent value into stack
       // if generator runToYield = true
@@ -91,7 +92,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
     JPVM.getThreadState().setCurrentFrame(cf);
     if (!evalLoop.getIterator().hasNext())
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
-    else return res;
+    else
+      return res;
   }
 
   public boolean started() {
@@ -101,8 +103,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
   @PyClassMethod
   public PyObject send(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (!runToYield) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.Exception, "can't send non-None value to a just-started generator");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception,
+          "can't send non-None value to a just-started generator");
       return null;
     }
     if (args.size() == 1) {
@@ -110,8 +112,8 @@ public class PyGeneratorObject extends PyObject implements TypeDoIterate, TypeIt
       newVal = true;
       return __next__();
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.Exception, "TypeError: send() takes exactly one argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception,
+        "TypeError: send() takes exactly one argument");
   }
 
   @Override

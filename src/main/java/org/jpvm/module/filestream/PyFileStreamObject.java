@@ -95,7 +95,7 @@ public class PyFileStreamObject extends PyObject {
   public void writeLines(TypeIterable o) throws PyException {
     TypeDoIterate itr = o.getIterator();
     try {
-      for (; ; ) {
+      for (;;) {
         PyObject next;
         try {
           next = itr.next();

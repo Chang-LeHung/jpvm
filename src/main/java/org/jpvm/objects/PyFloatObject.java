@@ -78,24 +78,26 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
       return null;
     }
-    if (!(o instanceof PyFloatObject)) return BuiltIn.False;
-    if (((PyFloatObject) o).getData() == data) return BuiltIn.True;
+    if (!(o instanceof PyFloatObject))
+      return BuiltIn.False;
+    if (((PyFloatObject) o).getData() == data)
+      return BuiltIn.True;
     return BuiltIn.False;
   }
 
   @Override
   public PyObject add(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply + on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply + on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data + ((PyFloatObject) object).getData());
@@ -104,15 +106,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject sub(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods))
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply - on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply - on float and " + o.getTypeName());
     assert o instanceof PyNumberMethods;
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data - ((PyFloatObject) object).getData());
@@ -121,15 +123,15 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject mul(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods))
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply * on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply * on float and " + o.getTypeName());
     assert o instanceof PyNumberMethods;
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data * ((PyFloatObject) object).getData());
@@ -138,16 +140,16 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject mod(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply % on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply % on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     return new PyFloatObject(data % ((PyFloatObject) object).getData());
@@ -164,16 +166,16 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject pow(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply ** on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply ** on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.NotImplementedError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     var d = (PyFloatObject) object;
@@ -213,16 +215,16 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject floorDiv(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply // on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply // on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     var d = (PyFloatObject) object;
@@ -236,16 +238,16 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject trueDiv(PyObject o) throws PyException {
     if (!(o instanceof PyNumberMethods)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply / on float and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply / on float and " + o.getTypeName());
       return null;
     }
     PyObject object;
     try {
       object = ((PyNumberMethods) o).nbFloat();
     } catch (PyException e) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "parameter o not implement function nbFloat");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "parameter o not implement function nbFloat");
       return null;
     }
     if (((PyFloatObject) object).getData() == 0) {
@@ -292,12 +294,18 @@ public class PyFloatObject extends PyObject implements PyNumberMethods {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null) return false;
-    if (obj == this) return true;
-    if (obj instanceof Integer o) return data == o;
-    if (obj instanceof Long o) return data == o;
-    if (obj instanceof Double o) return data == o;
-    if (obj instanceof Float o) return data == o;
+    if (obj == null)
+      return false;
+    if (obj == this)
+      return true;
+    if (obj instanceof Integer o)
+      return data == o;
+    if (obj instanceof Long o)
+      return data == o;
+    if (obj instanceof Double o)
+      return data == o;
+    if (obj instanceof Float o)
+      return data == o;
     return false;
   }
 }

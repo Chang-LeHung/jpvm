@@ -12,10 +12,7 @@ public class PyCodeExecutor implements Runnable {
   private final PyDictObject kwArgs;
   private final PyThreadObject owner;
 
-  public PyCodeExecutor(
-      PyFunctionObject functionObject,
-      PyTupleObject args,
-      PyDictObject kwArgs,
+  public PyCodeExecutor(PyFunctionObject functionObject, PyTupleObject args, PyDictObject kwArgs,
       PyThreadObject owner) {
     this.functionObject = functionObject;
     this.args = args;
@@ -28,7 +25,8 @@ public class PyCodeExecutor implements Runnable {
     try {
       PyThreadObject.type.tss.set(owner);
       PyObject res = Abstract.abstractCall(functionObject, null, args, kwArgs);
-      if (res == null) PyErrorUtils.printExceptionInformation();
+      if (res == null)
+        PyErrorUtils.printExceptionInformation();
       PyThreadObject.type.tss.remove();
     } catch (PyException ignore) {
       PyErrorUtils.printExceptionInformation();

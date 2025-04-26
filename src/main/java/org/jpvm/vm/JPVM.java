@@ -60,7 +60,8 @@ public class JPVM {
 
   public static ThreadState getThreadState() {
     ThreadState res = tss.get();
-    if (res != null) return res;
+    if (res != null)
+      return res;
     res = new ThreadState();
     res.setIs(interpreterState);
     tss.set(res);
@@ -83,8 +84,10 @@ public class JPVM {
   }
 
   private void init() {
-    if (tss == null) tss = new ThreadLocal<>();
-    if (interpreterState == null) interpreterState = new InterpreterState(500);
+    if (tss == null)
+      tss = new ThreadLocal<>();
+    if (interpreterState == null)
+      interpreterState = new InterpreterState(500);
   }
 
   private void initVirtualMachine() throws PyNotImplemented {
@@ -93,23 +96,19 @@ public class JPVM {
     locals = rootModule.getDict();
 
     // ensure that the main module is named "__main__"
-    rootModule.putAttribute(
-        PyUnicodeObject.getOrCreateFromInternStringPool("__name__", true),
+    rootModule.putAttribute(PyUnicodeObject.getOrCreateFromInternStringPool("__name__", true),
         PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true));
 
     // register the Interpreter state
     registerInterpreterState();
 
     // register the module
-    JPVM.getThreadState()
-        .getIs()
+    JPVM.getThreadState().getIs()
         .addModule(PyUnicodeObject.getOrCreateFromInternStringPool("__main__", true), rootModule);
     // add stl path to search path all stl are under org/jpvm/stl
-    JPVM.getThreadState()
-        .getIs()
+    JPVM.getThreadState().getIs()
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvm/stl", true));
-    JPVM.getThreadState()
-        .getIs()
+    JPVM.getThreadState().getIs()
         .addSearchPath(PyUnicodeObject.getOrCreateFromInternStringPool("org/jpvmExt", true));
 
     Path path = Paths.get(filename);
@@ -153,7 +152,8 @@ public class JPVM {
     ts.setCurrentFrame(rootFrame);
     loop = new EvaluationLoop(rootFrame);
     PyObject object = loop.pyEvalFrame();
-    if (object == null) PyErrorUtils.printExceptionInformation();
+    if (object == null)
+      PyErrorUtils.printExceptionInformation();
     PyThreadObject.type.tss.remove();
     state = PVM_STATE.FINISHED;
   }
@@ -244,10 +244,6 @@ public class JPVM {
   }
 
   enum PVM_STATE {
-    UNINITIALIZED,
-    INIT,
-    RUNNING,
-    FINISHED,
-    EXIT
+    UNINITIALIZED, INIT, RUNNING, FINISHED, EXIT
   }
 }

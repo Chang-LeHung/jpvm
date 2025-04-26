@@ -198,46 +198,13 @@ public class PyCodeObject extends PyObject {
 
   @Override
   public String toString() {
-    return "CodeObject{"
-        + "coArgument="
-        + coArgument
-        + ", coKwOnlyArCnt="
-        + coKwOnlyArCnt
-        + ", coPosOnlyArCnt="
-        + coPosOnlyArCnt
-        + ", coNLocals="
-        + coNLocals
-        + ", coStackSize="
-        + coStackSize
-        + ", coFlags="
-        + coFlags
-        + ", coFirstLineNo="
-        + coFirstLineNo
-        + ", coCode="
-        + coCode
-        + ", coConsts="
-        + coConsts
-        + ", coNames="
-        + coNames
-        + ", coVarNames="
-        + coVarNames
-        + ", coFreeVars="
-        + coFreeVars
-        + ", coCellVars="
-        + coCellVars
-        + ", coFileName="
-        + coFileName
-        + ", coName="
-        + coName
-        + ", colnotab="
-        + colnotab
-        + ", coZombieFrame="
-        + coZombieFrame
-        + ", coWeakRefList="
-        + coWeakRefList
-        + ", coExtra="
-        + coExtra
-        + '}';
+    return "CodeObject{" + "coArgument=" + coArgument + ", coKwOnlyArCnt=" + coKwOnlyArCnt
+        + ", coPosOnlyArCnt=" + coPosOnlyArCnt + ", coNLocals=" + coNLocals + ", coStackSize="
+        + coStackSize + ", coFlags=" + coFlags + ", coFirstLineNo=" + coFirstLineNo + ", coCode="
+        + coCode + ", coConsts=" + coConsts + ", coNames=" + coNames + ", coVarNames=" + coVarNames
+        + ", coFreeVars=" + coFreeVars + ", coCellVars=" + coCellVars + ", coFileName=" + coFileName
+        + ", coName=" + coName + ", colnotab=" + colnotab + ", coZombieFrame=" + coZombieFrame
+        + ", coWeakRefList=" + coWeakRefList + ", coExtra=" + coExtra + '}';
   }
 
   public int freeVarsSize() {

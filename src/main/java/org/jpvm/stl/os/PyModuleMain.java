@@ -14,7 +14,8 @@ import org.jpvm.vm.JPVM;
 
 public class PyModuleMain extends PyModuleObject {
 
-  @PyClassAttribute PyObject path = new PyPath(new PyUnicodeObject("path"));
+  @PyClassAttribute
+  PyObject path = new PyPath(new PyUnicodeObject("path"));
 
   public PyModuleMain(PyUnicodeObject moduleName) {
     super(moduleName);
@@ -35,12 +36,12 @@ public class PyModuleMain extends PyModuleObject {
         list.forEach(x -> res.append(new PyUnicodeObject(x.getFileName().toString())));
         return res;
       } catch (IOException e) {
-        return PyErrorUtils.pyErrorFormat(
-            PyErrorUtils.FileNotFoundError, "can not find a dir named " + args.get(0));
+        return PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,
+            "can not find a dir named " + args.get(0));
       }
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "listdir requires exactly one or no argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "listdir requires exactly one or no argument");
     return null;
   }
 }

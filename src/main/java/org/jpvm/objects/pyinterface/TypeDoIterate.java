@@ -11,8 +11,8 @@ public interface TypeDoIterate {
   }
 
   default PyObject get(int idx) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeDoIterate get not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeDoIterate get not implemented");
   }
 
   default int size() {

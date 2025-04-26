@@ -12,7 +12,7 @@ public interface TypeInit {
    * @return {@link PyObject}
    */
   default PyObject init() throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeInit init not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeInit init not implemented");
   }
 }

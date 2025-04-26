@@ -13,10 +13,8 @@ public class PyPythonType extends PyTypeType {
 
   public PyPythonType(PyUnicodeObject name, PyTupleObject bases, PyDictObject dict) {
     this();
-    this.name =
-        dict.get(PyUnicodeObject.getOrCreateFromInternStringPool("__module__", true))
-            + "."
-            + name.getData();
+    this.name = dict.get(PyUnicodeObject.getOrCreateFromInternStringPool("__module__", true)) + "."
+        + name.getData();
     this.__bases__ = bases;
     this.dict = dict;
   }

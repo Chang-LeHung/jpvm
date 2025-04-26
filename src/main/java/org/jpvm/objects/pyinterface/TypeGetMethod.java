@@ -22,6 +22,7 @@ public interface TypeGetMethod {
    * @return {@link PyMethodObject} if not contain methodName then throw PyMissMethod
    */
   default PyObject getMethod(PyUnicodeObject name) throws PyException {
-    return PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "not have method" + name.toJavaType());
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError,
+        "not have method" + name.toJavaType());
   }
 }

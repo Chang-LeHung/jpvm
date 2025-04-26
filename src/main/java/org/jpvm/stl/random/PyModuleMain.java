@@ -26,7 +26,7 @@ public class PyModuleMain extends PyModuleObject {
         return new PyLongObject(s.getData() + (long) (Math.random() * (e.getData() - s.getData())));
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "randint() takes exactly 2 arguments (" + args.size() + " given)");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "randint() takes exactly 2 arguments (" + args.size() + " given)");
   }
 }

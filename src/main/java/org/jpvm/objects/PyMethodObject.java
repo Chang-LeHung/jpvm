@@ -72,7 +72,8 @@ public class PyMethodObject extends PyObject {
     PyObject self;
     try {
       if (method != null) {
-        if (null != this.self) return (PyObject) method.invoke(this.self, args, kwArgs);
+        if (null != this.self)
+          return (PyObject) method.invoke(this.self, args, kwArgs);
         else {
           self = args.get(0);
           PyTupleObject eliArgs = new PyTupleObject(args.size() - 1);
@@ -87,7 +88,8 @@ public class PyMethodObject extends PyObject {
         return Abstract.abstractCall(functionObject, null, args, kwArgs);
       }
     } catch (IllegalAccessException | InvocationTargetException e) {
-      if (e.getCause() instanceof PyException) throw (PyException) e.getCause();
+      if (e.getCause() instanceof PyException)
+        throw (PyException) e.getCause();
       PyErrorUtils.pyErrorFormat(PyErrorUtils.Exception, e.getCause().getMessage());
       return null;
     }

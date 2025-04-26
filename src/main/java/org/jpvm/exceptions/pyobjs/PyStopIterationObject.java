@@ -5,6 +5,7 @@ import org.jpvm.objects.PyUnicodeObject;
 
 public class PyStopIterationObject extends PyExceptionObject {
   private PyObject retVal;
+
   public PyStopIterationObject(PyUnicodeObject errorMsg) {
     super(errorMsg);
   }

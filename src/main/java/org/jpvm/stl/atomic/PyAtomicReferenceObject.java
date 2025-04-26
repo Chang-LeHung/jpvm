@@ -30,14 +30,16 @@ public class PyAtomicReferenceObject extends PyObject {
 
   @PyClassMethod
   public PyObject set(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() != 1) throw new RuntimeException("set() takes exactly one argument (0 given)");
+    if (args.size() != 1)
+      throw new RuntimeException("set() takes exactly one argument (0 given)");
     value.set(args.get(0));
     return this;
   }
 
   @PyClassMethod
   public PyObject compareAndSwap(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() != 2) throw new RuntimeException("compareAndSwap() takes exactly two argument (0 given)");
+    if (args.size() != 2)
+      throw new RuntimeException("compareAndSwap() takes exactly two argument (0 given)");
     PyObject old = args.get(0);
     PyObject newValue = args.get(1);
     if (value.compareAndSet(old, newValue))
@@ -47,7 +49,7 @@ public class PyAtomicReferenceObject extends PyObject {
 
   @Override
   public PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
-   return value.get().__str__(args, kwArgs);
+    return value.get().__str__(args, kwArgs);
   }
 
   @Override

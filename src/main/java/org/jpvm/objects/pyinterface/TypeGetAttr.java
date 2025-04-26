@@ -12,7 +12,7 @@ public interface TypeGetAttr {
    * @return {@link PyObject}
    */
   default PyObject getAttr(PyObject key) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeGetAttr getAttr not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeGetAttr getAttr not implemented");
   }
 }

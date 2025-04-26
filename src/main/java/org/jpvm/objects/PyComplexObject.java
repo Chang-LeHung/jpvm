@@ -85,7 +85,8 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
       return null;
     }
     if (o instanceof PyComplexObject complex) {
-      if (complex.real == real && complex.image == image) return BuiltIn.True;
+      if (complex.real == real && complex.image == image)
+        return BuiltIn.True;
     }
     return BuiltIn.False;
   }
@@ -98,32 +99,30 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject add(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply function add on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply function add on complex and " + o.getTypeName());
       return null;
     }
-    return new PyComplexObject(
-        (PyFloatObject) (real.add(((PyComplexObject) o).getReal())),
+    return new PyComplexObject((PyFloatObject) (real.add(((PyComplexObject) o).getReal())),
         (PyFloatObject) (image.add(((PyComplexObject) o).getImage())));
   }
 
   @Override
   public PyObject sub(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "cannot  apply function add on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "cannot  apply function add on complex and " + o.getTypeName());
       return null;
     }
-    return new PyComplexObject(
-        (PyFloatObject) (real.sub(((PyComplexObject) o).getReal())),
+    return new PyComplexObject((PyFloatObject) (real.sub(((PyComplexObject) o).getReal())),
         (PyFloatObject) (image.sub(((PyComplexObject) o).getImage())));
   }
 
   @Override
   public PyObject mul(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not apply function mul on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not apply function mul on complex and " + o.getTypeName());
       return null;
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
@@ -161,8 +160,8 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
   @Override
   public PyObject trueDiv(PyObject o) throws PyException {
     if (!(o instanceof PyComplexObject)) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "cannot apply function div on complex and " + o.getTypeName());
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "cannot apply function div on complex and " + o.getTypeName());
       return null;
     }
     PyFloatObject ac = (PyFloatObject) real.mul(((PyComplexObject) o).getReal());
@@ -174,8 +173,8 @@ public class PyComplexObject extends PyObject implements PyNumberMethods {
     PyFloatObject ac_add_bd = (PyFloatObject) ac.add(bd);
     PyFloatObject c2_add_d2 = (PyFloatObject) c2.add(d2);
     PyFloatObject bc_sub_ad = (PyFloatObject) bc.sub(ad);
-    return new PyComplexObject(
-        (PyFloatObject) ac_add_bd.trueDiv(c2_add_d2), (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
+    return new PyComplexObject((PyFloatObject) ac_add_bd.trueDiv(c2_add_d2),
+        (PyFloatObject) bc_sub_ad.trueDiv(c2_add_d2));
   }
 
   @Override

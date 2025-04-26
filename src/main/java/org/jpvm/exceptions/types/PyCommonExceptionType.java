@@ -15,14 +15,17 @@ public class PyCommonExceptionType extends PyTypeType {
   @Override
   public PyExceptionObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyExceptionObject val;
-    if (args.size() == 0) val = new PyExceptionObject(new PyUnicodeObject(name));
-    else val = new PyExceptionObject((PyUnicodeObject) args.get(0));
+    if (args.size() == 0)
+      val = new PyExceptionObject(new PyUnicodeObject(name));
+    else
+      val = new PyExceptionObject((PyUnicodeObject) args.get(0));
     val.setType(PyBaseExceptionType.type);
     return val;
   }
 
   public PyUnicodeObject extractPyUnicodeObjectFromArgs(PyTupleObject args) throws PyException {
-    if (args.size() == 0) return new PyUnicodeObject(name);
+    if (args.size() == 0)
+      return new PyUnicodeObject(name);
     return (PyUnicodeObject) args.get(0);
   }
 
@@ -39,21 +42,24 @@ public class PyCommonExceptionType extends PyTypeType {
       case PyCmp_EXC_MATCH -> {
         PyListObject typeMro = getMro();
         for (int i = 0; i < typeMro.size(); i++) {
-          if (typeMro.get(i) == o) return BuiltIn.True;
+          if (typeMro.get(i) == o)
+            return BuiltIn.True;
         }
         return BuiltIn.False;
       }
       case PyCmp_IS -> {
-        if (o == this) return BuiltIn.True;
+        if (o == this)
+          return BuiltIn.True;
         return BuiltIn.False;
       }
       case PyCmp_IS_NOT -> {
-        if (o == this) return BuiltIn.False;
+        if (o == this)
+          return BuiltIn.False;
         return BuiltIn.True;
       }
     }
-    return (PyBoolObject)
-        PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "Unsupported Operator " + op);
+    return (PyBoolObject) PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "Unsupported Operator " + op);
   }
 
   @Override

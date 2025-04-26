@@ -41,8 +41,8 @@ public class PySuperType extends PyTypeType {
           return new PySuperObject(self, tpMro.get(i + 1));
         }
       }
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "can not find a proper super class");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "can not find a proper super class");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "super() takes at most 2 arguments");
   }

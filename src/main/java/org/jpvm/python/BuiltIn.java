@@ -109,9 +109,8 @@ public class BuiltIn {
       throws NoSuchMethodException, PyException {
     Class<BuiltIn> clazz = BuiltIn.class;
     if (dict.get(PyUnicodeObject.getOrCreateFromInternStringPool(name, true)) == null) {
-      PyNativeMethodObject mp =
-          new PyNativeMethodObject(
-              clazz.getMethod(name, PyTupleObject.class, PyDictObject.class), true);
+      PyNativeMethodObject mp = new PyNativeMethodObject(
+          clazz.getMethod(name, PyTupleObject.class, PyDictObject.class), true);
       dict.put(PyUnicodeObject.getOrCreateFromInternStringPool(name, true), mp);
     }
   }
@@ -137,13 +136,10 @@ public class BuiltIn {
       std = Sys.stdout;
       end = PyUnicodeObject.getOrCreateFromInternStringPool("\n", true);
     } else {
-      std =
-          kwArgs.getOrDefault(
-              PyUnicodeObject.getOrCreateFromInternStringPool("std", true), Sys.stdout);
-      end =
-          kwArgs.getOrDefault(
-              PyUnicodeObject.getOrCreateFromInternStringPool("end", true),
-              PyUnicodeObject.getOrCreateFromInternStringPool("\n", true));
+      std = kwArgs.getOrDefault(PyUnicodeObject.getOrCreateFromInternStringPool("std", true),
+          Sys.stdout);
+      end = kwArgs.getOrDefault(PyUnicodeObject.getOrCreateFromInternStringPool("end", true),
+          PyUnicodeObject.getOrCreateFromInternStringPool("\n", true));
     }
     if (!(std instanceof PyFileStreamObject stream)) {
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "std require stdout PyFileStreamObject");
@@ -155,11 +151,12 @@ public class BuiltIn {
     }
     TypeDoIterate iterator = args.getIterator();
     PyObject o;
-    for (; ; ) {
+    for (;;) {
       try {
         o = iterator.next();
         stream.writeString(o.__str__(null, null).getData());
-        if (iterator.hasNext()) stream.writeString(" ");
+        if (iterator.hasNext())
+          stream.writeString(" ");
       } catch (PyException ignore) {
         break;
       }
@@ -209,8 +206,8 @@ public class BuiltIn {
         return map.mpLength();
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "sum only require one iterable argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "sum only require one iterable argument");
   }
 
   public static PyObject sorted(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -221,7 +218,8 @@ public class BuiltIn {
 
   public static PyObject max(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
-    if (list.size() == 0) return BuiltIn.None;
+    if (list.size() == 0)
+      return BuiltIn.None;
     PyObject res = list.get(0);
     for (int i = 0; i < list.size(); i++) {
       if (res.richCompare(list.get(i), TypeRichCompare.Operator.Py_LE).isTrue()) {
@@ -233,7 +231,8 @@ public class BuiltIn {
 
   public static PyObject min(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
-    if (list.size() == 0) return BuiltIn.None;
+    if (list.size() == 0)
+      return BuiltIn.None;
     PyObject res = list.get(0);
     for (int i = 0; i < list.size(); i++) {
       if (res.richCompare(list.get(i), TypeRichCompare.Operator.Py_GT).isTrue()) {
@@ -244,28 +243,35 @@ public class BuiltIn {
   }
 
   public static PyObject all(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    //  transform an iterable object to list
+    // transform an iterable object to list
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
-    if (list.size() == 0) return BuiltIn.False;
+    if (list.size() == 0)
+      return BuiltIn.False;
     for (int i = 0; i < list.size(); i++) {
       PyObject o = list.get(i);
-      if (o == BuiltIn.False) return BuiltIn.False;
+      if (o == BuiltIn.False)
+        return BuiltIn.False;
       else if (o instanceof PyNumberMethods num) {
-        if (((PyBoolObject) num.bool()).isFalse()) return BuiltIn.False;
-      } else return BuiltIn.False;
+        if (((PyBoolObject) num.bool()).isFalse())
+          return BuiltIn.False;
+      } else
+        return BuiltIn.False;
     }
     return BuiltIn.True;
   }
 
   public static PyObject any(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    //  transform an iterable object to list
+    // transform an iterable object to list
     PyListObject list = PyListType.getListFromIterable(args, kwArgs);
-    if (list.size() == 0) return BuiltIn.False;
+    if (list.size() == 0)
+      return BuiltIn.False;
     for (int i = 0; i < list.size(); i++) {
       PyObject o = list.get(i);
-      if (o == BuiltIn.True) return BuiltIn.True;
+      if (o == BuiltIn.True)
+        return BuiltIn.True;
       else if (o instanceof PyNumberMethods num) {
-        if (((PyBoolObject) num.bool()).isTrue()) return BuiltIn.True;
+        if (((PyBoolObject) num.bool()).isTrue())
+          return BuiltIn.True;
       }
     }
     return BuiltIn.False;
@@ -278,20 +284,21 @@ public class BuiltIn {
         return iterator.next();
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "next function require only 1 argument that is an iterator");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "next function require only 1 argument that is an iterator");
   }
 
   public static PyObject __build_class__(PyTupleObject args, PyDictObject kwArgs)
       throws PyException {
     if (args.size() < 2)
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "buildClass function require at least 2 arguments");
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "buildClass function require at least 2 arguments");
     PyObject function = args.get(0);
     PyObject name = args.get(1);
     boolean containObject = false;
     for (int i = 2; i < args.size(); i++)
-      if (args.get(i) == PyBaseObjectType.getInstance()) containObject = true;
+      if (args.get(i) == PyBaseObjectType.getInstance())
+        containObject = true;
     PyTupleObject bases;
     if (containObject) {
       bases = new PyTupleObject(args.size() - 2);
@@ -317,8 +324,7 @@ public class BuiltIn {
         if (metaclass.isSubTypeOf(PyTypeType.getInstance())) {
           return metaclass.call(args, null);
         } else {
-          return PyErrorUtils.pyErrorFormat(
-              PyErrorUtils.TypeError,
+          return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
               String.format("metaclass must be the type or its subclass, not '%s'", type.repr()));
         }
       }
@@ -328,8 +334,7 @@ public class BuiltIn {
         return creator.getCreator().call(args, kwArgs);
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError,
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
         String.format("can not create a class with name %s bases(%s)", name, bases));
   }
 
@@ -355,8 +360,8 @@ public class BuiltIn {
       out = PyUnicodeObject.getOrCreateFromInternStringPool(str, false);
       return out;
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "input function require at most 1 argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "input function require at most 1 argument");
   }
 
   public static PyObject open(PyTupleObject args, PyDictObject kwArgs) throws PyException {
@@ -366,16 +371,12 @@ public class BuiltIn {
     } else if (args.size() == 2) {
       String path = args.get(0).toString();
       String mode = args.get(1).toString();
-      if (mode.equals("r")
-          || mode.equals("w")
-          || mode.equals("rw")
-          || mode.equals("a")
-          || mode.equals("rb")
-          || mode.equals("wb")) {
+      if (mode.equals("r") || mode.equals("w") || mode.equals("rw") || mode.equals("a")
+          || mode.equals("rb") || mode.equals("wb")) {
         return new PyFileOpenObject(path, mode);
       } else {
-        return PyErrorUtils.pyErrorFormat(
-            PyErrorUtils.NotImplementedError, "not support file mode");
+        return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+            "not support file mode");
       }
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.AttributeError, "the num of attributes error");

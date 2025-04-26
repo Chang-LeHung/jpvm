@@ -95,16 +95,19 @@ public class PyBytesObject extends PyObject
       PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "not support operator " + op);
       return null;
     }
-    if (null == o) return BuiltIn.False;
+    if (null == o)
+      return BuiltIn.False;
     if (o instanceof PyBytesObject bytes) {
-      if (Arrays.equals(data, bytes.data)) return BuiltIn.True;
+      if (Arrays.equals(data, bytes.data))
+        return BuiltIn.True;
     }
     return BuiltIn.False;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (null == o) return false;
+    if (null == o)
+      return false;
     if (o instanceof PyBytesObject bytes) {
       return Arrays.equals(data, bytes.data);
     }
@@ -188,7 +191,8 @@ public class PyBytesObject extends PyObject
 
   @Override
   public PyObject bool() throws PyException {
-    if (size == 0) return BuiltIn.False;
+    if (size == 0)
+      return BuiltIn.False;
     return BuiltIn.True;
   }
 

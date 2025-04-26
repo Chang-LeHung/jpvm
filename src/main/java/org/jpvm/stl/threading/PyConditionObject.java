@@ -47,25 +47,25 @@ public class PyConditionObject extends PyObject {
 
   @PyClassMethod
   public PyObject acquire(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-	  PyObject timeout = null;
-		if (kwArgs != null)
-		 timeout = kwArgs.get(new PyUnicodeObject("timeout"));
-		if (timeout == null) {
-			lock.lock();
-			return BuiltIn.None;
-		}
-		else {
-			if (timeout instanceof PyLongObject l) {
-				long data = l.getData();
-				try {
-					if (lock.tryLock(data, TimeUnit.MILLISECONDS))
-						return BuiltIn.True;
-					return BuiltIn.False;
-				} catch (InterruptedException ignore) {
-				}
-			}
-		}
-    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "acquire() requires a single integer argument");
+    PyObject timeout = null;
+    if (kwArgs != null)
+      timeout = kwArgs.get(new PyUnicodeObject("timeout"));
+    if (timeout == null) {
+      lock.lock();
+      return BuiltIn.None;
+    } else {
+      if (timeout instanceof PyLongObject l) {
+        long data = l.getData();
+        try {
+          if (lock.tryLock(data, TimeUnit.MILLISECONDS))
+            return BuiltIn.True;
+          return BuiltIn.False;
+        } catch (InterruptedException ignore) {
+        }
+      }
+    }
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "acquire() requires a single integer argument");
   }
 
   @PyClassMethod

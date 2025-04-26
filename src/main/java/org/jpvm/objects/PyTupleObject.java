@@ -32,12 +32,14 @@ public class PyTupleObject extends PyObject
   }
 
   public static PyBoolObject check(PyObject o) {
-    if (type == o) return BuiltIn.True;
+    if (type == o)
+      return BuiltIn.True;
     return BuiltIn.False;
   }
 
   public static PyObject getTupleBySize(int size) {
-    if (size == 0) return zero;
+    if (size == 0)
+      return zero;
     return new PyTupleObject(size);
   }
 
@@ -60,8 +62,8 @@ public class PyTupleObject extends PyObject
       }
       return res;
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "getTupleFromIterator require TypeIterable or Iterator");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "getTupleFromIterator require TypeIterable or Iterator");
     return null;
   }
 
@@ -71,8 +73,7 @@ public class PyTupleObject extends PyObject
 
   public PyObject get(int idx) throws PyException {
     if (idx >= obItem.length) {
-      PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.KeyError,
+      PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError,
           "idx = " + idx + " out of PyTupleObject bound with size = " + obItem.length);
       return null;
     }
@@ -87,7 +88,8 @@ public class PyTupleObject extends PyObject
       builder.append(object.repr());
       builder.append(", ");
     }
-    if (builder.length() > 2) builder.delete(builder.length() - 2, builder.length());
+    if (builder.length() > 2)
+      builder.delete(builder.length() - 2, builder.length());
     builder.append(")");
     return builder.toString();
   }
@@ -138,7 +140,8 @@ public class PyTupleObject extends PyObject
 
   @Override
   public PyLongObject hash() {
-    if (hashDone) return hashCode;
+    if (hashDone)
+      return hashCode;
     int h = 0;
     for (PyObject e : obItem) {
       h = 31 * h + (e == null ? 0 : (int) e.hash().getData());
@@ -165,19 +168,22 @@ public class PyTupleObject extends PyObject
           return BuiltIn.False;
         }
         for (int i = 0; i < size(); i++) {
-          if (obItem[i] != tuple.obItem[i]) return BuiltIn.False;
+          if (obItem[i] != tuple.obItem[i])
+            return BuiltIn.False;
         }
         return BuiltIn.True;
       }
       case PyCmp_IN -> {
         for (PyObject pyObject : obItem) {
-          if (pyObject.richCompare(o, Operator.Py_EQ).isTrue()) return BuiltIn.True;
+          if (pyObject.richCompare(o, Operator.Py_EQ).isTrue())
+            return BuiltIn.True;
         }
         return BuiltIn.False;
       }
       case PyCmp_NOT_IN -> {
         for (PyObject pyObject : obItem) {
-          if (pyObject.richCompare(o, Operator.Py_NE).isTrue()) return BuiltIn.True;
+          if (pyObject.richCompare(o, Operator.Py_NE).isTrue())
+            return BuiltIn.True;
         }
         return BuiltIn.False;
       }
@@ -319,8 +325,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(-1);
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "PyTupleObject method index only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "PyTupleObject method index only require one argument");
     return null;
   }
 
@@ -335,8 +341,8 @@ public class PyTupleObject extends PyObject
       }
       return PyLongObject.getLongObject(count);
     }
-    PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "PyTupleObject method count only require one argument");
+    PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "PyTupleObject method count only require one argument");
     return null;
   }
 
@@ -377,9 +383,10 @@ public class PyTupleObject extends PyObject
 
   @Override
   public PyObject __getitem__(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 1) return sqItem(args.get(0));
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "__getitem__ takes exactly one argument");
+    if (args.size() == 1)
+      return sqItem(args.get(0));
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "__getitem__ takes exactly one argument");
   }
 
   @Override
@@ -424,13 +431,15 @@ public class PyTupleObject extends PyObject
 
     @Override
     public PyObject next() throws PyException {
-      if (idx < obItem.length) return obItem[idx++];
+      if (idx < obItem.length)
+        return obItem[idx++];
       return PyErrorUtils.pyErrorFormat(PyErrorUtils.StopIteration, "");
     }
 
     @Override
     public PyObject get(int idx) throws PyException {
-      if (idx < obItem.length) return obItem[idx];
+      if (idx < obItem.length)
+        return obItem[idx];
       PyErrorUtils.pyErrorFormat(PyErrorUtils.KeyError, "tuple is out of bound for index " + idx);
       return null;
     }

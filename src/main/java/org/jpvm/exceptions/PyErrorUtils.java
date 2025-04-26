@@ -21,7 +21,8 @@ public class PyErrorUtils {
   public static final PyRuntimeErrorType RuntimeError = PyRuntimeErrorType.getInstance();
   public static final PyTypeErrorType TypeError = PyTypeErrorType.getInstance();
   public static final PyValueErrorType ValueError = PyValueErrorType.getInstance();
-  public static final PyZeroDivisionErrorType ZeroDivisionError = PyZeroDivisionErrorType.getInstance();
+  public static final PyZeroDivisionErrorType ZeroDivisionError =
+      PyZeroDivisionErrorType.getInstance();
   public static final PyStackOverflowType StackOverflowError = PyStackOverflowType.getInstance();
   public static final PyImportErrorType ImportError = new PyImportErrorType();
   public static final PyIndexOutOfBoundErrorType IndexError =
@@ -73,8 +74,8 @@ public class PyErrorUtils {
       PyExceptionObject context = value.getContext();
       boolean p = recursivePrintExceptionInformation(context);
       if (p)
-        System.err.println(
-            "\nDuring handling of the above exception, another exception occurred:\n");
+        System.err
+            .println("\nDuring handling of the above exception, another exception occurred:\n");
       System.err.print(value.getTraceback().repr());
       System.err.print(value.getTypeName());
       System.err.print(": ");
@@ -89,7 +90,8 @@ public class PyErrorUtils {
       try {
         PyListObject mro = type.getMro();
         for (int i = 0; i < mro.size(); i++) {
-          if (mro.get(i) == PyErrorUtils.BaseException) return true;
+          if (mro.get(i) == PyErrorUtils.BaseException)
+            return true;
         }
       } catch (PyException ignore) {
       }
@@ -97,8 +99,8 @@ public class PyErrorUtils {
     return false;
   }
 
-  public static void restoreExceptionState(
-      PyCommonExceptionType type, PyExceptionObject val, PyTraceBackObject tb) {
+  public static void restoreExceptionState(PyCommonExceptionType type, PyExceptionObject val,
+      PyTraceBackObject tb) {
     ThreadState ts = JPVM.getThreadState();
     ts.setCurExcType(type);
     ts.setCurExcValue(val);

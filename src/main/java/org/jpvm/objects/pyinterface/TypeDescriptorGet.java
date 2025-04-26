@@ -7,7 +7,7 @@ import org.jpvm.objects.PyObject;
 public interface TypeDescriptorGet {
 
   default PyObject descrGet(PyObject obj, PyObject cls) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeDescriptor descrGet not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeDescriptor descrGet not implemented");
   }
 }

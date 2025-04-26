@@ -35,8 +35,8 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
         value.addAndGet(val.getData());
         return this;
       }
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "atomic_add require an int argument");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "atomic_add require an int argument");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "atomic_add require 1 argument");
   }
@@ -49,8 +49,8 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
         value.addAndGet(-val.getData());
         return this;
       }
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "atomic_sub require an int argument");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "atomic_sub require an int argument");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "atomic_sub require 1 argument");
   }
@@ -68,8 +68,8 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
         } while (true);
         return this;
       }
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "atomic_mul require an int argument");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "atomic_mul require an int argument");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "atomic_mul require 1 argument");
   }
@@ -87,8 +87,8 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
         } while (true);
         return this;
       }
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "atomic_div require an int argument");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "atomic_div require an int argument");
     }
     return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "atomic_div require 1 argument");
   }
@@ -105,7 +105,7 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyUnicodeObject __str__(PyTupleObject args, PyDictObject kwArgs) {
-   return new PyUnicodeObject(String.valueOf(value.get()));
+    return new PyUnicodeObject(String.valueOf(value.get()));
   }
 
   @Override
@@ -130,21 +130,21 @@ public class PyAtomicLongObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject inplaceFloorDiv(PyObject o) throws PyException {
-    return atomic_div(new PyTupleObject(new PyObject[]{o}), null);
+    return atomic_div(new PyTupleObject(new PyObject[] {o}), null);
   }
 
   @Override
   public PyObject inplaceAdd(PyObject o) throws PyException {
-    return __iadd__(new PyTupleObject(new PyObject[]{o}), null);
+    return __iadd__(new PyTupleObject(new PyObject[] {o}), null);
   }
 
   @Override
   public PyObject inplaceSub(PyObject o) throws PyException {
-    return atomic_sub(new PyTupleObject(new PyObject[]{o}), null);
+    return atomic_sub(new PyTupleObject(new PyObject[] {o}), null);
   }
 
   @Override
   public PyObject inplaceMul(PyObject o) throws PyException {
-    return atomic_mul(new PyTupleObject(new PyObject[]{o}), null);
+    return atomic_mul(new PyTupleObject(new PyObject[] {o}), null);
   }
 }

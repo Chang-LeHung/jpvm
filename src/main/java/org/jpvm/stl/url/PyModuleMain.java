@@ -73,14 +73,8 @@ public class PyModuleMain extends PyModuleObject {
       try {
         String urlString = args.get(0).toString();
         URL url = new URL(urlString);
-        parseResult =
-            new PyParseResultObject(
-                url.getProtocol(),
-                url.getHost(),
-                url.getPort(),
-                url.getPath(),
-                url.getQuery(),
-                url.getRef());
+        parseResult = new PyParseResultObject(url.getProtocol(), url.getHost(), url.getPort(),
+            url.getPath(), url.getQuery(), url.getRef());
 
         return parseResult;
       } catch (PyException e) {

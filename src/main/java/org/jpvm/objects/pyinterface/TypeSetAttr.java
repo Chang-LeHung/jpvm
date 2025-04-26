@@ -12,7 +12,7 @@ public interface TypeSetAttr {
    * @return {@link PyObject}
    */
   default PyObject setAttr(PyObject key, PyObject val) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeSetAttr setAttr not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeSetAttr setAttr not implemented");
   }
 }

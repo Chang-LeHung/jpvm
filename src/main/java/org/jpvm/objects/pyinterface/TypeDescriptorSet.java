@@ -6,7 +6,7 @@ import org.jpvm.objects.PyObject;
 
 public interface TypeDescriptorSet {
   default PyObject descrSet(PyObject obj, PyObject val) throws PyException {
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.NotImplementedError, "TypeDescriptor descrSet not implemented");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.NotImplementedError,
+        "TypeDescriptor descrSet not implemented");
   }
 }

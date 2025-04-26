@@ -20,25 +20,22 @@ public class PyModuleMain extends PyModuleObject {
   }
 
   public void copyDirectory(Path sourceDir, Path destinationDir) throws IOException {
-    Files.walkFileTree(
-        sourceDir,
-        new SimpleFileVisitor<Path>() {
-          @Override
-          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-              throws IOException {
-            Path targetFile = destinationDir.resolve(sourceDir.relativize(file));
-            Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
-            return FileVisitResult.CONTINUE;
-          }
+    Files.walkFileTree(sourceDir, new SimpleFileVisitor<Path>() {
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        Path targetFile = destinationDir.resolve(sourceDir.relativize(file));
+        Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
+        return FileVisitResult.CONTINUE;
+      }
 
-          @Override
-          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-              throws IOException {
-            Path targetDir = destinationDir.resolve(sourceDir.relativize(dir));
-            Files.createDirectories(targetDir);
-            return FileVisitResult.CONTINUE;
-          }
-        });
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+          throws IOException {
+        Path targetDir = destinationDir.resolve(sourceDir.relativize(dir));
+        Files.createDirectories(targetDir);
+        return FileVisitResult.CONTINUE;
+      }
+    });
   }
 
   @PyClassMethod
@@ -48,8 +45,8 @@ public class PyModuleMain extends PyModuleObject {
     }
     Path source = Paths.get(args.get(0).toString());
     if (!Files.isDirectory(source))
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.FileNotFoundError, "Directory " + source + " not found");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,
+          "Directory " + source + " not found");
     Path destination = Paths.get(args.get(1).toString());
     try {
       copyDirectory(source, destination);
@@ -67,8 +64,8 @@ public class PyModuleMain extends PyModuleObject {
     Path source = Paths.get(args.get(0).toString());
     Path destination = Paths.get(args.get(1).toString());
     if (!Files.exists(source)) {
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.FileNotFoundError, "File " + source + " not found");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.FileNotFoundError,
+          "File " + source + " not found");
     }
     if (Files.isDirectory(destination)) {
       destination = destination.resolve(source.getFileName());

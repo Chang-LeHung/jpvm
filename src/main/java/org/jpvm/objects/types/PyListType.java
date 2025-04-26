@@ -26,7 +26,8 @@ public class PyListType extends PyTypeType {
 
   public static PyListObject getListFromIterable(PyTupleObject args, PyDictObject kwArgs)
       throws PyException {
-    if (args.size() == 0) return new PyListObject();
+    if (args.size() == 0)
+      return new PyListObject();
     if (args.size() == 1) {
       PyListObject result = new PyListObject();
       if (args.get(0) instanceof TypeDoIterate itr) {
@@ -38,7 +39,8 @@ public class PyListType extends PyTypeType {
         while (iterator.hasNext()) {
           result.append(iterator.next());
         }
-      } else throw new PyTypeNotMatch("list() require an Iterable object");
+      } else
+        throw new PyTypeNotMatch("list() require an Iterable object");
       return result;
     }
     PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError, "list() only require one argument");

@@ -34,8 +34,8 @@ public class PyThreadObject extends PyObject {
   @PyClassMethod
   public PyObject setDaemon(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (state == THREAD_STATE.UNINITIALIZED)
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "only a not stated thread can call this method");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "only a not stated thread can call this method");
     if (args.size() == 1) {
       try {
         PyObject object = args.get(0);
@@ -66,8 +66,8 @@ public class PyThreadObject extends PyObject {
   @PyClassMethod
   public PyObject join(PyTupleObject args, PyDictObject kwArgs) throws PyException {
     if (state == THREAD_STATE.UNINITIALIZED)
-      return PyErrorUtils.pyErrorFormat(
-          PyErrorUtils.TypeError, "only a stated thread can call this method");
+      return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+          "only a stated thread can call this method");
     try {
       // deal lock warning
       thread.join();
@@ -110,8 +110,6 @@ public class PyThreadObject extends PyObject {
   }
 
   enum THREAD_STATE {
-    UNINITIALIZED,
-    STARTED,
-    FINISHED,
+    UNINITIALIZED, STARTED, FINISHED,
   }
 }

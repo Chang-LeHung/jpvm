@@ -9,7 +9,7 @@ public class PyFrameType extends PyTypeType {
   }
 
   public static final class SelfHolder {
-    public static final PyFrameType self =  new PyFrameType();
+    public static final PyFrameType self = new PyFrameType();
   }
 
   public static PyFrameType getInstance() {

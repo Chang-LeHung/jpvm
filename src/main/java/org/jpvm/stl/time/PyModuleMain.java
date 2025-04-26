@@ -31,8 +31,8 @@ public class PyModuleMain extends PyModuleObject {
         return BuiltIn.None;
       }
     }
-    return PyErrorUtils.pyErrorFormat(
-        PyErrorUtils.TypeError, "time.sleep only require 1 int argument");
+    return PyErrorUtils.pyErrorFormat(PyErrorUtils.TypeError,
+        "time.sleep only require 1 int argument");
   }
 
   @PyClassMethod

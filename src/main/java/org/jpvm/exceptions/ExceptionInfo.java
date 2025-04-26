@@ -18,11 +18,8 @@ public class ExceptionInfo {
 
   private ExceptionInfo previous;
 
-  public ExceptionInfo(
-      PyBaseExceptionType excType,
-      PyExceptionObject excValue,
-      ExceptionInfo previous,
-      PyTraceBackObject excTrace) {
+  public ExceptionInfo(PyBaseExceptionType excType, PyExceptionObject excValue,
+      ExceptionInfo previous, PyTraceBackObject excTrace) {
     this.excType = excType;
     this.excValue = excValue;
     this.previous = previous;
@@ -36,7 +33,8 @@ public class ExceptionInfo {
   }
 
   public void setExcType(PyObject excType) {
-    if (excType != null && excType != BuiltIn.None) this.excType = (PyCommonExceptionType) excType;
+    if (excType != null && excType != BuiltIn.None)
+      this.excType = (PyCommonExceptionType) excType;
   }
 
   public ExceptionInfo getPrevious() {

@@ -10,12 +10,12 @@ import org.jpvm.pycParser.PyCodeObject;
 import org.jpvm.python.BuiltIn;
 
 /**
- * Before implementing this class, you should read cpython:marshal.c) carefully
- * pay much attention on {@link Marshal#RREF(PyObject)} {@link Marshal#RREFInsert(int, PyObject)}
- * and {@link Marshal#RREFReserve()}, all above function are used to deal with reference relationship
- * between PyObjects.
- * Your code must follow the order of calling above function, cause there is recursive call in
- * {@link Marshal#loadPyObject(ByteBuffer)}. If you do not follow the order, will cause some unexpected errors.
+ * Before implementing this class, you should read cpython:marshal.c) carefully pay much attention
+ * on {@link Marshal#RREF(PyObject)} {@link Marshal#RREFInsert(int, PyObject)} and
+ * {@link Marshal#RREFReserve()}, all above function are used to deal with reference relationship
+ * between PyObjects. Your code must follow the order of calling above function, cause there is
+ * recursive call in {@link Marshal#loadPyObject(ByteBuffer)}. If you do not follow the order, will
+ * cause some unexpected errors.
  */
 public class Marshal {
 
@@ -197,11 +197,13 @@ public class Marshal {
   private PyObject loadDictionary(ByteBuffer buffer) throws PyException {
     PyDictObject dictObject = new PyDictObject();
     RREF(dictObject);
-    for (; ; ) {
+    for (;;) {
       PyObject key = loadPyObject(buffer);
-      if (key == BuiltIn.NULL) break;
+      if (key == BuiltIn.NULL)
+        break;
       PyObject val = loadPyObject(buffer);
-      if (val == BuiltIn.NULL) break;
+      if (val == BuiltIn.NULL)
+        break;
       dictObject.put(key, val);
     }
     return dictObject;
@@ -291,8 +293,9 @@ public class Marshal {
     public static final byte TYPE_STOPITER = 'S';
     public static final byte TYPE_ELLIPSIS = '.';
     public static final byte TYPE_INT = 'i';
-    /* TYPE_INT64 is not generated anymore.
-    Supported for backward compatibility only. */
+    /*
+     * TYPE_INT64 is not generated anymore. Supported for backward compatibility only.
+     */
     public static final byte TYPE_INT64 = 'I';
     public static final byte TYPE_FLOAT = 'f';
     public static final byte TYPE_BINARY_FLOAT = 'g';

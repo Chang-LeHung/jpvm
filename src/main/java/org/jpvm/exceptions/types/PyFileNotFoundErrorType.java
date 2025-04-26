@@ -18,7 +18,7 @@ public class PyFileNotFoundErrorType extends PyCommonExceptionType {
   }
 
   public static final class SelfHolder {
-    public static final  PyFileNotFoundErrorType instance = new PyFileNotFoundErrorType();
+    public static final PyFileNotFoundErrorType instance = new PyFileNotFoundErrorType();
   }
 
   public static PyFileNotFoundErrorType getInstance() {

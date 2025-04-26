@@ -21,7 +21,7 @@ public class PyAttributeErrorType extends PyCommonExceptionType {
     public static final PyAttributeErrorType self = new PyAttributeErrorType();
   }
 
-  public static  PyAttributeErrorType getInstance() {
+  public static PyAttributeErrorType getInstance() {
     return SelfHolder.self;
   }
 

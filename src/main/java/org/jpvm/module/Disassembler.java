@@ -39,22 +39,17 @@ public class Disassembler {
       if (enterPoint.contains(ins.getPos())) {
         builder.append(" >>");
       }
-      builder.append("\t")
-          .append(String.format("%4d", ins.getPos()))
-          .append(" ")
-          .append(String.format("%-15s", ins.getOpname()))
-          .append("\t")
+      builder.append("\t").append(String.format("%4d", ins.getPos())).append(" ")
+          .append(String.format("%-15s", ins.getOpname())).append("\t")
           .append(String.format("%3d", ins.getOparg()));
       switch (ins.getOpname()) {
         case LOAD_CONST -> {
           var coConsts = (PyTupleObject) pyCodeObject.getCoConsts();
           if (coConsts.get(ins.getOparg()) instanceof PyCodeObject cb) {
-            builder.append(" <CodeObject ").append(cb.getCoName())
-                .append(" @0x")
-                .append(Integer.toHexString(System.identityHashCode(cb)))
-                .append(" ")
-                .append(cb.getCoFileName()).append(", line ")
-                .append(cb.getCoFirstLineNo()).append(" >");
+            builder.append(" <CodeObject ").append(cb.getCoName()).append(" @0x")
+                .append(Integer.toHexString(System.identityHashCode(cb))).append(" ")
+                .append(cb.getCoFileName()).append(", line ").append(cb.getCoFirstLineNo())
+                .append(" >");
           } else {
             builder.append(" (").append(coConsts.get(ins.getOparg())).append(")");
           }

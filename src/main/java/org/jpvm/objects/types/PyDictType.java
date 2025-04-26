@@ -22,7 +22,9 @@ public class PyDictType extends PyTypeType {
 
   @Override
   public PyObject call(PyTupleObject args, PyDictObject kwArgs) throws PyException {
-    if (args.size() == 0) return new PyDictObject();
-    else throw new PyException("dict() takes no arguments");
+    if (args.size() == 0)
+      return new PyDictObject();
+    else
+      throw new PyException("dict() takes no arguments");
   }
 }

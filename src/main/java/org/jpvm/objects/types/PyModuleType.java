@@ -12,6 +12,7 @@ public class PyModuleType extends PyTypeType {
   public static final class SelfHolder {
     public static final PyModuleType self = new PyModuleType();
   }
+
   public static PyModuleType getInstance() {
     return SelfHolder.self;
   }

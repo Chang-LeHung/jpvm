@@ -44,7 +44,8 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public String toString() {
-    if (bool) return "True";
+    if (bool)
+      return "True";
     return "False";
   }
 
@@ -68,27 +69,33 @@ public class PyBoolObject extends PyObject implements PyNumberMethods {
 
   @Override
   public PyObject and(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return getFalse();
+    if (!(o instanceof PyBoolObject))
+      return getFalse();
     return bool && ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
   public PyObject xor(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return getFalse();
+    if (!(o instanceof PyBoolObject))
+      return getFalse();
     return bool != ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
   public PyObject or(PyObject o) {
-    if (!(o instanceof PyBoolObject)) return getFalse();
+    if (!(o instanceof PyBoolObject))
+      return getFalse();
     return bool || ((PyBoolObject) o).bool ? getTrue() : getFalse();
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (obj instanceof PyBoolObject) return bool == ((PyBoolObject) obj).bool;
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (obj instanceof PyBoolObject)
+      return bool == ((PyBoolObject) obj).bool;
     return false;
   }
 
